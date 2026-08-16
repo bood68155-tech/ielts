@@ -336,5 +336,84 @@ const SPEAKING_TEST = {
   ]
 };
 
+/* ---------------- LEARNING LEVELS ---------------- */
+const LEVELS = [
+  {
+    id: 'beginner',
+    name: 'Beginner',
+    icon: '🌱',
+    minXp: 0,
+    color: 'emerald',
+    desc: 'Start here. Build your foundation with the first two Listening sections, one Reading passage, Writing Task 1 and Speaking Part 1.'
+  },
+  {
+    id: 'intermediate',
+    name: 'Intermediate',
+    icon: '🚀',
+    minXp: 300,
+    color: 'sky',
+    desc: 'Take on longer passages, more Listening sections, Writing Task 2 and Speaking Part 2.'
+  },
+  {
+    id: 'advanced',
+    name: 'Advanced',
+    icon: '🏆',
+    minXp: 700,
+    color: 'violet',
+    desc: 'The full test experience: all four Listening sections, all Reading passages and the complete Speaking exam.'
+  }
+];
+
+/* How many items of each skill each level unlocks (index-based counts) */
+const LEVEL_UNLOCKS = {
+  listening: { beginner: 2, intermediate: 3, advanced: 4 },
+  reading: { beginner: 1, intermediate: 2, advanced: 3 },
+  writing: { beginner: 1, intermediate: 2, advanced: 2 },
+  speaking: { beginner: 1, intermediate: 2, advanced: 3 }
+};
+
+/* XP rewards for completing activities */
+const XP_REWARDS = {
+  listening: 20,  // per section checked
+  reading: 25,    // per passage checked
+  writing: 10,    // per word-count check
+  speaking: 10,   // per part practised
+  exam: 2         // per correct answer in weekly exam
+};
+
+/* ---------------- WEEKLY EXAM POOL ---------------- */
+const WEEKLY_EXAM_POOL = [
+  { id: 'W1', type: 'mcq', question: 'The lecture was so ______ that many students fell asleep.', options: ['tedious', 'fascinating', 'engaging', 'lively'], answer: 'A', explanation: 'Tedious means boring and long — the opposite of fascinating or engaging.' },
+  { id: 'W2', type: 'mcq', question: 'Choose the word closest in meaning to “significant”.', options: ['small', 'important', 'sudden', 'obvious'], answer: 'B', explanation: 'Significant means important or meaningful.' },
+  { id: 'W3', type: 'mcq', question: 'The government introduced new ______ to reduce traffic in the city centre.', options: ['measure', 'measures', 'measuring', 'measured'], answer: 'B', explanation: 'The plural “measures” is needed: new measures = new actions/policies.' },
+  { id: 'W4', type: 'fill', question: 'Complete the sentence: “She has lived in this city ______ 2015.”', answer: ['since'], explanation: 'Use “since” with a point in time (2015); “for” is used with a duration.' },
+  { id: 'W5', type: 'mcq', question: 'Which sentence is grammatically correct?', options: ['He suggested to go to the museum.', 'He suggested going to the museum.', 'He suggested go to the museum.', 'He suggested to going the museum.'], answer: 'B', explanation: 'The verb “suggest” is followed by a gerund: suggest + -ing.' },
+  { id: 'W6', type: 'mcq', question: '______ the heavy rain, the match continued as planned.', options: ['Despite', 'Although', 'Because', 'However'], answer: 'A', explanation: '“Despite” is a preposition followed by a noun phrase (the heavy rain).' },
+  { id: 'W7', type: 'fill', question: 'Complete: “If I had studied harder, I ______ have passed the exam.”', answer: ['would'], explanation: 'Third conditional: if + past perfect, would have + past participle.' },
+  { id: 'W8', type: 'mcq', question: 'Choose the correct form: “Neither of the answers ______ correct.”', options: ['is', 'are', 'were', 'be'], answer: 'A', explanation: 'With “neither of” + plural noun, the verb is singular: is.' },
+  { id: 'W9', type: 'mcq', question: 'The word “deteriorate” is closest in meaning to ______.', options: ['improve', 'worsen', 'accelerate', 'stabilise'], answer: 'B', explanation: 'Deteriorate means to become progressively worse.' },
+  { id: 'W10', type: 'fill', question: 'Complete: “The results were ______ because the sample size was too small.”', answer: ['unreliable', 'not reliable', 'invalid'], explanation: 'A small sample size makes results unreliable or invalid.' },
+  { id: 'W11', type: 'mcq', question: 'By the time we arrived, the meeting ______.', options: ['already started', 'had already started', 'has already started', 'was already starting'], answer: 'B', explanation: 'Past perfect is used for an action completed before another past action.' },
+  { id: 'W12', type: 'mcq', question: 'Choose the correct sentence:', options: ['The book who I borrowed was fascinating.', 'The book which I borrowed was fascinating.', 'The book whom I borrowed was fascinating.', 'The book what I borrowed was fascinating.'], answer: 'B', explanation: '“Which” is used for things; “who/whom” for people.' },
+  { id: 'W13', type: 'fill', question: 'Complete: “The company’s profits increased ______ twenty percent last year.”', answer: ['by'], explanation: 'Use “by” to state the amount of change: increased by 20%.' },
+  { id: 'W14', type: 'mcq', question: 'Which word best completes: “She is ______ to succeed because she works extremely hard.”', options: ['likely', 'liking', 'liked', 'like'], answer: 'A', explanation: '“Likely” is an adjective meaning probable.' },
+  { id: 'W15', type: 'mcq', question: 'The antonym of “abundant” is ______.', options: ['plentiful', 'scarce', 'ample', 'sufficient'], answer: 'B', explanation: 'Abundant means plentiful; scarce is its opposite.' },
+  { id: 'W16', type: 'fill', question: 'Complete: “Urban farming can make use of land that would otherwise be ______.”', answer: ['wasted', 'unused', 'neglected'], explanation: 'The passage uses “wasted” — land that would otherwise be wasted.' },
+  { id: 'W17', type: 'mcq', question: 'Choose the correct passive form: “The bridge ______ in 1998.”', options: ['built', 'was built', 'is built', 'has built'], answer: 'B', explanation: 'Past simple passive: was/were + past participle.' },
+  { id: 'W18', type: 'mcq', question: '“Comprehensive” most nearly means ______.', options: ['brief', 'complete', 'complicated', 'comfortable'], answer: 'B', explanation: 'Comprehensive means including everything; complete or thorough.' },
+  { id: 'W19', type: 'fill', question: 'Complete: “Many students find it difficult to ______ on their studies with so many distractions.”', answer: ['concentrate', 'focus'], explanation: 'Concentrate/focus on = give full attention to.' },
+  { id: 'W20', type: 'mcq', question: 'I look forward to ______ from you soon.', options: ['hear', 'hearing', 'heard', 'hears'], answer: 'B', explanation: '“Look forward to” is followed by a gerund (-ing form).' },
+  { id: 'W21', type: 'mcq', question: 'Which word fits: “The two countries signed a trade ______.”', options: ['agreement', 'agree', 'agreed', 'agreeing'], answer: 'A', explanation: 'A trade agreement is the noun collocation.' },
+  { id: 'W22', type: 'fill', question: 'Complete: “Sleep is essential for ______ memories, not just for physical recovery.”', answer: ['consolidating', 'forming', 'strengthening', 'storing'], explanation: 'The reading passage explains sleep consolidates memories.' },
+  { id: 'W23', type: 'mcq', question: 'Choose the correct form: “If it ______ tomorrow, we will cancel the picnic.”', options: ['rains', 'will rain', 'rained', 'would rain'], answer: 'A', explanation: 'First conditional: if + present simple, will + base verb.' },
+  { id: 'W24', type: 'mcq', question: 'The word “crucial” is closest in meaning to ______.', options: ['optional', 'essential', 'unusual', 'difficult'], answer: 'B', explanation: 'Crucial means extremely important or essential.' },
+  { id: 'W25', type: 'fill', question: 'Complete: “The experiment was repeated three times to ______ the results.”', answer: ['verify', 'confirm', 'validate', 'check'], explanation: 'Verify/confirm = to check that something is true or accurate.' },
+  { id: 'W26', type: 'mcq', question: 'Which sentence uses the correct article?', options: ['She is an university student.', 'She is a university student.', 'She is the university student.', 'She is university student.'], answer: 'B', explanation: '“University” begins with a “y” sound, so the article is “a”, not “an”.' },
+  { id: 'W27', type: 'mcq', question: 'Choose the correct word: “The museum ______ thousands of visitors every year.”', options: ['attracts', 'attract', 'attracting', 'attracted'], answer: 'A', explanation: 'Present simple third person singular: attracts.' },
+  { id: 'W28', type: 'fill', question: 'Complete: “Regular exercise can ______ your overall health.”', answer: ['improve', 'boost', 'enhance'], explanation: 'Improve/boost/enhance all fit: exercise improves health.' },
+  { id: 'W29', type: 'mcq', question: 'The phrase “in the long run” means ______.', options: ['over a short period', 'eventually, over time', 'immediately', 'never'], answer: 'B', explanation: '“In the long run” = after a long period of time, eventually.' },
+  { id: 'W30', type: 'mcq', question: 'Choose the correct sentence:', options: ['Despite of the noise, she slept well.', 'Despite the noise, she slept well.', 'Although the noise, she slept well.', 'Despite the noise, but she slept well.'], answer: 'B', explanation: '“Despite” is used directly with a noun phrase, without “of”.' }
+];
+
 /* ---- Expose to window for the app script ---- */
-window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST };
+window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, LEVELS, LEVEL_UNLOCKS, XP_REWARDS, WEEKLY_EXAM_POOL };

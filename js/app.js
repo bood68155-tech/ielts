@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST } = window.IELTS_DATA;
+  const { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, XP_REWARDS } = window.IELTS_DATA;
 
   /* ---------------- State ---------------- */
   const state = {
@@ -65,6 +65,12 @@
 
   /* ---------------- Navigation ---------------- */
   window.showSection = function (name) {
+    // Auth gate: dashboard is the only section available before sign-in
+    if (name !== 'dashboard' && window.IELTS_AUTH && !window.IELTS_AUTH.getCurrentUser()) {
+      window.IELTS_AUTH.showScreen();
+      return;
+    }
+
     state.currentSection = name;
     $$('.section-view').forEach((s) => s.classList.add('hidden'));
     $('#section-' + name).classList.remove('hidden');
@@ -75,6 +81,8 @@
     $('#mobile-nav').classList.add('hidden');
 
     if (name === 'dashboard') renderDashboard();
+    if (name === 'levels') window.IELTS_LEVELS.render();
+    if (name === 'exam') window.IELTS_EXAM.render();
     if (name === 'listening') renderListening();
     if (name === 'reading') renderReading();
     if (name === 'writing') renderWriting();
@@ -89,6 +97,38 @@
 
   /* ---------------- Dashboard ---------------- */
   function renderDashboard() {
+    const user = window.IELTS_AUTH ? window.IELTS_AUTH.getCurrentUser() : null;
+    const level = user ? window.IELTS_AUTH.getLevel(user.xp) : null;
+    const nextLevel = user ? window.IELTS_AUTH.getNextLevel(user.xp) : null;
+
+    // Auth banner: sign-in prompt or user progress summary
+    $('#dashboard-auth-banner').innerHTML = user
+      ? `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-extrabold">${esc(user.username.charAt(0).toUpperCase())}</div>
+            <div>
+              <p class="font-bold text-slate-900">Welcome back, ${esc(user.username)}</p>
+              <p class="text-xs text-slate-500">${level.icon} ${level.name} level · ${user.xp} XP ${nextLevel ? '· ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
+              <div class="mt-2 h-1.5 w-40 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-brand-500 rounded-full" style="width: ${user.xp >= 700 ? 100 : Math.max(3, Math.round((user.xp / 700) * 100))}%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn-secondary text-sm" onclick="showSection('levels')">📈 My levels</button>
+            <button class="btn-primary text-sm" onclick="showSection('exam')">📅 Weekly exam</button>
+          </div>
+        </div>`
+      : `
+        <div class="bg-gradient-to-r from-brand-600 to-indigo-500 rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-lg font-extrabold">Sign in to start your learning journey 🚀</p>
+            <p class="text-sm text-brand-100 mt-0.5">Create a free account to earn XP, level up, and track your weekly exam scores.</p>
+          </div>
+          <button onclick="IELTS_AUTH.showScreen()" class="bg-white text-brand-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-50 transition">Sign in / Register</button>
+        </div>`;
+
     const stats = [
       { icon: '🎧', label: 'Listening', value: countListeningScore() + '/40', sub: '40 questions' },
       { icon: '📖', label: 'Reading', value: countReadingScore() + '/40', sub: '40 questions' },
@@ -135,19 +175,42 @@
   /* ---------------- Listening ---------------- */
   let audioUnavailable = false;
 
+  /* --- level gating helpers --- */
+  function unlocked(skill, index) {
+    return window.IELTS_AUTH && window.IELTS_AUTH.isUnlocked(skill, index);
+  }
+
+  function lockedPanel(skill, index) {
+    const names = { listening: 'Listening', reading: 'Reading', writing: 'Writing', speaking: 'Speaking' };
+    return `
+      <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+        <p class="text-4xl mb-3">🔒</p>
+        <p class="font-bold text-slate-800">This ${names[skill]} content is locked</p>
+        <p class="text-sm text-slate-500 mt-1 max-w-md mx-auto">Reach the next level by completing activities and weekly exams to unlock ${names[skill]} section ${index + 1}.</p>
+        <button class="btn-primary mt-5" onclick="showSection('levels')">📈 View learning path</button>
+      </div>`;
+  }
+
   function renderListening() {
     renderListeningSectionTabs();
     renderListeningQuestions();
   }
 
   function renderListeningSectionTabs() {
-    $('#listening-sections').innerHTML = LISTENING_TEST.map((sec, i) => `
-      <button class="tab-pill ${i === state.listening.section ? 'active' : ''}" onclick="selectListeningSection(${i})">
-        ${sec.title.split('·')[0].trim()}
-      </button>`).join('');
+    $('#listening-sections').innerHTML = LISTENING_TEST.map((sec, i) => {
+      const isLocked = !unlocked('listening', i);
+      return `
+      <button class="tab-pill ${i === state.listening.section ? 'active' : ''} ${isLocked ? 'opacity-50' : ''}" onclick="selectListeningSection(${i})">
+        ${sec.title.split('·')[0].trim()}${isLocked ? ' 🔒' : ''}
+      </button>`;
+    }).join('');
   }
 
   window.selectListeningSection = function (i) {
+    if (!unlocked('listening', i)) {
+      toast('🔒 Earn more XP to unlock this section');
+      return;
+    }
     state.listening.section = i;
     stopAudio();
     renderListeningSectionTabs();
@@ -160,7 +223,14 @@
 
   function renderListeningQuestions() {
     const section = LISTENING_TEST[state.listening.section];
-    $('#now-playing').textContent = section.title;      const qHtml = section.questions.map((q) => {
+    $('#now-playing').textContent = section.title;
+
+    if (!unlocked('listening', state.listening.section)) {
+      $('#listening-content').innerHTML = lockedPanel('listening', state.listening.section);
+      return;
+    }
+
+    const qHtml = section.questions.map((q) => {
       const saved = state.listening.answers[q.id];
       return questionHtml(q, q.id, saved, q.id.split('-')[1]);
     }).join('');
@@ -198,6 +268,12 @@
         <div class="mt-3 space-y-1.5">${resultHtml.join('')}</div>
         <button class="btn-secondary mt-4" onclick="resetListening()">Try again</button>
       </div>`;
+
+    // Award XP once per section for checking answers
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('listening-' + section.id)) {
+      window.IELTS_AUTH.addXp(XP_REWARDS.listening);
+      toast('+' + XP_REWARDS.listening + ' XP for completing ' + section.title.split('·')[0].trim() + '!');
+    }
 
     saveProgress();
   };
@@ -299,6 +375,16 @@
   /* ---------------- Reading ---------------- */
   function renderReading() {
     $('#reading-content').innerHTML = READING_TEST.map((passage, pi) => {
+      if (!unlocked('reading', pi)) {
+        return `
+          <div class="mb-8">
+            <div class="bg-slate-900 text-white px-6 py-4 rounded-t-2xl">
+              <h3 class="font-bold">${esc(passage.title)} <span class="text-xs font-normal text-slate-400">🔒 locked</span></h3>
+            </div>
+            <div class="rounded-b-2xl overflow-hidden">${lockedPanel('reading', pi)}</div>
+          </div>`;
+      }
+
       const qHtml = passage.questions.map((q) => {
         const saved = state.reading.answers[q.id];
         return questionHtml(q, q.id, saved, q.id.split('-')[1]);
@@ -355,6 +441,12 @@
       if (el) el.innerHTML = `<p class="text-xs text-slate-500 mt-1.5">💡 ${esc(q.explanation)}</p>`;
     });
 
+    // Award XP once per passage
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('reading-' + passage.id)) {
+      window.IELTS_AUTH.addXp(XP_REWARDS.reading);
+      toast('+' + XP_REWARDS.reading + ' XP for completing ' + passage.title.split('·')[0].trim() + '!');
+    }
+
     saveProgress();
   };
 
@@ -395,11 +487,18 @@
   }
 
   function renderWritingTabs() {
-    $('#writing-tabs').innerHTML = WRITING_TASKS.map((task, i) => `
-      <button class="tab-pill ${i === state.writing.task ? 'active' : ''}" onclick="selectWritingTask(${i})">${task.name}</button>`).join('');
+    $('#writing-tabs').innerHTML = WRITING_TASKS.map((task, i) => {
+      const isLocked = !unlocked('writing', i);
+      return `
+      <button class="tab-pill ${i === state.writing.task ? 'active' : ''} ${isLocked ? 'opacity-50' : ''}" onclick="selectWritingTask(${i})">${task.name}${isLocked ? ' 🔒' : ''}</button>`;
+    }).join('');
   }
 
   window.selectWritingTask = function (i) {
+    if (!unlocked('writing', i)) {
+      toast('🔒 Earn more XP to unlock ' + WRITING_TASKS[i].name);
+      return;
+    }
     state.writing.task = i;
     saveProgress();
     renderWritingTabs();
@@ -409,6 +508,11 @@
   function renderWritingTask() {
     const task = WRITING_TASKS[state.writing.task];
     const draft = localStorage.getItem('ielts-draft-' + task.id) || '';
+
+    if (!unlocked('writing', state.writing.task)) {
+      $('#writing-content').innerHTML = lockedPanel('writing', state.writing.task);
+      return;
+    }
 
     let chartHtml = '';
     if (task.chart) {
@@ -499,6 +603,12 @@
         </ul>
         <p class="text-xs text-slate-400 mt-3">Tip: for Task 1 describe trends and comparisons; for Task 2 give a clear position with developed arguments.</p>
       </div>`;
+
+    // Award XP once per task for checking the word count
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('writing-' + task.id)) {
+      window.IELTS_AUTH.addXp(XP_REWARDS.writing);
+      toast('+' + XP_REWARDS.writing + ' XP for ' + task.name + '!');
+    }
   };
 
   window.toggleSampleAnswer = function () {
@@ -540,11 +650,18 @@
   }
 
   function renderSpeakingTabs() {
-    $('#speaking-tabs').innerHTML = [1, 2, 3].map((p) => `
-      <button class="tab-pill ${state.speaking.part === p ? 'active' : ''}" onclick="selectSpeakingPart(${p})">Part ${p}</button>`).join('');
+    $('#speaking-tabs').innerHTML = [1, 2, 3].map((p) => {
+      const isLocked = !unlocked('speaking', p - 1);
+      return `
+      <button class="tab-pill ${state.speaking.part === p ? 'active' : ''} ${isLocked ? 'opacity-50' : ''}" onclick="selectSpeakingPart(${p})">Part ${p}${isLocked ? ' 🔒' : ''}</button>`;
+    }).join('');
   }
 
   window.selectSpeakingPart = function (p) {
+    if (!unlocked('speaking', p - 1)) {
+      toast('🔒 Earn more XP to unlock Part ' + p);
+      return;
+    }
     stopSpeakingTimers();
     state.speaking.part = p;
     renderSpeakingTabs();
@@ -563,6 +680,17 @@
   function renderSpeakingPart() {
     const part = state.speaking.part;
     const el = $('#speaking-content');
+
+    if (!unlocked('speaking', part - 1)) {
+      el.innerHTML = lockedPanel('speaking', part - 1);
+      return;
+    }
+
+    // Award XP once per part for practising
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('speaking-' + part)) {
+      window.IELTS_AUTH.addXp(XP_REWARDS.speaking);
+      toast('+' + XP_REWARDS.speaking + ' XP for practising Speaking Part ' + part + '!');
+    }
 
     if (part === 1) {
       el.innerHTML = `
@@ -741,9 +869,18 @@
     return key.startsWith('L') ? 'listening' : 'reading';
   }
 
+  /* ---------------- Shared exports ---------------- */
+  window.toast = toast;
+  window.renderDashboard = renderDashboard;
+  window.countListeningScore = countListeningScore;
+  window.countReadingScore = countReadingScore;
+
   /* ---------------- Init ---------------- */
   loadProgress();
   renderDashboard();
+
+  // Restore auth session (shows sign-in screen if no session)
+  if (window.IELTS_AUTH) window.IELTS_AUTH.init();
 
   // Expose state for debugging
   window.__IELTS_STATE = state;
