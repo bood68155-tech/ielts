@@ -2,6 +2,7 @@
    IELTS Master — weekly exam module
    15 questions picked deterministically from the pool each week,
    a 15-minute timer, and per-user score history.
+   Exam history + in-progress state live under a user-scoped key.
    ============================================================ */
 (function () {
   'use strict';
@@ -14,6 +15,46 @@
   const EXAM_SECONDS = 15 * 60;
 
   let exam = null; // { week, questions, answers: {}, secondsLeft, interval, submitted }
+
+  /* --- persist/resume the in-progress exam under user_<id>_exam --- */
+  function saveExamState() {
+    const state = window.IELTS_AUTH.getScoped('exam', null) || { history: window.IELTS_AUTH.getExamHistory(), inProgress: null };
+    if (!Array.isArray(state.history)) state.history = window.IELTS_AUTH.getExamHistory();
+    state.inProgress = (exam && !exam.submitted)
+      ? { week: exam.week, questions: exam.questions, answers: exam.answers, secondsLeft: exam.secondsLeft, submitted: false }
+      : null;
+    window.IELTS_AUTH.setScoped('exam', state);
+  }
+
+  function loadInProgressExam() {
+    const state = window.IELTS_AUTH.getScoped('exam', null);
+    return state && state.inProgress ? state.inProgress : null;
+  }
+
+  /* --- countdown shared by start() and resumed exams --- */
+  function startTimer() {
+    return setInterval(() => {
+      exam.secondsLeft--;
+      const t = $('#exam-timer');
+      if (t) {
+        t.textContent = formatTime(Math.max(0, exam.secondsLeft));
+        t.classList.toggle('timer-late', exam.secondsLeft <= 60);
+      }
+      if (exam.secondsLeft <= 0) {
+        clearInterval(exam.interval);
+        window.toast && window.toast('Time is up — submitting your exam…');
+        submit(true);
+      }
+    }, 1000);
+  }
+
+  /* switching users switches to their exam environment */
+  if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) {
+    window.IELTS_AUTH.onUserChange(() => {
+      if (exam && exam.interval) clearInterval(exam.interval);
+      exam = null;
+    });
+  }
 
   /* --- deterministic weekly seed: week number of current ISO week --- */
   function getWeekNumber(date) {
@@ -61,6 +102,14 @@
   }
 
   function render() {
+    // resume an in-progress exam saved for the active user
+    if (exam === null) {
+      const saved = loadInProgressExam();
+      if (saved && !saved.submitted) {
+        exam = saved;
+        exam.interval = startTimer();
+      }
+    }
     const week = getWeekNumber(new Date());
     const history = window.IELTS_AUTH.getExamHistory();
     const weekResults = history.filter((h) => h.week === week);
@@ -316,22 +365,9 @@
       submitted: false
     };
 
-    $('#exam-timer').textContent = formatTime(exam.secondsLeft);
-    exam.interval = setInterval(() => {
-      exam.secondsLeft--;
-      const t = $('#exam-timer');
-      if (t) {
-        t.textContent = formatTime(Math.max(0, exam.secondsLeft));
-        t.classList.toggle('timer-late', exam.secondsLeft <= 60);
-      }
-      if (exam.secondsLeft <= 0) {
-        clearInterval(exam.interval);
-        window.toast && window.toast('Time is up — submitting your exam…');
-        submit(true);
-      }
-    }, 1000);
-
     renderExamRun();
+    exam.interval = startTimer();
+    saveExamState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -341,11 +377,13 @@
     const wrap = btn.closest('[data-options]');
     wrap.querySelectorAll('.opt').forEach((o) => o.classList.remove('selected'));
     btn.classList.add('selected');
+    saveExamState();
   }
 
   function saveFill(qIndex, value) {
     if (!exam || exam.submitted) return;
     exam.answers['E' + (qIndex + 1)] = value;
+    saveExamState();
   }
 
   function submit(auto) {
@@ -353,6 +391,7 @@
     clearInterval(exam.interval);
     exam.submitted = true;
     exam.secondsUsed = EXAM_SECONDS - exam.secondsLeft;
+    saveExamState(); // clears inProgress for this user
 
     const correct = exam.questions.reduce((n, q, i) => n + (checkAnswer(q, exam.answers['E' + (i + 1)]) ? 1 : 0), 0);
 

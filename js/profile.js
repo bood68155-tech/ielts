@@ -1,6 +1,7 @@
 /* ============================================================
    IELTS Master — interactive profile system
-   Editable profile, stats, badges and activity log (localStorage).
+   Editable profile, stats, badges and activity log.
+   Data is stored per active user under a user-scoped key.
    ============================================================ */
 (function () {
   'use strict';
@@ -11,13 +12,27 @@
   const AVATARS = ['🦊', '🐼', '🦉', '🐯', '🐸', '🐙', '🦄', '🐨', '🦁', '🐧', '🐳', '🦋'];
   const BAND_OPTIONS = ['', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0'];
 
+  /* ---------- merged user-scoped profile (user_<id>_profile) ---------- */
+  function profileData() {
+    const user = window.IELTS_AUTH.getCurrentUser();
+    const scoped = window.IELTS_AUTH.getScoped('profile', null) || {};
+    return {
+      username: user ? user.username : '',
+      displayName: scoped.displayName || (user && user.displayName) || (user ? user.username : ''),
+      bio: scoped.bio || (user && user.bio) || '',
+      targetBand: scoped.targetBand || (user && user.targetBand) || '',
+      avatar: scoped.avatar || (user && user.avatar) || null,
+      activity: (scoped.activity && scoped.activity.length) ? scoped.activity : ((user && user.activity) || [])
+    };
+  }
+
   /* ---------- badge definitions (computed from user data) ---------- */
   function computeBadges(user) {
     if (!user) return [];
     const level = window.IELTS_AUTH.getLevel(user.xp);
-    const exams = user.examHistory || [];
+    const exams = window.IELTS_AUTH.getExamHistory();
     const claims = user.claims || [];
-    const training = user.training || {};
+    const training = window.IELTS_AUTH.getScoped('training', null) || {};
     const stagesDone = Object.keys(training).reduce((n, k) => n + ((training[k].completed || []).length), 0);
     const moduleDone = (m) => (training[m] && (training[m].completed || []).length) >= 5;
     const allModules = ['vocabulary', 'listening', 'speaking'].every(moduleDone);
@@ -54,7 +69,7 @@
   }
 
   function trainingProgress(user) {
-    const t = user.training || {};
+    const t = window.IELTS_AUTH.getScoped('training', null) || {};
     return [
       { key: 'vocabulary', label: 'Vocabulary', icon: '📚', done: (t.vocabulary && (t.vocabulary.completed || []).length) || 0, total: 5 },
       { key: 'listening', label: 'Listening', icon: '🎧', done: (t.listening && (t.listening.completed || []).length) || 0, total: 5 },
@@ -63,7 +78,7 @@
   }
 
   function statsOf(user) {
-    const exams = user.examHistory || [];
+    const exams = window.IELTS_AUTH.getExamHistory();
     const best = exams.length ? Math.max(...exams.map((e) => e.score)) : 0;
     const t = trainingProgress(user);
     const stages = t.reduce((n, x) => n + x.done, 0);
@@ -118,18 +133,19 @@
 
   /* ---------- profile card ---------- */
   function renderView(user) {
+    const p = profileData();
     const level = window.IELTS_AUTH.getLevel(user.xp);
     const joined = new Date(user.createdAt || Date.now()).toLocaleDateString();
     $('#profile-view').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-6">
-        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center text-4xl font-extrabold shadow-lg shrink-0">${esc(avatarOf(user))}</div>
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center text-4xl font-extrabold shadow-lg shrink-0">${esc(avatarOf(p))}</div>
         <div class="flex-1 text-center sm:text-left">
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-            <h3 class="text-2xl font-extrabold text-slate-900">${esc(user.displayName || user.username)}</h3>
+            <h3 class="text-2xl font-extrabold text-slate-900">${esc(p.displayName)}</h3>
             <span class="text-xs font-bold level-badge-${level.color} px-2.5 py-1 rounded-full">${level.icon} ${level.name}</span>
           </div>
-          <p class="text-sm text-slate-500 mt-0.5">@${esc(user.username)} ${user.targetBand ? '· 🎯 Target band ' + esc(user.targetBand) : ''}</p>
-          <p class="text-sm text-slate-600 mt-2 max-w-xl mx-auto sm:mx-0">${user.bio ? esc(user.bio) : 'No bio yet — tell other learners a little about yourself.'}</p>
+          <p class="text-sm text-slate-500 mt-0.5">@${esc(p.username)} ${p.targetBand ? '· 🎯 Target band ' + esc(p.targetBand) : ''}</p>
+          <p class="text-sm text-slate-600 mt-2 max-w-xl mx-auto sm:mx-0">${p.bio ? esc(p.bio) : 'No bio yet — tell other learners a little about yourself.'}</p>
           <p class="text-xs text-slate-400 mt-2">Member since ${joined} · ${user.xp} XP</p>
         </div>
         <button class="btn-secondary text-sm shrink-0" onclick="IELTS_PROFILE.startEdit()">✏️ Edit profile</button>
@@ -179,29 +195,30 @@
 
   /* ---------- edit form ---------- */
   function renderEdit(user) {
+    const p = profileData();
     $('#profile-edit').innerHTML = `
       <div class="bg-white rounded-2xl border border-brand-200 ring-2 ring-brand-100 shadow-sm p-6">
         <h4 class="font-bold text-slate-900 mb-4">✏️ Edit your profile</h4>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-name">Display name</label>
-            <input id="pf-name" type="text" maxlength="40" value="${esc(user.displayName || '')}" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+            <input id="pf-name" type="text" maxlength="40" value="${esc(p.displayName)}" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
           </div>
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-band">Target band</label>
             <select id="pf-band" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white">
-              ${BAND_OPTIONS.map((b) => '<option value="' + b + '" ' + (user.targetBand === b ? 'selected' : '') + '>' + (b ? 'Band ' + b : 'Not set') + '</option>').join('')}
+              ${BAND_OPTIONS.map((b) => '<option value="' + b + '" ' + (p.targetBand === b ? 'selected' : '') + '>' + (b ? 'Band ' + b : 'Not set') + '</option>').join('')}
             </select>
           </div>
         </div>
         <div class="mt-4">
           <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-bio">Bio</label>
-          <textarea id="pf-bio" rows="3" maxlength="200" placeholder="Tell other learners about your goals…" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 resize-y">${esc(user.bio || '')}</textarea>
+          <textarea id="pf-bio" rows="3" maxlength="200" placeholder="Tell other learners about your goals…" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 resize-y">${esc(p.bio)}</textarea>
         </div>
         <div class="mt-4">
           <p class="text-sm font-semibold text-slate-700 mb-2">Avatar</p>
           <div class="flex flex-wrap gap-2">
-            ${AVATARS.map((a) => '<button type="button" onclick="IELTS_PROFILE.pickAvatar(this)" data-avatar="' + a + '" class="w-10 h-10 rounded-full border-2 text-xl flex items-center justify-center transition ' + (user.avatar === a ? 'border-brand-500 bg-brand-50' : 'border-slate-200 hover:border-brand-300') + '">' + a + '</button>').join('')}
+            ${AVATARS.map((a) => '<button type="button" onclick="IELTS_PROFILE.pickAvatar(this)" data-avatar="' + a + '" class="w-10 h-10 rounded-full border-2 text-xl flex items-center justify-center transition ' + (p.avatar === a ? 'border-brand-500 bg-brand-50' : 'border-slate-200 hover:border-brand-300') + '">' + a + '</button>').join('')}
           </div>
         </div>
         <div class="flex gap-3 mt-6">
@@ -239,12 +256,13 @@
   function saveProfile() {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return;
+    const p = profileData();
     const name = $('#pf-name').value.trim() || user.username;
     const bio = $('#pf-bio').value.trim();
     const targetBand = $('#pf-band').value;
     const picked = document.querySelector('#profile-edit [data-avatar].border-brand-500');
-    const avatar = picked ? picked.dataset.avatar : user.avatar;
-    const bandChanged = targetBand !== user.targetBand;
+    const avatar = picked ? picked.dataset.avatar : p.avatar;
+    const bandChanged = targetBand !== p.targetBand;
 
     window.IELTS_AUTH.updateProfile({ displayName: name, bio, targetBand, avatar });
     if (bandChanged && targetBand) {
@@ -282,7 +300,7 @@
   };
 
   function renderActivity(user) {
-    const activity = user.activity || [];
+    const activity = profileData().activity || [];
     $('#profile-activity').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
         <p class="font-bold text-slate-900 mb-4">🕒 Recent activity</p>

@@ -1,7 +1,7 @@
 /* ============================================================
    IELTS Master — zero-to-hero training modules
    Vocabulary, Listening and Speaking skill paths with stages.
-   Progress + XP stored per user in localStorage.
+   Progress + XP stored per user under a user-scoped key.
    ============================================================ */
 (function () {
   'use strict';
@@ -43,12 +43,20 @@
     if ('speechSynthesis' in window) speechSynthesis.cancel();
   }
 
-  /* ---------- per-user training state ---------- */
+  /* ---------- per-user training state (user-scoped key) ---------- */
+  let trainingCache = null; // lazily loaded for the active user
+
   function trainState() {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return null;
-    if (!user.training) user.training = {};
-    return user.training;
+    if (trainingCache === null) {
+      trainingCache = window.IELTS_AUTH.getScoped('training', null) || {};
+    }
+    return trainingCache;
+  }
+
+  function saveTraining() {
+    if (trainingCache !== null) window.IELTS_AUTH.setScoped('training', trainingCache);
   }
 
   function moduleState(mId) {
@@ -56,6 +64,11 @@
     if (!ts) return null;
     if (!ts[mId]) ts[mId] = { completed: [], scores: {} };
     return ts[mId];
+  }
+
+  /* switching users switches to their training environment */
+  if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) {
+    window.IELTS_AUTH.onUserChange(() => { trainingCache = null; });
   }
 
   function getModule(mId) {
@@ -85,7 +98,7 @@
     const stage = m.stages[stageIdx];
     if (!ms.completed.includes(stage.id)) {
       ms.completed.push(stage.id);
-      window.IELTS_AUTH.save();
+      saveTraining();
       window.IELTS_AUTH.addActivity('training', 'Completed ' + stage.title + ' · ' + m.name, m.xpPerStage);
       const allDone = countDone(m.id) >= m.stages.length;
       if (allDone) {

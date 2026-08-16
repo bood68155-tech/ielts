@@ -27,6 +27,14 @@
     catch (e) { return []; }
   }
 
+  /* --- stable id for a username (used for migrated/legacy accounts) --- */
+  function idFromUsername(username) {
+    let h = 0;
+    const s = String(username).toLowerCase();
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return 'u' + h.toString(36);
+  }
+
   function saveUsers(users) {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
@@ -48,8 +56,61 @@
     return currentUser;
   }
 
+  /* --- user-scoped storage: every data key is prefixed with the active user id --- */
+  let activeUserId = null;
+
+  function getActiveUserId() {
+    return activeUserId;
+  }
+
+  function scopedKey(suffix) {
+    return 'user_' + (activeUserId || 'guest') + '_' + suffix;
+  }
+
+  function getScoped(suffix, fallback) {
+    try {
+      const raw = localStorage.getItem(scopedKey(suffix));
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (e) { return fallback; }
+  }
+
+  function setScoped(suffix, value) {
+    localStorage.setItem(scopedKey(suffix), JSON.stringify(value));
+  }
+
+  function removeScoped(suffix) {
+    localStorage.removeItem(scopedKey(suffix));
+  }
+
+  /* --- notify modules when the active user changes (login / logout / restore) --- */
+  const userChangeHandlers = [];
+  function onUserChange(cb) { userChangeHandlers.push(cb); }
+  function notifyUserChange() {
+    userChangeHandlers.forEach((cb) => { try { cb(); } catch (e) {} });
+  }
+
+  /* --- one-time move of legacy per-user data into scoped keys --- */
+  function migrateLegacyData(user) {
+    if (!user) return;
+    if (getScoped('profile', null) === null) {
+      setScoped('profile', {
+        displayName: user.displayName || user.username,
+        bio: user.bio || '',
+        targetBand: user.targetBand || '',
+        avatar: user.avatar || null,
+        activity: Array.isArray(user.activity) ? user.activity.slice() : []
+      });
+    }
+    if (getScoped('training', null) === null && user.training && Object.keys(user.training).length) {
+      setScoped('training', user.training);
+    }
+    if (getScoped('exam', null) === null && Array.isArray(user.examHistory) && user.examHistory.length) {
+      setScoped('exam', { history: user.examHistory.slice(), inProgress: null });
+    }
+  }
+
   function persistSession(username) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ username }));
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ username, userId: activeUserId }));
   }
 
   function clearSession() {
@@ -104,12 +165,19 @@
   /* --- record a weekly exam result for the current user --- */
   function recordExam(week, score, total, secondsUsed) {
     if (!currentUser) return;
+    const state = getScoped('exam', null) || { history: [], inProgress: null };
+    if (!Array.isArray(state.history)) state.history = [];
+    state.history.push({ week, score, total, secondsUsed, date: Date.now() });
+    setScoped('exam', state);
+    // legacy mirror so older readers keep working
     if (!currentUser.examHistory) currentUser.examHistory = [];
     currentUser.examHistory.push({ week, score, total, secondsUsed, date: Date.now() });
     saveCurrentUser();
   }
 
   function getExamHistory() {
+    const state = getScoped('exam', null);
+    if (state && Array.isArray(state.history)) return state.history.slice();
     return currentUser && currentUser.examHistory ? currentUser.examHistory.slice() : [];
   }
 
@@ -205,6 +273,7 @@
 
     const users = loadUsers();
     users.push({
+      userId: 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       username,
       email,
       passwordHash: hashPassword(password),
@@ -242,25 +311,41 @@
   function signInAs(username) {
     const users = loadUsers();
     currentUser = users.find((u) => u.username === username) || null;
+    if (currentUser) {
+      if (!currentUser.userId) currentUser.userId = idFromUsername(currentUser.username);
+      activeUserId = currentUser.userId;
+      migrateLegacyData(currentUser);
+    } else {
+      activeUserId = null;
+    }
     persistSession(username);
     hideScreen();
     refreshHeader();
     renderDashboardIfVisible();
+    notifyUserChange();
   }
 
   function logout() {
     currentUser = null;
+    activeUserId = null;
     clearSession();
     refreshHeader();
     showScreen();
     switchTab('login');
     if (window.showSection) window.showSection('dashboard');
     window.toast && window.toast('Signed out. See you soon!');
+    notifyUserChange();
   }
 
   /* --- profile & activity helpers --- */
   function updateProfile(updates) {
     if (!currentUser) return;
+    const profile = getScoped('profile', null) || {
+      displayName: currentUser.displayName || currentUser.username,
+      bio: '', targetBand: '', avatar: null, activity: []
+    };
+    Object.assign(profile, updates);
+    setScoped('profile', profile);
     Object.assign(currentUser, updates);
     saveCurrentUser();
     refreshHeader();
@@ -269,6 +354,15 @@
 
   function addActivity(type, text, xp) {
     if (!currentUser) return;
+    const profile = getScoped('profile', null) || {
+      displayName: currentUser.displayName || currentUser.username,
+      bio: '', targetBand: '', avatar: null, activity: []
+    };
+    if (!Array.isArray(profile.activity)) profile.activity = [];
+    profile.activity.unshift({ type, text, xp: xp || 0, date: Date.now() });
+    if (profile.activity.length > 40) profile.activity.length = 40;
+    setScoped('profile', profile);
+    // legacy mirror so older readers keep working
     if (!currentUser.activity) currentUser.activity = [];
     currentUser.activity.unshift({ type, text, xp: xp || 0, date: Date.now() });
     if (currentUser.activity.length > 40) currentUser.activity.length = 40;
@@ -286,14 +380,20 @@
       const user = getUser(session.username);
       if (user) {
         currentUser = user;
+        if (!currentUser.userId) currentUser.userId = session.userId || idFromUsername(currentUser.username);
+        activeUserId = currentUser.userId;
+        migrateLegacyData(currentUser);
         hideScreen();
         refreshHeader();
+        notifyUserChange();
         return;
       }
     }
     currentUser = null;
+    activeUserId = null;
     showScreen();
     refreshHeader();
+    notifyUserChange();
   }
 
   window.IELTS_AUTH = {
@@ -317,6 +417,12 @@
     updateProfile,
     addActivity,
     getUserByUsername,
+    getActiveUserId,
+    scopedKey,
+    getScoped,
+    setScoped,
+    removeScoped,
+    onUserChange,
     save: saveCurrentUser
   };
 })();

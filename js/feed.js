@@ -1,27 +1,40 @@
 /* ============================================================
    IELTS Master — social feed
-   Share progress, post updates, like and interact (localStorage).
+   Share progress, post updates, like and interact.
+   Data is stored per active user under a user-scoped key.
    ============================================================ */
 (function () {
   'use strict';
 
-  const FEED_KEY = 'ielts-feed';
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  let feed = loadFeed();
-  if (!feed.length) seed();
+  let feed = null; // lazy: loaded for the active user on demand
 
+  /* feed is scoped per user: user_<activeUserId>_feed */
   function loadFeed() {
     try {
-      const list = JSON.parse(localStorage.getItem(FEED_KEY)) || [];
+      const list = window.IELTS_AUTH.getScoped('feed', []) || [];
       return list.map((p) => { p.comments = p.comments || []; return p; });
     }
     catch (e) { return []; }
   }
 
   function saveFeed() {
-    localStorage.setItem(FEED_KEY, JSON.stringify(feed));
+    window.IELTS_AUTH.setScoped('feed', feed || []);
+  }
+
+  function ensureFeed() {
+    if (feed === null) {
+      feed = loadFeed();
+      if (!feed.length) seed();
+    }
+    return feed;
+  }
+
+  /* switching users switches to their feed environment */
+  if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) {
+    window.IELTS_AUTH.onUserChange(() => { feed = null; });
   }
 
   /* starter posts so the community never looks empty */
@@ -54,6 +67,7 @@
   function createPost(text, attachment) {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return;
+    ensureFeed();
     text = (text || '').trim();
     if (!text && !attachment) {
       window.toast && window.toast('Write something or attach a milestone first.');
@@ -178,6 +192,7 @@
   function render() {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return;
+    ensureFeed();
 
     const composer = user ? `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
@@ -245,8 +260,10 @@
   /* ---------- interactions ---------- */
   function toggleLike(id) {
     const user = window.IELTS_AUTH.getCurrentUser();
+    if (!user) return;
+    ensureFeed();
     const post = feed.find((p) => p.id === id);
-    if (!user || !post) return;
+    if (!post) return;
     const i = post.likes.indexOf(user.username);
     if (i >= 0) post.likes.splice(i, 1);
     else post.likes.push(user.username);
@@ -256,8 +273,10 @@
 
   function deletePost(id) {
     const user = window.IELTS_AUTH.getCurrentUser();
+    if (!user) return;
+    ensureFeed();
     const post = feed.find((p) => p.id === id);
-    if (!user || !post || post.author !== user.username) return;
+    if (!post || post.author !== user.username) return;
     feed = feed.filter((p) => p.id !== id);
     saveFeed();
     render();
@@ -271,9 +290,11 @@
 
   function addComment(id) {
     const user = window.IELTS_AUTH.getCurrentUser();
+    if (!user) return;
+    ensureFeed();
     const post = feed.find((p) => p.id === id);
     const input = $('#feed-comment-' + id);
-    if (!user || !post || !input) return;
+    if (!post || !input) return;
     const text = input.value.trim();
     if (!text) {
       window.toast && window.toast('Write a comment first.');
