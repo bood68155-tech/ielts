@@ -83,6 +83,9 @@
     if (name === 'dashboard') renderDashboard();
     if (name === 'levels') window.IELTS_LEVELS.render();
     if (name === 'exam') window.IELTS_EXAM.render();
+    if (name === 'training') window.IELTS_TRAINING.render();
+    if (name === 'profile') window.IELTS_PROFILE.render();
+    if (name === 'feed') window.IELTS_FEED.render();
     if (name === 'listening') renderListening();
     if (name === 'reading') renderReading();
     if (name === 'writing') renderWriting();
@@ -115,9 +118,11 @@
               </div>
             </div>
           </div>
-          <div class="flex gap-2">
+          <div class="flex flex-wrap gap-2">
+            <button class="btn-secondary text-sm" onclick="showSection('training')">🎓 Training</button>
             <button class="btn-secondary text-sm" onclick="showSection('levels')">📈 My levels</button>
             <button class="btn-primary text-sm" onclick="showSection('exam')">📅 Weekly exam</button>
+            <button class="btn-secondary text-sm" onclick="showSection('profile')">👤 Profile</button>
           </div>
         </div>`
       : `
@@ -272,6 +277,7 @@
     // Award XP once per section for checking answers
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('listening-' + section.id)) {
       window.IELTS_AUTH.addXp(XP_REWARDS.listening);
+      window.IELTS_AUTH.addActivity('listening', 'Completed ' + section.title.split('·')[0].trim(), XP_REWARDS.listening);
       toast('+' + XP_REWARDS.listening + ' XP for completing ' + section.title.split('·')[0].trim() + '!');
     }
 
@@ -444,6 +450,7 @@
     // Award XP once per passage
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('reading-' + passage.id)) {
       window.IELTS_AUTH.addXp(XP_REWARDS.reading);
+      window.IELTS_AUTH.addActivity('reading', 'Completed ' + passage.title.split('·')[0].trim(), XP_REWARDS.reading);
       toast('+' + XP_REWARDS.reading + ' XP for completing ' + passage.title.split('·')[0].trim() + '!');
     }
 
@@ -607,6 +614,7 @@
     // Award XP once per task for checking the word count
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('writing-' + task.id)) {
       window.IELTS_AUTH.addXp(XP_REWARDS.writing);
+      window.IELTS_AUTH.addActivity('writing', 'Checked word count for ' + task.name, XP_REWARDS.writing);
       toast('+' + XP_REWARDS.writing + ' XP for ' + task.name + '!');
     }
   };
@@ -689,6 +697,7 @@
     // Award XP once per part for practising
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('speaking-' + part)) {
       window.IELTS_AUTH.addXp(XP_REWARDS.speaking);
+      window.IELTS_AUTH.addActivity('speaking', 'Practised Speaking Part ' + part, XP_REWARDS.speaking);
       toast('+' + XP_REWARDS.speaking + ' XP for practising Speaking Part ' + part + '!');
     }
 

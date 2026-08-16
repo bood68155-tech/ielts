@@ -415,5 +415,300 @@ const WEEKLY_EXAM_POOL = [
   { id: 'W30', type: 'mcq', question: 'Choose the correct sentence:', options: ['Despite of the noise, she slept well.', 'Despite the noise, she slept well.', 'Although the noise, she slept well.', 'Despite the noise, but she slept well.'], answer: 'B', explanation: '“Despite” is used directly with a noun phrase, without “of”.' }
 ];
 
+/* ---------------- ZERO-TO-HERO TRAINING MODULES ---------------- */
+/* Structured skill training: Vocabulary, Listening and Speaking.
+   Each module has 5 progressive stages (zero-to-hero). */
+const TRAINING_MODULES = [
+  {
+    id: 'vocabulary',
+    name: 'Vocabulary',
+    icon: '📚',
+    color: 'amber',
+    xpPerStage: 15,
+    desc: 'Build a strong academic word bank step by step — from everyday essentials to band-9 collocations.',
+    stages: [
+      {
+        id: 'vocab-1',
+        title: 'Step 1 · Everyday Essentials',
+        focus: 'Common words for daily life and general IELTS topics.',
+        words: [
+          { word: 'accommodation', meaning: 'a place to live or stay', example: 'The city has affordable accommodation near the university.' },
+          { word: 'commute', meaning: 'the journey to and from work or school', example: 'My daily commute takes about forty minutes.' },
+          { word: 'facilities', meaning: 'services or equipment provided for a purpose', example: 'The gym has excellent facilities.' },
+          { word: 'neighbourhood', meaning: 'an area of a town or city', example: 'We live in a quiet neighbourhood.' },
+          { word: 'convenient', meaning: 'easy and suitable for your needs', example: 'The flat is convenient for the shops.' },
+          { word: 'expenses', meaning: 'money that you spend', example: 'Travel expenses can add up quickly.' },
+          { word: 'rent', meaning: 'money paid regularly to live in a property', example: 'The rent is £480 per month.' },
+          { word: 'utilities', meaning: 'services such as water, electricity and gas', example: 'Rent excludes utilities such as electricity.' }
+        ],
+        quiz: [
+          { q: 'Which word means "a place to live or stay"?', options: ['Transportation', 'Accommodation', 'Environment', 'Education'], answer: 'B', explanation: 'Accommodation is a place where you live or stay, such as a flat or hotel.' },
+          { q: 'Which word describes the journey to and from work?', options: ['Commute', 'Rent', 'Facility', 'Utility'], answer: 'A', explanation: 'A commute is the regular journey between home and work.' },
+          { q: 'What does "convenient" mean?', options: ['Expensive', 'Crowded', 'Easy and suitable', 'Far away'], answer: 'C', explanation: 'Convenient means easy to use or suitable for your needs.' },
+          { q: 'Which word means "services such as water, electricity and gas"?', options: ['Expenses', 'Utilities', 'Facilities', 'Neighbours'], answer: 'B', explanation: 'Utilities are the basic services like water, electricity and gas.' },
+          { q: 'Complete: "My daily ______ takes about forty minutes."', options: ['Rent', 'Commute', 'Utility', 'Expense'], answer: 'B', explanation: 'A daily commute is your regular journey to work or school.' }
+        ]
+      },
+      {
+        id: 'vocab-2',
+        title: 'Step 2 · Education & Study',
+        focus: 'The academic vocabulary you need for campus life and study topics.',
+        words: [
+          { word: 'curriculum', meaning: 'the set of subjects taught', example: 'The curriculum includes science, maths and the arts.' },
+          { word: 'assignment', meaning: 'a piece of work given to students', example: 'I have three assignments due this week.' },
+          { word: 'lecture', meaning: 'a formal talk given to a large group', example: 'The lecture on economics was fascinating.' },
+          { word: 'seminar', meaning: 'a small class for discussion', example: 'We discuss the reading in weekly seminars.' },
+          { word: 'deadline', meaning: 'the latest time something must be finished', example: 'The deadline for the essay is Friday.' },
+          { word: 'plagiarism', meaning: 'copying someone else\'s work as your own', example: 'Plagiarism is treated very seriously.' },
+          { word: 'tutorial', meaning: 'a small teaching session with a tutor', example: 'I have a tutorial with my tutor tomorrow.' },
+          { word: 'research', meaning: 'careful study to discover new facts', example: 'Her research focuses on climate change.' }
+        ],
+        quiz: [
+          { q: 'Which word means "the set of subjects taught at a school"?', options: ['Deadline', 'Curriculum', 'Tutorial', 'Seminar'], answer: 'B', explanation: 'The curriculum is the range of subjects taught.' },
+          { q: 'A piece of work given to students is called an ______.', options: ['Assignment', 'Lecture', 'Expense', 'Utility'], answer: 'A', explanation: 'Assignments are tasks set for students to complete.' },
+          { q: 'What does "plagiarism" mean?', options: ['Studying late at night', 'Copying someone else\'s work as your own', 'Giving a presentation', 'Working in a group'], answer: 'B', explanation: 'Plagiarism is using another person\'s work without permission.' },
+          { q: 'Which word means "the latest time something must be finished"?', options: ['Curriculum', 'Research', 'Deadline', 'Seminar'], answer: 'C', explanation: 'A deadline is the time by which work must be submitted.' },
+          { q: 'Complete: "We discuss the reading in weekly ______."', options: ['Lectures', 'Seminars', 'Deadlines', 'Rents'], answer: 'B', explanation: 'Seminars are small discussion-based classes.' }
+        ]
+      },
+      {
+        id: 'vocab-3',
+        title: 'Step 3 · Work & Career',
+        focus: 'Professional vocabulary for job and workplace questions.',
+        words: [
+          { word: 'apply for', meaning: 'to make a formal request for a job or course', example: 'I applied for the marketing position.' },
+          { word: 'experience', meaning: 'knowledge gained from doing something', example: 'She has five years of teaching experience.' },
+          { word: 'qualifications', meaning: 'official proofs of your skills or education', example: 'He has strong qualifications in engineering.' },
+          { word: 'promotion', meaning: 'a move to a higher position at work', example: 'She received a promotion last month.' },
+          { word: 'salary', meaning: 'the regular pay you receive for work', example: 'The salary is competitive.' },
+          { word: 'training', meaning: 'learning the skills needed for a job', example: 'New staff get two weeks of training.' },
+          { word: 'vacancy', meaning: 'an available job position', example: 'There is a vacancy in the sales team.' },
+          { word: 'colleague', meaning: 'a person you work with', example: 'My colleagues are very supportive.' }
+        ],
+        quiz: [
+          { q: 'Which phrase means "to make a formal request for a job"?', options: ['Apply for', 'Give up', 'Turn down', 'Look after'], answer: 'A', explanation: 'You apply for a job by formally requesting it.' },
+          { q: 'A move to a higher position at work is a ______.', options: ['Salary', 'Vacancy', 'Promotion', 'Training'], answer: 'C', explanation: 'A promotion means moving up in your career.' },
+          { q: 'What is a "vacancy"?', options: ['A holiday from work', 'An available job position', 'A type of training', 'A work colleague'], answer: 'B', explanation: 'A vacancy is a job position that is available.' },
+          { q: 'Which word means "a person you work with"?', options: ['Colleague', 'Customer', 'Manager', 'Neighbour'], answer: 'A', explanation: 'A colleague is someone who works with you.' },
+          { q: 'Complete: "New staff get two weeks of ______."', options: ['Vacancy', 'Promotion', 'Training', 'Salary'], answer: 'C', explanation: 'Training is the process of learning job skills.' }
+        ]
+      },
+      {
+        id: 'vocab-4',
+        title: 'Step 4 · Health & Environment',
+        focus: 'High-frequency words for health and environmental issues.',
+        words: [
+          { word: 'pollution', meaning: 'harmful substances in the air, water or land', example: 'Air pollution is a serious problem in big cities.' },
+          { word: 'sustainable', meaning: 'able to continue without harming the environment', example: 'We need sustainable sources of energy.' },
+          { word: 'obesity', meaning: 'the state of being very overweight', example: 'Obesity rates have risen sharply.' },
+          { word: 'nutrition', meaning: 'the food you need to stay healthy', example: 'Good nutrition is essential for children.' },
+          { word: 'epidemic', meaning: 'a disease spreading quickly among many people', example: 'The flu epidemic hit the city hard.' },
+          { word: 'recycling', meaning: 'turning waste into new products', example: 'Recycling reduces the amount of landfill waste.' },
+          { word: 'emissions', meaning: 'gases released into the atmosphere', example: 'Car emissions contribute to global warming.' },
+          { word: 'well-being', meaning: 'general health and happiness', example: 'Regular exercise improves your well-being.' }
+        ],
+        quiz: [
+          { q: 'Which word means "able to continue without harming the environment"?', options: ['Sustainable', 'Polluted', 'Crowded', 'Expensive'], answer: 'A', explanation: 'Sustainable practices meet present needs without harming the future.' },
+          { q: 'Gases released into the atmosphere are called ______.', options: ['Emissions', 'Recycling', 'Nutrition', 'Obesity'], answer: 'A', explanation: 'Emissions are gases, often from cars or factories.' },
+          { q: 'What is "recycling"?', options: ['Burning waste', 'Turning waste into new products', 'Throwing rubbish in the sea', 'Growing food in cities'], answer: 'B', explanation: 'Recycling converts waste materials into new products.' },
+          { q: 'A disease spreading quickly among many people is an ______.', options: ['Epidemic', 'Exhibition', 'Emission', 'Appointment'], answer: 'A', explanation: 'An epidemic is a rapid spread of disease through a population.' },
+          { q: 'Complete: "Good ______ is essential for children to grow."', options: ['Pollution', 'Nutrition', 'Emission', 'Rent'], answer: 'B', explanation: 'Nutrition is the food and nourishment needed for health.' }
+        ]
+      },
+      {
+        id: 'vocab-5',
+        title: 'Step 5 · Band-9 Collocations & Academic Verbs',
+        focus: 'The sophisticated language that lifts your writing and speaking to band 9.',
+        words: [
+          { word: 'significant impact', meaning: 'a large and important effect', example: 'Social media has a significant impact on teenagers.' },
+          { word: 'crucial role', meaning: 'an extremely important part', example: 'Sleep plays a crucial role in forming memories.' },
+          { word: 'address an issue', meaning: 'to deal with a problem', example: 'The government must address the housing issue.' },
+          { word: 'implement', meaning: 'to put a plan or policy into action', example: 'The school implemented a new timetable.' },
+          { word: 'considerable', meaning: 'large in amount or degree', example: 'There is considerable evidence to support this.' },
+          { word: 'predominant', meaning: 'most common or main', example: 'English is the predominant language of the internet.' },
+          { word: 'facilitate', meaning: 'to make something easier', example: 'Technology facilitates communication across borders.' },
+          { word: 'alleviate', meaning: 'to make something less severe', example: 'New roads will alleviate congestion in the city.' }
+        ],
+        quiz: [
+          { q: 'Which collocation means "a large and important effect"?', options: ['Significant impact', 'Small change', 'Crucial role', 'Minor detail'], answer: 'A', explanation: 'A significant impact is a large and important effect.' },
+          { q: 'What does "implement" mean?', options: ['To cancel', 'To put a plan into action', 'To delay', 'To ignore'], answer: 'B', explanation: 'To implement a plan is to start putting it into practice.' },
+          { q: '"The government must address the housing issue" — what does address mean here?', options: ['To write a speech', 'To deal with a problem', 'To build houses', 'To ignore'], answer: 'B', explanation: 'To address an issue means to deal with it or tackle it.' },
+          { q: 'Which word means "to make something less severe"?', options: ['Alleviate', 'Facilitate', 'Implement', 'Predominate'], answer: 'A', explanation: 'To alleviate is to reduce the severity of a problem.' },
+          { q: 'Complete: "Sleep plays a ______ role in forming memories."', options: ['Significant impact', 'Crucial', 'Considerable', 'Predominant'], answer: 'B', explanation: 'The natural collocation is "plays a crucial role".' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'listening',
+    name: 'Listening',
+    icon: '🎧',
+    color: 'sky',
+    xpPerStage: 20,
+    desc: 'Hone your ear for numbers, directions, opinions, facts and inference — the core skills of the Listening test.',
+    stages: [
+      {
+        id: 'listening-1',
+        title: 'Step 1 · Numbers & Spelling',
+        focus: 'Catch prices, membership numbers, times and small details.',
+        script: [
+          'RECEPTIONIST: Good afternoon, City Sports Club. How can I help you?',
+          'MEMBER: Hello, I would like to book a tennis court for Saturday afternoon.',
+          'RECEPTIONIST: Courts cost twelve pounds per hour for members. What time would suit you?',
+          'MEMBER: Two thirty, please. My membership number is 7-4-8-2-9.',
+          'RECEPTIONIST: Thank you. Court number 3 is booked for 2:30 on Saturday. Please arrive ten minutes early.'
+        ],
+        questions: [
+          { id: 'TL1-1', type: 'mcq', question: 'How much does a tennis court cost per hour for members?', options: ['£10', '£12', '£15', '£20'], answer: 'B', explanation: 'The receptionist says courts cost twelve pounds per hour for members.' },
+          { id: 'TL1-2', type: 'fill', question: 'What is the member\'s membership number?', answer: ['74829', '7 4 8 2 9'], explanation: 'The member spells it: 7-4-8-2-9.' },
+          { id: 'TL1-3', type: 'mcq', question: 'Which court is booked for the member?', options: ['Court 1', 'Court 2', 'Court 3', 'Court 4'], answer: 'C', explanation: 'The receptionist confirms court number 3.' },
+          { id: 'TL1-4', type: 'fill', question: 'How many minutes early should the member arrive? Write the number.', answer: ['10', 'ten'], explanation: 'The receptionist asks the member to arrive ten minutes early.' }
+        ]
+      },
+      {
+        id: 'listening-2',
+        title: 'Step 2 · Directions & Places',
+        focus: 'Follow instructions and note the position of places.',
+        script: [
+          'TOURIST: Excuse me, could you tell me how to get to the art gallery?',
+          'LOCAL: Certainly. Go straight down this street until you reach the traffic lights, then turn left.',
+          'LOCAL: The gallery is on the right, opposite the library and next to the museum.',
+          'TOURIST: Is it far from here?',
+          'LOCAL: It is about a ten-minute walk. There is also a bus stop right outside the library.'
+        ],
+        questions: [
+          { id: 'TL2-1', type: 'mcq', question: 'At the traffic lights, which way should the tourist turn?', options: ['Left', 'Right', 'Straight on', 'Back'], answer: 'A', explanation: 'The local says "turn left" at the traffic lights.' },
+          { id: 'TL2-2', type: 'mcq', question: 'Where is the art gallery?', options: ['Opposite the museum', 'Opposite the library, next to the museum', 'Next to the traffic lights', 'Behind the bus stop'], answer: 'B', explanation: 'The gallery is "opposite the library and next to the museum".' },
+          { id: 'TL2-3', type: 'fill', question: 'How long is the walk to the gallery? Write the number of minutes.', answer: ['10', 'ten'], explanation: 'The local says it is about a ten-minute walk.' },
+          { id: 'TL2-4', type: 'mcq', question: 'Where is the bus stop?', options: ['Inside the museum', 'Outside the library', 'Opposite the gallery', 'At the traffic lights'], answer: 'B', explanation: 'There is a bus stop "right outside the library".' }
+        ]
+      },
+      {
+        id: 'listening-3',
+        title: 'Step 3 · Opinions & Attitudes',
+        focus: 'Identify what speakers like, dislike and would prefer.',
+        script: [
+          'INTERVIEWER: So, Maria, what do you think of the new study schedule?',
+          'MARIA: Overall, I think it is a big improvement. Having a fixed revision hour every evening helps me stay consistent, though I would prefer it to start a little later.',
+          'INTERVIEWER: And how do you feel about the group projects?',
+          'MARIA: To be honest, I am not keen on them. I prefer working alone because I can concentrate better.'
+        ],
+        questions: [
+          { id: 'TL3-1', type: 'mcq', question: 'What does Maria think of the new study schedule?', options: ['It is too long', 'It is a big improvement', 'It is a waste of time', 'It is unchanged'], answer: 'B', explanation: 'Maria calls the new schedule "a big improvement".' },
+          { id: 'TL3-2', type: 'mcq', question: 'What would Maria prefer about the revision hour?', options: ['It should be longer', 'It should start later', 'It should be shorter', 'It should be optional'], answer: 'B', explanation: 'She would prefer the revision hour to start a little later.' },
+          { id: 'TL3-3', type: 'mcq', question: 'How does Maria feel about the group projects?', options: ['She loves them', 'She is not keen on them', 'She has no opinion', 'She wants more of them'], answer: 'B', explanation: 'Maria says "I am not keen on them" — she does not like them.' },
+          { id: 'TL3-4', type: 'mcq', question: 'Why does Maria prefer working alone?', options: ['She has no friends', 'She can concentrate better', 'It is faster', 'She dislikes her group'], answer: 'B', explanation: 'She prefers working alone because she can concentrate better.' }
+        ]
+      },
+      {
+        id: 'listening-4',
+        title: 'Step 4 · Facts & Figures',
+        focus: 'Note specific numbers and amounts from a short lecture.',
+        script: [
+          'LECTURER: Today we are looking at the honeybee. A single honeybee colony can contain up to sixty thousand workers.',
+          'LECTURER: Interestingly, a bee will visit up to five thousand flowers in a single day, while the queen can lay up to two thousand eggs per day.',
+          'LECTURER: Beekeepers report that colonies in warmer climates produce around thirty kilograms of honey per year, roughly double the amount produced in cooler regions.'
+        ],
+        questions: [
+          { id: 'TL4-1', type: 'fill', question: 'How many workers can a honeybee colony contain? Write the number in thousands.', answer: ['60000', 'sixty thousand', '60 thousand', '60,000'], explanation: 'A colony can contain up to sixty thousand workers.' },
+          { id: 'TL4-2', type: 'fill', question: 'How many flowers can a bee visit in a single day? Write the number.', answer: ['5000', 'five thousand'], explanation: 'A bee can visit up to five thousand flowers in a day.' },
+          { id: 'TL4-3', type: 'fill', question: 'How many eggs can the queen lay per day? Write the number.', answer: ['2000', 'two thousand'], explanation: 'The queen can lay up to two thousand eggs per day.' },
+          { id: 'TL4-4', type: 'mcq', question: 'How much honey do colonies produce per year in cooler regions?', options: ['30 kg', '15 kg', '60 kg', '45 kg'], answer: 'B', explanation: 'Warmer climates produce around 30 kg — double the cooler regions, so cooler regions produce about 15 kg.' }
+        ]
+      },
+      {
+        id: 'listening-5',
+        title: 'Step 5 · Inference & Purpose',
+        focus: 'Understand why a speaker says something and what they suggest.',
+        script: [
+          'ADVISOR: Good morning, Daniel. I have looked over your university application.',
+          'DANIEL: Great — what did you make of it?',
+          'ADVISOR: Your personal statement is strong, but the references are a little weak. You asked Mr Brown, your physics teacher, but you took that class two years ago and he barely remembers you.',
+          'ADVISOR: I would suggest asking your current chemistry teacher instead — she can speak much more specifically about your recent work.',
+          'DANIEL: That makes sense. I will email her today.',
+          'ADVISOR: Good. And one more thing — you might want to retake your English exam. Your score meets the minimum, but a higher band would make your application far more competitive.'
+        ],
+        questions: [
+          { id: 'TL5-1', type: 'mcq', question: 'Why does the advisor think the references are weak?', options: ['Mr Brown is a poor teacher', 'The physics teacher barely remembers Daniel', 'The references are too long', 'Daniel wrote them himself'], answer: 'B', explanation: 'Mr Brown "barely remembers" Daniel because the class was two years ago.' },
+          { id: 'TL5-2', type: 'mcq', question: 'Who does the advisor suggest Daniel should ask instead?', options: ['His physics teacher', 'His chemistry teacher', 'His maths teacher', 'The head teacher'], answer: 'B', explanation: 'The advisor suggests the current chemistry teacher, who knows Daniel\'s recent work.' },
+          { id: 'TL5-3', type: 'mcq', question: 'What does the advisor suggest about the English exam?', options: ['It is not needed', 'Daniel should retake it', 'It should be cancelled', 'The score is perfect'], answer: 'B', explanation: 'A higher band would make the application "far more competitive".' },
+          { id: 'TL5-4', type: 'mcq', question: 'What is the advisor\'s overall purpose?', options: ['To reject the application', 'To help Daniel improve his application', 'To compare two teachers', 'To discuss exam dates'], answer: 'B', explanation: 'The advisor gives suggestions to strengthen the application.' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'speaking',
+    name: 'Speaking',
+    icon: '🗣️',
+    color: 'emerald',
+    xpPerStage: 15,
+    desc: 'Train your fluency and structure — from single sentences to a full two-minute hero talk.',
+    stages: [
+      {
+        id: 'speaking-1',
+        title: 'Step 1 · Speak in Sentences',
+        focus: 'Answer in complete sentences with one detail.',
+        topic: 'Your hometown',
+        tip: 'Answer in complete sentences. Give one piece of information, then add one detail.',
+        prompts: [
+          { prompt: 'Where are you from?', tip: 'Name the place, then add one detail about it.', sample: 'I am from Alexandria, a coastal city in Egypt. It is famous for its long seafront and friendly atmosphere.' },
+          { prompt: 'What is your hometown like?', tip: 'Use two adjectives and give one example.', sample: 'It is lively and crowded, especially in summer. For example, the Corniche is packed with families every evening.' },
+          { prompt: 'Do you like living there?', tip: 'Give your opinion and one reason.', sample: 'Yes, I do, because everything I need is close by and the sea is only ten minutes away.' }
+        ]
+      },
+      {
+        id: 'speaking-2',
+        title: 'Step 2 · Fluency: Giving Reasons',
+        focus: 'Keep talking by explaining why.',
+        topic: 'Your daily routine',
+        tip: 'Use linking words: because, so, as a result, that is why.',
+        prompts: [
+          { prompt: 'What time do you usually wake up?', tip: 'Give the time, then explain why it suits you.', sample: 'I usually wake up at six thirty because I like to start the day quietly, before the rest of the house is up. That is why I can fit in some reading before breakfast.' },
+          { prompt: 'What do you do in the evenings?', tip: 'Describe your routine and give a reason for it.', sample: 'In the evenings I relax by watching a series or going for a short walk, because it helps me unwind after a long day. As a result, I sleep much better.' },
+          { prompt: 'Do you prefer mornings or evenings?', tip: 'State a preference and justify it.', sample: 'I definitely prefer mornings, because I have the most energy then and I can get a lot done before noon. In the evening I am usually too tired to study.' }
+        ]
+      },
+      {
+        id: 'speaking-3',
+        title: 'Step 3 · Structure: Describe & Compare',
+        focus: 'Use comparatives to describe and contrast.',
+        topic: 'Two places you know well',
+        tip: 'Use comparatives: more, less, -er, not as … as.',
+        prompts: [
+          { prompt: 'Describe your favourite café.', tip: 'Talk about the atmosphere, the coffee and the location.', sample: 'My favourite café is a small place near the library. It is quieter than most coffee shops, the coffee is fresher, and the staff remember my order, which makes it feel very welcoming.' },
+          { prompt: 'How is it different from a busy chain café?', tip: 'Use comparatives to contrast the two.', sample: 'It is much less crowded than a chain café, so I can find a seat easily. The prices are slightly higher, but the quality is better, so it is worth it.' },
+          { prompt: 'Which do you prefer and why?', tip: 'Give a clear preference and two reasons.', sample: 'I prefer the small café because it is more comfortable for studying and the atmosphere is friendlier. I go there at least three times a week.' }
+        ]
+      },
+      {
+        id: 'speaking-4',
+        title: 'Step 4 · Confidence: Opinions & Examples',
+        focus: 'State an opinion and support it with an example.',
+        topic: 'Modern technology',
+        tip: 'State your opinion first, then support it with a personal example.',
+        prompts: [
+          { prompt: 'Is technology making life easier?', tip: 'Give your opinion, then one example.', sample: 'Overall, yes, technology is making life easier. For example, I can video-call my family abroad for free, which was impossible for my parents\' generation.' },
+          { prompt: 'What is your favourite device and why?', tip: 'Name the device and give two reasons.', sample: 'My favourite device is my smartphone, because it combines so many tools in one — a camera, a map, a diary and a library. I use it every day for both study and entertainment.' },
+          { prompt: 'Do people spend too much time online?', tip: 'Give your opinion and a balanced example.', sample: 'I think many people do. For instance, I notice my friends checking their phones during meals instead of talking. That said, the internet also lets us learn new skills, so it depends on how we use it.' }
+        ]
+      },
+      {
+        id: 'speaking-5',
+        title: 'Step 5 · The Hero Talk',
+        focus: 'Deliver a structured two-minute answer.',
+        topic: 'Describe a skill you learned that took a lot of effort',
+        tip: 'Follow the structure: introduction → what it was → how you learned → why it mattered.',
+        prompts: [
+          { prompt: 'Introduce the skill and why you wanted to learn it.', tip: 'Start with a clear sentence naming the skill and your motivation.', sample: 'The skill I would like to talk about is public speaking. I wanted to learn it because I used to freeze whenever I had to present in class, and I knew it would be essential for university and my future career.' },
+          { prompt: 'Explain how you practised and what was difficult.', tip: 'Describe your method and one challenge you overcame.', sample: 'I practised by joining a speaking club where we delivered short talks every week. At first it was really difficult — I spoke too fast and forgot my points. To fix this, I recorded myself and watched the videos to spot my mistakes.' },
+          { prompt: 'Describe the result and why the effort was worth it.', tip: 'Finish with the outcome and the lesson you learned.', sample: 'After six months, I gave a ten-minute presentation to over a hundred students without notes. It felt amazing. The effort was absolutely worth it because I gained confidence that now helps me in exams, interviews and everyday conversations.' }
+        ]
+      }
+    ]
+  }
+];
+
 /* ---- Expose to window for the app script ---- */
-window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, LEVELS, LEVEL_UNLOCKS, XP_REWARDS, WEEKLY_EXAM_POOL };
+window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, LEVELS, LEVEL_UNLOCKS, XP_REWARDS, WEEKLY_EXAM_POOL, TRAINING_MODULES };
+

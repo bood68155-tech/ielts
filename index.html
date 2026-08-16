@@ -97,10 +97,13 @@
           <button data-section="dashboard" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('dashboard')">Dashboard</button>
           <button data-section="levels" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('levels')">📈 Levels</button>
           <button data-section="exam" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('exam')">📅 Weekly Exam</button>
+          <button data-section="training" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
           <button data-section="listening" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('listening')">🎧 Listening</button>
           <button data-section="reading" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('reading')">📖 Reading</button>
           <button data-section="writing" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('writing')">✍️ Writing</button>
           <button data-section="speaking" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('speaking')">🗣️ Speaking</button>
+          <button data-section="feed" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('feed')">💬 Feed</button>
+          <button data-section="profile" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
 
         <div class="hidden md:flex items-center gap-3 text-xs text-slate-500">
@@ -130,10 +133,13 @@
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">Dashboard</button>
       <button data-section="levels" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('levels')">📈 Levels</button>
       <button data-section="exam" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('exam')">📅 Weekly Exam</button>
+      <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
       <button data-section="listening" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('listening')">🎧 Listening</button>
       <button data-section="reading" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('reading')">📖 Reading</button>
       <button data-section="writing" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('writing')">✍️ Writing</button>
       <button data-section="speaking" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('speaking')">🗣️ Speaking</button>
+      <button data-section="feed" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('feed')">💬 Feed</button>
+      <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-rose-600">Sign out</button>
     </nav>
   </header>
@@ -299,6 +305,39 @@
       <div id="exam-content"></div>
     </section>
 
+    <!-- ============ TRAINING ============ -->
+    <section id="section-training" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">🎓 Skill Training</h2>
+          <p class="text-sm text-slate-500">Zero-to-hero paths for Vocabulary, Listening and Speaking.</p>
+        </div>
+      </div>
+      <div id="training-content"></div>
+    </section>
+
+    <!-- ============ PROFILE ============ -->
+    <section id="section-profile" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">👤 My Profile</h2>
+          <p class="text-sm text-slate-500">Your stats, badges, progress and activity — all in one place.</p>
+        </div>
+      </div>
+      <div id="profile-content"></div>
+    </section>
+
+    <!-- ============ FEED ============ -->
+    <section id="section-feed" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">💬 Community Feed</h2>
+          <p class="text-sm text-slate-500">Post updates and share your progress with other learners.</p>
+        </div>
+      </div>
+      <div id="feed-content"></div>
+    </section>
+
     <!-- ============ SPEAKING ============ -->
     <section id="section-speaking" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
@@ -341,6 +380,9 @@
   <script src="js/auth.js"></script>
   <script src="js/levels.js"></script>
   <script src="js/exam.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/training.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

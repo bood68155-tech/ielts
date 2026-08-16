@@ -82,8 +82,10 @@
         </div>
       </div>
       <div id="exam-run"></div>
+      <div id="exam-gradebook"></div>
       <div id="exam-history"></div>`;
 
+    renderGradeBook(history);
     renderHistory(history);
     if (exam && exam.week === week && !exam.submitted) {
       renderExamRun();
@@ -160,6 +162,7 @@
         <p class="text-lg font-extrabold text-slate-900">You scored ${correct} / ${exam.questions.length} (${pct}%)</p>
         <p class="text-sm text-slate-600 mt-1">${pct >= 80 ? 'Excellent — keep it up!' : pct >= 60 ? 'Good effort — review the answers below.' : 'Review the answers and try again next week.'}</p>
         <button class="btn-secondary mt-4" onclick="IELTS_EXAM.start()">Retake</button>
+        <button class="btn-primary mt-4 ml-2" onclick="IELTS_EXAM.shareScore()">📣 Share score</button>
       </div>
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-2">${detail}</div>`;
   }
@@ -226,6 +229,79 @@
       </div>`;
   }
 
+  /* --- weekly grade book: pass/fail per week + level unlock progress --- */
+  function renderGradeBook(history) {
+    const el = $('#exam-gradebook');
+    if (!el) return;
+    const user = window.IELTS_AUTH.getCurrentUser();
+    const next = window.IELTS_AUTH.getNextLevel(user ? user.xp : 0);
+
+    // best score per week
+    const byWeek = {};
+    history.forEach((h) => {
+      if (!byWeek[h.week] || h.score > byWeek[h.week].score) {
+        byWeek[h.week] = { week: h.week, score: h.score, total: h.total };
+      }
+    });
+    const sorted = Object.keys(byWeek).map((k) => byWeek[k]).sort((a, b) => a.week - b.week).slice(-10);
+
+    const bars = sorted.map((w) => {
+      const pct = Math.round((w.score / w.total) * 100);
+      const pass = pct >= 60;
+      const hpx = Math.max(10, Math.round((pct / 100) * 120));
+      return `
+        <div class="flex flex-col items-center gap-1 flex-1 min-w-0">
+          <span class="text-[10px] font-bold ${pass ? 'text-emerald-600' : 'text-rose-500'}">${w.score}/${w.total}</span>
+          <div class="w-full rounded-t-lg ${pass ? 'bg-emerald-500' : 'bg-rose-400'} transition-all" style="height: ${hpx}px" title="Week ${w.week}: ${pct}%"></div>
+          <span class="text-[10px] text-slate-400">W${w.week}</span>
+          <span class="text-[9px] font-bold ${pass ? 'text-emerald-600' : 'text-rose-500'}">${pass ? 'PASS' : 'FAIL'}</span>
+        </div>`;
+    }).join('');
+
+    // countdown to the next weekly exam (next Monday)
+    const now = new Date();
+    const dayIdx = (now.getDay() + 6) % 7; // Monday = 0
+    const daysToMonday = (7 - dayIdx) % 7 || 7;
+    const nextMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToMonday);
+    const diff = Math.max(0, nextMonday - now);
+    const dLeft = Math.floor(diff / 86400000);
+    const hLeft = Math.floor((diff % 86400000) / 3600000);
+    const mLeft = Math.floor((diff % 3600000) / 60000);
+
+    el.innerHTML = `
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <p class="font-bold text-slate-900">📊 Weekly grade book <span class="text-xs font-normal text-slate-400">(pass = 60% or more)</span></p>
+          <p class="text-xs text-slate-500">🔄 New questions every Monday · next exam in <span class="font-semibold text-slate-700">${dLeft}d ${hLeft}h ${mLeft}m</span></p>
+        </div>
+        ${sorted.length ? `
+          <div class="relative">
+            <div class="flex items-end gap-2 h-[120px]">${bars}</div>
+            <div class="absolute left-0 right-0 border-t-2 border-dashed border-emerald-400/70" style="bottom: 72px">
+              <span class="absolute -top-2.5 left-0 text-[9px] font-bold text-emerald-600 bg-white px-1">PASS 60%</span>
+            </div>
+          </div>
+        ` : `
+          <div class="text-center py-6 text-sm text-slate-500">
+            <p class="text-3xl mb-2">📝</p>
+            <p class="font-bold text-slate-700">No exams yet</p>
+            <p class="mt-1">Take this week's assessment to start your grade book and earn XP.</p>
+          </div>
+        `}
+        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <p class="text-sm text-slate-600">${next ? '📈 <b>' + esc(next.name) + '</b> unlocks at <b>' + next.minXp + ' XP</b> — ' + (next.minXp - (user ? user.xp : 0)) + ' XP to go. Weekly exams are the fastest way to level up.' : '🏆 You reached the top level — keep practising to stay sharp!'}</p>
+          <button class="btn-secondary !py-2 text-xs" onclick="showSection('levels')">View learning path</button>
+        </div>
+      </div>`;
+  }
+
+  /* --- share the latest result to the community feed --- */
+  function shareScore() {
+    if (!exam || !exam.submitted || !window.IELTS_FEED) return;
+    const correct = exam.questions.reduce((n, q, i) => n + (checkAnswer(q, exam.answers['E' + (i + 1)]) ? 1 : 0), 0);
+    window.IELTS_FEED.shareProgress('exam', { week: exam.week, score: correct, total: exam.questions.length });
+  }
+
   /* --- actions --- */
   function start() {
     const week = getWeekNumber(new Date());
@@ -287,9 +363,10 @@
     if (!alreadyTaken && !auto) {
       window.IELTS_AUTH.addXp(correct * XP_REWARDS.exam);
     }
+    window.IELTS_AUTH.addActivity('exam', 'Completed Week ' + exam.week + ' Assessment Exam — ' + correct + '/' + exam.questions.length + ' correct', correct * XP_REWARDS.exam);
 
     render(); // refresh best-this-week banner, result and history
   }
 
-  window.IELTS_EXAM = { render, start, submit, selectOption, saveFill };
+  window.IELTS_EXAM = { render, start, submit, selectOption, saveFill, shareScore };
 })();

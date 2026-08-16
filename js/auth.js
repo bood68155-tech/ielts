@@ -211,7 +211,13 @@
       createdAt: Date.now(),
       xp: 0,
       claims: [],
-      examHistory: []
+      examHistory: [],
+      displayName: username,
+      bio: '',
+      targetBand: '',
+      avatar: null,
+      training: {},
+      activity: []
     });
     saveUsers(users);
 
@@ -252,6 +258,27 @@
     window.toast && window.toast('Signed out. See you soon!');
   }
 
+  /* --- profile & activity helpers --- */
+  function updateProfile(updates) {
+    if (!currentUser) return;
+    Object.assign(currentUser, updates);
+    saveCurrentUser();
+    refreshHeader();
+    renderDashboardIfVisible();
+  }
+
+  function addActivity(type, text, xp) {
+    if (!currentUser) return;
+    if (!currentUser.activity) currentUser.activity = [];
+    currentUser.activity.unshift({ type, text, xp: xp || 0, date: Date.now() });
+    if (currentUser.activity.length > 40) currentUser.activity.length = 40;
+    saveCurrentUser();
+  }
+
+  function getUserByUsername(username) {
+    return getUser(username) || null;
+  }
+
   /* --- init: restore session or show the auth screen --- */
   function init() {
     const session = currentSession();
@@ -286,6 +313,10 @@
     getExamHistory,
     claimCompleted,
     completeClaim,
-    refreshHeader
+    refreshHeader,
+    updateProfile,
+    addActivity,
+    getUserByUsername,
+    save: saveCurrentUser
   };
 })();

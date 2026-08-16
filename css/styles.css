@@ -187,3 +187,12 @@ input:focus { outline: none; }
   z-index: 60;
 }
 #toast.show { transform: translateX(-50%) translateY(0); }
+
+/* --- Desktop nav: allow horizontal scroll when many items --- */
+#main-nav { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+#main-nav::-webkit-scrollbar { display: none; }
+#main-nav .nav-btn { white-space: nowrap; flex-shrink: 0; }
+
+/* --- Training star rating buttons --- */
+.star-btn { background: none; border: none; cursor: pointer; padding: 0.15rem; line-height: 1; }
+.star-btn:focus { outline: none; }
