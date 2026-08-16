@@ -119,6 +119,7 @@
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
+            <button class="btn-primary text-sm" onclick="showSection('feed')">💬 Community</button>
             <button class="btn-secondary text-sm" onclick="showSection('training')">🎓 Training</button>
             <button class="btn-secondary text-sm" onclick="showSection('levels')">📈 My levels</button>
             <button class="btn-primary text-sm" onclick="showSection('exam')">📅 Weekly exam</button>

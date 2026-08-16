@@ -13,7 +13,10 @@
   if (!feed.length) seed();
 
   function loadFeed() {
-    try { return JSON.parse(localStorage.getItem(FEED_KEY)) || []; }
+    try {
+      const list = JSON.parse(localStorage.getItem(FEED_KEY)) || [];
+      return list.map((p) => { p.comments = p.comments || []; return p; });
+    }
     catch (e) { return []; }
   }
 
@@ -27,10 +30,10 @@
     feed = [
       { id: 'seed-1', author: 'IELTS Master', avatar: 'I', level: 'Advanced', system: true,
         text: 'Welcome to the IELTS Master community! 🎉 Share your scores, ask questions and keep each other motivated on the road to your target band.',
-        attachment: null, likes: [], date: now - 2 * 86400000 },
+        attachment: null, likes: [], comments: [], date: now - 2 * 86400000 },
       { id: 'seed-2', author: 'IELTS Master', avatar: 'I', level: 'Advanced', system: true,
         text: 'Tip of the week: 15 focused minutes of vocabulary every day beats a 3-hour cram on Sunday. Consistency wins. 📚',
-        attachment: null, likes: [], date: now - 86400000 }
+        attachment: null, likes: [], comments: [], date: now - 86400000 }
     ];
     saveFeed();
   }
@@ -64,6 +67,7 @@
       text,
       attachment: attachment || null,
       likes: [],
+      comments: [],
       date: Date.now()
     });
     saveFeed();
@@ -118,6 +122,20 @@
       </div>`;
   }
 
+  function commentHtml(c) {
+    return `
+      <div class="flex items-start gap-2.5">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center font-extrabold text-xs shrink-0">${esc(c.avatar)}</div>
+        <div class="flex-1 min-w-0 bg-slate-50 border border-slate-100 rounded-xl px-3 py-2">
+          <div class="flex items-center gap-2">
+            <p class="text-xs font-bold text-slate-800">${esc(c.author)}</p>
+            <span class="text-[10px] text-slate-400">· ${timeAgo(c.date)}</span>
+          </div>
+          <p class="text-sm text-slate-600 mt-0.5 leading-relaxed">${esc(c.text)}</p>
+        </div>
+      </div>`;
+  }
+
   function postHtml(p) {
     const user = window.IELTS_AUTH.getCurrentUser();
     const mine = user && p.author === user.username;
@@ -139,7 +157,18 @@
               <button onclick="IELTS_FEED.toggleLike('${p.id}')" class="inline-flex items-center gap-1.5 text-sm font-semibold transition ${liked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-500'}">
                 <span class="text-base leading-none">${liked ? '❤️' : '🤍'}</span> ${p.likes.length || ''}
               </button>
+              <button onclick="IELTS_FEED.toggleComments('${p.id}')" class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-400 hover:text-brand-600 transition">
+                <span class="text-base leading-none">💬</span> ${(p.comments || []).length || ''}
+              </button>
               ${mine ? '<button onclick="IELTS_FEED.deletePost(\'\ + p.id + \'\)" class="text-xs text-slate-400 hover:text-rose-600 font-semibold">Delete</button>' : ''}
+            </div>
+            <div id="comments-${p.id}" class="hidden mt-4 pt-4 border-t border-slate-100 space-y-3">
+              ${(p.comments || []).length ? (p.comments || []).map(commentHtml).join('') : '<p class="text-xs text-slate-400">No comments yet — start the discussion!</p>'}
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center font-extrabold text-xs shrink-0">${esc(user ? (user.avatar || String(user.displayName || user.username).charAt(0).toUpperCase()) : '?')}</div>
+                <input id="feed-comment-${p.id}" type="text" maxlength="200" placeholder="Write a comment…" class="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" onkeydown="if (event.key === 'Enter') IELTS_FEED.addComment('${p.id}')" />
+                <button class="btn-primary !py-2 !px-3 text-xs" onclick="IELTS_FEED.addComment('${p.id}')">Comment</button>
+              </div>
             </div>
           </div>
         </div>
@@ -235,5 +264,33 @@
     window.toast && window.toast('Post deleted');
   }
 
-  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost };
+  function toggleComments(id) {
+    const el = $('#comments-' + id);
+    if (el) el.classList.toggle('hidden');
+  }
+
+  function addComment(id) {
+    const user = window.IELTS_AUTH.getCurrentUser();
+    const post = feed.find((p) => p.id === id);
+    const input = $('#feed-comment-' + id);
+    if (!user || !post || !input) return;
+    const text = input.value.trim();
+    if (!text) {
+      window.toast && window.toast('Write a comment first.');
+      return;
+    }
+    if (!post.comments) post.comments = [];
+    post.comments.push({
+      author: user.username,
+      avatar: user.avatar || String(user.displayName || user.username).charAt(0).toUpperCase(),
+      text: text.slice(0, 200),
+      date: Date.now()
+    });
+    saveFeed();
+    window.IELTS_AUTH.addActivity('feed', 'Commented on ' + post.author + "'s post", 0);
+    render();
+    window.toast && window.toast('Comment added 💬');
+  }
+
+  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost, toggleComments, addComment };
 })();

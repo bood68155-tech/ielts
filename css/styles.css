@@ -9,6 +9,14 @@
 .nav-btn-mobile:hover { background: #f1f5f9; }
 .nav-btn-mobile.active { background: #eef2ff; color: #4f46e5; font-weight: 600; }
 
+/* --- Featured "Community" nav tab --- */
+.nav-btn-featured { background: #4f46e5; color: #ffffff; font-weight: 600; }
+.nav-btn-featured:hover { background: #4338ca; color: #ffffff; }
+.nav-btn-featured.active { background: #4338ca; color: #ffffff; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3); }
+.nav-btn-mobile-featured { background: #4f46e5; color: #ffffff; font-weight: 600; }
+.nav-btn-mobile-featured:hover { background: #4338ca; color: #ffffff; }
+.nav-btn-mobile-featured.active { background: #4338ca; color: #ffffff; }
+
 /* --- Skill cards --- */
 .skill-card {
   background: #fff;
