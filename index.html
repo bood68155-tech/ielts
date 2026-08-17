@@ -78,7 +78,7 @@
           <button type="submit" class="btn-primary w-full !py-3">Create account</button>
         </form>
 
-        <p class="text-[11px] text-slate-400 text-center mt-5">Demo authentication — accounts are stored only in this browser (localStorage). Do not reuse a real password.</p>
+        <p class="text-[11px] text-slate-400 text-center mt-5">Demo authentication — accounts sync to Supabase when configured, otherwise they stay in this browser (localStorage). Do not reuse a real password.</p>
       </div>
     </div>
   </div>
@@ -372,9 +372,14 @@
     </div>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
       <p>IELTS Master — a free interactive practice app. Not affiliated with the official IELTS test partners.</p>
-      <p class="font-mono text-xs">Built with HTML · Tailwind CSS · JavaScript</p>
+      <p class="font-mono text-xs">Built with HTML · Tailwind CSS · JavaScript · Supabase</p>
     </div>
   </footer>
+
+  <!-- Supabase data layer — loaded first so js/supabaseClient.js can initialize -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabaseClient.js"></script>
 
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>

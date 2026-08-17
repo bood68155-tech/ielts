@@ -1,6 +1,7 @@
 /* ============================================================
    IELTS Master — authentication, user profiles & level system
-   Demo auth: accounts live only in this browser (localStorage).
+   Accounts sync to Supabase when configured; otherwise they live
+   only in this browser (localStorage). Demo auth — not real security.
    ============================================================ */
 (function () {
   'use strict';
@@ -11,6 +12,7 @@
   const SESSION_KEY = 'ielts-session';
 
   const $ = (sel) => document.querySelector(sel);
+  const db = () => window.IELTS_DB || null;
 
   /* --- tiny demo hash (not for real security; see note in UI) --- */
   function hashPassword(pw) {
@@ -74,8 +76,29 @@
     } catch (e) { return fallback; }
   }
 
+  /* --- every scoped write is also pushed to Supabase (best-effort, async) --- */
   function setScoped(suffix, value) {
+    const ts = Date.now();
+    // profiles carry their own updated_at so cross-device merges can compare timestamps
+    if (suffix === 'profile') {
+      try { value = Object.assign({}, value, { updatedAt: ts }); } catch (e) { /* ignore */ }
+    }
     localStorage.setItem(scopedKey(suffix), JSON.stringify(value));
+    pushScopedToDb(suffix, value, ts);
+  }
+
+  function pushScopedToDb(suffix, value, ts) {
+    const d = db();
+    if (!d || !d.isConfigured() || !activeUserId) return;
+    if (suffix === 'profile') {
+      d.upsertProfile(activeUserId, value);           // → profiles table (UPSERT)
+    } else if (suffix === 'training') {
+      if (value && typeof value === 'object' && Object.keys(value).length) {
+        d.upsertTraining(activeUserId, value);        // → training_progress table (UPSERT)
+        d.setMeta(activeUserId, { trainingUpdatedAt: ts });
+      }
+    }
+    // 'exam' drafts stay local; results are pushed by recordExam → exam_results table
   }
 
   function removeScoped(suffix) {
@@ -139,13 +162,24 @@
   }
 
   /* --- persistence of the signed-in user's mutable profile --- */
+  let userPushTimer = null;
+
+  function pushUserToDb() {
+    const d = db();
+    if (!d || !d.isConfigured() || !currentUser) return;
+    clearTimeout(userPushTimer);
+    userPushTimer = setTimeout(() => { d.upsertUser(currentUser); }, 400);
+  }
+
   function saveCurrentUser() {
     if (!currentUser) return;
+    currentUser.updatedAt = Date.now();
     const users = loadUsers();
     const i = users.findIndex((u) => u.username === currentUser.username);
     if (i >= 0) users[i] = currentUser;
     saveUsers(users);
     persistSession(currentUser.username);
+    pushUserToDb(); // → users table (UPSERT, debounced)
   }
 
   /* --- XP & progression --- */
@@ -165,14 +199,23 @@
   /* --- record a weekly exam result for the current user --- */
   function recordExam(week, score, total, secondsUsed) {
     if (!currentUser) return;
+    const entry = {
+      id: 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      week, score, total, secondsUsed, date: Date.now()
+    };
     const state = getScoped('exam', null) || { history: [], inProgress: null };
     if (!Array.isArray(state.history)) state.history = [];
-    state.history.push({ week, score, total, secondsUsed, date: Date.now() });
+    state.history.push(entry);
     setScoped('exam', state);
     // legacy mirror so older readers keep working
     if (!currentUser.examHistory) currentUser.examHistory = [];
-    currentUser.examHistory.push({ week, score, total, secondsUsed, date: Date.now() });
+    currentUser.examHistory.push(Object.assign({}, entry));
     saveCurrentUser();
+    // real INSERT into the exam_results table (best-effort)
+    const d = db();
+    if (d && d.isConfigured() && activeUserId) {
+      d.insertExamResult({ id: entry.id, userId: activeUserId, week, score, total, secondsUsed, date: entry.date });
+    }
   }
 
   function getExamHistory() {
@@ -258,7 +301,16 @@
     el.classList.remove('hidden');
   }
 
-  function register(event) {
+  /* --- pull fresher data from Supabase after sign-in (background, best-effort) --- */
+  function startBackgroundSync() {
+    const d = db();
+    if (!d || !d.isConfigured() || !activeUserId) return;
+    d.syncUserData(activeUserId).then(() => {
+      if (window.IELTS_DB && window.IELTS_DB.onSynced) window.IELTS_DB.onSynced();
+    });
+  }
+
+  async function register(event) {
     if (event) event.preventDefault();
     const username = $('#reg-username').value.trim();
     const email = $('#reg-email').value.trim();
@@ -271,13 +323,21 @@
     if (password !== password2) return showError('Passwords do not match.');
     if (getUser(username)) return showError('That username is already taken.');
 
-    const users = loadUsers();
-    users.push({
-      userId: 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    // reject usernames already registered on the shared database
+    const d = db();
+    if (d && d.isConfigured()) {
+      const existing = await d.pullUserByUsername(username);
+      if (existing) return showError('That username is already taken.');
+    }
+
+    const now = Date.now();
+    const newUser = {
+      userId: 'u' + now.toString(36) + Math.random().toString(36).slice(2, 6),
       username,
       email,
       passwordHash: hashPassword(password),
-      createdAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
       xp: 0,
       claims: [],
       examHistory: [],
@@ -287,19 +347,55 @@
       avatar: null,
       training: {},
       activity: []
-    });
+    };
+    const users = loadUsers();
+    users.push(newUser);
     saveUsers(users);
+
+    // real INSERT into the users table (best-effort)
+    if (d && d.isConfigured()) d.upsertUser(newUser);
 
     signInAs(username);
     window.toast && window.toast('Account created — welcome, ' + username + '! 🎉');
     if (window.showSection) window.showSection('dashboard');
   }
 
-  function login(event) {
+  async function login(event) {
     if (event) event.preventDefault();
     const username = $('#login-username').value.trim();
     const password = $('#login-password').value;
-    const user = getUser(username);
+    let user = getUser(username);
+
+    // account not on this device yet — look it up on the shared database
+    if (!user) {
+      const d = db();
+      if (d && d.isConfigured()) {
+        const remote = await d.pullUserByUsername(username);
+        if (remote && remote.passwordHash === hashPassword(password)) {
+          user = Object.assign({
+            userId: remote.userId,
+            username: remote.username,
+            email: remote.email || '',
+            passwordHash: remote.passwordHash,
+            createdAt: remote.createdAt || Date.now(),
+            updatedAt: remote.updatedAt || Date.now(),
+            xp: remote.xp || 0,
+            claims: remote.claims || [],
+            examHistory: [],
+            displayName: remote.username,
+            bio: '',
+            targetBand: '',
+            avatar: null,
+            training: {},
+            activity: []
+          }, remote);
+          const users = loadUsers();
+          users.push(user);
+          saveUsers(users);
+        }
+      }
+    }
+
     if (!user || user.passwordHash !== hashPassword(password)) {
       return showError('Incorrect username or password.');
     }
@@ -323,11 +419,13 @@
     refreshHeader();
     renderDashboardIfVisible();
     notifyUserChange();
+    startBackgroundSync();
   }
 
   function logout() {
     currentUser = null;
     activeUserId = null;
+    clearTimeout(userPushTimer);
     clearSession();
     refreshHeader();
     showScreen();
@@ -373,8 +471,25 @@
     return getUser(username) || null;
   }
 
+  /* --- re-render the visible section after a background sync --- */
+  function wireSyncUi() {
+    if (window.IELTS_DB) {
+      window.IELTS_DB.onSynced = function () {
+        const s = window.__IELTS_STATE && window.__IELTS_STATE.currentSection;
+        if (!s) return;
+        if (s === 'profile' && window.IELTS_PROFILE) window.IELTS_PROFILE.render();
+        else if (s === 'exam' && window.IELTS_EXAM) window.IELTS_EXAM.render();
+        else if (s === 'training' && window.IELTS_TRAINING) window.IELTS_TRAINING.render();
+        else if (s === 'levels' && window.IELTS_LEVELS) window.IELTS_LEVELS.render();
+        else if (s === 'feed' && window.IELTS_FEED) window.IELTS_FEED.render();
+        else if (s === 'dashboard' && window.renderDashboard) window.renderDashboard();
+      };
+    }
+  }
+
   /* --- init: restore session or show the auth screen --- */
   function init() {
+    wireSyncUi();
     const session = currentSession();
     if (session && session.username) {
       const user = getUser(session.username);
@@ -386,6 +501,7 @@
         hideScreen();
         refreshHeader();
         notifyUserChange();
+        startBackgroundSync();
         return;
       }
     }

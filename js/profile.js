@@ -1,7 +1,9 @@
 /* ============================================================
    IELTS Master — interactive profile system
    Editable profile, stats, badges and activity log.
-   Data is stored per active user under a user-scoped key.
+   Data is stored per active user under a user-scoped key and
+   mirrored to the Supabase `profiles` table (UPSERT) when
+   configured, so it follows the user across devices.
    ============================================================ */
 (function () {
   'use strict';
@@ -129,6 +131,17 @@
     renderProgress(user);
     renderBadges(user);
     renderActivity(user);
+
+    syncFromDb(user);
+  }
+
+  /* pull fresher profile data (e.g. edits made on another device) in the background */
+  function syncFromDb(user) {
+    const d = window.IELTS_DB;
+    if (!d || !d.isConfigured() || !user) return;
+    d.syncProfileForActive(user.userId).then((changed) => {
+      if (changed) render();
+    });
   }
 
   /* ---------- profile card ---------- */

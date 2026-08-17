@@ -2,7 +2,10 @@
    IELTS Master — weekly exam module
    15 questions picked deterministically from the pool each week,
    a 15-minute timer, and per-user score history.
-   Exam history + in-progress state live under a user-scoped key.
+   Exam results are pushed to the Supabase `exam_results` table
+   (INSERT) and pulled back in the background so history follows
+   the user across devices; without Supabase, everything stays
+   in a user-scoped localStorage key.
    ============================================================ */
 (function () {
   'use strict';
@@ -141,6 +144,18 @@
     } else if (exam) {
       renderExamResult();
     }
+
+    syncHistoryFromDb();
+  }
+
+  /* pull exam results from Supabase in the background and re-render if new rows arrived */
+  function syncHistoryFromDb() {
+    const d = window.IELTS_DB;
+    const user = window.IELTS_AUTH.getCurrentUser();
+    if (!d || !d.isConfigured() || !user) return;
+    d.syncExamHistory(user.userId).then((changed) => {
+      if (changed && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'exam') render();
+    });
   }
 
   function renderExamRun() {

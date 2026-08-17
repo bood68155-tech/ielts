@@ -1,7 +1,9 @@
 /* ============================================================
    IELTS Master — social feed
    Share progress, post updates, like and interact.
-   Data is stored per active user under a user-scoped key.
+   With Supabase configured the feed is a SHARED community feed
+   backed by the `posts` table (every user sees the same posts).
+   Without it, posts fall back to a local browser cache.
    ============================================================ */
 (function () {
   'use strict';
@@ -9,35 +11,41 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  let feed = null; // lazy: loaded for the active user on demand
+  let feed = null; // lazy: loaded once per session
 
-  /* feed is scoped per user: user_<activeUserId>_feed */
+  /* feed cache: shared across users, kept locally and mirrored to `posts` */
   function loadFeed() {
     try {
-      const list = window.IELTS_AUTH.getScoped('feed', []) || [];
-      return list.map((p) => { p.comments = p.comments || []; return p; });
+      let list = (window.IELTS_DB && window.IELTS_DB.getCache('feed')) || [];
+      // migrate a legacy per-user feed into the shared cache on first load
+      if (!list.length && window.IELTS_AUTH) {
+        const legacy = window.IELTS_AUTH.getScoped('feed', null);
+        if (Array.isArray(legacy)) list = legacy;
+      }
+      return list.map((p) => { p.comments = p.comments || []; p.likes = p.likes || []; return p; });
     }
     catch (e) { return []; }
   }
 
   function saveFeed() {
-    window.IELTS_AUTH.setScoped('feed', feed || []);
+    if (window.IELTS_DB) window.IELTS_DB.setCache('feed', feed || []);
   }
 
   function ensureFeed() {
     if (feed === null) {
       feed = loadFeed();
-      if (!feed.length) seed();
+      // only seed locally when there is no database to pull from
+      if (!feed.length && !(window.IELTS_DB && window.IELTS_DB.isConfigured())) seed();
     }
     return feed;
   }
 
-  /* switching users switches to their feed environment */
+  /* switching users keeps the same shared community feed */
   if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) {
     window.IELTS_AUTH.onUserChange(() => { feed = null; });
   }
 
-  /* starter posts so the community never looks empty */
+  /* starter posts so the community never looks empty (local-only mode) */
   function seed() {
     const now = Date.now();
     feed = [
@@ -73,7 +81,7 @@
       window.toast && window.toast('Write something or attach a milestone first.');
       return;
     }
-    feed.unshift({
+    const post = {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
       author: user.username,
       avatar: user.avatar || String(user.displayName || user.username).charAt(0).toUpperCase(),
@@ -82,9 +90,19 @@
       attachment: attachment || null,
       likes: [],
       comments: [],
-      date: Date.now()
-    });
+      date: Date.now(),
+      _unsynced: true // not yet pushed to the shared database
+    };
+    feed.unshift(post);
     saveFeed();
+    // real INSERT into the posts table (best-effort)
+    const d = window.IELTS_DB;
+    if (d && d.isConfigured()) {
+      d.upsertPost(post).then(() => {
+        const i = feed.findIndex((p) => p.id === post.id);
+        if (i >= 0) { delete feed[i]._unsynced; saveFeed(); }
+      });
+    }
     window.IELTS_AUTH.addActivity('feed', text.slice(0, 60) + (text.length > 60 ? '…' : ''), 0);
     render();
     window.toast && window.toast('Posted to the feed ✅');
@@ -174,7 +192,7 @@
               <button onclick="IELTS_FEED.toggleComments('${p.id}')" class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-400 hover:text-brand-600 transition">
                 <span class="text-base leading-none">💬</span> ${(p.comments || []).length || ''}
               </button>
-              ${mine ? '<button onclick="IELTS_FEED.deletePost(\'\ + p.id + \'\)" class="text-xs text-slate-400 hover:text-rose-600 font-semibold">Delete</button>' : ''}
+              ${mine ? '<button onclick="IELTS_FEED.deletePost(\'' + p.id + '\')" class="text-xs text-slate-400 hover:text-rose-600 font-semibold">Delete</button>' : ''}
             </div>
             <div id="comments-${p.id}" class="hidden mt-4 pt-4 border-t border-slate-100 space-y-3">
               ${(p.comments || []).length ? (p.comments || []).map(commentHtml).join('') : '<p class="text-xs text-slate-400">No comments yet — start the discussion!</p>'}
@@ -228,6 +246,17 @@
         <p class="text-xs text-slate-400">${feed.length} posts</p>
       </div>
       <div class="space-y-4">${list}</div>`;
+
+    refreshFromDb();
+  }
+
+  /* pull the shared feed from Supabase in the background and re-render */
+  function refreshFromDb() {
+    const d = window.IELTS_DB;
+    if (!d || !d.isConfigured()) return;
+    d.syncFeed().then((changed) => {
+      if (changed && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'feed') render();
+    });
   }
 
   function post() {
@@ -268,6 +297,9 @@
     if (i >= 0) post.likes.splice(i, 1);
     else post.likes.push(user.username);
     saveFeed();
+    // real UPDATE on the posts table (best-effort)
+    const d = window.IELTS_DB;
+    if (d && d.isConfigured()) d.updatePost(id, { likes: post.likes });
     render();
   }
 
@@ -279,6 +311,9 @@
     if (!post || post.author !== user.username) return;
     feed = feed.filter((p) => p.id !== id);
     saveFeed();
+    // real DELETE on the posts table (best-effort)
+    const d = window.IELTS_DB;
+    if (d && d.isConfigured()) d.deletePost(id);
     render();
     window.toast && window.toast('Post deleted');
   }
@@ -308,6 +343,9 @@
       date: Date.now()
     });
     saveFeed();
+    // real UPDATE on the posts table (best-effort)
+    const d = window.IELTS_DB;
+    if (d && d.isConfigured()) d.updatePost(id, { comments: post.comments });
     window.IELTS_AUTH.addActivity('feed', 'Commented on ' + post.author + "'s post", 0);
     render();
     window.toast && window.toast('Comment added 💬');
