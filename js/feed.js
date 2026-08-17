@@ -110,51 +110,99 @@
     window.toast && window.toast('Posted to the feed ✅');
   }
 
-  /* only accept http(s) image links so we never inject junk into the feed */
+  /* accept http(s) links (legacy posts) and data:image URLs (file uploads) */
   function cleanImageUrl(url) {
     const u = String(url || '').trim();
     if (!u) return '';
+    if (u.indexOf('data:image/') === 0) return u;
     try {
       const parsed = new URL(u);
       return (parsed.protocol === 'https:' || parsed.protocol === 'http:') ? u : '';
     } catch (e) { return ''; }
   }
 
-  /* ---------- composer image field ---------- */
+  /* ---------- composer image picker (file upload) ---------- */
+  let pickedImage = null;   // processed data URL of the chosen image
+  let imageRowOpen = false; // whether the image row is visible
+
   function toggleImageField() {
+    imageRowOpen = !imageRowOpen;
     const row = $('#feed-image-row');
-    if (!row) return;
-    row.classList.toggle('hidden');
-    if (row.classList.contains('hidden')) {
-      const input = $('#feed-image');
-      if (input) input.value = '';
-      const prev = $('#feed-image-preview');
-      if (prev) { prev.classList.add('hidden'); prev.innerHTML = ''; }
-    } else {
-      const input = $('#feed-image');
-      if (input) input.focus();
-    }
+    if (row) row.classList.toggle('hidden', !imageRowOpen);
+    if (!imageRowOpen) removeImage();
   }
 
-  function previewImage() {
-    const input = $('#feed-image');
+  /* called when the user picks a file: validate → downscale → preview */
+  function onImagePicked() {
+    const input = $('#feed-image-file');
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    if (!file.type || file.type.indexOf('image/') !== 0) {
+      window.toast && window.toast('Please choose an image file (PNG, JPG, GIF…).');
+      input.value = '';
+      return;
+    }
+    if (file.size > 6 * 1024 * 1024) {
+      window.toast && window.toast('That image is too large — pick one under 6 MB.');
+      input.value = '';
+      return;
+    }
+    processImageFile(file, (dataUrl) => {
+      pickedImage = dataUrl;
+      renderImageRow(file.name);
+      window.toast && window.toast('Image ready ✅');
+    });
+  }
+
+  /* read the file and re-encode it as a downscaled JPEG data URL (~900px max),
+     so posts stay small enough for localStorage and the Supabase posts table */
+  function processImageFile(file, done) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 900;
+        let w = img.naturalWidth || img.width;
+        let h = img.naturalHeight || img.height;
+        const scale = Math.min(1, MAX / Math.max(w, h));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(w * scale));
+        canvas.height = Math.max(1, Math.round(h * scale));
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        let out = canvas.toDataURL('image/jpeg', 0.8);
+        // still oversized (e.g. a huge photo)? drop quality rather than reject
+        if (out.length > 2.5e6) out = canvas.toDataURL('image/jpeg', 0.5);
+        done(out);
+      };
+      img.onerror = () => { window.toast && window.toast('Could not read that image file.'); };
+      img.src = reader.result;
+    };
+    reader.onerror = () => { window.toast && window.toast('Could not read that file.'); };
+    reader.readAsDataURL(file);
+  }
+
+  function renderImageRow(name) {
     const prev = $('#feed-image-preview');
-    if (!input || !prev) return;
-    const url = cleanImageUrl(input.value);
-    if (url) {
-      prev.innerHTML = `<img src="${esc(url)}" alt="Image preview" class="max-h-48 w-auto rounded-xl border border-slate-200" onerror="this.parentElement.classList.add('hidden')" />`;
+    if (prev && pickedImage) {
+      prev.innerHTML = `<img src="${esc(pickedImage)}" alt="Image preview" class="max-h-44 w-auto rounded-xl border border-slate-200" />`;
       prev.classList.remove('hidden');
-    } else {
-      prev.classList.add('hidden');
-      prev.innerHTML = '';
     }
+    const nameEl = $('#feed-image-name');
+    if (nameEl) nameEl.textContent = name || 'image';
+    const clearBtn = $('#feed-image-clear');
+    if (clearBtn) clearBtn.classList.remove('hidden');
   }
 
-  function clearImageField() {
-    const input = $('#feed-image');
+  function removeImage() {
+    pickedImage = null;
+    const input = $('#feed-image-file');
     if (input) input.value = '';
     const prev = $('#feed-image-preview');
     if (prev) { prev.classList.add('hidden'); prev.innerHTML = ''; }
+    const nameEl = $('#feed-image-name');
+    if (nameEl) nameEl.textContent = '';
+    const clearBtn = $('#feed-image-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
   }
 
   /* quick-share: attach a milestone card to the post */
@@ -278,12 +326,17 @@
               </div>
               <button class="btn-primary !py-2 text-xs" onclick="IELTS_FEED.post()">Post</button>
             </div>
-            <div id="feed-image-row" class="hidden mt-3">
+            <div id="feed-image-row" class="mt-3 ${imageRowOpen ? '' : 'hidden'}">
               <div class="flex items-center gap-2">
-                <input id="feed-image" type="text" placeholder="Paste an image URL (https://…)" class="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" oninput="IELTS_FEED.previewImage()" />
-                <button class="text-xs font-semibold text-slate-400 hover:text-rose-600 transition shrink-0" onclick="IELTS_FEED.clearImageField()">Clear</button>
+                <label class="inline-flex items-center gap-1.5 text-xs font-semibold border border-slate-200 rounded-full px-3 py-1.5 cursor-pointer hover:border-brand-300 hover:text-brand-600 transition shrink-0">
+                  📁 Choose image…
+                  <input id="feed-image-file" type="file" accept="image/*" class="hidden" onchange="IELTS_FEED.onImagePicked()" />
+                </label>
+                <span id="feed-image-name" class="text-[11px] text-slate-400 truncate ${pickedImage ? '' : 'hidden'}"></span>
+                <button id="feed-image-clear" class="text-xs font-semibold text-slate-400 hover:text-rose-600 transition shrink-0 ${pickedImage ? '' : 'hidden'}" onclick="IELTS_FEED.removeImage()">Remove</button>
               </div>
-              <div id="feed-image-preview" class="hidden mt-2"></div>
+              <div id="feed-image-preview" class="mt-2 ${pickedImage ? '' : 'hidden'}">${pickedImage ? `<img src="${esc(pickedImage)}" alt="Image preview" class="max-h-44 w-auto rounded-xl border border-slate-200" />` : ''}</div>
+              <p class="text-[11px] text-slate-400 mt-1">Compressed on your device before posting — stays private until you hit Post.</p>
             </div>
             <p class="text-[11px] text-slate-400 mt-2">💡 Milestone chips build a progress card on your post automatically. Add a 🖼️ image to make it pop.</p>
           </div>
@@ -319,7 +372,9 @@
 
   function post() {
     const text = $('#feed-text') ? $('#feed-text').value : '';
-    const image = $('#feed-image') ? $('#feed-image').value : '';
+    const image = pickedImage || '';
+    pickedImage = null;
+    imageRowOpen = false;
     createPost(text, null, image);
   }
 
@@ -410,5 +465,5 @@
     window.toast && window.toast('Comment added 💬');
   }
 
-  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost, toggleComments, addComment, toggleImageField, previewImage, clearImageField };
+  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost, toggleComments, addComment, toggleImageField, onImagePicked, removeImage };
 })();
