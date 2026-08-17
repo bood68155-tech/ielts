@@ -72,13 +72,14 @@
   }
 
   /* ---------- post creation ---------- */
-  function createPost(text, attachment) {
+  function createPost(text, attachment, image) {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return;
     ensureFeed();
     text = (text || '').trim();
-    if (!text && !attachment) {
-      window.toast && window.toast('Write something or attach a milestone first.');
+    image = cleanImageUrl(image);
+    if (!text && !attachment && !image) {
+      window.toast && window.toast('Write something, attach a milestone or add an image first.');
       return;
     }
     const post = {
@@ -88,6 +89,7 @@
       level: window.IELTS_AUTH.getLevel(user.xp).name,
       text,
       attachment: attachment || null,
+      image: image || null,
       likes: [],
       comments: [],
       date: Date.now(),
@@ -103,9 +105,56 @@
         if (i >= 0) { delete feed[i]._unsynced; saveFeed(); }
       });
     }
-    window.IELTS_AUTH.addActivity('feed', text.slice(0, 60) + (text.length > 60 ? '…' : ''), 0);
+    window.IELTS_AUTH.addActivity('feed', (text || 'Shared a post').slice(0, 60) + ((text || '').length > 60 ? '…' : ''), 0);
     render();
     window.toast && window.toast('Posted to the feed ✅');
+  }
+
+  /* only accept http(s) image links so we never inject junk into the feed */
+  function cleanImageUrl(url) {
+    const u = String(url || '').trim();
+    if (!u) return '';
+    try {
+      const parsed = new URL(u);
+      return (parsed.protocol === 'https:' || parsed.protocol === 'http:') ? u : '';
+    } catch (e) { return ''; }
+  }
+
+  /* ---------- composer image field ---------- */
+  function toggleImageField() {
+    const row = $('#feed-image-row');
+    if (!row) return;
+    row.classList.toggle('hidden');
+    if (row.classList.contains('hidden')) {
+      const input = $('#feed-image');
+      if (input) input.value = '';
+      const prev = $('#feed-image-preview');
+      if (prev) { prev.classList.add('hidden'); prev.innerHTML = ''; }
+    } else {
+      const input = $('#feed-image');
+      if (input) input.focus();
+    }
+  }
+
+  function previewImage() {
+    const input = $('#feed-image');
+    const prev = $('#feed-image-preview');
+    if (!input || !prev) return;
+    const url = cleanImageUrl(input.value);
+    if (url) {
+      prev.innerHTML = `<img src="${esc(url)}" alt="Image preview" class="max-h-48 w-auto rounded-xl border border-slate-200" onerror="this.parentElement.classList.add('hidden')" />`;
+      prev.classList.remove('hidden');
+    } else {
+      prev.classList.add('hidden');
+      prev.innerHTML = '';
+    }
+  }
+
+  function clearImageField() {
+    const input = $('#feed-image');
+    if (input) input.value = '';
+    const prev = $('#feed-image-preview');
+    if (prev) { prev.classList.add('hidden'); prev.innerHTML = ''; }
   }
 
   /* quick-share: attach a milestone card to the post */
@@ -184,6 +233,7 @@
               <span class="text-[11px] text-slate-400">· ${timeAgo(p.date)}</span>
             </div>
             ${p.text ? '<p class="text-sm text-slate-700 mt-2 leading-relaxed">' + esc(p.text) + '</p>' : ''}
+            ${p.image ? '<a href="' + esc(p.image) + '" target="_blank" rel="noopener noreferrer" class="block mt-3"><img src="' + esc(p.image) + '" alt="Post image" loading="lazy" class="max-h-80 w-auto max-w-full rounded-xl border border-slate-200 object-cover" onerror="this.remove()" /></a>' : ''}
             ${attachmentHtml(p.attachment)}
             <div class="flex items-center gap-4 mt-3">
               <button onclick="IELTS_FEED.toggleLike('${p.id}')" class="inline-flex items-center gap-1.5 text-sm font-semibold transition ${liked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-500'}">
@@ -224,10 +274,18 @@
                 <button class="text-xs font-semibold border border-slate-200 rounded-full px-3 py-1.5 hover:border-brand-300 hover:text-brand-600 transition" onclick="IELTS_FEED.attachShare('level')">🏆 Level up</button>
                 <button class="text-xs font-semibold border border-slate-200 rounded-full px-3 py-1.5 hover:border-brand-300 hover:text-brand-600 transition" onclick="IELTS_FEED.attachShare('xp')">⚡ XP</button>
                 <button class="text-xs font-semibold border border-slate-200 rounded-full px-3 py-1.5 hover:border-brand-300 hover:text-brand-600 transition" onclick="IELTS_FEED.attachShare('training')">🎓 Training</button>
+                <button class="text-xs font-semibold border border-slate-200 rounded-full px-3 py-1.5 hover:border-brand-300 hover:text-brand-600 transition" onclick="IELTS_FEED.toggleImageField()">🖼️ Image</button>
               </div>
               <button class="btn-primary !py-2 text-xs" onclick="IELTS_FEED.post()">Post</button>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2">💡 Milestone chips build a progress card on your post automatically.</p>
+            <div id="feed-image-row" class="hidden mt-3">
+              <div class="flex items-center gap-2">
+                <input id="feed-image" type="text" placeholder="Paste an image URL (https://…)" class="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" oninput="IELTS_FEED.previewImage()" />
+                <button class="text-xs font-semibold text-slate-400 hover:text-rose-600 transition shrink-0" onclick="IELTS_FEED.clearImageField()">Clear</button>
+              </div>
+              <div id="feed-image-preview" class="hidden mt-2"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">💡 Milestone chips build a progress card on your post automatically. Add a 🖼️ image to make it pop.</p>
           </div>
         </div>
       </div>` : '';
@@ -261,7 +319,8 @@
 
   function post() {
     const text = $('#feed-text') ? $('#feed-text').value : '';
-    createPost(text, null);
+    const image = $('#feed-image') ? $('#feed-image').value : '';
+    createPost(text, null, image);
   }
 
   /* milestone chips: prefill the composer with a progress card */
@@ -351,5 +410,5 @@
     window.toast && window.toast('Comment added 💬');
   }
 
-  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost, toggleComments, addComment };
+  window.IELTS_FEED = { render, post, attachShare, shareProgress, toggleLike, deletePost, toggleComments, addComment, toggleImageField, previewImage, clearImageField };
 })();

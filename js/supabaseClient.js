@@ -341,6 +341,7 @@
       level: p.level || '',
       text: p.text || '',
       attachment: p.attachment || null,
+      image: p.image || null,
       likes: p.likes || [],
       comments: p.comments || [],
       system: !!p.system,
@@ -356,6 +357,7 @@
       level: r.level || '',
       text: r.text || '',
       attachment: r.attachment || null,
+      image: r.image || null,
       likes: r.likes || [],
       comments: r.comments || [],
       system: !!r.system,
@@ -375,6 +377,7 @@
     if ('likes' in patch) row.likes = patch.likes;
     if ('comments' in patch) row.comments = patch.comments;
     if ('text' in patch) row.text = patch.text;
+    if ('image' in patch) row.image = patch.image;
     if (!Object.keys(row).length) return null;
     return update('posts', { id }, row);
   }

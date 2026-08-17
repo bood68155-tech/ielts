@@ -28,6 +28,8 @@
   let subscription = null;
   let pollTimer = null;
   let dirtyRooms = {}; // rooms with messages not yet pushed to the db
+  let usersCache = null;   // merged list of known learners (fetched once per session)
+  let usersLoading = false;
 
   /* ---------- helpers ---------- */
   function me() {
@@ -118,10 +120,18 @@
   function startPolling() {
     stopPolling();
     pollTimer = setInterval(() => {
-      const room = currentRoom();
-      if (!room) return;
       const d = window.IELTS_DB;
       if (d && d.isConfigured() && subscription) return; // realtime is live
+      // on the DM picker there is no single open room — refresh every known DM room
+      if (activeTab === 'dms') {
+        const myName = me() ? me().username : null;
+        Object.keys(messages).forEach((r) => {
+          if (r.indexOf('dm:') === 0 && (!myName || r.indexOf(myName) >= 0)) refreshFromDb(r);
+        });
+        return;
+      }
+      const room = currentRoom();
+      if (!room) return;
       refreshFromDb(room);
     }, 4000);
   }
@@ -145,7 +155,10 @@
       if (changed) {
         local.sort((a, b) => (a.date || 0) - (b.date || 0));
         saveRoom(room);
-        if (room === currentRoom() && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'chat') renderMessages();
+        if (window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'chat') {
+          if (room === currentRoom()) renderMessages();
+          else if (activeTab === 'dms' && room.indexOf('dm:') === 0) renderDmPicker();
+        }
       }
     });
   }
@@ -245,23 +258,65 @@
   }
 
   /* ---------- user list for DMs ---------- */
-  function allUsers() {
+  /* known learners: everyone registered in this browser + community feed authors.
+     The Supabase user list is fetched ONCE per session; the picker re-renders when
+     it arrives. (Previously every call re-fetched and re-rendered → infinite loop.) */
+  function baseUsers() {
     const out = [];
     try {
       const local = JSON.parse(localStorage.getItem('ielts-users') || '[]');
       local.forEach((u) => out.push({ username: u.username, avatar: u.avatar || null, xp: u.xp || 0 }));
     } catch (e) { /* ignore */ }
+    try {
+      const feed = (window.IELTS_DB && window.IELTS_DB.getCache('feed')) || [];
+      feed.forEach((p) => {
+        if (p.author && !out.some((x) => x.username === p.author)) {
+          out.push({ username: p.author, avatar: p.avatar || null, xp: 0 });
+        }
+      });
+    } catch (e) { /* ignore */ }
+    return out;
+  }
+
+  function allUsers() {
+    if (usersCache) return usersCache;
+    const out = baseUsers();
     const d = window.IELTS_DB;
     if (d && d.isConfigured()) {
-      d.pullAllUsers().then((remote) => {
-        if (!remote) return;
-        remote.forEach((u) => {
-          if (!out.some((x) => x.username === u.username)) out.push({ username: u.username, avatar: u.avatar || null, xp: u.xp || 0 });
-        });
-        if (activeTab === 'dms' && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'chat') render();
-      });
+      if (!usersLoading) {
+        usersLoading = true;
+        d.pullAllUsers().then((remote) => {
+          usersLoading = false;
+          if (remote) {
+            remote.forEach((u) => {
+              if (!out.some((x) => x.username === u.username)) out.push({ username: u.username, avatar: u.avatar || null, xp: u.xp || 0 });
+            });
+          }
+          usersCache = out;
+          if (activeTab === 'dms' && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'chat') renderDmPicker();
+        }).catch(() => { usersLoading = false; usersCache = out; });
+      }
+    } else {
+      usersCache = out;
     }
     return out;
+  }
+
+  /* ---------- unread tracking (per DM room) ---------- */
+  function lastSeenOf(room) {
+    return window.IELTS_AUTH ? (window.IELTS_AUTH.getScoped('chat-lastseen-' + room, 0) || 0) : 0;
+  }
+
+  function markSeen(room) {
+    if (window.IELTS_AUTH) window.IELTS_AUTH.setScoped('chat-lastseen-' + room, Date.now());
+  }
+
+  function unreadFor(room) {
+    let list = messages[room];
+    if (!list) list = (window.IELTS_DB && window.IELTS_DB.getCache('chat:' + roomKeyOf(room))) || [];
+    if (!list.length) return 0;
+    const myName = me() ? me().username : null;
+    return list.filter((m) => m.sender && m.sender !== myName && (m.date || 0) > lastSeenOf(room)).length;
   }
 
   /* ---------- render ---------- */
@@ -301,15 +356,19 @@
         <p class="text-sm text-slate-500 mb-4">${ROOMS.dms.desc} Direct messages are private between you and the other learner.</p>
         ${sorted.length ? `
           <div class="grid sm:grid-cols-2 gap-2.5">
-            ${sorted.map((u) => `
-              <button class="flex items-center gap-3 border border-slate-200 rounded-xl px-4 py-3 hover:border-brand-300 hover:bg-brand-50/40 transition text-left" onclick="IELTS_CHAT.openDm('${esc(u.username).replace(/'/g, "\\'")}')">
+            ${sorted.map((u) => {
+              const room = dmRoom(user.username, u.username);
+              const unseen = unreadFor(room);
+              return `
+              <button class="relative flex items-center gap-3 border border-slate-200 rounded-xl px-4 py-3 hover:border-brand-300 hover:bg-brand-50/40 transition text-left" onclick="IELTS_CHAT.openDm('${esc(u.username).replace(/'/g, "\\'")}')">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center font-extrabold text-sm shrink-0">${esc(u.avatar || String(u.username).charAt(0).toUpperCase())}</div>
                 <div class="min-w-0">
                   <p class="text-sm font-bold text-slate-800 truncate">${esc(u.username)}</p>
-                  <p class="text-[11px] text-slate-400">${(u.xp || 0)} XP</p>
+                  <p class="text-[11px] text-slate-400">${esc(window.IELTS_AUTH.getLevel(u.xp || 0).name)} · ${(u.xp || 0)} XP</p>
                 </div>
-                <span class="ml-auto text-brand-600 text-sm font-bold">💬</span>
-              </button>`).join('')}
+                ${unseen ? `<span class="ml-auto shrink-0 min-w-5 h-5 px-1.5 rounded-full bg-rose-500 text-white text-[11px] font-extrabold flex items-center justify-center">${unseen}</span>` : '<span class="ml-auto text-brand-600 text-sm font-bold">💬</span>'}
+              </button>`;
+            }).join('')}
           </div>` : `
           <div class="text-center py-8 text-sm text-slate-500">
             <p class="text-3xl mb-2">💌</p>
@@ -386,6 +445,7 @@
     });
     box.innerHTML = html;
     scrollToBottom();
+    markSeen(room);
   }
 
   function scrollToBottom() {
@@ -431,6 +491,8 @@
       stopPolling();
       if (subscription) { try { subscription(); } catch (e) { /* ignore */ } subscription = null; }
       messages = {};
+      usersCache = null;
+      usersLoading = false;
     });
   }
 

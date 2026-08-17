@@ -62,11 +62,15 @@ create table if not exists public.posts (
   level      text not null default '',
   text       text not null default '',
   attachment jsonb,
+  image      text,                      -- optional image URL on a post
   likes      jsonb not null default '[]'::jsonb,
   comments   jsonb not null default '[]'::jsonb,
   system     boolean not null default false,
   created_at bigint not null default 0
 );
+
+-- pick up the image column on databases created before this change
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS image text;
 
 -- Chat messages: one row per message, shared by all users.
 -- room is 'community', 'support' or 'dm:<userA>:<userB>' (sorted ids).
