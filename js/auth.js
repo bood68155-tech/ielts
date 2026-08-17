@@ -97,6 +97,16 @@
         d.upsertTraining(activeUserId, value);        // → training_progress table (UPSERT)
         d.setMeta(activeUserId, { trainingUpdatedAt: ts });
       }
+    } else if (suffix === 'words') {
+      if (value && typeof value === 'object' && Object.keys(value).length) {
+        d.upsertSavedWords(activeUserId, value);      // → saved_words table (UPSERT)
+        d.setMeta(activeUserId, { wordsUpdatedAt: ts });
+      }
+    } else if (suffix === 'study') {
+      if (value && typeof value === 'object' && Object.keys(value).length) {
+        d.upsertStudyLog(activeUserId, value);        // → study_log table (UPSERT)
+        d.setMeta(activeUserId, { studyUpdatedAt: ts });
+      }
     }
     // 'exam' drafts stay local; results are pushed by recordExam → exam_results table
   }
@@ -482,6 +492,11 @@
         else if (s === 'training' && window.IELTS_TRAINING) window.IELTS_TRAINING.render();
         else if (s === 'levels' && window.IELTS_LEVELS) window.IELTS_LEVELS.render();
         else if (s === 'feed' && window.IELTS_FEED) window.IELTS_FEED.render();
+        else if (s === 'readings' && window.IELTS_READINGS) window.IELTS_READINGS.render();
+        else if (s === 'translator' && window.IELTS_TRANSLATOR) window.IELTS_TRANSLATOR.render();
+        else if (s === 'study' && window.IELTS_STUDY) window.IELTS_STUDY.render();
+        else if (s === 'words' && window.IELTS_VOCAB) window.IELTS_VOCAB.render();
+        else if (s === 'chat' && window.IELTS_CHAT) window.IELTS_CHAT.render();
         else if (s === 'dashboard' && window.renderDashboard) window.renderDashboard();
       };
     }

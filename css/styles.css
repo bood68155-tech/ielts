@@ -170,10 +170,13 @@ input[type="text"].fill-input.wrong { border-color: #ef4444; background: #fef2f2
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Level badges --- */
+/* --- Level badges (CEFR A1-C2) --- */
 .level-badge-emerald { background: #d1fae5; color: #047857; }
 .level-badge-sky { background: #e0f2fe; color: #0369a1; }
+.level-badge-amber { background: #fef3c7; color: #b45309; }
+.level-badge-orange { background: #ffedd5; color: #c2410c; }
 .level-badge-violet { background: #ede9fe; color: #6d28d9; }
+.level-badge-rose { background: #ffe4e6; color: #be123c; }
 
 /* --- Auth inputs focus ring fix --- */
 input:focus { outline: none; }
@@ -204,3 +207,50 @@ input:focus { outline: none; }
 /* --- Training star rating buttons --- */
 .star-btn { background: none; border: none; cursor: pointer; padding: 0.15rem; line-height: 1; }
 .star-btn:focus { outline: none; }
+
+/* --- Graded reading: tap-to-translate words --- */
+.dict-word {
+  color: #4f46e5;
+  font-weight: 600;
+  border-bottom: 1px dashed #a5b4fc;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.12s ease;
+}
+.dict-word:hover { background: #eef2ff; }
+.dict-word:focus { outline: none; background: #eef2ff; }
+
+.dict-tooltip {
+  position: fixed;
+  z-index: 70;
+  width: 15rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 30px -6px rgba(30, 41, 59, 0.25);
+  padding: 0.85rem 0.95rem;
+}
+
+/* --- Translator output --- */
+.tr-word {
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 0.3rem;
+  padding: 0 0.15rem;
+  margin: 0 0.1rem;
+  cursor: default;
+}
+.tr-unknown {
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 0.3rem;
+  padding: 0 0.15rem;
+  margin: 0 0.1rem;
+}
+
+/* --- Chat input focus ring --- */
+#chat-messages::-webkit-scrollbar { width: 6px; }
+#chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+
+/* --- Study clock numerals --- */
+.tabular-nums { font-variant-numeric: tabular-nums; }

@@ -68,14 +68,52 @@ create table if not exists public.posts (
   created_at bigint not null default 0
 );
 
--- Useful indexes for feed ordering and exam lookups.
+-- Chat messages: one row per message, shared by all users.
+-- room is 'community', 'support' or 'dm:<userA>:<userB>' (sorted ids).
+create table if not exists public.chat_messages (
+  id            text primary key,             -- client-generated "m…" id
+  room          text not null,
+  sender        text not null,
+  sender_avatar text,
+  kind          text not null default 'message',  -- message | question | answer | system
+  text          text not null default '',
+  created_at    bigint not null default 0
+);
+
+-- Saved words (personal vocabulary builder): one row per user.
+create table if not exists public.saved_words (
+  user_id    text primary key references public.users (id) on delete cascade,
+  data       jsonb not null default '{}'::jsonb,
+  updated_at bigint not null default 0
+);
+
+-- Study log (daily study hours + sessions): one row per user.
+create table if not exists public.study_log (
+  user_id    text primary key references public.users (id) on delete cascade,
+  data       jsonb not null default '{}'::jsonb,
+  updated_at bigint not null default 0
+);
+
+-- Useful indexes for feed ordering, chat rooms and exam lookups.
 create index if not exists posts_created_at_idx on public.posts (created_at desc);
 create index if not exists exam_results_user_idx on public.exam_results (user_id, created_at);
+create index if not exists chat_room_created_idx on public.chat_messages (room, created_at asc);
 
 -- Allow the anon / authenticated roles (the anon key) to use the tables.
 grant all on public.users, public.profiles, public.training_progress,
-           public.exam_results, public.posts
+           public.exam_results, public.posts, public.chat_messages,
+           public.saved_words, public.study_log
            to anon, authenticated;
+
+-- Enable realtime for chat messages so the chat updates live.
+-- (Wrapped in a DO block so it is a no-op if the publication is missing.)
+do $$
+begin
+  begin
+    alter publication supabase_realtime add table public.chat_messages;
+  exception when others then null;
+  end;
+end $$;
 
 -- ============================================================
 -- Row Level Security (demo: permissive — see the note above)
@@ -85,6 +123,9 @@ alter table public.profiles enable row level security;
 alter table public.training_progress enable row level security;
 alter table public.exam_results enable row level security;
 alter table public.posts enable row level security;
+alter table public.chat_messages enable row level security;
+alter table public.saved_words enable row level security;
+alter table public.study_log enable row level security;
 
 create policy "users_all" on public.users
   for all using (true) with check (true);
@@ -95,4 +136,10 @@ create policy "training_progress_all" on public.training_progress
 create policy "exam_results_all" on public.exam_results
   for all using (true) with check (true);
 create policy "posts_all" on public.posts
+  for all using (true) with check (true);
+create policy "chat_messages_all" on public.chat_messages
+  for all using (true) with check (true);
+create policy "saved_words_all" on public.saved_words
+  for all using (true) with check (true);
+create policy "study_log_all" on public.study_log
   for all using (true) with check (true);

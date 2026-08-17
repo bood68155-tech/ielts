@@ -35,24 +35,37 @@
     const exams = window.IELTS_AUTH.getExamHistory();
     const claims = user.claims || [];
     const training = window.IELTS_AUTH.getScoped('training', null) || {};
+    const words = window.IELTS_AUTH.getScoped('words', null) || { words: [] };
+    const study = window.IELTS_AUTH.getScoped('study', null) || { days: {} };
     const stagesDone = Object.keys(training).reduce((n, k) => n + ((training[k].completed || []).length), 0);
     const moduleDone = (m) => (training[m] && (training[m].completed || []).length) >= 5;
     const allModules = ['vocabulary', 'listening', 'speaking'].every(moduleDone);
-    const levelIdx = ['beginner', 'intermediate', 'advanced'].indexOf(level.id);
+    const levelIdx = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].indexOf(level.id);
+    const wordCount = (words.words || []).length;
+    const learnedCount = (words.words || []).filter((w) => w.learned).length;
+    const studySeconds = Object.keys(study.days || {}).reduce((n, k) => n + (study.days[k] || 0), 0);
+    const activeDays = Object.keys(study.days || {}).filter((k) => (study.days[k] || 0) >= 600).length;
 
     return [
       { id: 'first-steps', icon: '🌱', name: 'First steps', desc: 'Complete your first activity.', earned: claims.length >= 1 },
       { id: 'xp-100', icon: '⚡', name: 'Getting started', desc: 'Reach 100 XP.', earned: user.xp >= 100 },
       { id: 'xp-500', icon: '🔥', name: 'On fire', desc: 'Reach 500 XP.', earned: user.xp >= 500 },
       { id: 'xp-1000', icon: '💎', name: 'XP elite', desc: 'Reach 1000 XP.', earned: user.xp >= 1000 },
-      { id: 'level-intermediate', icon: '🚀', name: 'Intermediate', desc: 'Reach the Intermediate level.', earned: levelIdx >= 1 },
-      { id: 'level-advanced', icon: '🏆', name: 'Advanced', desc: 'Reach the Advanced level.', earned: levelIdx >= 2 },
+      { id: 'level-b1', icon: '🚀', name: 'B1 Intermediate', desc: 'Reach the B1 level (250 XP).', earned: levelIdx >= 2 },
+      { id: 'level-b2', icon: '⚡', name: 'B2 Upper-Intermediate', desc: 'Reach the B2 level (450 XP).', earned: levelIdx >= 3 },
+      { id: 'level-c1', icon: '🏆', name: 'C1 Advanced', desc: 'Reach the C1 level (700 XP).', earned: levelIdx >= 4 },
+      { id: 'level-c2', icon: '👑', name: 'C2 Proficiency', desc: 'Reach the top C2 level (1000 XP).', earned: levelIdx >= 5 },
       { id: 'exam-first', icon: '📝', name: 'First exam', desc: 'Take your first weekly exam.', earned: exams.length >= 1 },
       { id: 'exam-pass', icon: '✅', name: 'Exam passer', desc: 'Score 60% or more on a weekly exam.', earned: exams.some((e) => e.score / e.total >= 0.6) },
       { id: 'exam-top', icon: '🎯', name: 'Top scorer', desc: 'Score 80% or more on a weekly exam.', earned: exams.some((e) => e.score / e.total >= 0.8) },
       { id: 'training-first', icon: '🎓', name: 'Trainee', desc: 'Complete your first training stage.', earned: stagesDone >= 1 },
       { id: 'vocab-master', icon: '📚', name: 'Vocabulary master', desc: 'Finish all Vocabulary stages.', earned: moduleDone('vocabulary') },
-      { id: 'hero', icon: '🦸', name: 'Hero graduate', desc: 'Complete all three training modules.', earned: allModules }
+      { id: 'hero', icon: '🦸', name: 'Hero graduate', desc: 'Complete all three training modules.', earned: allModules },
+      { id: 'study-first', icon: '⏱', name: 'Focused', desc: 'Complete your first study session.', earned: claims.some((c) => c.indexOf('study-session-') === 0) },
+      { id: 'study-goal', icon: '🎯', name: 'Goal getter', desc: 'Hit your daily study goal.', earned: claims.some((c) => c.indexOf('study-goal-') === 0) },
+      { id: 'study-hours', icon: '⏰', name: 'Time investor', desc: 'Study for 10+ hours in total.', earned: studySeconds >= 36000 },
+      { id: 'words-10', icon: '📒', name: 'Word collector', desc: 'Save 10 words to your vocabulary.', earned: wordCount >= 10 },
+      { id: 'words-learned', icon: '🧠', name: 'Word master', desc: 'Master 25 words with flashcards.', earned: learnedCount >= 25 }
     ];
   }
 
@@ -79,18 +92,30 @@
     ];
   }
 
+  function fmtStudyHours(secs) {
+    const h = Math.floor(secs / 3600);
+    const m = Math.round((secs % 3600) / 60);
+    if (h === 0) return m + 'm';
+    return h + 'h' + (m > 0 ? ' ' + m + 'm' : '');
+  }
+
   function statsOf(user) {
     const exams = window.IELTS_AUTH.getExamHistory();
     const best = exams.length ? Math.max(...exams.map((e) => e.score)) : 0;
     const t = trainingProgress(user);
     const stages = t.reduce((n, x) => n + x.done, 0);
     const badges = computeBadges(user).filter((b) => b.earned).length;
+    const study = window.IELTS_AUTH.getScoped('study', null) || { days: {} };
+    const studySecs = Object.keys(study.days || {}).reduce((n, k) => n + (study.days[k] || 0), 0);
+    const words = window.IELTS_AUTH.getScoped('words', null) || { words: [] };
     return [
       { icon: '⚡', label: 'Total XP', value: user.xp },
-      { icon: '🏅', label: 'Level', value: window.IELTS_AUTH.getLevel(user.xp).name },
+      { icon: '🏅', label: 'Level', value: window.IELTS_AUTH.getLevel(user.xp).shortName || window.IELTS_AUTH.getLevel(user.xp).name },
       { icon: '📝', label: 'Exams taken', value: exams.length },
       { icon: '🎯', label: 'Best exam score', value: exams.length ? best + '/' + exams[0].total : '—' },
       { icon: '🎓', label: 'Training stages', value: stages + '/15' },
+      { icon: '⏱', label: 'Study time', value: fmtStudyHours(studySecs) },
+      { icon: '📒', label: 'Saved words', value: (words.words || []).length },
       { icon: '🏆', label: 'Badges', value: badges }
     ];
   }
@@ -115,7 +140,7 @@
     $('#profile-content').innerHTML = `
       <div id="profile-view"></div>
       <div id="profile-edit" class="hidden"></div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-6" id="profile-stats"></div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6" id="profile-stats"></div>
       <div class="grid lg:grid-cols-2 gap-5 mt-6" id="profile-progress"></div>
       <div class="mt-6" id="profile-badges"></div>
       <div class="mt-6" id="profile-activity"></div>`;
@@ -309,7 +334,8 @@
   /* ---------- activity log ---------- */
   const ACTIVITY_ICONS = {
     listening: '🎧', reading: '📖', writing: '✍️', speaking: '🗣️',
-    exam: '📝', training: '🎓', profile: '👤', feed: '💬'
+    exam: '📝', training: '🎓', profile: '👤', feed: '💬',
+    study: '⏱', words: '📒', chat: '💬'
   };
 
   function renderActivity(user) {

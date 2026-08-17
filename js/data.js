@@ -336,40 +336,73 @@ const SPEAKING_TEST = {
   ]
 };
 
-/* ---------------- LEARNING LEVELS ---------------- */
+/* ---------------- LEARNING LEVELS (CEFR A1–C2) ---------------- */
+/* Progressive Common European Framework levels. XP unlocks each one:
+   A1 → A2 → B1 → B2 → C1 → C2. Every level unlocks more practice
+   content and a new shelf of graded reading passages. */
 const LEVELS = [
   {
-    id: 'beginner',
-    name: 'Beginner',
+    id: 'a1',
+    name: 'A1 Beginner',
+    shortName: 'A1',
     icon: '🌱',
     minXp: 0,
     color: 'emerald',
-    desc: 'Start here. Build your foundation with the first two Listening sections, one Reading passage, Writing Task 1 and Speaking Part 1.'
+    desc: 'Everyday basics — understand and use familiar words and simple sentences about yourself and daily life.'
   },
   {
-    id: 'intermediate',
-    name: 'Intermediate',
-    icon: '🚀',
-    minXp: 300,
+    id: 'a2',
+    name: 'A2 Elementary',
+    shortName: 'A2',
+    icon: '🌿',
+    minXp: 100,
     color: 'sky',
-    desc: 'Take on longer passages, more Listening sections, Writing Task 2 and Speaking Part 2.'
+    desc: 'Short, simple texts and conversations about familiar topics like work, shopping and travel.'
   },
   {
-    id: 'advanced',
-    name: 'Advanced',
+    id: 'b1',
+    name: 'B1 Intermediate',
+    shortName: 'B1',
+    icon: '🚀',
+    minXp: 250,
+    color: 'amber',
+    desc: 'Handle everyday situations and the main points of clear texts — the IELTS 4.5–6.0 band territory.'
+  },
+  {
+    id: 'b2',
+    name: 'B2 Upper-Intermediate',
+    shortName: 'B2',
+    icon: '⚡',
+    minXp: 450,
+    color: 'orange',
+    desc: 'Understand complex texts and express yourself fluently — the IELTS 6.5–7.5 band territory.'
+  },
+  {
+    id: 'c1',
+    name: 'C1 Advanced',
+    shortName: 'C1',
     icon: '🏆',
     minXp: 700,
     color: 'violet',
-    desc: 'The full test experience: all four Listening sections, all Reading passages and the complete Speaking exam.'
+    desc: 'Long, demanding texts with implied meaning and flexible, natural expression — IELTS 8.0 territory.'
+  },
+  {
+    id: 'c2',
+    name: 'C2 Proficiency',
+    shortName: 'C2',
+    icon: '👑',
+    minXp: 1000,
+    color: 'rose',
+    desc: 'Near-native mastery — understand virtually everything and express yourself with precision and nuance.'
   }
 ];
 
 /* How many items of each skill each level unlocks (index-based counts) */
 const LEVEL_UNLOCKS = {
-  listening: { beginner: 2, intermediate: 3, advanced: 4 },
-  reading: { beginner: 1, intermediate: 2, advanced: 3 },
-  writing: { beginner: 1, intermediate: 2, advanced: 2 },
-  speaking: { beginner: 1, intermediate: 2, advanced: 3 }
+  listening: { a1: 1, a2: 2, b1: 2, b2: 3, c1: 3, c2: 4 },
+  reading: { a1: 1, a2: 1, b1: 2, b2: 2, c1: 3, c2: 3 },
+  writing: { a1: 1, a2: 1, b1: 1, b2: 2, c1: 2, c2: 2 },
+  speaking: { a1: 1, a2: 1, b1: 2, b2: 2, c1: 3, c2: 3 }
 };
 
 /* XP rewards for completing activities */
@@ -709,6 +742,515 @@ const TRAINING_MODULES = [
   }
 ];
 
+/* ---------------- GRADED READING LIBRARY (A1–C2) ---------------- */
+/* Two passages per CEFR level. Each passage has a graded text, a
+   glossary (word + English meaning + Arabic translation) and 4–5
+   comprehension questions. Passages power the Level Reading tool. */
+const GRADED_READING = [
+  /* ===================== A1 ===================== */
+  {
+    id: 'GR-A1-1',
+    level: 'a1',
+    title: 'My Morning Routine',
+    minutes: 1,
+    text: [
+      'I wake up at seven o\'clock every morning. First, I open the window and look outside. The sun is bright and the sky is blue.',
+      'Then I go to the kitchen and make breakfast. I eat bread and eggs and I drink a cup of tea. My mother makes coffee for my father.',
+      'After breakfast, I brush my teeth and wash my face. I put on my clothes and take my bag. I go to school by bus at eight o\'clock. I am never late.'
+    ],
+    words: [
+      { word: 'wake up', meaning: 'to stop sleeping', ar: 'يستيقظ', example: 'I wake up at seven every morning.' },
+      { word: 'bright', meaning: 'full of light', ar: 'مُشرق', example: 'The sun is bright today.' },
+      { word: 'kitchen', meaning: 'the room where you cook', ar: 'مطبخ', example: 'We eat breakfast in the kitchen.' },
+      { word: 'brush', meaning: 'to clean with a brush', ar: 'يفرّش', example: 'I brush my teeth after breakfast.' },
+      { word: 'never', meaning: 'not at any time', ar: 'أبداً', example: 'I am never late for school.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'What time does the writer wake up?', options: ['Six o\'clock', 'Seven o\'clock', 'Eight o\'clock', 'Nine o\'clock'], answer: 'B', explanation: 'The text says “I wake up at seven o\'clock every morning.”' },
+      { type: 'mcq', question: 'What does the writer drink at breakfast?', options: ['Coffee', 'Milk', 'Tea', 'Juice'], answer: 'C', explanation: '“I drink a cup of tea.”' },
+      { type: 'mcq', question: 'Who makes coffee for the father?', options: ['The writer', 'The mother', 'The sister', 'The father'], answer: 'B', explanation: '“My mother makes coffee for my father.”' },
+      { type: 'mcq', question: 'How does the writer go to school?', options: ['By bus', 'By car', 'By bike', 'On foot'], answer: 'A', explanation: '“I go to school by bus at eight o\'clock.”' }
+    ]
+  },
+  {
+    id: 'GR-A1-2',
+    level: 'a1',
+    title: 'My Family',
+    minutes: 1,
+    text: [
+      'I live with my family in a small flat. My family has four people: my father, my mother, my brother and me.',
+      'My father is a doctor. He works in a hospital near our home. My mother is a teacher. She teaches English at a school.',
+      'My brother is twelve years old. He is a student. He likes football and music. On Friday, we all eat dinner together at home. I love my family.'
+    ],
+    words: [
+      { word: 'flat', meaning: 'a home in a building (apartment)', ar: 'شقة', example: 'We live in a small flat.' },
+      { word: 'doctor', meaning: 'a person who treats sick people', ar: 'طبيب', example: 'My father is a doctor.' },
+      { word: 'hospital', meaning: 'a place where sick people stay', ar: 'مستشفى', example: 'He works in a hospital.' },
+      { word: 'teacher', meaning: 'a person who teaches', ar: 'معلّم', example: 'My mother is a teacher.' },
+      { word: 'together', meaning: 'with each other', ar: 'معاً', example: 'We eat dinner together.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'How many people are in the writer\'s family?', options: ['Three', 'Four', 'Five', 'Six'], answer: 'B', explanation: '“My family has four people.”' },
+      { type: 'mcq', question: 'Where does the father work?', options: ['In a school', 'In a hospital', 'In a bank', 'At home'], answer: 'B', explanation: '“He works in a hospital near our home.”' },
+      { type: 'mcq', question: 'What does the mother teach?', options: ['Maths', 'Science', 'English', 'History'], answer: 'C', explanation: '“She teaches English at a school.”' },
+      { type: 'mcq', question: 'What does the brother like?', options: ['Football and music', 'Books and films', 'Cooking and art', 'Games and swimming'], answer: 'A', explanation: '“He likes football and music.”' }
+    ]
+  },
+  /* ===================== A2 ===================== */
+  {
+    id: 'GR-A2-1',
+    level: 'a2',
+    title: 'A Day in Cairo',
+    minutes: 2,
+    text: [
+      'Last weekend I visited Cairo with my cousin. We left home early in the morning because the city is very busy during the day. The traffic was heavy, but we arrived at the museum before ten o\'clock.',
+      'The museum was amazing. We saw old statues, gold masks and many things from ancient Egypt. My favourite part was the room with the mummies. We took lots of photos, but we could not use the flash because it is bad for the old things.',
+      'In the afternoon we crossed the river and walked in a big park near the water. We bought sandwiches and juice from a small shop and had lunch under a tree. In the evening, we watched the lights of the city from a high tower. It was a perfect day.'
+    ],
+    words: [
+      { word: 'cousin', meaning: 'the child of your aunt or uncle', ar: 'ابن العم/الخال', example: 'I visited Cairo with my cousin.' },
+      { word: 'traffic', meaning: 'cars moving on the roads', ar: 'حركة المرور', example: 'The traffic was heavy in the morning.' },
+      { word: 'ancient', meaning: 'very old, from long ago', ar: 'قديم', example: 'We saw things from ancient Egypt.' },
+      { word: 'statue', meaning: 'a figure made of stone or metal', ar: 'تمثال', example: 'We saw old statues in the museum.' },
+      { word: 'flash', meaning: 'a bright light from a camera', ar: 'فلاش', example: 'We could not use the flash.' },
+      { word: 'tower', meaning: 'a tall narrow building', ar: 'برج', example: 'We watched the lights from a high tower.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'Why did the writer leave home early?', options: ['The museum opens early', 'The city is busy during the day', 'The bus was leaving', 'The weather was hot'], answer: 'B', explanation: '“We left home early… because the city is very busy during the day.”' },
+      { type: 'mcq', question: 'What could the visitors not do in the museum?', options: ['Take photos', 'Use the flash', 'Touch the statues', 'Sit down'], answer: 'B', explanation: '“We could not use the flash because it is bad for the old things.”' },
+      { type: 'mcq', question: 'Where did the writer have lunch?', options: ['In a restaurant', 'In the museum', 'Under a tree in a park', 'On the tower'], answer: 'C', explanation: '“We… had lunch under a tree” in a park near the water.' },
+      { type: 'mcq', question: 'What did the writer do in the evening?', options: ['Went home', 'Watched the city lights', 'Went shopping', 'Visited another museum'], answer: 'B', explanation: '“In the evening, we watched the lights of the city from a high tower.”' }
+    ]
+  },
+  {
+    id: 'GR-A2-2',
+    level: 'a2',
+    title: 'A New Sport',
+    minutes: 2,
+    text: [
+      'Last month, my friend Ali asked me to try a new sport with him. I did not want to go at first because I am not very sporty. But Ali said it was easy and fun, so I said yes.',
+      'We went to a small hall near our school. The sport was table tennis. Ali played very well, but I could not hit the ball. I laughed a lot and the teacher helped me. After one hour, I could hit the ball ten times without stopping.',
+      'Now I play table tennis every week. It is good exercise and it helps me think quickly. I am happy that I tried something new. Next month, Ali wants to teach me swimming. I am a little afraid, but I will try!'
+    ],
+    words: [
+      { word: 'sporty', meaning: 'good at and interested in sport', ar: 'رياضي', example: 'I am not very sporty.' },
+      { word: 'hall', meaning: 'a large room for events or sports', ar: 'قاعة', example: 'We went to a small hall near our school.' },
+      { word: 'hit', meaning: 'to touch something with force', ar: 'يضرب', example: 'I could hit the ball ten times.' },
+      { word: 'exercise', meaning: 'physical activity for health', ar: 'تمرين رياضي', example: 'It is good exercise.' },
+      { word: 'afraid', meaning: 'scared, frightened', ar: 'خائف', example: 'I am a little afraid of swimming.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'Why did the writer say yes to Ali?', options: ['Because he loves sport', 'Because Ali said it was easy and fun', 'Because his parents told him to', 'Because the lesson was free'], answer: 'B', explanation: '“Ali said it was easy and fun, so I said yes.”' },
+      { type: 'mcq', question: 'Where did the friends play the new sport?', options: ['In a park', 'At school', 'In a hall near their school', 'At Ali\'s home'], answer: 'C', explanation: '“We went to a small hall near our school.”' },
+      { type: 'mcq', question: 'What could the writer do after one hour?', options: ['Win a game against Ali', 'Hit the ball ten times', 'Teach the teacher', 'Play swimming'], answer: 'B', explanation: '“After one hour, I could hit the ball ten times without stopping.”' },
+      { type: 'mcq', question: 'What does the writer want to learn next month?', options: ['Football', 'Basketball', 'Swimming', 'Tennis'], answer: 'C', explanation: '“Next month, Ali wants to teach me swimming.”' }
+    ]
+  },
+  /* ===================== B1 ===================== */
+  {
+    id: 'GR-B1-1',
+    level: 'b1',
+    title: 'The Rise of Online Learning',
+    minutes: 3,
+    text: [
+      'In the past ten years, online learning has grown from a small experiment into a major part of education. Millions of students now take courses on the internet, from short language lessons to full university degrees. The reasons are clear: online courses are often cheaper, more flexible and available to people who live far from good schools.',
+      'However, online learning is not perfect. Many students say they find it hard to stay motivated when they study alone at home. Without a teacher in the room, it is easy to lose focus and fall behind. Some courses try to solve this problem with live classes, group projects and chat rooms, but these tools only work if students actually use them.',
+      'Another important issue is the digital divide. In many countries, students do not have a reliable internet connection or a computer at home. For these learners, online courses are simply not an option. Governments and companies are working on this problem by providing free Wi-Fi in public places and giving low-cost devices to schools.',
+      'Experts agree that online learning will not replace traditional classrooms completely. Instead, the future is probably a mix of both: students will watch video lessons at home and then meet their teachers in person for discussions, lab work and exams. This model, called blended learning, may give students the best of both worlds — the flexibility of technology and the support of a real teacher.'
+    ],
+    words: [
+      { word: 'experiment', meaning: 'a test or trial of a new idea', ar: 'تجربة', example: 'Online learning began as a small experiment.' },
+      { word: 'flexible', meaning: 'able to change easily to fit new needs', ar: 'مرن', example: 'Online courses are more flexible.' },
+      { word: 'motivated', meaning: 'keen to do something', ar: 'متحمس', example: 'Students find it hard to stay motivated.' },
+      { word: 'fall behind', meaning: 'to make less progress than others', ar: 'يتأخر', example: 'It is easy to lose focus and fall behind.' },
+      { word: 'reliable', meaning: 'able to be trusted to work well', ar: 'موثوق', example: 'Many students lack a reliable internet connection.' },
+      { word: 'blended', meaning: 'mixed, combining two things', ar: 'مدمج', example: 'Blended learning mixes online and classroom study.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'Which is NOT mentioned as a reason online learning has grown?', options: ['It is cheaper', 'It is more flexible', 'It offers better teachers', 'It helps people far from schools'], answer: 'C', explanation: 'The passage mentions cheaper, more flexible and available to people far from good schools — not better teachers.' },
+      { type: 'mcq', question: 'Why do some students struggle with online courses?', options: ['They cost too much', 'They find it hard to stay motivated alone', 'They cannot get a degree', 'The lessons are too short'], answer: 'B', explanation: 'Many students find it hard to stay motivated when studying alone at home.' },
+      { type: 'mcq', question: 'What does the “digital divide” refer to?', options: ['Different teaching styles', 'The gap in access to technology', 'A problem with online exams', 'The cost of internet courses'], answer: 'B', explanation: 'It describes students without a reliable connection or computer — the technology access gap.' },
+      { type: 'mcq', question: 'What is “blended learning”?', options: ['Learning only from videos', 'A mix of online and classroom learning', 'Learning in groups online', 'Learning without a teacher'], answer: 'B', explanation: '“Students will watch video lessons at home and then meet their teachers in person” — a mix of both.' }
+    ]
+  },
+  {
+    id: 'GR-B1-2',
+    level: 'b1',
+    title: 'Why Cities Are Planting More Trees',
+    minutes: 3,
+    text: [
+      'Walk through almost any modern city and you will notice something new: trees are everywhere. Over the last decade, city governments around the world have started planting millions of trees along streets, in parks and on rooftops. This is not just about making cities prettier — trees do important jobs that save money and protect health.',
+      'The most obvious benefit is temperature. A single tree can cool the air around it by several degrees, because water evaporating from its leaves absorbs heat. On hot summer days, a street with trees can be five degrees cooler than a street without them. This reduces the need for air conditioning, which saves energy and cuts the cost of electricity for residents and businesses alike.',
+      'Trees also clean the air. Their leaves catch dust and pollution, and they absorb carbon dioxide, one of the main gases responsible for climate change. A mature tree can absorb about twenty-two kilograms of carbon dioxide every year. Some studies suggest that neighbourhoods with more trees have lower rates of breathing problems such as asthma.',
+      'There are challenges, however. Trees need water, and in dry cities that can be expensive. They can also damage pavements and pipes with their roots, and some species drop fruit or leaves that make streets messy. For this reason, planners must choose the right tree for the right place and be prepared to maintain them for many years.',
+      'Despite these difficulties, the trend is growing. City leaders see trees as one of the cheapest ways to make urban life healthier, and residents clearly agree — neighbourhoods with more greenery often have higher property values. In the future, the green city may be the most successful city.'
+    ],
+    words: [
+      { word: 'decade', meaning: 'a period of ten years', ar: 'عقد', example: 'Planting has grown over the last decade.' },
+      { word: 'evaporate', meaning: 'to turn from liquid into gas', ar: 'يتبخر', example: 'Water evaporating from leaves absorbs heat.' },
+      { word: 'absorb', meaning: 'to take in a liquid or gas', ar: 'يمتص', example: 'Trees absorb carbon dioxide.' },
+      { word: 'mature', meaning: 'fully grown', ar: 'ناضج', example: 'A mature tree absorbs more CO₂.' },
+      { word: 'asthma', meaning: 'a medical condition with breathing difficulty', ar: 'ربو', example: 'Greener areas have lower rates of asthma.' },
+      { word: 'maintain', meaning: 'to keep something in good condition', ar: 'يحافظ على', example: 'Planners must maintain the trees for years.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'According to the passage, trees cool the air mainly by', options: ['blocking the wind', 'water evaporating from their leaves', 'making shade for cars', 'absorbing dust'], answer: 'B', explanation: '“Water evaporating from its leaves absorbs heat” — this is how a tree cools the air.' },
+      { type: 'mcq', question: 'How much carbon dioxide can a mature tree absorb each year?', options: ['5 kilograms', '22 kilograms', '40 kilograms', '100 kilograms'], answer: 'B', explanation: '“A mature tree can absorb about twenty-two kilograms of carbon dioxide every year.”' },
+      { type: 'mcq', question: 'Which is mentioned as a problem with urban trees?', options: ['They make the air dirty', 'Their roots can damage pavements and pipes', 'They increase electricity costs', 'They attract too many birds'], answer: 'B', explanation: '“They can also damage pavements and pipes with their roots.”' },
+      { type: 'mcq', question: 'What does the writer suggest about green neighbourhoods?', options: ['They are more expensive to live in', 'They often have higher property values', 'They use more energy', 'They have more pollution'], answer: 'B', explanation: '“Neighbourhoods with more greenery often have higher property values.”' }
+    ]
+  },
+  /* ===================== B2 ===================== */
+  {
+    id: 'GR-B2-1',
+    level: 'b2',
+    title: 'The Psychology of Habit Formation',
+    minutes: 4,
+    text: [
+      'Anyone who has tried to start exercising regularly or give up sugar knows that habits are surprisingly hard to change. Psychologists have spent decades studying why some behaviours become automatic while others never stick, and their findings have important implications for education, health and personal productivity.',
+      'One influential model, proposed by the researchers at University College London, suggests that a habit forms through a simple loop: a cue, a routine and a reward. The cue is a trigger — for example, finishing dinner. The routine is the behaviour itself, such as going for a walk. The reward is the positive feeling that follows, which reinforces the behaviour so that the brain begins to associate the cue with the action.',
+      'Crucially, the strength of a habit depends less on motivation than on repetition in a consistent context. Studies have shown that performing a behaviour at the same time and in the same place each day dramatically increases the chance that it becomes automatic. This is why experts recommend linking a new habit to an existing one — a technique known as “habit stacking” — rather than relying on willpower alone.',
+      'However, the model has limitations. When the reward is delayed, as with studying for an exam that is months away, the loop weakens because the brain undervalues distant outcomes. Researchers call this “temporal discounting”: we prefer small immediate pleasures over larger future benefits. To counter this, learners are advised to make progress visible and tangible — ticking off a calendar, logging study hours or sharing milestones with friends.',
+      'The most encouraging finding is that habits are not fixed. Even long-established patterns can be reshaped by altering the cue or making the routine easier to start. The key is to reduce friction at the beginning: prepare your books the night before, or commit to just five minutes of study. Small, repeated actions compound over time, and what once required effort eventually becomes effortless.'
+    ],
+    words: [
+      { word: 'automatic', meaning: 'done without thinking', ar: 'تلقائي', example: 'Some behaviours become automatic.' },
+      { word: 'implications', meaning: 'possible effects or results', ar: 'آثار', example: 'The findings have important implications.' },
+      { word: 'cue', meaning: 'a signal that starts a behaviour', ar: 'إشارة', example: 'The cue is a trigger, like finishing dinner.' },
+      { word: 'reinforce', meaning: 'to strengthen', ar: 'يعزز', example: 'The reward reinforces the behaviour.' },
+      { word: 'consistent', meaning: 'always behaving in the same way', ar: 'مستمر/ثابت', example: 'Repetition in a consistent context builds habits.' },
+      { word: 'temporal', meaning: 'related to time', ar: 'زمني', example: 'Temporal discounting favours immediate rewards.' },
+      { word: 'friction', meaning: 'difficulty or resistance', ar: 'احتكاك/معوقات', example: 'Reduce friction at the beginning of a task.' },
+      { word: 'compound', meaning: 'to grow by adding to itself', ar: 'يتراكم', example: 'Small actions compound over time.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'What three parts make up the habit loop described in the passage?', options: ['Start, middle, end', 'Cue, routine, reward', 'Motivation, action, result', 'Time, place, repetition'], answer: 'B', explanation: 'The model describes “a cue, a routine and a reward.”' },
+      { type: 'mcq', question: 'According to the research, habits become strong mainly through', options: ['strong motivation', 'repetition in a consistent context', 'large rewards', 'avoiding mistakes'], answer: 'B', explanation: '“The strength of a habit depends less on motivation than on repetition in a consistent context.”' },
+      { type: 'mcq', question: 'What is “habit stacking”?', options: ['Doing many habits at once', 'Linking a new habit to an existing one', 'Stacking rewards together', 'Planning habits in a diary'], answer: 'B', explanation: 'It is “linking a new habit to an existing one.”' },
+      { type: 'mcq', question: 'Why does delayed reward weaken the habit loop?', options: ['The reward never arrives', 'The brain undervalues distant outcomes', 'The routine becomes too easy', 'The cue disappears'], answer: 'B', explanation: 'The brain “undervalues distant outcomes” — this is temporal discounting.' },
+      { type: 'mcq', question: 'What does the writer recommend to make progress visible?', options: ['Increasing motivation', 'Logging study hours and sharing milestones', 'Studying only at night', 'Removing rewards'], answer: 'B', explanation: 'Learners are advised to “make progress visible and tangible — ticking off a calendar, logging study hours or sharing milestones.”' }
+    ]
+  },
+  {
+    id: 'GR-B2-2',
+    level: 'b2',
+    title: 'The Economics of Food Waste',
+    minutes: 4,
+    text: [
+      'Roughly one-third of all food produced for human consumption is never eaten. This staggering statistic — more than a billion tonnes a year — carries a hidden price tag that goes far beyond the cost of the food itself, because wasted food also wastes the water, energy and land used to grow it.',
+      'The environmental cost is enormous. Agriculture accounts for about a quarter of global greenhouse gas emissions, and when food rots in landfills it releases methane, a gas roughly twenty-five times more potent than carbon dioxide over a century. If food waste were a country, its emissions would rank third behind only China and the United States.',
+      'The causes of waste differ sharply between rich and poor countries. In developing nations, most loss happens on the farm or during storage and transport, where refrigeration and roads are unreliable. In wealthy countries, by contrast, waste is concentrated at the consumer stage: households and restaurants discard food because of oversized portions, confusion over date labels and simple overbuying.',
+      'Consumers in high-income countries are responsible for a surprising share of the problem. In Europe and North America, households throw away more food than the entire food retail sector of sub-Saharan Africa produces. Campaigns have therefore focused on changing consumer behaviour: shopping from a list, storing produce correctly, and understanding that “best before” refers to quality rather than safety.',
+      'Technology offers some solutions, such as apps that connect restaurants with surplus food to charities, and smart packaging that signals spoilage more accurately. Yet experts argue that the most effective lever is economic: when food is priced to reflect its true environmental cost, both producers and consumers have a financial incentive to waste less. Until then, the cheapest way to cut food waste remains the simplest — buy less, plan better and use everything you buy.'
+    ],
+    words: [
+      { word: 'consumption', meaning: 'the act of using or eating something', ar: 'استهلاك', example: 'Food produced for human consumption.' },
+      { word: 'staggering', meaning: 'very surprising and large', ar: 'مذهل', example: 'A staggering statistic.' },
+      { word: 'emissions', meaning: 'gases sent into the air', ar: 'انبعاثات', example: 'Greenhouse gas emissions.' },
+      { word: 'potent', meaning: 'powerful in effect', ar: 'قوي التأثير', example: 'Methane is more potent than CO₂.' },
+      { word: 'refrigeration', meaning: 'keeping food cold', ar: 'تبريد', example: 'Loss happens where refrigeration is unreliable.' },
+      { word: 'discard', meaning: 'to throw away', ar: 'يتخلص من', example: 'Households discard food for many reasons.' },
+      { word: 'surplus', meaning: 'an amount left over', ar: 'فائض', example: 'Apps connect restaurants with surplus food to charities.' },
+      { word: 'incentive', meaning: 'something that encourages action', ar: 'حافز', example: 'Pricing creates a financial incentive.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'What does the writer say about the true cost of food waste?', options: ['It only includes the price of the food', 'It includes wasted water, energy and land', 'It is impossible to measure', 'It affects only rich countries'], answer: 'B', explanation: '“Wasted food also wastes the water, energy and land used to grow it.”' },
+      { type: 'mcq', question: 'Why is methane a particular concern?', options: ['It is the most common gas', 'It is about 25 times more potent than CO₂', 'It comes only from farming', 'It cools the planet'], answer: 'B', explanation: 'Methane is “roughly twenty-five times more potent than carbon dioxide over a century.”' },
+      { type: 'mcq', question: 'Where does most food loss happen in developing countries?', options: ['In restaurants', 'At the consumer stage', 'On the farm or during storage and transport', 'In supermarkets'], answer: 'C', explanation: 'In developing nations most loss happens “on the farm or during storage and transport.”' },
+      { type: 'mcq', question: 'What does the writer say about “best before” labels?', options: ['They indicate safety', 'They refer to quality rather than safety', 'They are legally required', 'They prevent all waste'], answer: 'B', explanation: '“Best before” refers to quality rather than safety.' },
+      { type: 'mcq', question: 'What does the writer suggest is the most effective solution?', options: ['More recycling', 'Pricing food to reflect its environmental cost', 'Building more warehouses', 'Banning supermarkets'], answer: 'B', explanation: '“The most effective lever is economic: when food is priced to reflect its true environmental cost.”' }
+    ]
+  },
+  /* ===================== C1 ===================== */
+  {
+    id: 'GR-C1-1',
+    level: 'c1',
+    title: 'The Paradox of Choice in Modern Life',
+    minutes: 5,
+    text: [
+      'Conventional wisdom holds that more choice is always better. Yet a growing body of research suggests that an abundance of options can be paralysing, leaving consumers anxious, dissatisfied and, paradoxically, less likely to commit to any decision at all. This phenomenon — labelled the “paradox of choice” — has profound implications for everything from supermarket shelves to university applications.',
+      'The mechanism is cognitive rather than economic. When confronted with a vast array of alternatives, the mind must evaluate each option against every other, a process that rapidly exhausts the limited resource of attention. Faced with this mental overload, individuals frequently resort to one of two strategies: either they postpone the decision indefinitely, or they settle for an option that merely satisfies basic criteria, despite the availability of better alternatives. In both cases, the quality of the outcome is diminished, and the decision-maker experiences a lingering sense of regret.',
+      'Moreover, the proliferation of options amplifies expectations. A consumer who buys a single perfect sweater from a small shop is delighted; the same consumer, confronted with fifty sweaters online, is more likely to focus on the flaws of the one purchased, knowing that a superior choice may be only a click away. This asymmetry between anticipated and experienced satisfaction is a recurring theme in behavioural economics.',
+      'There is, however, a compelling counterargument. Research also indicates that the detrimental effects of excessive choice are most pronounced for those who lack expertise in the domain, whereas experts — who rely on established criteria to filter options — benefit from having more alternatives available. The problem, in other words, may not be choice itself but the absence of the heuristics that make choice manageable.',
+      'The practical lesson for learners is twofold. First, curate your environment: limit the sources of information you consume so that attention is preserved for what matters. Second, embrace satisficing — the practice of choosing the first option that meets your standards — for low-stakes decisions, reserving exhaustive comparison for genuinely significant ones. Mastery, it seems, lies not in having access to everything, but in the discipline of ignoring most of it.'
+    ],
+    words: [
+      { word: 'paradox', meaning: 'a statement that seems contradictory but may be true', ar: 'مفارقة', example: 'The paradox of choice.' },
+      { word: 'abundance', meaning: 'a very large quantity', ar: 'وفرة', example: 'An abundance of options can be paralysing.' },
+      { word: 'paralysing', meaning: 'making someone unable to act', ar: 'مُشلّ', example: 'Too many options can be paralysing.' },
+      { word: 'cognitive', meaning: 'related to thinking and understanding', ar: 'معرفي', example: 'The mechanism is cognitive rather than economic.' },
+      { word: 'overload', meaning: 'too much to deal with', ar: 'حمل زائد', example: 'Mental overload exhausts attention.' },
+      { word: 'amplify', meaning: 'to increase in strength', ar: 'يضخم', example: 'The options amplify expectations.' },
+      { word: 'asymmetry', meaning: 'lack of balance or equality', ar: 'عدم تناظر', example: 'An asymmetry between expectation and satisfaction.' },
+      { word: 'heuristic', meaning: 'a simple rule for making decisions', ar: 'قاعدة استرشادية', example: 'Experts use heuristics to filter options.' },
+      { word: 'satisficing', meaning: 'choosing the first acceptable option', ar: 'الاكتفاء بأول خيار مقبول', example: 'Satisficing saves attention for important decisions.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'According to the passage, the “paradox of choice” means that more options can lead to', options: ['greater satisfaction', 'anxiety and worse decisions', 'faster decision-making', 'higher prices'], answer: 'B', explanation: 'An abundance of options “can be paralysing, leaving consumers anxious, dissatisfied and… less likely to commit.”' },
+      { type: 'mcq', question: 'Why do people settle for an option that merely satisfies basic criteria?', options: ['They enjoy simple choices', 'Mental overload makes full comparison difficult', 'Better options are too expensive', 'They trust their intuition'], answer: 'B', explanation: 'Faced with mental overload, people “settle for an option that merely satisfies basic criteria.”' },
+      { type: 'mcq', question: 'Why does a wider range of options increase regret after a purchase?', options: ['The product quality is lower', 'Consumers know a superior choice may be close at hand', 'Prices are higher online', 'Shops give less information'], answer: 'B', explanation: 'The buyer knows “a superior choice may be only a click away,” so they focus on flaws.' },
+      { type: 'mcq', question: 'When are the negative effects of too much choice most pronounced?', options: ['For experts with established criteria', 'For people who lack expertise in the domain', 'For decisions about money', 'For online shopping only'], answer: 'B', explanation: 'The effects are “most pronounced for those who lack expertise in the domain.”' },
+      { type: 'mcq', question: 'What does the writer recommend for low-stakes decisions?', options: ['Exhaustive comparison', 'Satisficing', 'Avoiding decisions entirely', 'Asking experts'], answer: 'B', explanation: 'The writer recommends “satisficing… for low-stakes decisions.”' }
+    ]
+  },
+  {
+    id: 'GR-C1-2',
+    level: 'c1',
+    title: 'Artificial Intelligence and the Future of Work',
+    minutes: 5,
+    text: [
+      'Few technological developments have generated as much speculation as artificial intelligence. Predictions range from utopian visions of effortless abundance to dystopian warnings of mass unemployment. The reality, as is so often the case, is considerably more nuanced: AI is likely to transform the nature of work rather than simply eliminate it.',
+      'Historical precedent supports this view. The mechanisation of agriculture in the nineteenth century displaced millions of farm workers, yet it ultimately created more jobs in manufacturing and services than it destroyed. The key distinction, economists argue, is between tasks and occupations: machines have repeatedly replaced specific tasks — lifting, counting, retrieving — while generating demand for new tasks that require human judgement, creativity and interpersonal skills.',
+      'The current wave of AI, however, differs from previous technologies in one crucial respect: it encroaches on cognitive territory that was once the exclusive domain of educated professionals. Legal research, medical diagnosis, financial analysis and even software engineering all involve pattern recognition that machine learning models perform with growing proficiency. This has prompted concern among white-collar workers, a demographic that had largely considered itself immune to automation.',
+      'Yet the evidence to date suggests that AI functions more effectively as an augmenting tool than as a wholesale substitute. Physicians who consult AI diagnostic systems make fewer errors than either humans or machines working alone; analysts who use AI to triage documents spend their time on higher-order synthesis. The productivity gains are real, but they accrue primarily to those who can collaborate with the technology — a capability that depends less on technical mastery than on the ability to frame problems, question outputs and communicate findings.',
+      'The policy implications are significant. Educational systems that emphasise the memorisation of facts will need to pivot towards critical thinking, adaptability and lifelong learning, since these are precisely the competencies that machines do not readily replicate. For individual workers, the most prudent strategy is to treat AI as an opportunity to shed routine tasks and concentrate on the distinctly human dimensions of work: empathy, ethical judgement and the capacity for creative synthesis. The future does not belong to those who compete with machines, but to those who learn to command them.'
+    ],
+    words: [
+      { word: 'speculation', meaning: 'guessing or forming ideas without firm evidence', ar: 'تكهنات', example: 'AI has generated much speculation.' },
+      { word: 'utopian', meaning: 'describing a perfect imagined society', ar: 'طوباوي', example: 'Utopian visions of effortless abundance.' },
+      { word: 'dystopian', meaning: 'describing a frightening imagined society', ar: 'بائس/كئيب', example: 'Dystopian warnings of mass unemployment.' },
+      { word: 'nuanced', meaning: 'having fine, subtle distinctions', ar: 'دقيق/متنوع التفاصيل', example: 'The reality is considerably more nuanced.' },
+      { word: 'precedent', meaning: 'an earlier example used as a guide', ar: 'سابقة', example: 'Historical precedent supports this view.' },
+      { word: 'encroach', meaning: 'to intrude on something gradually', ar: 'يتعدى', example: 'AI encroaches on cognitive territory.' },
+      { word: 'proficiency', meaning: 'skill and competence', ar: 'إتقان', example: 'Models perform pattern recognition with growing proficiency.' },
+      { word: 'immune', meaning: 'protected from something', ar: 'محصّن', example: 'White-collar workers felt immune to automation.' },
+      { word: 'synthesis', meaning: 'combining parts into a whole', ar: 'تركيب', example: 'Higher-order synthesis of information.' },
+      { word: 'prudent', meaning: 'wise and careful', ar: 'حكيم', example: 'The most prudent strategy is to adapt.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'What does the writer say about predictions concerning AI?', options: ['They are mostly accurate', 'They are too extreme and the reality is more nuanced', 'They focus only on unemployment', 'They have all proved wrong'], answer: 'B', explanation: 'Predictions range from utopian to dystopian, but “the reality… is considerably more nuanced.”' },
+      { type: 'mcq', question: 'What distinction do economists make regarding automation?', options: ['Between manual and office work', 'Between tasks and occupations', 'Between machines and software', 'Between workers and managers'], answer: 'B', explanation: '“The key distinction… is between tasks and occupations.”' },
+      { type: 'mcq', question: 'How does the current wave of AI differ from previous technologies?', options: ['It affects only manufacturing', 'It encroaches on cognitive work once done by professionals', 'It is cheaper to install', 'It requires no electricity'], answer: 'B', explanation: 'AI “encroaches on cognitive territory that was once the exclusive domain of educated professionals.”' },
+      { type: 'mcq', question: 'What do the examples of physicians and analysts suggest?', options: ['AI should replace humans entirely', 'AI works best as an augmenting tool alongside humans', 'AI makes more errors than humans', 'AI is not useful in medicine'], answer: 'B', explanation: 'Humans and AI working together outperform either alone — AI functions as an “augmenting tool.”' },
+      { type: 'mcq', question: 'What will educational systems need to emphasise, according to the writer?', options: ['Memorisation of facts', 'Critical thinking, adaptability and lifelong learning', 'Technical programming', 'Speed of calculation'], answer: 'B', explanation: 'Systems must “pivot towards critical thinking, adaptability and lifelong learning.”' }
+    ]
+  },
+  /* ===================== C2 ===================== */
+  {
+    id: 'GR-C2-1',
+    level: 'c2',
+    title: 'The Epistemology of Expertise',
+    minutes: 6,
+    text: [
+      'Expertise occupies an uneasy position in contemporary intellectual life. We defer to specialists in domains ranging from cardiology to constitutional law, yet we are simultaneously warned that experts are frequently wrong, that credentials confer no immunity from bias, and that the cumulative judgement of crowds can outperform the most accomplished individual. Reconciling these competing intuitions requires a more precise account of what expertise is and the conditions under which it can be trusted.',
+      'A useful distinction, elaborated by the philosopher of science Harry Collins, separates two forms of expertise. The first, contributory expertise, is the ability to perform within a field — to conduct experiments, to draft judgments, to operate on patients. The second, interactional expertise, is the capacity to talk fluently and credibly about a field without being able to practise it. Interactional expertise explains how journalists, administrators and policy-makers can engage meaningfully with specialist communities despite lacking their technical skills, and it suggests that the boundary between expert and layperson is more permeable than is commonly assumed.',
+      'The reliability of expert judgement, meanwhile, is highly context-dependent. In domains characterised by stable environments and frequent, unambiguous feedback — meteorology, chess, the diagnosis of common ailments — calibrated expertise develops readily, and the expert\'s intuition is a dependable instrument. In domains where feedback is delayed, sparse or systematically distorted, such as macroeconomic forecasting or the prediction of geopolitical events, even eminent specialists exhibit accuracy scarcely better than chance. The celebrated psychologist Daniel Kahneman has argued that in such “low-validity” environments, the pretensions of expertise are largely illusory, and that simple statistical models, however crude, routinely outperform subjective judgement.',
+      'This analysis carries sobering implications for the learner. The acquisition of expertise is not a matter of mere exposure or diligent accumulation of facts; it demands deliberate practice — the structured, effortful engagement with tasks at the edge of one\'s competence, accompanied by immediate feedback and the systematic correction of error. Without such practice, performance plateaus, and the individual mistakes fluency for mastery.',
+      'Yet the most profound insight is that genuine expertise is characterised not by the confident assertion of conclusions but by the nuanced appreciation of uncertainty. The novice perceives a problem in black and white; the expert discerns a spectrum of probabilities, contingencies and trade-offs. To cultivate expertise, therefore, is to cultivate intellectual humility — the recognition that knowledge is provisional, that one\'s own judgement is fallible, and that the mark of true understanding is the ability to articulate precisely what one does not know.'
+    ],
+    words: [
+      { word: 'epistemology', meaning: 'the study of knowledge and how we know things', ar: 'نظرية المعرفة', example: 'The epistemology of expertise.' },
+      { word: 'defer', meaning: 'to accept someone else\'s judgement', ar: 'يخضع/يذعن', example: 'We defer to specialists in many domains.' },
+      { word: 'credentials', meaning: 'qualifications or evidence of ability', ar: 'مؤهلات', example: 'Credentials confer no immunity from bias.' },
+      { word: 'permeable', meaning: 'allowing things to pass through', ar: 'نفّاذ', example: 'The boundary between expert and layperson is permeable.' },
+      { word: 'unambiguous', meaning: 'clear, with only one meaning', ar: 'لا لبس فيه', example: 'Frequent, unambiguous feedback.' },
+      { word: 'calibrated', meaning: 'carefully adjusted to be accurate', ar: 'مُعايَر', example: 'Calibrated expertise develops readily.' },
+      { word: 'illusory', meaning: 'based on illusion, not real', ar: 'وهمي', example: 'The pretensions of expertise are largely illusory.' },
+      { word: 'sobering', meaning: 'making you feel serious and thoughtful', ar: 'مُذكّر بالواقع', example: 'A sobering implication for learners.' },
+      { word: 'plateau', meaning: 'to stop improving after progress', ar: 'يستقر/يركد', example: 'Without practice, performance plateaus.' },
+      { word: 'provisional', meaning: 'not final, temporary', ar: 'مؤقت', example: 'Knowledge is provisional.' },
+      { word: 'fallible', meaning: 'capable of making mistakes', ar: 'قابل للخطأ', example: 'One\'s own judgement is fallible.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'What does the writer say about the status of expertise in modern intellectual life?', options: ['It is universally trusted', 'It is both deferred to and distrusted', 'It has lost all influence', 'It applies only to science'], answer: 'B', explanation: 'We “defer to specialists” yet are “warned that experts are frequently wrong” — both at once.' },
+      { type: 'mcq', question: 'What is “interactional expertise”?', options: ['The ability to perform within a field', 'The ability to talk credibly about a field without practising it', 'Expertise in social interaction', 'Knowledge gained from interaction with machines'], answer: 'B', explanation: 'Interactional expertise is “the capacity to talk fluently and credibly about a field without being able to practise it.”' },
+      { type: 'mcq', question: 'In which type of environment does expert intuition become dependable?', options: ['Where feedback is delayed', 'Where feedback is frequent and unambiguous', 'Where the domain is unpredictable', 'Where models are crude'], answer: 'B', explanation: 'In “stable environments and frequent, unambiguous feedback… the expert\'s intuition is a dependable instrument.”' },
+      { type: 'mcq', question: 'What does Kahneman say about “low-validity” environments?', options: ['Expertise is especially valuable', 'The pretensions of expertise are largely illusory', 'Statistical models are useless', 'Feedback is more reliable'], answer: 'B', explanation: 'In low-validity environments, “the pretensions of expertise are largely illusory” and simple models outperform judgement.' },
+      { type: 'mcq', question: 'What does deliberate practice require?', options: ['Mere exposure to information', 'Effortful engagement with tasks at the edge of competence and immediate feedback', 'Long hours of passive reading', 'Memorising expert opinions'], answer: 'B', explanation: 'Deliberate practice is “structured, effortful engagement with tasks at the edge of one\'s competence, accompanied by immediate feedback.”' },
+      { type: 'mcq', question: 'What marks genuine expertise, according to the final paragraph?', options: ['Confident assertion of conclusions', 'The nuanced appreciation of uncertainty', 'A large store of facts', 'Speed of decision-making'], answer: 'B', explanation: 'Genuine expertise is “the nuanced appreciation of uncertainty.”' }
+    ]
+  },
+  {
+    id: 'GR-C2-2',
+    level: 'c2',
+    title: 'The Architecture of Attention in a Distracted Age',
+    minutes: 6,
+    text: [
+      'Attention, the psychologist William James once observed, is the taking possession by the mind, in clear and vivid form, of one of what seem several simultaneously possible objects or trains of thought. A century later, this scarce cognitive resource has become the central battleground of the digital economy, where an entire industry is devoted to capturing, monetising and fragmenting it. Understanding the architecture of attention is therefore not merely an academic curiosity but a precondition for autonomy in contemporary life.',
+      'The mechanisms that render attention vulnerable are well documented. Intermittent reinforcement — the unpredictable arrival of notifications, likes and messages — exploits the same neural circuitry as slot machines, creating a compulsion to check that is experienced as almost involuntary. The phenomenon of “variable reward” ensures that even trivial information acquires salience, because the brain, ever alert to the possibility of novelty, assigns disproportionate weight to the uncertain payoff of each glance.',
+      'The consequences extend beyond the merely irritating. Sustained distraction impairs the capacity for deep work — the prolonged, uninterrupted concentration required for complex problem-solving, the composition of extended arguments and the mastery of difficult material. Research suggests that the mere presence of a smartphone, even switched off and face-down, measurably diminishes available working memory, a finding that underscores how profoundly the environment shapes cognition. The learner who imagines that willpower alone can resist this architecture is, in most cases, overestimating the force of intention against the accumulated design of a thousand engineers.',
+      'What, then, is to be done? The most robust responses are architectural rather than attitudinal: they restructure the environment rather than exhorting the individual to try harder. The removal of notifications at the device level, the physical separation of work and leisure devices, the scheduling of communication into discrete windows, and the cultivation of what the essayist Jenny Odell calls “attention as care” — the deliberate, loving investment of attention in a chosen subject — all constitute forms of resistance that are sustainable precisely because they do not depend on momentary resolve.',
+      'The deeper point is philosophical. The way we allocate attention is, in the most literal sense, the way we allocate a life; every act of attending is simultaneously an act of not attending to everything else. To reclaim attention, then, is to reclaim the capacity for choice itself. In an age engineered for distraction, the quiet discipline of sustained focus is not a retreat from the world but the most subversive form of engagement with it.'
+    ],
+    words: [
+      { word: 'monetise', meaning: 'to earn money from something', ar: 'يحقق ربحاً من', example: 'An industry devoted to monetising attention.' },
+      { word: 'fragmenting', meaning: 'breaking into small pieces', ar: 'تجزئة', example: 'Attention is being fragmented.' },
+      { word: 'autonomy', meaning: 'the freedom to govern oneself', ar: 'استقلالية', example: 'Attention is a precondition for autonomy.' },
+      { word: 'intermittent', meaning: 'happening at irregular intervals', ar: 'متقطع', example: 'Intermittent reinforcement.' },
+      { word: 'circuitry', meaning: 'the system of connections (here: in the brain)', ar: 'دوائر', example: 'It exploits the same neural circuitry as slot machines.' },
+      { word: 'salience', meaning: 'prominence or importance', ar: 'بروز/أهمية', example: 'Trivial information acquires salience.' },
+      { word: 'diminish', meaning: 'to make smaller or weaker', ar: 'يقلل', example: 'A phone diminishes available working memory.' },
+      { word: 'exhorting', meaning: 'strongly urging someone', ar: 'يحث', example: 'Rather than exhorting the individual to try harder.' },
+      { word: 'resolve', meaning: 'firm determination', ar: 'عزيمة', example: 'They do not depend on momentary resolve.' },
+      { word: 'subversive', meaning: 'intended to undermine the established order', ar: 'مُخرب/مقاوم', example: 'Focused attention is a subversive act.' }
+    ],
+    questions: [
+      { type: 'mcq', question: 'Why does the writer call attention a “battleground of the digital economy”?', options: ['Because attention is unlimited', 'Because an industry captures and monetises it', 'Because it cannot be measured', 'Because only engineers possess it'], answer: 'B', explanation: 'An entire industry is “devoted to capturing, monetising and fragmenting it.”' },
+      { type: 'mcq', question: 'Why does “variable reward” make people check their devices compulsively?', options: ['The rewards are always large', 'The brain assigns weight to uncertain novelty', 'Notifications arrive at fixed times', 'Devices are habit-forming by law'], answer: 'B', explanation: 'The brain assigns “disproportionate weight to the uncertain payoff of each glance.”' },
+      { type: 'mcq', question: 'What does research suggest about a smartphone that is switched off?', options: ['It has no effect on cognition', 'Its mere presence diminishes working memory', 'It improves concentration', 'It only distracts when used'], answer: 'B', explanation: 'Even switched off and face-down, a phone\'s presence “measurably diminishes available working memory.”' },
+      { type: 'mcq', question: 'What kind of response does the writer consider most robust?', options: ['Attitudinal — trying harder', 'Architectural — restructuring the environment', 'Legislative — new laws', 'Technological — better apps'], answer: 'B', explanation: '“The most robust responses are architectural rather than attitudinal: they restructure the environment.”' },
+      { type: 'mcq', question: 'What does the writer mean by “attention as care”?', options: ['Monitoring attention scientifically', 'The deliberate, loving investment of attention in a chosen subject', 'Caring for digital devices', 'Attention paid to health'], answer: 'B', explanation: 'Odell\'s phrase describes “the deliberate, loving investment of attention in a chosen subject.”' },
+      { type: 'mcq', question: 'What is the writer\'s philosophical conclusion?', options: ['Distraction is inevitable', 'How we allocate attention is how we allocate a life', 'Focus is a retreat from the world', 'Willpower can solve distraction'], answer: 'B', explanation: '“The way we allocate attention is… the way we allocate a life,” and reclaiming it reclaims choice itself.' }
+    ]
+  }
+];
+
+/* ---------------- BUILT-IN TRANSLATION DICTIONARY ---------------- */
+/* Offline English ↔ Arabic glossary used by the Translator tool and
+   word-tap lookups in the graded readers. Covers the reading
+   glossaries plus common academic / IELTS vocabulary. */
+const TRANSLATION_DICT = [
+  // ---- everyday / A1-A2 ----
+  { en: 'morning', ar: 'صباح' }, { en: 'afternoon', ar: 'بعد الظهر' }, { en: 'evening', ar: 'مساء' },
+  { en: 'night', ar: 'ليل' }, { en: 'day', ar: 'يوم' }, { en: 'week', ar: 'أسبوع' },
+  { en: 'month', ar: 'شهر' }, { en: 'year', ar: 'سنة' }, { en: 'time', ar: 'وقت' },
+  { en: 'hour', ar: 'ساعة' }, { en: 'minute', ar: 'دقيقة' }, { en: 'today', ar: 'اليوم' },
+  { en: 'tomorrow', ar: 'غداً' }, { en: 'yesterday', ar: 'أمس' }, { en: 'now', ar: 'الآن' },
+  { en: 'family', ar: 'عائلة' }, { en: 'father', ar: 'أب' }, { en: 'mother', ar: 'أم' },
+  { en: 'brother', ar: 'أخ' }, { en: 'sister', ar: 'أخت' }, { en: 'son', ar: 'ابن' },
+  { en: 'daughter', ar: 'ابنة' }, { en: 'friend', ar: 'صديق' }, { en: 'person', ar: 'شخص' },
+  { en: 'people', ar: 'ناس' }, { en: 'man', ar: 'رجل' }, { en: 'woman', ar: 'امرأة' },
+  { en: 'child', ar: 'طفل' }, { en: 'home', ar: 'منزل' }, { en: 'house', ar: 'بيت' },
+  { en: 'flat', ar: 'شقة' }, { en: 'room', ar: 'غرفة' }, { en: 'kitchen', ar: 'مطبخ' },
+  { en: 'door', ar: 'باب' }, { en: 'window', ar: 'نافذة' }, { en: 'table', ar: 'طاولة' },
+  { en: 'chair', ar: 'كرسي' }, { en: 'bed', ar: 'سرير' }, { en: 'school', ar: 'مدرسة' },
+  { en: 'university', ar: 'جامعة' }, { en: 'teacher', ar: 'معلّم' }, { en: 'student', ar: 'طالب' },
+  { en: 'class', ar: 'فصل/حصة' }, { en: 'book', ar: 'كتاب' }, { en: 'pen', ar: 'قلم' },
+  { en: 'paper', ar: 'ورق' }, { en: 'work', ar: 'عمل' }, { en: 'job', ar: 'وظيفة' },
+  { en: 'office', ar: 'مكتب' }, { en: 'hospital', ar: 'مستشفى' }, { en: 'doctor', ar: 'طبيب' },
+  { en: 'nurse', ar: 'ممرض' }, { en: 'shop', ar: 'متجر' }, { en: 'market', ar: 'سوق' },
+  { en: 'money', ar: 'مال' }, { en: 'price', ar: 'سعر' }, { en: 'food', ar: 'طعام' },
+  { en: 'water', ar: 'ماء' }, { en: 'bread', ar: 'خبز' }, { en: 'breakfast', ar: 'فطور' },
+  { en: 'lunch', ar: 'غداء' }, { en: 'dinner', ar: 'عشاء' }, { en: 'tea', ar: 'شاي' },
+  { en: 'coffee', ar: 'قهوة' }, { en: 'milk', ar: 'حليب' }, { en: 'fruit', ar: 'فاكهة' },
+  { en: 'vegetable', ar: 'خضار' }, { en: 'apple', ar: 'تفاحة' }, { en: 'city', ar: 'مدينة' },
+  { en: 'village', ar: 'قرية' }, { en: 'street', ar: 'شارع' }, { en: 'road', ar: 'طريق' },
+  { en: 'car', ar: 'سيارة' }, { en: 'bus', ar: 'حافلة' }, { en: 'train', ar: 'قطار' },
+  { en: 'plane', ar: 'طائرة' }, { en: 'bike', ar: 'دراجة' }, { en: 'airport', ar: 'مطار' },
+  { en: 'station', ar: 'محطة' }, { en: 'park', ar: 'حديقة' }, { en: 'garden', ar: 'حديقة منزل' },
+  { en: 'tree', ar: 'شجرة' }, { en: 'flower', ar: 'زهرة' }, { en: 'sky', ar: 'سماء' },
+  { en: 'sun', ar: 'شمس' }, { en: 'moon', ar: 'قمر' }, { en: 'weather', ar: 'طقس' },
+  { en: 'rain', ar: 'مطر' }, { en: 'hot', ar: 'حار' }, { en: 'cold', ar: 'بارد' },
+  { en: 'big', ar: 'كبير' }, { en: 'small', ar: 'صغير' }, { en: 'new', ar: 'جديد' },
+  { en: 'old', ar: 'قديم' }, { en: 'good', ar: 'جيد' }, { en: 'bad', ar: 'سيئ' },
+  { en: 'happy', ar: 'سعيد' }, { en: 'sad', ar: 'حزين' }, { en: 'beautiful', ar: 'جميل' },
+  { en: 'easy', ar: 'سهل' }, { en: 'difficult', ar: 'صعب' }, { en: 'fast', ar: 'سريع' },
+  { en: 'slow', ar: 'بطيء' }, { en: 'cheap', ar: 'رخيص' }, { en: 'expensive', ar: 'غالي' },
+  { en: 'early', ar: 'مبكر' }, { en: 'late', ar: 'متأخر' }, { en: 'always', ar: 'دائماً' },
+  { en: 'never', ar: 'أبداً' }, { en: 'often', ar: 'غالباً' }, { en: 'sometimes', ar: 'أحياناً' },
+  { en: 'bright', ar: 'مُشرق' }, { en: 'brush', ar: 'يفرّش' }, { en: 'together', ar: 'معاً' }, { en: 'cousin', ar: 'ابن العم/الخال' }, { en: 'traffic', ar: 'حركة المرور' }, { en: 'ancient', ar: 'قديم' }, { en: 'statue', ar: 'تمثال' }, { en: 'flash', ar: 'فلاش' }, { en: 'tower', ar: 'برج' }, { en: 'sporty', ar: 'رياضي' }, { en: 'hall', ar: 'قاعة' }, { en: 'hit', ar: 'يضرب' }, { en: 'afraid', ar: 'خائف' },
+  { en: 'eat', ar: 'يأكل' }, { en: 'drink', ar: 'يشرب' }, { en: 'sleep', ar: 'ينام' },
+  { en: 'wake up', ar: 'يستيقظ' }, { en: 'go', ar: 'يذهب' }, { en: 'come', ar: 'يأتي' },
+  { en: 'live', ar: 'يعيش' }, { en: 'work', ar: 'يعمل' }, { en: 'study', ar: 'يدرس' },
+  { en: 'play', ar: 'يلعب' }, { en: 'read', ar: 'يقرأ' }, { en: 'write', ar: 'يكتب' },
+  { en: 'speak', ar: 'يتحدث' }, { en: 'listen', ar: 'يستمع' }, { en: 'see', ar: 'يرى' },
+  { en: 'look', ar: 'ينظر' }, { en: 'buy', ar: 'يشتري' }, { en: 'sell', ar: 'يبيع' },
+  { en: 'help', ar: 'يساعد' }, { en: 'like', ar: 'يحب' }, { en: 'love', ar: 'يعشق' },
+  { en: 'want', ar: 'يريد' }, { en: 'need', ar: 'يحتاج' }, { en: 'know', ar: 'يعرف' },
+  { en: 'think', ar: 'يفكر' }, { en: 'understand', ar: 'يفهم' }, { en: 'remember', ar: 'يتذكر' },
+  { en: 'forget', ar: 'ينسى' }, { en: 'learn', ar: 'يتعلم' }, { en: 'teach', ar: 'يعلّم' },
+  { en: 'ask', ar: 'يسأل' }, { en: 'answer', ar: 'يجيب' }, { en: 'give', ar: 'يعطي' },
+  { en: 'take', ar: 'يأخذ' }, { en: 'open', ar: 'يفتح' }, { en: 'close', ar: 'يغلق' },
+  { en: 'start', ar: 'يبدأ' }, { en: 'finish', ar: 'ينهي' }, { en: 'stop', ar: 'يتوقف' },
+  // ---- academic / IELTS B1-C1 ----
+  { en: 'significant', ar: 'مهم/كبير' }, { en: 'significant amount', ar: 'كمية كبيرة' },
+  { en: 'significant impact', ar: 'تأثير كبير' }, { en: 'benefit', ar: 'فائدة' },
+  { en: 'disadvantage', ar: 'عيب/مساوئ' }, { en: 'advantage', ar: 'ميزة' },
+  { en: 'increase', ar: 'زيادة/يزيد' }, { en: 'decrease', ar: 'انخفاض/ينخفض' },
+  { en: 'reduce', ar: 'يقلل' }, { en: 'improve', ar: 'يحسّن' }, { en: 'develop', ar: 'يطوّر' },
+  { en: 'development', ar: 'تطوير' }, { en: 'growth', ar: 'نمو' }, { en: 'decline', ar: 'انحدار' },
+  { en: 'trend', ar: 'اتجاه' }, { en: 'pattern', ar: 'نمط' }, { en: 'change', ar: 'تغيير' },
+  { en: 'effect', ar: 'تأثير' }, { en: 'affect', ar: 'يؤثر على' }, { en: 'cause', ar: 'سبب' },
+  { en: 'result', ar: 'نتيجة' }, { en: 'solution', ar: 'حل' }, { en: 'problem', ar: 'مشكلة' },
+  { en: 'issue', ar: 'قضية' }, { en: 'challenge', ar: 'تحدي' }, { en: 'opportunity', ar: 'فرصة' },
+  { en: 'environment', ar: 'بيئة' }, { en: 'environmental', ar: 'بيئي' }, { en: 'pollution', ar: 'تلوث' },
+  { en: 'climate', ar: 'مناخ' }, { en: 'energy', ar: 'طاقة' }, { en: 'resource', ar: 'مورد' },
+  { en: 'population', ar: 'سكان' }, { en: 'society', ar: 'مجتمع' }, { en: 'government', ar: 'حكومة' },
+  { en: 'policy', ar: 'سياسة' }, { en: 'economy', ar: 'اقتصاد' }, { en: 'economic', ar: 'اقتصادي' },
+  { en: 'industry', ar: 'صناعة' }, { en: 'technology', ar: 'تكنولوجيا' }, { en: 'science', ar: 'علم' },
+  { en: 'research', ar: 'بحث' }, { en: 'study', ar: 'دراسة' }, { en: 'evidence', ar: 'دليل' },
+  { en: 'data', ar: 'بيانات' }, { en: 'information', ar: 'معلومات' }, { en: 'knowledge', ar: 'معرفة' },
+  { en: 'education', ar: 'تعليم' }, { en: 'educational', ar: 'تعليمي' }, { en: 'learning', ar: 'تعلم' },
+  { en: 'language', ar: 'لغة' }, { en: 'vocabulary', ar: 'مفردات' }, { en: 'grammar', ar: 'قواعد' },
+  { en: 'skill', ar: 'مهارة' }, { en: 'ability', ar: 'قدرة' }, { en: 'experience', ar: 'خبرة/تجربة' },
+  { en: 'health', ar: 'صحة' }, { en: 'healthcare', ar: 'رعاية صحية' }, { en: 'disease', ar: 'مرض' },
+  { en: 'treatment', ar: 'علاج' }, { en: 'nutrition', ar: 'تغذية' }, { en: 'agriculture', ar: 'زراعة' },
+  { en: 'transport', ar: 'نقل' }, { en: 'infrastructure', ar: 'بنية تحتية' }, { en: 'housing', ar: 'سكن' },
+  { en: 'urban', ar: 'حضري' }, { en: 'rural', ar: 'ريفي' }, { en: 'global', ar: 'عالمي' },
+  { en: 'international', ar: 'دولي' }, { en: 'cultural', ar: 'ثقافي' }, { en: 'social', ar: 'اجتماعي' },
+  { en: 'personal', ar: 'شخصي' }, { en: 'professional', ar: 'مهني' }, { en: 'public', ar: 'عام' },
+  { en: 'private', ar: 'خاص' }, { en: 'available', ar: 'متاح' }, { en: 'necessary', ar: 'ضروري' },
+  { en: 'essential', ar: 'أساسي' }, { en: 'important', ar: 'مهم' }, { en: 'relevant', ar: 'ذو صلة' },
+  { en: 'effective', ar: 'فعال' }, { en: 'efficient', ar: 'كفؤ' }, { en: 'accurate', ar: 'دقيق' },
+  { en: 'reliable', ar: 'موثوق' }, { en: 'flexible', ar: 'مرن' }, { en: 'sustainable', ar: 'مستدام' },
+  { en: 'potential', ar: 'محتمل/إمكانية' }, { en: 'factors', ar: 'عوامل' }, { en: 'aspect', ar: 'جانب' },
+  { en: 'approach', ar: 'نهج/أسلوب' }, { en: 'method', ar: 'طريقة' }, { en: 'strategy', ar: 'استراتيجية' },
+  { en: 'analysis', ar: 'تحليل' }, { en: 'comparison', ar: 'مقارنة' }, { en: 'contrast', ar: 'تباين' },
+  { en: 'conclusion', ar: 'استنتاج' }, { en: 'argument', ar: 'حجة' }, { en: 'opinion', ar: 'رأي' },
+  { en: 'point of view', ar: 'وجهة نظر' }, { en: 'perspective', ar: 'منظور' }, { en: 'theory', ar: 'نظرية' },
+  { en: 'concept', ar: 'مفهوم' }, { en: 'principle', ar: 'مبدأ' }, { en: 'standard', ar: 'معيار' },
+  { en: 'quality', ar: 'جودة' }, { en: 'quantity', ar: 'كمية' }, { en: 'majority', ar: 'أغلبية' },
+  { en: 'minority', ar: 'أقلية' }, { en: 'individual', ar: 'فرد' }, { en: 'community', ar: 'مجتمع محلي' },
+  { en: 'consumer', ar: 'مستهلك' }, { en: 'customer', ar: 'عميل' }, { en: 'employee', ar: 'موظف' },
+  { en: 'employer', ar: 'صاحب عمل' }, { en: 'unemployment', ar: 'بطالة' }, { en: 'income', ar: 'دخل' },
+  { en: 'tax', ar: 'ضريبة' }, { en: 'budget', ar: 'ميزانية' }, { en: 'investment', ar: 'استثمار' },
+  { en: 'trade', ar: 'تجارة' }, { en: 'export', ar: 'تصدير' }, { en: 'import', ar: 'استيراد' },
+  { en: 'manufacturing', ar: 'تصنيع' }, { en: 'production', ar: 'إنتاج' }, { en: 'consumption', ar: 'استهلاك' },
+  { en: 'demand', ar: 'طلب' }, { en: 'supply', ar: 'عرض' }, { en: 'price', ar: 'سعر' },
+  { en: 'marketing', ar: 'تسويق' }, { en: 'advertising', ar: 'إعلانات' }, { en: 'communication', ar: 'تواصل' },
+  { en: 'conversation', ar: 'محادثة' }, { en: 'discussion', ar: 'نقاش' }, { en: 'interview', ar: 'مقابلة' },
+  { en: 'presentation', ar: 'عرض تقديمي' }, { en: 'lecture', ar: 'محاضرة' }, { en: 'seminar', ar: 'ندوة' },
+  { en: 'conference', ar: 'مؤتمر' }, { en: 'examination', ar: 'امتحان' }, { en: 'assessment', ar: 'تقييم' },
+  { en: 'achievement', ar: 'إنجاز' }, { en: 'success', ar: 'نجاح' }, { en: 'failure', ar: 'فشل' },
+  { en: 'progress', ar: 'تقدّم' }, { en: 'improvement', ar: 'تحسّن' }, { en: 'motivation', ar: 'دافع' },
+  { en: 'concentration', ar: 'تركيز' }, { en: 'attention', ar: 'انتباه' }, { en: 'memory', ar: 'ذاكرة' },
+  { en: 'habit', ar: 'عادة' }, { en: 'routine', ar: 'روتين' }, { en: 'schedule', ar: 'جدول' },
+  { en: 'goal', ar: 'هدف' }, { en: 'target', ar: 'هدف/مستهدف' }, { en: 'deadline', ar: 'موعد نهائي' },
+  { en: 'effort', ar: 'جهد' }, { en: 'practice', ar: 'ممارسة' }, { en: 'training', ar: 'تدريب' },
+  { en: 'exercise', ar: 'تمرين' }, { en: 'revision', ar: 'مراجعة' }, { en: 'review', ar: 'مراجعة' },
+  { en: 'summary', ar: 'ملخص' }, { en: 'outline', ar: 'مخطط/خطوط عريضة' }, { en: 'draft', ar: 'مسودة' },
+  { en: 'essay', ar: 'مقال' }, { en: 'paragraph', ar: 'فقرة' }, { en: 'sentence', ar: 'جملة' },
+  { en: 'passage', ar: 'فقرة/نص' }, { en: 'article', ar: 'مقال/مادة' }, { en: 'text', ar: 'نص' },
+  { en: 'meaning', ar: 'معنى' }, { en: 'definition', ar: 'تعريف' }, { en: 'translation', ar: 'ترجمة' },
+  { en: 'synonym', ar: 'مرادف' }, { en: 'antonym', ar: 'ضد/عكس' }, { en: 'example', ar: 'مثال' },
+  { en: 'phrase', ar: 'عبارة' }, { en: 'expression', ar: 'تعبير' }, { en: 'idiom', ar: 'تعبير اصطلاحي' },
+  { en: 'pronunciation', ar: 'نطق' }, { en: 'fluency', ar: 'طلاقة' }, { en: 'accuracy', ar: 'دقة' },
+  { en: 'band', ar: 'درجة/مستوى' }, { en: 'score', ar: 'نتيجة/علامة' }, { en: 'mark', ar: 'علامة' },
+  { en: 'grade', ar: 'درجة' }, { en: 'pass', ar: 'نجاح' }, { en: 'fail', ar: 'رسوب' },
+  { en: 'prepare', ar: 'يستعد' }, { en: 'preparation', ar: 'تحضير' }, { en: 'strategy', ar: 'خطة' },
+  { en: 'advice', ar: 'نصيحة' }, { en: 'suggestion', ar: 'اقتراح' }, { en: 'recommendation', ar: 'توصية' },
+  { en: 'support', ar: 'دعم' }, { en: 'encourage', ar: 'يشجع' }, { en: 'confidence', ar: 'ثقة' },
+  { en: 'confident', ar: 'واثق' }, { en: 'nervous', ar: 'متوتر' }, { en: 'stress', ar: 'توتر' },
+  { en: 'anxiety', ar: 'قلق' }, { en: 'relax', ar: 'يسترخي' }, { en: 'focus', ar: 'تركيز/يركز' },
+  { en: 'distraction', ar: 'إلهاء' }, { en: 'procrastinate', ar: 'يسوّف' }, { en: 'deadline', ar: 'آخر موعد' },
+  { en: 'efficient', ar: 'ذو كفاءة' }, { en: 'productive', ar: 'منتج' }, { en: 'productivity', ar: 'إنتاجية' },
+  { en: 'schedule', ar: 'جدول زمني' }, { en: 'organise', ar: 'ينظم' }, { en: 'prioritise', ar: 'يرتب الأولويات' },
+  // ---- graded reading glossaries (B1-C2) ----
+  { en: 'experiment', ar: 'تجربة' }, { en: 'motivated', ar: 'متحمس' },
+  { en: 'fall behind', ar: 'يتأخر' }, { en: 'blended', ar: 'مدمج' },
+  { en: 'decade', ar: 'عقد' }, { en: 'evaporate', ar: 'يتبخر' }, { en: 'absorb', ar: 'يمتص' },
+  { en: 'mature', ar: 'ناضج' }, { en: 'asthma', ar: 'ربو' }, { en: 'maintain', ar: 'يحافظ على' },
+  { en: 'automatic', ar: 'تلقائي' }, { en: 'implications', ar: 'آثار' }, { en: 'cue', ar: 'إشارة' },
+  { en: 'reinforce', ar: 'يعزز' }, { en: 'consistent', ar: 'مستمر' }, { en: 'temporal', ar: 'زمني' },
+  { en: 'friction', ar: 'معوقات' }, { en: 'compound', ar: 'يتراكم' }, { en: 'staggering', ar: 'مذهل' },
+  { en: 'emissions', ar: 'انبعاثات' }, { en: 'potent', ar: 'قوي التأثير' }, { en: 'refrigeration', ar: 'تبريد' },
+  { en: 'discard', ar: 'يتخلص من' }, { en: 'surplus', ar: 'فائض' }, { en: 'incentive', ar: 'حافز' },
+  { en: 'paradox', ar: 'مفارقة' }, { en: 'abundance', ar: 'وفرة' }, { en: 'paralysing', ar: 'مُشلّ' },
+  { en: 'cognitive', ar: 'معرفي' }, { en: 'overload', ar: 'حمل زائد' }, { en: 'amplify', ar: 'يضخم' },
+  { en: 'asymmetry', ar: 'عدم تناظر' }, { en: 'heuristic', ar: 'قاعدة استرشادية' }, { en: 'satisficing', ar: 'الاكتفاء بأول خيار مقبول' },
+  { en: 'speculation', ar: 'تكهنات' }, { en: 'utopian', ar: 'طوباوي' }, { en: 'dystopian', ar: 'بائس' },
+  { en: 'nuanced', ar: 'دقيق التفاصيل' }, { en: 'precedent', ar: 'سابقة' }, { en: 'encroach', ar: 'يتعدى' },
+  { en: 'proficiency', ar: 'إتقان' }, { en: 'immune', ar: 'محصّن' }, { en: 'synthesis', ar: 'تركيب' },
+  { en: 'prudent', ar: 'حكيم' }, { en: 'epistemology', ar: 'نظرية المعرفة' }, { en: 'defer', ar: 'يذعن' },
+  { en: 'credentials', ar: 'مؤهلات' }, { en: 'permeable', ar: 'نفّاذ' }, { en: 'unambiguous', ar: 'لا لبس فيه' },
+  { en: 'calibrated', ar: 'مُعايَر' }, { en: 'illusory', ar: 'وهمي' }, { en: 'sobering', ar: 'مُذكّر بالواقع' },
+  { en: 'plateau', ar: 'يركد' }, { en: 'provisional', ar: 'مؤقت' }, { en: 'fallible', ar: 'قابل للخطأ' },
+  { en: 'monetise', ar: 'يحقق ربحاً من' }, { en: 'fragmenting', ar: 'تجزئة' }, { en: 'autonomy', ar: 'استقلالية' },
+  { en: 'intermittent', ar: 'متقطع' }, { en: 'circuitry', ar: 'دوائر' }, { en: 'salience', ar: 'بروز' },
+  { en: 'diminish', ar: 'يقلل' }, { en: 'exhorting', ar: 'يحث' }, { en: 'resolve', ar: 'عزيمة' },
+  { en: 'subversive', ar: 'مقاوم' }
+];
+
 /* ---- Expose to window for the app script ---- */
-window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, LEVELS, LEVEL_UNLOCKS, XP_REWARDS, WEEKLY_EXAM_POOL, TRAINING_MODULES };
+window.IELTS_DATA = { LISTENING_TEST, READING_TEST, WRITING_TASKS, SPEAKING_TEST, LEVELS, LEVEL_UNLOCKS, XP_REWARDS, WEEKLY_EXAM_POOL, TRAINING_MODULES, GRADED_READING, TRANSLATION_DICT };
 

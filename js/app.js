@@ -84,6 +84,11 @@
     if (name === 'levels') window.IELTS_LEVELS.render();
     if (name === 'exam') window.IELTS_EXAM.render();
     if (name === 'training') window.IELTS_TRAINING.render();
+    if (name === 'readings') window.IELTS_READINGS.render();
+    if (name === 'translator') window.IELTS_TRANSLATOR.render();
+    if (name === 'study') window.IELTS_STUDY.render();
+    if (name === 'words') window.IELTS_VOCAB.render();
+    if (name === 'chat') window.IELTS_CHAT.render();
     if (name === 'profile') window.IELTS_PROFILE.render();
     if (name === 'feed') window.IELTS_FEED.render();
     if (name === 'listening') renderListening();
@@ -99,6 +104,10 @@
   };
 
   /* ---------------- Dashboard ---------------- */
+  const maxXp = (window.IELTS_DATA && window.IELTS_DATA.LEVELS.length)
+    ? window.IELTS_DATA.LEVELS[window.IELTS_DATA.LEVELS.length - 1].minXp
+    : 1000;
+
   function renderDashboard() {
     const user = window.IELTS_AUTH ? window.IELTS_AUTH.getCurrentUser() : null;
     const level = user ? window.IELTS_AUTH.getLevel(user.xp) : null;
@@ -114,7 +123,7 @@
               <p class="font-bold text-slate-900">Welcome back, ${esc(user.username)}</p>
               <p class="text-xs text-slate-500">${level.icon} ${level.name} level · ${user.xp} XP ${nextLevel ? '· ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
               <div class="mt-2 h-1.5 w-40 bg-slate-100 rounded-full overflow-hidden">
-                <div class="h-full bg-brand-500 rounded-full" style="width: ${user.xp >= 700 ? 100 : Math.max(3, Math.round((user.xp / 700) * 100))}%"></div>
+                <div class="h-full bg-brand-500 rounded-full" style="width: ${Math.min(100, Math.max(3, Math.round((user.xp / maxXp) * 100)))}%"></div>
               </div>
             </div>
           </div>

@@ -98,10 +98,15 @@
           <button data-section="levels" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('levels')">📈 Levels</button>
           <button data-section="exam" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('exam')">📅 Weekly Exam</button>
           <button data-section="training" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
+          <button data-section="readings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('readings')">📚 Level Reading</button>
+          <button data-section="translator" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('translator')">🌐 Translator</button>
           <button data-section="listening" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('listening')">🎧 Listening</button>
           <button data-section="reading" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('reading')">📖 Reading</button>
           <button data-section="writing" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('writing')">✍️ Writing</button>
           <button data-section="speaking" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('speaking')">🗣️ Speaking</button>
+          <button data-section="study" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('study')">⏱ Study</button>
+          <button data-section="words" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('words')">📒 My Words</button>
+          <button data-section="chat" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('chat')">💬 Chat</button>
           <button data-section="feed" class="nav-btn nav-btn-featured px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('feed')">💬 Community</button>
           <button data-section="profile" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
@@ -134,10 +139,15 @@
       <button data-section="levels" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('levels')">📈 Levels</button>
       <button data-section="exam" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('exam')">📅 Weekly Exam</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
+      <button data-section="readings" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('readings')">📚 Level Reading</button>
+      <button data-section="translator" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('translator')">🌐 Translator</button>
       <button data-section="listening" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('listening')">🎧 Listening</button>
       <button data-section="reading" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('reading')">📖 Reading</button>
       <button data-section="writing" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('writing')">✍️ Writing</button>
       <button data-section="speaking" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('speaking')">🗣️ Speaking</button>
+      <button data-section="study" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('study')">⏱ Study</button>
+      <button data-section="words" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('words')">📒 My Words</button>
+      <button data-section="chat" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('chat')">💬 Chat</button>
       <button data-section="feed" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('feed')">💬 Community</button>
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-rose-600">Sign out</button>
@@ -316,6 +326,61 @@
       <div id="training-content"></div>
     </section>
 
+    <!-- ============ GRADED READING (LEVEL READING) ============ -->
+    <section id="section-readings" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">📚 Level Reading</h2>
+          <p class="text-sm text-slate-500">Graded passages for every CEFR level (A1–C2) — tap any word to translate it and add it to your vocabulary.</p>
+        </div>
+      </div>
+      <div id="readings-content"></div>
+    </section>
+
+    <!-- ============ TRANSLATOR ============ -->
+    <section id="section-translator" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">🌐 Translator</h2>
+          <p class="text-sm text-slate-500">Built-in offline English ↔ Arabic glossary with instant word lookups and word-by-word translation.</p>
+        </div>
+      </div>
+      <div id="translator-content"></div>
+    </section>
+
+    <!-- ============ STUDY TRACKER ============ -->
+    <section id="section-study" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">⏱ Study Tracker</h2>
+          <p class="text-sm text-slate-500">Track your daily study hours with an interactive timer, weekly chart and streaks.</p>
+        </div>
+      </div>
+      <div id="study-content"></div>
+    </section>
+
+    <!-- ============ VOCABULARY BUILDER ============ -->
+    <section id="section-words" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">📒 My Words</h2>
+          <p class="text-sm text-slate-500">Your personal vocabulary builder — save words, review them as flashcards and master them.</p>
+        </div>
+      </div>
+      <div id="words-content"></div>
+    </section>
+
+    <!-- ============ CHAT & SUPPORT ============ -->
+    <section id="section-chat" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">💬 Chat &amp; Support</h2>
+          <p class="text-sm text-slate-500">Real-time community chat, learner-to-learner direct messages and official support.</p>
+        </div>
+      </div>
+      <div id="chat-content"></div>
+    </section>
+
     <!-- ============ PROFILE ============ -->
     <section id="section-profile" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
@@ -388,6 +453,11 @@
   <script src="js/profile.js"></script>
   <script src="js/feed.js"></script>
   <script src="js/training.js"></script>
+  <script src="js/readings.js"></script>
+  <script src="js/translator.js"></script>
+  <script src="js/study.js"></script>
+  <script src="js/vocabulary.js"></script>
+  <script src="js/chat.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

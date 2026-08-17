@@ -18,6 +18,9 @@
      training_progress – zero-to-hero module progress (one row per user)
      exam_results      – weekly exam attempts (one row per attempt)
      posts             – shared community feed (one row per post)
+     chat_messages     – real-time chat (community / support / DMs)
+     saved_words       – personal vocabulary builder (one row per user)
+     study_log         – daily study hours + sessions (one row per user)
    ============================================================ */
 (function () {
   'use strict';
@@ -228,6 +231,90 @@
     return upsert('training_progress', { user_id: userId, data: data || {}, updated_at: Date.now() }, 'user_id');
   }
 
+  /* ---------------- saved words (personal vocabulary builder) ---------------- */
+  async function pullSavedWords(userId) {
+    const rows = await select('saved_words', { match: { user_id: userId }, limit: 1 });
+    return rows && rows.length ? rows[0] : null; // { user_id, data, updated_at }
+  }
+
+  async function upsertSavedWords(userId, data) {
+    return upsert('saved_words', { user_id: userId, data: data || {}, updated_at: Date.now() }, 'user_id');
+  }
+
+  /* ---------------- study log (daily hours + sessions) ---------------- */
+  async function pullStudyLog(userId) {
+    const rows = await select('study_log', { match: { user_id: userId }, limit: 1 });
+    return rows && rows.length ? rows[0] : null; // { user_id, data, updated_at }
+  }
+
+  async function upsertStudyLog(userId, data) {
+    return upsert('study_log', { user_id: userId, data: data || {}, updated_at: Date.now() }, 'user_id');
+  }
+
+  /* ---------------- chat messages (community / support / DMs) ---------------- */
+  function chatToRow(m) {
+    return {
+      id: m.id,
+      room: m.room,
+      sender: m.sender,
+      sender_avatar: m.senderAvatar || null,
+      kind: m.kind || 'message',
+      text: m.text || '',
+      created_at: m.date || Date.now()
+    };
+  }
+
+  function rowToChat(r) {
+    return {
+      id: r.id,
+      room: r.room,
+      sender: r.sender,
+      senderAvatar: r.sender_avatar,
+      kind: r.kind || 'message',
+      text: r.text || '',
+      date: r.created_at || Date.now()
+    };
+  }
+
+  async function pullChatMessages(room) {
+    const rows = await select('chat_messages', { match: { room }, order: 'created_at', ascending: true, limit: 300 });
+    return rows ? rows.map(rowToChat) : null;
+  }
+
+  async function insertChatMessage(msg) {
+    return insert('chat_messages', chatToRow(msg));
+  }
+
+  async function pullAllUsers() {
+    const rows = await select('users', { order: 'created_at', ascending: true, limit: 500 });
+    return rows ? rows.map(rowToUser) : null;
+  }
+
+  /* live subscription: calls onMessage(row) for each new row in the room */
+  function subscribeChat(room, onMessage) {
+    if (!client) return null;
+    let channel = null;
+    try {
+      channel = client
+        .channel('chat-' + room)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: 'room=eq.' + room
+        }, (payload) => {
+          try { if (payload && payload.new) onMessage(rowToChat(payload.new)); } catch (e) { /* ignore */ }
+        })
+        .subscribe();
+    } catch (e) {
+      channel = null;
+      console.warn('[IELTS_DB] realtime subscribe failed for room ' + room, e);
+    }
+    return channel ? function () {
+      try { client.removeChannel(channel); } catch (e) { /* ignore */ }
+    } : null;
+  }
+
   /* ---------------- exam results ---------------- */
   async function pullExamHistory(userId) {
     return select('exam_results', { match: { user_id: userId }, order: 'created_at', ascending: true });
@@ -391,6 +478,32 @@
       }
     }
 
+    // saved words (same last-writer-wins merge as training)
+    const remoteWords = await pullSavedWords(userId);
+    if (remoteWords && remoteWords.data && Object.keys(remoteWords.data).length) {
+      const localWords = readScoped(userId, 'words') || {};
+      const localT = getMeta(userId).wordsUpdatedAt || 0;
+      const remoteT = remoteWords.updated_at || 0;
+      if (!Object.keys(localWords).length || remoteT > localT) {
+        writeScoped(userId, 'words', remoteWords.data);
+        setMeta(userId, { wordsUpdatedAt: remoteT });
+        changed = true;
+      }
+    }
+
+    // study log (daily hours + sessions)
+    const remoteStudy = await pullStudyLog(userId);
+    if (remoteStudy && remoteStudy.data && Object.keys(remoteStudy.data).length) {
+      const localStudy = readScoped(userId, 'study') || {};
+      const localT = getMeta(userId).studyUpdatedAt || 0;
+      const remoteT = remoteStudy.updated_at || 0;
+      if (!Object.keys(localStudy).length || remoteT > localT) {
+        writeScoped(userId, 'study', remoteStudy.data);
+        setMeta(userId, { studyUpdatedAt: remoteT });
+        changed = true;
+      }
+    }
+
     if (await syncExamHistory(userId)) changed = true;
     return changed;
   }
@@ -459,8 +572,11 @@
     pullUserByUsername, pullUserById, upsertUser,
     pullProfile, upsertProfile,
     pullTraining, upsertTraining,
+    pullSavedWords, upsertSavedWords,
+    pullStudyLog, upsertStudyLog,
     pullExamHistory, insertExamResult,
     pullPosts, upsertPost, updatePost, deletePost,
+    pullChatMessages, insertChatMessage, pullAllUsers, subscribeChat,
     syncUserData, syncExamHistory, syncFeed, syncProfileForActive, syncAllForActive,
     onSynced: null
   };
