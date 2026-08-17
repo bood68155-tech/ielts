@@ -60,7 +60,7 @@ The app is fully functional offline, but connecting it to Supabase makes account
 
 1. **Create a project** at [supabase.com](https://supabase.com) (free tier is fine).
 2. **Create the tables** — open your project → **SQL Editor** → **New query**, paste the contents of [`supabase/schema.sql`](supabase/schema.sql) and run it. This creates the `users`, `profiles`, `training_progress`, `exam_results` and `posts` tables with permissive RLS policies (see the security note in the file).
-3. **Grab your anon key** — open **Project Settings → API** and copy the **anon public** key.
+3. **Grab your publishable key** — open **Project Settings → API Keys** and copy the **publishable** key (modern format `sb_publishable_...`; the legacy **anon public** JWT also works).
 4. **Configure the app** — open [`js/supabase-config.js`](js/supabase-config.js) and paste the key into the `anonKey` field:
 
    ```js

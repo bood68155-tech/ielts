@@ -2,7 +2,9 @@
    IELTS Master — Supabase configuration
    ------------------------------------------------------------
    1. Create a free project at https://supabase.com
-   2. Open Project Settings → API and copy the "anon public" key.
+   2. Open Project Settings → API Keys and copy the
+      "publishable" key (modern format: sb_publishable_...) —
+      the legacy "anon public" JWT also works.
    3. Paste it below (replacing the placeholder).
 
    Alternatively you can inject the key at deploy time by
@@ -18,6 +20,6 @@
   const cfg = window.SUPABASE_CONFIG || {};
   window.SUPABASE_CONFIG = {
     url: cfg.url || 'https://gmmbjgjrlgibglaojflh.supabase.co',
-    anonKey: window.SUPABASE_ANON_KEY || cfg.anonKey || ''
+    anonKey: window.SUPABASE_ANON_KEY || cfg.anonKey || 'sb_publishable_AAjUjVoZDb7uUOV2VwlYsg__26RujF7'
   };
 })();
