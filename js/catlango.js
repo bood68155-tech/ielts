@@ -2,11 +2,11 @@
    IELTS Master — Catlango 🐱📚
    A dedicated vocabulary and word-learning section.
    Curated word packs organised by CEFR level (A1 Beginner →
-   C2 Proficiency), studied with interactive flip flashcards.
-   Progress is saved per user under user_<id>_catlango, XP is
-   awarded for mastering words and completing levels, and any
-   word can be sent straight into the personal "My Words"
-   vocabulary builder with one tap.
+   C2 Proficiency), studied with interactive spelling practice.
+   Users type each word based on its definition and Arabic
+   translation. Progress is saved per user under user_<id>_catlango,
+   XP is awarded for correct spelling, and any word can be sent
+   straight into the personal "My Words" vocabulary builder.
    ============================================================ */
 (function () {
   'use strict';
@@ -14,7 +14,7 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const WORD_XP = 2;    // mastering a word for the first time
+  const WORD_XP = 2;    // spelling a word correctly for the first time
   const LEVEL_XP = 30;  // completing every word in a level
 
   /* ---------------- curated word packs (A1 → C2) ---------------- */
@@ -160,7 +160,7 @@
     icon: '✍️',
     color: 'fuchsia',
     badge: 'level-badge-rose',
-    desc: 'Words you create yourself — add your own vocabulary and study it with flashcards.',
+    desc: 'Words you create yourself — add your own vocabulary and spell them to master.',
     words: []
   };
 
@@ -168,7 +168,7 @@
   let cache = null;
   let view = 'home';      // 'home' | 'level' | 'session'
   let currentLevel = null;
-  let session = null;     // { queue: [], index, flipped, masteredThisRun }
+  let session = null;     // { queue, index, spelledThisRun, attempts, hintLevel, feedback, waitingForNext }
   let listFilter = 'all'; // 'all' | 'learning' | 'mastered'  (word list view)
   let listSearch = '';    // word list search text
 
@@ -206,7 +206,7 @@
   function levelState(id) {
     const p = progress();
     if (!p) return null;
-    if (!p.levels[id]) p.levels[id] = { mastered: {}, reviews: {} };
+    if (!p.levels[id]) p.levels[id] = { mastered: {}, reviews: {}, spelled: {} };
     return p.levels[id];
   }
 
@@ -220,16 +220,18 @@
     return st ? Object.keys(st.mastered).length : 0;
   }
 
+  function spelledCount(levelId) {
+    const st = levelState(levelId);
+    return st && st.spelled ? Object.keys(st.spelled).length : 0;
+  }
+
   function getPack(id) {
     if (id === 'custom') {
-      // the custom pack is built from the user's own words (source 'Custom')
       return Object.assign({}, CUSTOM_PACK, { words: customWords() });
     }
     return PACKS.find((p) => p.id === id) || null;
   }
 
-  /* the next level the learner should continue on (first incomplete pack,
-     then custom words, else the first pack for review) */
   function nextToStudy() {
     for (const p of PACKS) {
       const st = levelState(p.id);
@@ -255,11 +257,13 @@
       </svg>`;
   }
 
+  /* replace the target word with blanks in an example sentence */
+  function blankWord(sentence, word) {
+    const safe = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return sentence.replace(new RegExp('\\b' + safe + '\\b', 'gi'), '______');
+  }
+
   /* ---------------- custom words ---------------- */
-  /* Custom words live in the shared “My Words” storage (source 'Custom'),
-     so they persist to localStorage and sync to Supabase (saved_words)
-     through the existing vocabulary pipeline, and they appear instantly
-     in the vocabulary list with flashcard support. */
   function customWords() {
     const auth = window.IELTS_AUTH;
     if (!auth) return [];
@@ -336,8 +340,8 @@
     render();
   }
 
-  /* start a flashcard run over the words not yet mastered
-     (or the whole pack when everything is already mastered) */
+  /* start a spelling practice session over words not yet spelled
+     (or the whole pack when everything is already spelled) */
   function startSession() {
     if (!currentLevel) return;
     if (!currentLevel.words.length) {
@@ -349,61 +353,130 @@
     }
     const st = levelState(currentLevel.id);
     if (!st) return;
-    let words = currentLevel.words.filter((w) => !st.mastered[w.word]);
+    if (!st.spelled) st.spelled = {};
+    let words = currentLevel.words.filter((w) => !st.spelled[w.word]);
     if (!words.length) words = currentLevel.words.slice();
     words.sort(() => Math.random() - 0.5);
-    session = { queue: words, index: 0, flipped: false, masteredThisRun: 0 };
+    session = { queue: words, index: 0, spelledThisRun: 0, attempts: 0, hintLevel: 0, feedback: null, feedbackMsg: '', waitingForNext: false };
     view = 'session';
     render();
+    setTimeout(() => {
+      const input = $('#catlango-spell-input');
+      if (input) input.focus();
+    }, 100);
   }
 
-  function flipCard() {
-    if (!session) return;
-    session.flipped = !session.flipped;
-    const card = $('#catlango-card');
-    if (card) card.classList.toggle('flipped', session.flipped);
+  function startSessionFrom(id) {
+    const pack = getPack(id);
+    if (!pack) return;
+    currentLevel = pack;
+    if (id === 'custom') currentLevel.words = customWords();
+    view = 'level';
+    render();
+    startSession();
   }
 
-  /* "Got it" — mark mastered (first time awards XP) and move on */
-  function markKnown() {
-    if (!session || !currentLevel) return;
-    const word = session.queue[session.index];
-    if (!word) return;
-    const st = levelState(currentLevel.id);
-    const firstTime = !st.mastered[word.word];
-    if (firstTime) {
-      st.mastered[word.word] = true;
-      st.reviews[word.word] = (st.reviews[word.word] || 0) + 1;
-      session.masteredThisRun++;
-      saveProgress();
-      const auth = window.IELTS_AUTH;
-      if (auth && auth.completeClaim('catlango-word-' + currentLevel.id + '-' + word.word)) {
-        auth.addXp(WORD_XP);
-        auth.addActivity('catlango', 'Mastered “' + word.word + '” in Catlango ' + currentLevel.name, WORD_XP);
+  /* check the user's typed answer */
+  function checkSpelling() {
+    if (!session || session.waitingForNext || !currentLevel) return;
+    const input = $('#catlango-spell-input');
+    if (!input) return;
+    const guess = input.value.trim();
+    if (!guess) return;
+
+    const w = session.queue[session.index];
+    if (!w) return;
+    const correct = guess.toLowerCase() === w.word.toLowerCase();
+
+    if (correct) {
+      const st = levelState(currentLevel.id);
+      /* award XP for the first correct spelling */
+      if (!st.spelled[w.word]) {
+        st.spelled[w.word] = true;
+        st.reviews[w.word] = (st.reviews[w.word] || 0) + 1;
+        if (!st.mastered[w.word]) st.mastered[w.word] = true;
+        session.spelledThisRun++;
+        saveProgress();
+        const auth = window.IELTS_AUTH;
+        if (auth && auth.completeClaim('catlango-spell-' + currentLevel.id + '-' + w.word)) {
+          auth.addXp(WORD_XP);
+          auth.addActivity('catlango', 'Spelled "' + w.word + '" correctly in ' + currentLevel.name, WORD_XP);
+        }
+        checkLevelComplete();
+      } else {
+        /* already spelled before — still count as a review */
+        st.reviews[w.word] = (st.reviews[w.word] || 0) + 1;
+        saveProgress();
       }
-      checkLevelComplete();
+      session.feedback = 'correct';
+      session.feedbackMsg = '✓ Correct! ' + (session.spelledThisRun > 0 && !st.spelled[w.word] ? '+' + WORD_XP + ' XP' : 'Well done!');
+      session.waitingForNext = true;
+      render();
+      setTimeout(() => advanceSpelling(), 1200);
+    } else {
+      session.attempts++;
+      session.feedback = 'incorrect';
+      if (session.attempts >= 2) {
+        /* auto-reveal a hint after 2 wrong attempts */
+        session.hintLevel = Math.min(3, session.hintLevel + 1);
+      }
+      session.feedbackMsg = buildHintMessage(w, session.hintLevel, session.attempts);
+      /* after 4 wrong attempts reveal the answer */
+      if (session.attempts >= 4) {
+        session.feedback = 'reveal';
+        session.feedbackMsg = 'The answer is: <strong class="text-brand-700">' + esc(w.word) + '</strong>';
+        session.waitingForNext = true;
+        render();
+        setTimeout(() => advanceSpelling(), 2500);
+      } else {
+        render();
+        /* shake animation on the input wrapper */
+        const wrapper = input.closest('.cat-spell-input-wrap');
+        if (wrapper) {
+          wrapper.classList.add('cat-shake');
+          setTimeout(() => wrapper.classList.remove('cat-shake'), 500);
+        }
+      }
     }
-    nextCard();
   }
 
-  /* "Still learning" — send the card to the back of the queue */
-  function markAgain() {
-    if (!session) return;
-    const word = session.queue[session.index];
-    if (!word) return;
-    const st = levelState(currentLevel.id);
-    if (st) st.reviews[word.word] = (st.reviews[word.word] || 0) + 1;
-    saveProgress();
-    session.queue.push(session.queue.splice(session.index, 1)[0]);
-    session.flipped = false;
+  /* build a progressive hint message */
+  function buildHintMessage(w, hintLevel, attempts) {
+    if (hintLevel >= 3) return '✗ Almost — try: "' + esc(w.word) + '"';
+    if (hintLevel >= 2) {
+      const n = Math.ceil(w.word.length / 2);
+      const shown = w.word.slice(0, n);
+      const hidden = '_'.repeat(w.word.length - n);
+      return '✗ Hint: <strong>' + esc(shown) + esc(hidden) + '</strong> (' + w.word.length + ' letters)';
+    }
+    return '✗ Not quite — try again (' + (4 - attempts) + ' attempts left)';
+  }
+
+  /* reveal hint manually (h key or button) */
+  function showHint() {
+    if (!session || session.waitingForNext || !session.queue[session.index]) return;
+    session.hintLevel = Math.min(3, session.hintLevel + 1);
+    session.attempts = Math.max(session.attempts, 1);
+    const w = session.queue[session.index];
+    session.feedback = 'hint';
+    session.feedbackMsg = buildHintMessage(w, session.hintLevel, session.attempts);
     render();
   }
 
-  function nextCard() {
+  /* move to the next word */
+  function advanceSpelling() {
     if (!session) return;
     session.index++;
-    session.flipped = false;
+    session.attempts = 0;
+    session.hintLevel = 0;
+    session.feedback = null;
+    session.feedbackMsg = '';
+    session.waitingForNext = false;
     render();
+    setTimeout(() => {
+      const input = $('#catlango-spell-input');
+      if (input) input.focus();
+    }, 100);
   }
 
   /* level completion bonus (once per level) */
@@ -443,7 +516,6 @@
     const body = $('#catlango-content');
     if (!body) return;
 
-    // the custom pack is dynamic — refresh its word list so new words appear instantly
     if (currentLevel && currentLevel.id === 'custom' && view !== 'session') {
       currentLevel.words = customWords();
     }
@@ -461,7 +533,6 @@
     const packsDone = PACKS.filter((p) => masteredCount(p.id) === p.words.length).length;
     const nextId = nextToStudy();
 
-    /* learning path — one row per pack, connected by a vertical rail */
     const pathRows = PACKS.map((pack, i) => {
       const st = levelState(pack.id);
       const done = st ? Object.keys(st.mastered).length : 0;
@@ -493,13 +564,12 @@
               <div class="h-full rounded-full transition-all" style="width: ${pct}%; background: ${complete ? '#10b981' : acc.ring}"></div>
             </div>
             <button class="btn-primary w-full mt-3 !py-2 text-xs" onclick="event.stopPropagation(); IELTS_CATLANGO.startSessionFrom('${pack.id}')">
-              ${complete ? '↺ Review flashcards' : done ? '▶ Continue learning' : '▶ Start learning'}
+              ${complete ? '✏️ Spelling practice' : done ? '▶ Continue learning' : '▶ Start learning'}
             </button>
           </div>
         </div>`;
     }).join('');
 
-    /* custom words row (dashed accent, last on the path) */
     const customAcc = accent('fuchsia');
     const customPct = customList.length ? Math.round((customDone / customList.length) * 100) : 0;
     const customComplete = customList.length > 0 && customDone === customList.length;
@@ -527,7 +597,7 @@
             <div class="h-full rounded-full transition-all" style="width: ${customPct}%; background: ${customComplete ? '#10b981' : customAcc.ring}"></div>
           </div>
           <button class="btn-primary w-full mt-3 !py-2 text-xs" onclick="event.stopPropagation(); IELTS_CATLANGO.startSessionFrom('custom')">
-            ${customList.length ? (customComplete ? '↺ Review flashcards' : '▶ Study with flashcards') : '✍️ Create a word'}
+            ${customList.length ? (customComplete ? '✏️ Spelling practice' : '▶ Spell these words') : '✍️ Create a word'}
           </button>
         </div>
       </div>`;
@@ -539,7 +609,7 @@
             <div class="cat-hero-mascot shrink-0">🐱</div>
             <div class="min-w-0">
               <h2>Catlango</h2>
-              <p class="sub mt-1">Learn IELTS vocabulary word by word — six curated levels plus your own words, studied with interactive flashcards.</p>
+              <p class="sub mt-1">Learn IELTS vocabulary by spelling each word — six curated levels plus your own words, practiced with instant feedback and progressive hints.</p>
             </div>
           </div>
           <button class="bg-white text-brand-700 font-extrabold px-6 py-3 rounded-2xl hover:bg-brand-50 transition shadow-lg text-sm" onclick="IELTS_CATLANGO.continueLearning()">
@@ -556,20 +626,9 @@
 
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-bold text-slate-900">Learning path</h3>
-        <p class="text-xs text-slate-400">+${LEVEL_XP} XP per level · tap a card for the word list</p>
+        <p class="text-xs text-slate-400">+${LEVEL_XP} XP per level · tap to spell words</p>
       </div>
       <div class="cat-path max-w-2xl mx-auto">${pathRows}${customRow}</div>`;
-  }
-
-  /* start a flashcard session directly from a path card (without opening the list) */
-  function startSessionFrom(id) {
-    const pack = getPack(id);
-    if (!pack) return;
-    currentLevel = pack;
-    if (id === 'custom') currentLevel.words = customWords();
-    view = 'level';
-    render();
-    startSession();
   }
 
   function renderLevel() {
@@ -584,7 +643,6 @@
     const acc = accent(pack.color || 'fuchsia');
     const learning = total - done;
 
-    /* filters + search over the word list */
     let list = pack.words.slice();
     if (listSearch) {
       const q = listSearch.toLowerCase();
@@ -600,6 +658,7 @@
 
     const rows = list.map((w) => {
       const mastered = isMastered(pack.id, w.word);
+      const spelled = st && st.spelled ? st.spelled[w.word] : false;
       const reviews = (st && st.reviews[w.word]) || 0;
       return `
         <div class="cat-word-row ${mastered ? 'mastered' : ''}">
@@ -608,11 +667,12 @@
               <p class="font-extrabold text-slate-900">${esc(w.word)}</p>
               ${w.pos ? '<span class="text-[10px] text-slate-400 uppercase tracking-wide">' + esc(w.pos) + '</span>' : ''}
               <span class="cat-word-badge ${mastered ? 'mastered' : 'learning'}">${mastered ? '✓ Mastered' : 'Learning'}</span>
+              ${spelled ? '<span class="cat-word-badge" style="background:#dbeafe;color:#1d4ed8">✏️ Spelled</span>' : ''}
               ${isCustom ? '<span class="cat-word-badge learning">Custom</span>' : ''}
             </div>
             <p class="text-sm text-slate-600 mt-1">${esc(w.meaning)}</p>
             <p class="text-sm text-emerald-700 font-semibold mt-0.5" dir="rtl">${esc(w.ar)}</p>
-            <p class="text-xs text-slate-400 italic mt-1">“${esc(w.example)}”</p>
+            <p class="text-xs text-slate-400 italic mt-1">"${esc(w.example)}"</p>
             <p class="text-[10px] text-slate-400 mt-1.5">Reviewed ${reviews}×${isCustom ? ' · synced to My Words' : ''}</p>
           </div>
           ${isCustom
@@ -631,7 +691,7 @@
     const creator = isCustom ? `
       <div class="cat-creator mb-6">
         <p class="font-extrabold text-slate-900 mb-0.5">✍️ Create a custom word</p>
-        <p class="text-xs text-slate-500 mb-4">Add your own word — it's saved to your device and synced to Supabase, then appears instantly in My Words with flashcards.</p>
+        <p class="text-xs text-slate-500 mb-4">Add your own word — it's saved to your device and synced to Supabase, then appears instantly in My Words.</p>
         <form onsubmit="IELTS_CATLANGO.createCustomWord(event)" class="space-y-3">
           <div class="grid sm:grid-cols-2 gap-3">
             <div>
@@ -673,7 +733,7 @@
             <p class="text-sm text-slate-500">${done} mastered · ${learning} learning · ${total} total</p>
           </div>
         </div>
-        <button class="btn-primary text-sm" onclick="IELTS_CATLANGO.startSession()">${complete ? '🎴 Review flashcards' : '🎴 Study with flashcards'}</button>
+        <button class="btn-primary text-sm" onclick="IELTS_CATLANGO.startSession()">✏️ Spelling practice</button>
       </div>
 
       ${creator}
@@ -685,7 +745,7 @@
         <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
           <div class="h-full rounded-full transition-all" style="width: ${pct}%; background: ${complete ? '#10b981' : acc.ring}"></div>
         </div>
-        ${complete ? '<p class="text-xs text-emerald-600 font-semibold mt-2">🎉 Level complete! Review keeps it in your long-term memory.</p>' : isCustom ? '<p class="text-xs text-slate-400 mt-2">Master every custom word to complete this level.</p>' : '<p class="text-xs text-slate-400 mt-2">Master every word to complete this level and earn +' + LEVEL_XP + ' XP.</p>'}
+        ${complete ? '<p class="text-xs text-emerald-600 font-semibold mt-2">🎉 Level complete! Review to keep words in long-term memory.</p>' : isCustom ? '<p class="text-xs text-slate-400 mt-2">Spell every custom word to complete this level.</p>' : '<p class="text-xs text-slate-400 mt-2">Spell every word correctly to complete this level and earn +' + LEVEL_XP + ' XP.</p>'}
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -696,12 +756,14 @@
       ${listBody}`;
   }
 
+  /* ---------- spelling practice session ---------- */
   function renderSession() {
     const pack = currentLevel;
     if (!pack) return '';
     const s = session;
     if (!s) return '';
 
+    /* completion screen */
     if (s.index >= s.queue.length) {
       const st = levelState(pack.id);
       const done = st ? Object.keys(st.mastered).length : 0;
@@ -711,15 +773,17 @@
         <div class="max-w-xl mx-auto text-center">
           <div class="bg-white rounded-3xl border ${complete ? 'border-emerald-200 ring-2 ring-emerald-100' : 'border-slate-200'} shadow-xl p-10">
             <div class="w-16 h-16 mx-auto rounded-full ${complete ? 'bg-emerald-100' : 'bg-brand-100'} flex items-center justify-center text-3xl mb-4">${complete ? '🎉' : '💪'}</div>
-            <p class="text-2xl font-extrabold text-slate-900">${complete ? 'Level complete!' : 'Session complete!'}</p>
-            <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">${complete ? 'You mastered every word in ' + pack.name + '. +' + LEVEL_XP + ' XP earned!' : 'You went through ' + s.queue.length + ' card' + (s.queue.length === 1 ? '' : 's') + ' this run — you mastered ' + s.masteredThisRun + ' new word' + (s.masteredThisRun === 1 ? '' : 's') + '. Repetition is how words stick.'}</p>
+            <p class="text-2xl font-extrabold text-slate-900">${complete ? 'Level complete!' : 'Practice complete!'}</p>
+            <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">${complete
+              ? 'You spelled every word in ' + pack.name + ' correctly. +' + LEVEL_XP + ' XP earned!'
+              : 'You spelled ' + s.spelledThisRun + ' new word' + (s.spelledThisRun === 1 ? '' : 's') + ' out of ' + s.queue.length + ' this run. Keep practicing to build muscle memory!'}</p>
             ${complete ? `<div class="flex justify-center gap-2 mt-4">
               <div class="cat-stat !bg-slate-100 !border-slate-200 !text-slate-700"><b class="!text-slate-900">${total}</b><span>words</span></div>
               <div class="cat-stat !bg-slate-100 !border-slate-200 !text-slate-700"><b class="!text-slate-900">+${LEVEL_XP}</b><span>XP</span></div>
             </div>` : ''}
             <div class="flex justify-center gap-3 mt-6 flex-wrap">
               <button class="btn-primary" onclick="IELTS_CATLANGO.backToLevel()">Back to ${pack.name}</button>
-              <button class="btn-secondary" onclick="IELTS_CATLANGO.startSession()">↺ Study again</button>
+              <button class="btn-secondary" onclick="IELTS_CATLANGO.startSession()">↺ Practice again</button>
             </div>
           </div>
         </div>`;
@@ -727,6 +791,16 @@
 
     const w = s.queue[s.index];
     const progressPct = Math.round((s.index / s.queue.length) * 100);
+    const blankedExample = blankWord(w.example, w.word);
+
+    /* feedback colour classes */
+    let feedbackClasses = '';
+    let feedbackIcon = '';
+    if (s.feedback === 'correct') { feedbackClasses = 'cat-spell-feedback-correct'; feedbackIcon = '✅'; }
+    else if (s.feedback === 'incorrect') { feedbackClasses = 'cat-spell-feedback-incorrect'; feedbackIcon = '❌'; }
+    else if (s.feedback === 'hint') { feedbackClasses = 'cat-spell-feedback-hint'; feedbackIcon = '💡'; }
+    else if (s.feedback === 'reveal') { feedbackClasses = 'cat-spell-feedback-reveal'; feedbackIcon = '👀'; }
+
     return `
       <div class="max-w-xl mx-auto">
         <div class="flex items-center justify-between mb-3">
@@ -735,48 +809,76 @@
         </div>
         <div class="cat-session-progress mb-5"><div style="width: ${progressPct}%"></div></div>
 
-        <div id="catlango-card" class="cat-flip ${s.flipped ? 'flipped' : ''}" onclick="IELTS_CATLANGO.flipCard()">
-          <div class="cat-flip-inner">
-            <div class="cat-face cat-front">
-              <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">${pack.icon} ${pack.name} · tap to flip</p>
-              <p class="text-4xl font-extrabold text-brand-700 break-words">${esc(w.word)}</p>
-              <p class="text-xs text-slate-400 mt-2 uppercase tracking-wide">${esc(w.pos)}</p>
-            </div>
-            <div class="cat-face cat-back">
-              <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">${pack.icon} ${pack.name}</p>
-              <p class="text-2xl font-extrabold text-slate-900">${esc(w.word)} <span class="text-xs font-semibold text-slate-400 uppercase">· ${esc(w.pos)}</span></p>
-              <p class="text-2xl text-emerald-700 font-semibold mt-2" dir="rtl">${esc(w.ar)}</p>
-              <p class="text-sm text-slate-600 mt-3 leading-relaxed">${esc(w.meaning)}</p>
-              <p class="text-xs text-slate-500 italic mt-3">“${esc(w.example)}”</p>
-              <p class="text-[10px] text-slate-400 mt-4">Tap the card to flip back</p>
-            </div>
+        <!-- prompt card -->
+        <div class="cat-spell-prompt bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-5">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xl">${pack.icon}</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">${pack.name} · type the word</span>
           </div>
+          <p class="text-xl font-extrabold text-slate-800 mb-2" dir="rtl" style="font-family: 'Segoe UI', Tahoma, sans-serif">${esc(w.ar)}</p>
+          <p class="text-base text-slate-600 mb-2">${esc(w.meaning)}</p>
+          <p class="text-sm text-slate-400 italic">"${esc(blankedExample)}"</p>
+          ${w.pos ? '<p class="text-[10px] text-slate-400 mt-3 uppercase tracking-wide">' + esc(w.pos) + '</p>' : ''}
         </div>
 
-        <div class="flex justify-center gap-3 mt-6">
-          <button class="cat-session-btn again" onclick="IELTS_CATLANGO.markAgain()">🔄 Still learning</button>
-          <button class="cat-session-btn gotit" onclick="IELTS_CATLANGO.markKnown()">✅ Got it</button>
+        <!-- input area -->
+        <div class="cat-spell-input-wrap mb-4">
+          <form onsubmit="event.preventDefault(); IELTS_CATLANGO.checkSpelling();" class="flex gap-2">
+            <input
+              id="catlango-spell-input"
+              type="text"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+              placeholder="Type the word here…"
+              class="flex-1 px-4 py-3 border-2 border-slate-300 rounded-xl text-lg font-bold text-center focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition ${s.feedback === 'correct' ? 'border-emerald-400 bg-emerald-50' : s.feedback === 'incorrect' ? 'border-rose-400 bg-rose-50' : ''}"
+              ${s.waitingForNext ? 'disabled' : ''}
+            />
+            <button type="submit" class="btn-primary !px-6 !py-3 text-sm font-extrabold ${s.waitingForNext ? 'opacity-50 pointer-events-none' : ''}" ${s.waitingForNext ? 'disabled' : ''}>Check</button>
+          </form>
         </div>
-        <div class="flex items-center justify-center gap-4 mt-4 text-[11px] text-slate-400">
-          <span><span class="cat-kbd">Space</span> flip</span>
-          <span><span class="cat-kbd">1</span> still learning</span>
-          <span><span class="cat-kbd">2</span> got it</span>
+
+        <!-- feedback -->
+        ${s.feedbackMsg ? `<div class="cat-spell-feedback ${feedbackClasses} mb-4 text-sm font-semibold">${feedbackIcon} ${s.feedbackMsg}</div>` : ''}
+
+        <!-- hint button -->
+        <div class="flex justify-center gap-3 mb-4">
+          <button class="text-xs font-semibold text-slate-500 hover:text-slate-800 border border-slate-300 px-4 py-2 rounded-lg transition ${s.waitingForNext ? 'opacity-50 pointer-events-none' : ''}" onclick="IELTS_CATLANGO.showHint()" ${s.waitingForNext ? 'disabled' : ''}>💡 Hint</button>
+          <button class="text-xs font-semibold text-slate-500 hover:text-slate-800 border border-slate-300 px-4 py-2 rounded-lg transition ${s.waitingForNext ? 'opacity-50 pointer-events-none' : ''}" onclick="IELTS_CATLANGO.revealAnswer()" ${s.waitingForNext ? 'disabled' : ''}>👀 Reveal</button>
+        </div>
+
+        <div class="flex items-center justify-center gap-4 text-[11px] text-slate-400">
+          <span><span class="cat-kbd">Enter</span> check</span>
+          <span><span class="cat-kbd">H</span> hint</span>
         </div>
       </div>`;
   }
 
-  /* keyboard shortcuts for the flashcard session */
+  /* reveal the full answer and advance */
+  function revealAnswer() {
+    if (!session || session.waitingForNext || !session.queue[session.index]) return;
+    const w = session.queue[session.index];
+    session.feedback = 'reveal';
+    session.feedbackMsg = 'The answer is: <strong class="text-brand-700">' + esc(w.word) + '</strong>';
+    session.waitingForNext = true;
+    render();
+    setTimeout(() => advanceSpelling(), 2500);
+  }
+
+  /* keyboard shortcuts */
   document.addEventListener('keydown', function (e) {
     if (view !== 'session' || !session) return;
-    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) return;
-    if (e.code === 'Space') { e.preventDefault(); flipCard(); }
-    else if (e.key === '1') markAgain();
-    else if (e.key === '2') markKnown();
+    if (e.target && e.target.tagName === 'INPUT' && e.target.id === 'catlango-spell-input') {
+      /* in the input — Enter already handled by form submit via onsubmit */
+      if (e.code === 'KeyH' && !session.waitingForNext) { e.preventDefault(); showHint(); }
+      return;
+    }
+    if (e.code === 'KeyH' && !session.waitingForNext) { e.preventDefault(); showHint(); }
   });
 
   window.IELTS_CATLANGO = {
     render, openLevel, backToHome, backToLevel, continueLearning, startSessionFrom,
-    startSession, flipCard, markKnown, markAgain, addToMyWords, setListFilter, setListSearch,
-    createCustomWord, removeCustomWord, customWords
+    startSession, checkSpelling, showHint, revealAnswer, addToMyWords,
+    setListFilter, setListSearch, createCustomWord, removeCustomWord, customWords
   };
 })();

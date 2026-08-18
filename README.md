@@ -28,14 +28,14 @@ A free, interactive IELTS practice web application built with **HTML, Tailwind C
 - Daily goal (30/60/90/120 min), last-7-days chart, lifetime stats
 - 🔥 Streaks for consistent days, with XP rewards for sessions, daily goals and 7-day streaks
 
-### 🐱 Catlango (word packs + flashcards)
+### 🐱 Catlango (word packs + spelling practice)
 - A dedicated vocabulary and word-learning section with **six curated word packs** organised by CEFR level — A1 Beginner → C2 Proficiency
 - Each pack has ~16 high-frequency IELTS words with English meaning, Arabic translation, part of speech and an example sentence
-- **Interactive flip flashcards** — tap the card to flip it, then mark each word “Got it” or “Still learning” (still-learning cards cycle back into the queue)
+- **Interactive spelling practice** — type each word correctly based on its Arabic translation and English definition, with instant validation, progressive hints (reveals letters after wrong attempts), and a reveal button
 - **Custom word creator** — add your own words with a definition, Arabic translation, part of speech and example sentence
-  - Custom words are saved to local storage and synced to Supabase (`saved_words`), appearing instantly in **My Words** with full flashcard support
+  - Custom words are saved to local storage and synced to Supabase (`saved_words`), appearing instantly in **My Words**
 - Per-user progress: words mastered, reviews and pack completion are saved per account and synced to Supabase
-- +2 XP per newly mastered word and +30 XP bonus for completing an entire pack
+- +2 XP per correctly spelled word and +30 XP bonus for completing an entire pack
 - Save any word straight into **My Words** with one tap
 
 ### 📒 My Words (personal vocabulary builder)
@@ -139,7 +139,7 @@ ielts/
     ├── translator.js       # Offline English ↔ Arabic translator
     ├── study.js            # Daily study hours tracker + interactive timer
     ├── vocabulary.js       # Personal vocabulary builder + flashcards
-    ├── catlango.js         # Catlango word packs (A1-C2) + flip flashcards
+    ├── catlango.js         # Catlango word packs (A1-C2) + spelling practice
     ├── chat.js             # Real-time chat, support & direct messages
     └── app.js              # Application logic (navigation, timers, scoring, audio)
 ```

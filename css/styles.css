@@ -255,50 +255,62 @@ input:focus { outline: none; }
 /* --- Study clock numerals --- */
 .tabular-nums { font-variant-numeric: tabular-nums; }
 
-/* --- Catlango flashcards (3D flip) --- */
-.cat-flip {
-  perspective: 1200px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.cat-flip-inner {
-  position: relative;
-  width: 100%;
-  min-height: 16rem;
-  transform-style: preserve-3d;
-  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
-}
-.cat-flip.flipped .cat-flip-inner { transform: rotateY(180deg); }
-.cat-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem 1.5rem;
-  border-radius: 1.25rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 12px 30px -10px rgba(30, 41, 59, 0.18);
-}
-.cat-front {
+/* --- Catlango spelling practice --- */
+.cat-spell-prompt {
   background: linear-gradient(135deg, #eef2ff, #ffffff);
   border-color: #c7d2fe;
 }
-.cat-back {
-  background: #ffffff;
-  transform: rotateY(180deg);
-  border-color: #a7f3d0;
-  border-width: 2px;
+.cat-spell-input-wrap input[type='text'] {
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+.cat-spell-feedback {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  animation: catFadeIn 0.2s ease;
+}
+.cat-spell-feedback-correct {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.cat-spell-feedback-incorrect {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.cat-spell-feedback-hint {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.cat-spell-feedback-reveal {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
+
+@keyframes catShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+.cat-shake { animation: catShake 0.45s ease; }
+
+@keyframes catFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Catlango responsive tweaks */
 @media (max-width: 480px) {
-  .cat-flip-inner { min-height: 15rem; }
-  .cat-face { padding: 1.5rem 1rem; }
+  .cat-spell-prompt { padding: 1.25rem 1rem; }
+  .cat-spell-input-wrap input[type='text'] { font-size: 1.1rem; }
 }
 
 /* ============ Catlango app shell (Duolingo-style) ============ */
