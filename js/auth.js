@@ -38,7 +38,7 @@
   }
 
   function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); } catch (e) { /* ignore quota errors */ }
   }
 
   function getUser(username) {
@@ -49,6 +49,27 @@
   function currentSession() {
     try { return JSON.parse(localStorage.getItem(SESSION_KEY)) || null; }
     catch (e) { return null; }
+  }
+
+  /* --- build a full user object from a Supabase row (same shape as register/login) --- */
+  function userFromRemote(remote) {
+    return Object.assign({
+      userId: remote.userId || idFromUsername(remote.username),
+      username: remote.username,
+      email: remote.email || '',
+      passwordHash: remote.passwordHash,
+      createdAt: remote.createdAt || Date.now(),
+      updatedAt: remote.updatedAt || Date.now(),
+      xp: remote.xp || 0,
+      claims: remote.claims || [],
+      examHistory: [],
+      displayName: remote.username,
+      bio: '',
+      targetBand: '',
+      avatar: null,
+      training: {},
+      activity: []
+    }, remote);
   }
 
   /* --- the user currently signed in (null if none) --- */
@@ -298,11 +319,16 @@
   }
 
   function switchTab(tab) {
-    $('#auth-tab-login').classList.toggle('active', tab === 'login');
-    $('#auth-tab-register').classList.toggle('active', tab === 'register');
-    $('#auth-form-login').classList.toggle('hidden', tab !== 'login');
-    $('#auth-form-register').classList.toggle('hidden', tab !== 'register');
-    $('#auth-error').classList.add('hidden');
+    const loginTab = $('#auth-tab-login');
+    const regTab = $('#auth-tab-register');
+    const loginForm = $('#auth-form-login');
+    const regForm = $('#auth-form-register');
+    const err = $('#auth-error');
+    if (loginTab) loginTab.classList.toggle('active', tab === 'login');
+    if (regTab) regTab.classList.toggle('active', tab === 'register');
+    if (loginForm) loginForm.classList.toggle('hidden', tab !== 'login');
+    if (regForm) regForm.classList.toggle('hidden', tab !== 'register');
+    if (err) err.classList.add('hidden');
   }
 
   function showError(msg) {
@@ -382,26 +408,12 @@
       if (d && d.isConfigured()) {
         const remote = await d.pullUserByUsername(username);
         if (remote && remote.passwordHash === hashPassword(password)) {
-          user = Object.assign({
-            userId: remote.userId,
-            username: remote.username,
-            email: remote.email || '',
-            passwordHash: remote.passwordHash,
-            createdAt: remote.createdAt || Date.now(),
-            updatedAt: remote.updatedAt || Date.now(),
-            xp: remote.xp || 0,
-            claims: remote.claims || [],
-            examHistory: [],
-            displayName: remote.username,
-            bio: '',
-            targetBand: '',
-            avatar: null,
-            training: {},
-            activity: []
-          }, remote);
+          user = userFromRemote(remote);
           const users = loadUsers();
-          users.push(user);
-          saveUsers(users);
+          if (!users.some((u) => u.username === user.username)) {
+            users.push(user);
+            saveUsers(users);
+          }
         }
       }
     }
@@ -416,20 +428,18 @@
 
   function signInAs(username) {
     const users = loadUsers();
-    currentUser = users.find((u) => u.username === username) || null;
-    if (currentUser) {
-      if (!currentUser.userId) currentUser.userId = idFromUsername(currentUser.username);
-      activeUserId = currentUser.userId;
-      migrateLegacyData(currentUser);
+    const user = users.find((u) => u.username === username) || null;
+    if (user) {
+      activateUser(user, user.userId);
     } else {
+      // defensive: nothing to sign in — clear any stale session
+      currentUser = null;
       activeUserId = null;
+      clearSession();
+      showScreen();
+      refreshHeader();
+      notifyUserChange();
     }
-    persistSession(username);
-    hideScreen();
-    refreshHeader();
-    renderDashboardIfVisible();
-    notifyUserChange();
-    startBackgroundSync();
   }
 
   function logout() {
@@ -502,29 +512,83 @@
     }
   }
 
-  /* --- init: restore session or show the auth screen --- */
-  function init() {
-    wireSyncUi();
-    const session = currentSession();
-    if (session && session.username) {
-      const user = getUser(session.username);
-      if (user) {
-        currentUser = user;
-        if (!currentUser.userId) currentUser.userId = session.userId || idFromUsername(currentUser.username);
-        activeUserId = currentUser.userId;
-        migrateLegacyData(currentUser);
-        hideScreen();
-        refreshHeader();
-        notifyUserChange();
-        startBackgroundSync();
-        return;
+  /* --- activate a user object as the signed-in session (shared by init / login / cross-tab sync) --- */
+  function activateUser(user, sessionUserId) {
+    currentUser = user;
+    if (!currentUser.userId) currentUser.userId = sessionUserId || idFromUsername(currentUser.username);
+    activeUserId = currentUser.userId;
+    migrateLegacyData(currentUser);
+    persistSession(currentUser.username);
+    hideScreen();
+    refreshHeader();
+    renderDashboardIfVisible();
+    notifyUserChange();
+    startBackgroundSync();
+  }
+
+  /* --- restore a saved session, falling back to the cloud when the local copy is gone --- */
+  async function restoreSession(session) {
+    if (!session || !session.username) { showGuest(); return; }
+    let user = getUser(session.username);
+    if (!user) {
+      // localStorage may have been cleared on this device — try Supabase before giving up
+      const d = db();
+      if (d && d.isConfigured()) {
+        try {
+          const remote = await d.pullUserByUsername(session.username);
+          if (remote && remote.passwordHash) {
+            user = userFromRemote(remote);
+            const users = loadUsers();
+            if (!users.some((u) => u.username === user.username)) {
+              users.push(user);
+              saveUsers(users);
+            }
+          }
+        } catch (e) { /* fall through to guest state */ }
       }
     }
+    if (user) {
+      activateUser(user, session.userId);
+    } else {
+      clearSession(); // stale session with no matching account anywhere
+      showGuest();
+    }
+  }
+
+  function showGuest() {
     currentUser = null;
     activeUserId = null;
     showScreen();
     refreshHeader();
     notifyUserChange();
+  }
+
+  /* --- init: restore session or show the auth screen --- */
+  function init() {
+    wireSyncUi();
+    restoreSession(currentSession());
+  }
+
+  /* --- keep multiple tabs in sync: login/logout in one tab reflects in the others --- */
+  if (typeof window !== 'undefined') {
+    window.addEventListener('storage', function (e) {
+      if (e.key !== SESSION_KEY) return;
+      const session = currentSession();
+      if (!session || !session.username) {
+        if (currentUser) {
+          currentUser = null;
+          activeUserId = null;
+          hideScreen();
+          refreshHeader();
+          notifyUserChange();
+        }
+        return;
+      }
+      const other = getUser(session.username);
+      if (other && (!currentUser || currentUser.username !== other.username)) {
+        activateUser(other, session.userId);
+      }
+    });
   }
 
   window.IELTS_AUTH = {

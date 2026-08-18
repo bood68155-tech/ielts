@@ -358,18 +358,17 @@
     }).join('');
 
     return `
-      <div class="bg-gradient-to-br from-brand-600 via-brand-500 to-indigo-400 rounded-3xl text-white p-7 sm:p-9 mb-6 shadow-lg relative overflow-hidden">
-        <div class="absolute -right-8 -top-8 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center text-3xl">🐱</div>
-          <div class="flex-1 min-w-[14rem]">
-            <h2 class="text-2xl font-extrabold">Catlango</h2>
-            <p class="text-brand-100 text-sm mt-0.5">Master IELTS vocabulary word by word — six curated packs from A1 Beginner to C2 Proficiency, studied with interactive flashcards.</p>
+      <div class="bg-gradient-to-r from-brand-600 to-indigo-500 rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl shrink-0">🐱</div>
+          <div>
+            <p class="text-lg font-extrabold">Keep building your word power</p>
+            <p class="text-sm text-brand-100 mt-0.5">Master every word in a pack to earn +${LEVEL_XP} XP per pack.</p>
           </div>
-          <div class="text-right">
-            <p class="text-3xl font-extrabold">${mastered}<span class="text-base font-semibold text-brand-100">/${totalWords}</span></p>
-            <p class="text-[11px] text-brand-100">words mastered</p>
-          </div>
+        </div>
+        <div class="text-right">
+          <p class="text-3xl font-extrabold">${mastered}<span class="text-base font-semibold text-brand-100">/${totalWords}</span></p>
+          <p class="text-[11px] text-brand-100">words mastered</p>
         </div>
       </div>
 
