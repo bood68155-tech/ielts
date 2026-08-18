@@ -153,6 +153,17 @@
     }
   ];
 
+  /* dynamic pack that holds the user's own created words */
+  const CUSTOM_PACK = {
+    id: 'custom',
+    name: 'My Custom Words',
+    icon: '✍️',
+    color: 'fuchsia',
+    badge: 'level-badge-rose',
+    desc: 'Words you create yourself — add your own vocabulary and study it with flashcards.',
+    words: []
+  };
+
   /* ---------------- per-user progress ---------------- */
   let cache = null;
   let view = 'grid';      // 'grid' | 'level' | 'session'
@@ -195,7 +206,58 @@
   }
 
   function getPack(id) {
+    if (id === 'custom') {
+      // the custom pack is built from the user's own words (source 'Custom')
+      return Object.assign({}, CUSTOM_PACK, { words: customWords() });
+    }
     return PACKS.find((p) => p.id === id) || null;
+  }
+
+  /* ---------------- custom words ---------------- */
+  /* Custom words live in the shared “My Words” storage (source 'Custom'),
+     so they persist to localStorage and sync to Supabase (saved_words)
+     through the existing vocabulary pipeline, and they appear instantly
+     in the vocabulary list with flashcard support. */
+  function customWords() {
+    const auth = window.IELTS_AUTH;
+    if (!auth) return [];
+    const scoped = auth.getScoped('words', null) || { words: [] };
+    return (scoped.words || []).filter((w) => w.source === 'Custom');
+  }
+
+  function createCustomWord(event) {
+    if (event) event.preventDefault();
+    if (!window.IELTS_VOCAB) return;
+    const word = $('#catlango-cw-word');
+    if (!word || !word.value.trim()) {
+      window.toast && window.toast('Enter a word first.');
+      return;
+    }
+    const added = window.IELTS_VOCAB.addWord({
+      word: word.value.trim(),
+      meaning: $('#catlango-cw-meaning') ? $('#catlango-cw-meaning').value.trim() : '',
+      ar: $('#catlango-cw-ar') ? $('#catlango-cw-ar').value.trim() : '',
+      example: $('#catlango-cw-example') ? $('#catlango-cw-example').value.trim() : '',
+      pos: $('#catlango-cw-pos') ? $('#catlango-cw-pos').value : '',
+      source: 'Custom'
+    });
+    if (added) {
+      window.toast && window.toast('Custom word saved — check My Words 📒');
+      ['catlango-cw-word', 'catlango-cw-meaning', 'catlango-cw-ar', 'catlango-cw-example'].forEach((id) => {
+        const el = $('#' + id);
+        if (el) el.value = '';
+      });
+      const pos = $('#catlango-cw-pos');
+      if (pos) pos.value = '';
+    } else {
+      window.toast && window.toast('That word is already in your vocabulary');
+    }
+    render();
+  }
+
+  function removeCustomWord(id) {
+    if (window.IELTS_VOCAB) window.IELTS_VOCAB.removeWord(id);
+    render();
   }
 
   /* ---------------- actions ---------------- */
@@ -225,6 +287,13 @@
      (or the whole pack when everything is already mastered) */
   function startSession() {
     if (!currentLevel) return;
+    if (!currentLevel.words.length) {
+      if (currentLevel.id === 'custom') {
+        window.toast && window.toast('Add a custom word first — use the form below ✍️');
+        return;
+      }
+      return;
+    }
     const st = levelState(currentLevel.id);
     if (!st) return;
     let words = currentLevel.words.filter((w) => !st.mastered[w.word]);
@@ -321,14 +390,47 @@
     const body = $('#catlango-content');
     if (!body) return;
 
+    // the custom pack is dynamic — refresh its word list so new words appear instantly
+    if (currentLevel && currentLevel.id === 'custom' && view !== 'session') {
+      currentLevel.words = customWords();
+    }
+
     if (view === 'session' && session) { body.innerHTML = renderSession(); return; }
     if (view === 'level' && currentLevel) { body.innerHTML = renderLevel(); return; }
     body.innerHTML = renderGrid();
   }
 
   function renderGrid() {
-    const totalWords = PACKS.reduce((n, p) => n + p.words.length, 0);
-    const mastered = PACKS.reduce((n, p) => n + masteredCount(p.id), 0);
+    const customList = customWords();
+    const customDone = masteredCount('custom');
+    const totalWords = PACKS.reduce((n, p) => n + p.words.length, 0) + customList.length;
+    const mastered = PACKS.reduce((n, p) => n + masteredCount(p.id), 0) + customDone;
+    const customCard = (() => {
+      const pct = customList.length ? Math.round((customDone / customList.length) * 100) : 0;
+      const complete = customList.length > 0 && customDone === customList.length;
+      return `
+        <div class="bg-white rounded-2xl border ${complete ? 'border-emerald-200 ring-2 ring-emerald-100' : customList.length ? 'border-brand-200' : 'border-dashed border-slate-300'} shadow-sm p-6 flex flex-col">
+          <div class="flex items-start justify-between mb-3">
+            <div class="text-4xl">✍️</div>
+            ${complete ? '<span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">COMPLETE ✓</span>' : '<span class="text-[10px] font-bold bg-brand-100 text-brand-700 px-2.5 py-1 rounded-full">CUSTOM</span>'}
+          </div>
+          <h3 class="text-lg font-extrabold text-slate-900">My Custom Words</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed flex-1">Create your own words — definition, Arabic translation, part of speech and an example. They sync to My Words and Supabase.</p>
+          <div class="mt-4">
+            <div class="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-1.5">
+              <span>${customList.length} / ${customList.length} words</span>
+              <span>${pct}%</span>
+            </div>
+            <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-fuchsia-500 to-brand-500 rounded-full transition-all" style="width: ${pct}%"></div>
+            </div>
+          </div>
+          <button class="btn-primary w-full mt-5 !py-2.5 text-sm" onclick="IELTS_CATLANGO.openLevel('custom')">
+            ${customList.length ? (complete ? '↺ Review flashcards' : '▶ Study with flashcards') : '✍️ Create a word'}
+          </button>
+        </div>`;
+    })();
+
     const cards = PACKS.map((pack) => {
       const st = levelState(pack.id);
       const done = st ? Object.keys(st.mastered).length : 0;
@@ -376,7 +478,7 @@
         <h3 class="text-lg font-bold text-slate-900">Word packs by level</h3>
         <p class="text-xs text-slate-400">+${WORD_XP} XP per new word · +${LEVEL_XP} XP per pack</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${cards}</div>`;
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${customCard}${cards}</div>`;
   }
 
   function renderLevel() {
@@ -386,8 +488,9 @@
     const done = st ? Object.keys(st.mastered).length : 0;
     const pct = Math.round((done / pack.words.length) * 100);
     const complete = done === pack.words.length;
+    const isCustom = pack.id === 'custom';
 
-    const rows = pack.words.map((w) => {
+    const rows = pack.words.map((w, wi) => {
       const mastered = isMastered(pack.id, w.word);
       const reviews = (st && st.reviews[w.word]) || 0;
       return `
@@ -395,17 +498,61 @@
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
               <p class="font-extrabold text-slate-900">${esc(w.word)}</p>
-              <span class="text-[10px] text-slate-400 uppercase tracking-wide">${esc(w.pos)}</span>
+              ${w.pos ? '<span class="text-[10px] text-slate-400 uppercase tracking-wide">' + esc(w.pos) + '</span>' : ''}
               <span class="text-[10px] font-bold ${mastered ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'} px-2 py-0.5 rounded-full">${mastered ? '✓ Mastered' : 'Learning'}</span>
+              <span class="text-[10px] text-slate-400">Custom</span>
             </div>
             <p class="text-sm text-slate-600 mt-1">${esc(w.meaning)}</p>
             <p class="text-sm text-emerald-700 font-semibold mt-0.5" dir="rtl">${esc(w.ar)}</p>
             <p class="text-xs text-slate-400 italic mt-1">“${esc(w.example)}”</p>
-            <p class="text-[10px] text-slate-400 mt-1.5">Reviewed ${reviews}×</p>
+            <p class="text-[10px] text-slate-400 mt-1.5">Reviewed ${reviews}×${isCustom ? ' · synced to My Words' : ''}</p>
           </div>
-          <button class="btn-secondary !py-1.5 !px-3 text-[11px] shrink-0" onclick="IELTS_CATLANGO.addToMyWords('${pack.id}', ${pack.words.indexOf(w)})" title="Add to My Words">📒 Save</button>
+          ${isCustom
+            ? `<button class="text-[11px] font-semibold text-rose-500 hover:text-rose-700 shrink-0" onclick="IELTS_CATLANGO.removeCustomWord('${w.id}')">Delete</button>`
+            : `<button class="btn-secondary !py-1.5 !px-3 text-[11px] shrink-0" onclick="IELTS_CATLANGO.addToMyWords('${pack.id}', ${wi})" title="Add to My Words">📒 Save</button>`}
         </div>`;
     }).join('');
+
+    const creator = isCustom ? `
+      <div class="bg-white rounded-2xl border-2 border-dashed border-brand-200 shadow-sm p-6 mb-6">
+        <p class="font-bold text-slate-900 mb-1">✍️ Create a custom word</p>
+        <p class="text-xs text-slate-500 mb-4">Add your own word — it's saved to your device and synced to Supabase, then appears instantly in My Words with flashcards.</p>
+        <form onsubmit="IELTS_CATLANGO.createCustomWord(event)" class="space-y-3">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1" for="catlango-cw-word">Word *</label>
+              <input id="catlango-cw-word" type="text" required placeholder="e.g. resilience" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1" for="catlango-cw-pos">Part of speech</label>
+              <select id="catlango-cw-pos" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-400">
+                <option value="">Select…</option>
+                ${['noun', 'verb', 'adjective', 'adverb', 'conjunction', 'phrase'].map((p) => '<option value="' + p + '">' + p + '</option>').join('')}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="catlango-cw-meaning">Definition (English)</label>
+            <input id="catlango-cw-meaning" type="text" placeholder="e.g. the ability to recover quickly from difficulties" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="catlango-cw-ar">Arabic translation</label>
+            <input id="catlango-cw-ar" type="text" dir="rtl" placeholder="الترجمة بالعربية" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="catlango-cw-example">Example sentence</label>
+            <input id="catlango-cw-example" type="text" placeholder="e.g. Her resilience helped her pass the exam." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+          </div>
+          <button type="submit" class="btn-primary w-full !py-2.5">💾 Save custom word</button>
+        </form>
+      </div>` : '';
+
+    const emptyCustom = isCustom && !pack.words.length ? `
+      <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+        <p class="text-3xl mb-2">✍️</p>
+        <p class="font-bold text-slate-800">No custom words yet</p>
+        <p class="text-sm text-slate-500 mt-1">Use the form above to create your first word — it will appear here and in My Words instantly.</p>
+      </div>` : '';
 
     return `
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
@@ -419,6 +566,8 @@
         <button class="btn-primary text-sm" onclick="IELTS_CATLANGO.startSession()">${complete ? '🎴 Review flashcards' : '🎴 Study with flashcards'}</button>
       </div>
 
+      ${creator}
+
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
         <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
           <span>Pack progress</span><span>${pct}%</span>
@@ -426,10 +575,10 @@
         <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
           <div class="h-full bg-gradient-to-r from-emerald-500 to-brand-500 rounded-full transition-all" style="width: ${pct}%"></div>
         </div>
-        ${complete ? '<p class="text-xs text-emerald-600 font-semibold mt-2">🎉 Pack complete! Review keeps it in your long-term memory.</p>' : '<p class="text-xs text-slate-400 mt-2">Master every word to complete this pack and earn +' + LEVEL_XP + ' XP.</p>'}
+        ${complete ? '<p class="text-xs text-emerald-600 font-semibold mt-2">🎉 Pack complete! Review keeps it in your long-term memory.</p>' : isCustom ? '<p class="text-xs text-slate-400 mt-2">Master every custom word to complete this pack.</p>' : '<p class="text-xs text-slate-400 mt-2">Master every word to complete this pack and earn +' + LEVEL_XP + ' XP.</p>'}
       </div>
 
-      <div class="space-y-3">${rows}</div>`;
+      ${emptyCustom || '<div class="space-y-3">' + rows + '</div>'}`;
   }
 
   function renderSession() {
@@ -492,6 +641,7 @@
   }
 
   window.IELTS_CATLANGO = {
-    render, openLevel, backToGrid, backToLevel, startSession, flipCard, markKnown, markAgain, addToMyWords
+    render, openLevel, backToGrid, backToLevel, startSession, flipCard, markKnown, markAgain, addToMyWords,
+    createCustomWord, removeCustomWord, customWords
   };
 })();

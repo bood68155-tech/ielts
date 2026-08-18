@@ -57,6 +57,7 @@
       meaning: String(data.meaning || '').trim(),
       ar: String(data.ar || '').trim(),
       example: String(data.example || '').trim(),
+      pos: String(data.pos || '').trim(),
       source: String(data.source || 'Manual').trim(),
       addedAt: Date.now(),
       learned: false,
@@ -265,6 +266,7 @@
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap items-center gap-2">
             <p class="font-extrabold text-slate-900">${esc(w.word)}</p>
+            ${w.pos ? '<span class="text-[10px] text-slate-400 uppercase tracking-wide">' + esc(w.pos) + '</span>' : ''}
             <span class="text-[10px] font-bold ${w.learned ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'} px-2 py-0.5 rounded-full">${w.learned ? '✓ Mastered' : 'Learning'}</span>
             <span class="text-[10px] text-slate-400">${esc(w.source)}</span>
           </div>
