@@ -65,7 +65,8 @@
       { id: 'study-goal', icon: '🎯', name: 'Goal getter', desc: 'Hit your daily study goal.', earned: claims.some((c) => c.indexOf('study-goal-') === 0) },
       { id: 'study-hours', icon: '⏰', name: 'Time investor', desc: 'Study for 10+ hours in total.', earned: studySeconds >= 36000 },
       { id: 'words-10', icon: '📒', name: 'Word collector', desc: 'Save 10 words to your vocabulary.', earned: wordCount >= 10 },
-      { id: 'words-learned', icon: '🧠', name: 'Word master', desc: 'Master 25 words with flashcards.', earned: learnedCount >= 25 }
+      { id: 'words-learned', icon: '🧠', name: 'Word master', desc: 'Master 25 words with flashcards.', earned: learnedCount >= 25 },
+      { id: 'catlango-level', icon: '🐱', name: 'Catlango explorer', desc: 'Complete a Catlango word pack (A1–C2).', earned: claims.some((c) => c.indexOf('catlango-level-') === 0) }
     ];
   }
 
@@ -108,6 +109,8 @@
     const study = window.IELTS_AUTH.getScoped('study', null) || { days: {} };
     const studySecs = Object.keys(study.days || {}).reduce((n, k) => n + (study.days[k] || 0), 0);
     const words = window.IELTS_AUTH.getScoped('words', null) || { words: [] };
+    const catlango = window.IELTS_AUTH.getScoped('catlango', null) || { levels: {} };
+    const catlangoMastered = Object.keys(catlango.levels || {}).reduce((n, lvl) => n + Object.keys((catlango.levels[lvl] || {}).mastered || {}).length, 0);
     return [
       { icon: '⚡', label: 'Total XP', value: user.xp },
       { icon: '🏅', label: 'Level', value: window.IELTS_AUTH.getLevel(user.xp).shortName || window.IELTS_AUTH.getLevel(user.xp).name },
@@ -116,6 +119,7 @@
       { icon: '🎓', label: 'Training stages', value: stages + '/15' },
       { icon: '⏱', label: 'Study time', value: fmtStudyHours(studySecs) },
       { icon: '📒', label: 'Saved words', value: (words.words || []).length },
+      { icon: '🐱', label: 'Catlango words', value: catlangoMastered },
       { icon: '🏆', label: 'Badges', value: badges }
     ];
   }

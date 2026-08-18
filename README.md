@@ -28,8 +28,16 @@ A free, interactive IELTS practice web application built with **HTML, Tailwind C
 - Daily goal (30/60/90/120 min), last-7-days chart, lifetime stats
 - 🔥 Streaks for consistent days, with XP rewards for sessions, daily goals and 7-day streaks
 
+### 🐱 Catlango (word packs + flashcards)
+- A dedicated vocabulary and word-learning section with **six curated word packs** organised by CEFR level — A1 Beginner → C2 Proficiency
+- Each pack has ~16 high-frequency IELTS words with English meaning, Arabic translation, part of speech and an example sentence
+- **Interactive flip flashcards** — tap the card to flip it, then mark each word “Got it” or “Still learning” (still-learning cards cycle back into the queue)
+- Per-user progress: words mastered, reviews and pack completion are saved per account and synced to Supabase
+- +2 XP per newly mastered word and +30 XP bonus for completing an entire pack
+- Save any word straight into **My Words** with one tap
+
 ### 📒 My Words (personal vocabulary builder)
-- Save words from Level Reading, the Translator or manually (with Arabic translation)
+- Save words from Level Reading, the Translator, Catlango or manually (with Arabic translation)
 - Flashcard review with flip cards — mark words as mastered
 - Search, filter, delete; +2 XP per word, bonus XP for mastering 10 / 50 words
 
@@ -129,6 +137,7 @@ ielts/
     ├── translator.js       # Offline English ↔ Arabic translator
     ├── study.js            # Daily study hours tracker + interactive timer
     ├── vocabulary.js       # Personal vocabulary builder + flashcards
+    ├── catlango.js         # Catlango word packs (A1-C2) + flip flashcards
     ├── chat.js             # Real-time chat, support & direct messages
     └── app.js              # Application logic (navigation, timers, scoring, audio)
 ```

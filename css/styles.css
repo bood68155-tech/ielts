@@ -254,3 +254,49 @@ input:focus { outline: none; }
 
 /* --- Study clock numerals --- */
 .tabular-nums { font-variant-numeric: tabular-nums; }
+
+/* --- Catlango flashcards (3D flip) --- */
+.cat-flip {
+  perspective: 1200px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cat-flip-inner {
+  position: relative;
+  width: 100%;
+  min-height: 16rem;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.cat-flip.flipped .cat-flip-inner { transform: rotateY(180deg); }
+.cat-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 30px -10px rgba(30, 41, 59, 0.18);
+}
+.cat-front {
+  background: linear-gradient(135deg, #eef2ff, #ffffff);
+  border-color: #c7d2fe;
+}
+.cat-back {
+  background: #ffffff;
+  transform: rotateY(180deg);
+  border-color: #a7f3d0;
+  border-width: 2px;
+}
+
+/* Catlango responsive tweaks */
+@media (max-width: 480px) {
+  .cat-flip-inner { min-height: 15rem; }
+  .cat-face { padding: 1.5rem 1rem; }
+}

@@ -88,6 +88,7 @@
     if (name === 'translator') window.IELTS_TRANSLATOR.render();
     if (name === 'study') window.IELTS_STUDY.render();
     if (name === 'words') window.IELTS_VOCAB.render();
+    if (name === 'catlango') window.IELTS_CATLANGO.render();
     if (name === 'chat') window.IELTS_CHAT.render();
     if (name === 'profile') window.IELTS_PROFILE.render();
     if (name === 'feed') window.IELTS_FEED.render();
@@ -734,7 +735,7 @@
               <h3 class="font-bold text-slate-900 text-lg">Part 2 · Individual long turn</h3>
               <p class="text-sm text-slate-500 mt-1">${esc(p2.intro)}</p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <div id="prep-timer" class="font-mono text-sm font-bold text-slate-700 bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm">01:00</div>
               <button class="btn-primary !py-2 text-xs" onclick="startPrepTimer()">Start 1-min prep</button>
             </div>
@@ -747,7 +748,7 @@
             </ul>
           </div>
 
-          <div class="mt-6 flex items-center gap-3">
+          <div class="mt-6 flex flex-wrap items-center gap-3">
             <div id="speak-timer" class="font-mono text-sm font-bold text-slate-700 bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm">02:00</div>
             <button class="btn-primary !py-2 text-xs" onclick="startSpeakTimer()">Start 2-min talk</button>
             <button class="btn-secondary !py-2 text-xs" onclick="toggleSpeakingAnswer(this)">Show model answer</button>
