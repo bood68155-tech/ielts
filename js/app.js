@@ -82,6 +82,8 @@
 
     if (name === 'dashboard') renderDashboard();
     if (name === 'levels') window.IELTS_LEVELS.render();
+    if (name === 'learning-path') window.LEARNING_PATH.render();
+    if (name === 'reading-hub') window.LEARNING_PATH.renderHub();
     if (name === 'exam') window.IELTS_EXAM.render();
     if (name === 'training') window.IELTS_TRAINING.render();
     if (name === 'readings') window.IELTS_READINGS.render();

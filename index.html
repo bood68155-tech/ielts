@@ -96,6 +96,8 @@
         <nav class="hidden md:flex items-center gap-1" id="main-nav">
           <button data-section="dashboard" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('dashboard')">Dashboard</button>
           <button data-section="levels" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('levels')">📈 Levels</button>
+          <button data-section="learning-path" class="nav-btn nav-btn-featured px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('learning-path')">🗺️ Learning Path</button>
+          <button data-section="reading-hub" class="nav-btn nav-btn-featured px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
           <button data-section="exam" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('exam')">📅 Weekly Exam</button>
           <button data-section="training" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
           <button data-section="readings" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('readings')">📚 Level Reading</button>
@@ -138,6 +140,8 @@
     <nav id="mobile-nav" class="hidden md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1">
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">Dashboard</button>
       <button data-section="levels" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('levels')">📈 Levels</button>
+      <button data-section="learning-path" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('learning-path')">🗺️ Learning Path</button>
+      <button data-section="reading-hub" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
       <button data-section="exam" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('exam')">📅 Weekly Exam</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
       <button data-section="readings" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('readings')">📚 Level Reading</button>
@@ -427,7 +431,22 @@
       </div>
       <div id="speaking-content"></div>
     </section>
-  </main>
+
+    <!-- ============ LEARNING PATH ============ -->
+    <section id="section-learning-path" class="section-view hidden">
+      <div class="max-w-5xl mx-auto px-4 py-8">
+        <div id="levels-content"></div>
+      </div>
+    </section>
+
+    <!-- ============ READING HUB ============ -->
+    <section id="section-reading-hub" class="section-view hidden">
+      <div class="max-w-5xl mx-auto px-4 py-8">
+        <div id="reading-hub-content"></div>
+      </div>
+    </section>
+
+    </main>
 
   <footer class="border-t border-slate-200 bg-white mt-10">
     <!-- ============ ABOUT THE DEVELOPER ============ -->
@@ -472,6 +491,7 @@
   <script src="js/vocabulary.js"></script>
   <script src="js/catlango.js"></script>
   <script src="js/chat.js"></script>
+  <script src="js/learning-path.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
