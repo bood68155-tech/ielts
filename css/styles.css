@@ -3,44 +3,14 @@
    Colors: Black (#1a1a2e), White (#ffffff), Green (#009736), Red (#CE1126)
    ================================================================ */
 
-/* ---- Palestinian cultural watermarks (layered, very subtle) ---- */
 
-/* Layer 1: Olive branch branches repeating pattern */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3C!-- olive branch left --%3E%3Cpath d='M30 220 Q60 180 50 140 Q40 100 60 70 Q80 40 100 30' fill='none' stroke='%23009736' stroke-width='1.8' stroke-linecap='round'/%3E%3Cellipse cx='42' cy='155' rx='10' ry='5.5' fill='%23009736' opacity='0.45' transform='rotate(-35 42 155)'/%3E%3Cellipse cx='38' cy='125' rx='9' ry='5' fill='%23009736' opacity='0.35' transform='rotate(-45 38 125)'/%3E%3Cellipse cx='48' cy='95' rx='8' ry='4.5' fill='%23009736' opacity='0.35' transform='rotate(-25 48 95)'/%3E%3Cellipse cx='60' cy='72' rx='7' ry='4' fill='%23009736' opacity='0.3' transform='rotate(-15 60 72)'/%3E%3Cellipse cx='80' cy='48' rx='6' ry='3.5' fill='%23009736' opacity='0.25' transform='rotate(-5 80 48)'/%3E%3C!-- olive branch right (mirrored) --%3E%3Cpath d='M210 220 Q180 180 190 140 Q200 100 180 70 Q160 40 140 30' fill='none' stroke='%23009736' stroke-width='1.8' stroke-linecap='round'/%3E%3Cellipse cx='198' cy='155' rx='10' ry='5.5' fill='%23009736' opacity='0.45' transform='rotate(35 198 155)'/%3E%3Cellipse cx='202' cy='125' rx='9' ry='5' fill='%23009736' opacity='0.35' transform='rotate(45 202 125)'/%3E%3Cellipse cx='192' cy='95' rx='8' ry='4.5' fill='%23009736' opacity='0.35' transform='rotate(25 192 95)'/%3E%3Cellipse cx='180' cy='72' rx='7' ry='4' fill='%23009736' opacity='0.3' transform='rotate(15 180 72)'/%3E%3Cellipse cx='160' cy='48' rx='6' ry='3.5' fill='%23009736' opacity='0.25' transform='rotate(5 160 48)'/%3E%3C/svg%3E");
-  background-size: 240px 240px;
-}
 
-/* Layer 2: Artistic watermelon slice motifs — scattered, low-opacity */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.022;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3C!-- artistic watermelon slice --%3E%3Cpath d='M50 160 A70 70 0 0 1 150 160 Z' fill='%23009736' opacity='0.35'/%3E%3Cpath d='M55 160 A65 65 0 0 1 145 160 Z' fill='%23CE1126' opacity='0.5'/%3E%3Cpath d='M60 160 A60 60 0 0 1 140 160 Z' fill='%23CE1126' opacity='0.6'/%3E%3C!-- seeds --%3E%3Ccircle cx='78' cy='142' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='100' cy='134' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='122' cy='142' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='88' cy='148' r='1.6' fill='%231a1a2e' opacity='0.35'/%3E%3Ccircle cx='112' cy='148' r='1.6' fill='%231a1a2e' opacity='0.35'/%3E%3Ccircle cx='100' cy='152' r='1.4' fill='%231a1a2e' opacity='0.3'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-}
 
-/* Layer 3: Palestinian flag triangle watermark (very faint, fixed center) */
-.pa-flag-watermark {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  height: 400px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.015;
-}
+
+
+
+
+
 
 /* --- Navigation --- */
 .nav-btn { color: #475569; border: 1px solid transparent; }
@@ -693,30 +663,30 @@ header::after {
 .hero-watermark .hw-flag {
   right: -10px;
   top: -10px;
-  width: 200px;
-  height: 200px;
-  opacity: 0.18;
+  width: 220px;
+  height: 220px;
+  opacity: 0.30;
 }
 .hero-watermark .hw-olive {
   left: -5px;
   bottom: -20px;
-  width: 180px;
-  height: 180px;
-  opacity: 0.22;
+  width: 200px;
+  height: 200px;
+  opacity: 0.35;
 }
 .hero-watermark .hw-melon {
-  right: 30px;
-  bottom: 15px;
-  width: 100px;
-  height: 100px;
-  opacity: 0.3;
+  right: 25px;
+  bottom: 10px;
+  width: 120px;
+  height: 120px;
+  opacity: 0.45;
 }
 .hero-watermark .hw-melon-sm {
-  right: 140px;
-  top: 10px;
-  width: 55px;
-  height: 55px;
-  opacity: 0.22;
+  right: 155px;
+  top: 8px;
+  width: 65px;
+  height: 65px;
+  opacity: 0.32;
   transform: rotate(-15deg);
 }
 
@@ -729,12 +699,12 @@ header::after {
 }
 .olive-frame .olive-left,
 .olive-frame .olive-right {
-  right: -65px;
+  right: -70px;
   top: 50%;
   transform: translateY(-50%) scaleX(-1);
 }
 .olive-frame .olive-left {
-  left: -65px;
+  left: -70px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -745,11 +715,11 @@ header::after {
 }
 @media (max-width: 640px) {
   .olive-frame .olive-left, .olive-frame .olive-right {
-    width: 50px;
-    height: 70px;
+    width: 55px;
+    height: 80px;
   }
-  .olive-frame .olive-left { left: -45px; }
-  .olive-frame .olive-right { right: -45px; }
+  .olive-frame .olive-left { left: -50px; }
+  .olive-frame .olive-right { right: -50px; }
 }
 
 /* --- Footer olive corner decorations --- */
