@@ -176,13 +176,13 @@
       '</div>' +
       '<div class="text-center">' +
       '<div class="relative w-24 h-24">' +
-      '<svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + (2 * Math.PI * 42) + '" stroke-dashoffset="' + (2 * Math.PI * 42 * (1 - overallPct / 100)) + '" class="transition-all duration-700"/></svg>' +
+      '<svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#009736" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + (2 * Math.PI * 42) + '" stroke-dashoffset="' + (2 * Math.PI * 42 * (1 - overallPct / 100)) + '" class="transition-all duration-700"/></svg>' +
       '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xl font-extrabold text-brand-600">' + overallPct + '%</span></div>' +
       '</div>' +
       '</div>' +
       '</div>' +
       '<div class="mt-4 h-2 bg-slate-100 rounded-full overflow-hidden">' +
-      '<div class="h-full bg-gradient-to-r from-brand-500 to-indigo-500 rounded-full transition-all duration-500" style="width:' + overallPct + '%"></div>' +
+      '<div class="h-full bg-gradient-to-r from-palestine-green to-palestine-green/70 rounded-full transition-all duration-500" style="width:' + overallPct + '%"></div>' +
       '</div>' +
       '<p class="text-xs text-slate-400 mt-2">Complete all 28 daily tasks to finish your IELTS preparation journey.</p>' +
       '</div>';
@@ -201,7 +201,7 @@
         var done = isComplete(d.id);
         var sc = skillColors[d.skill] || skillColors.training;
 
-        dayRows += '<div class="flex items-center gap-3 p-3 rounded-xl ' + (done ? 'bg-emerald-50 border border-emerald-200' : 'bg-white border border-slate-200 hover:border-brand-300 hover:shadow-sm') + ' transition-all cursor-pointer group" onclick="window.STUDY_PLAN.openTask(\'' + d.id + '\', \'' + d.action + '\')">' +
+        dayRows += '<div class="flex items-center gap-3 p-3 rounded-xl ' + (done ? 'bg-green-50 border border-green-200' : 'bg-white border border-slate-200 hover:border-brand-300 hover:shadow-sm') + ' transition-all cursor-pointer group" onclick="window.STUDY_PLAN.openTask(\'' + d.id + '\', \'' + d.action + '\')">' +
           '<div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ' + (done ? 'bg-emerald-100' : sc.bg) + '">' + (done ? '✅' : d.icon) + '</div>' +
           '<div class="flex-1 min-w-0">' +
           '<p class="text-sm font-semibold ' + (done ? 'text-emerald-700 line-through' : 'text-slate-800') + '">Day ' + d.day + ': ' + esc(d.title) + '</p>' +
@@ -209,7 +209,7 @@
           '</div>' +
           '<div class="shrink-0">' +
           (done
-            ? '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Done</span>'
+            ? '<span class="px-2 py-1 bg-green-100 text-palestine-green text-xs font-bold rounded-full">Done</span>'
             : '<span class="px-2 py-1 ' + sc.bg + ' ' + sc.text + ' text-xs font-bold rounded-full">' + d.skill.charAt(0).toUpperCase() + d.skill.slice(1) + '</span>') +
           '</div>' +
           '</div>';
@@ -278,11 +278,11 @@
       '</div>' +
       '<div class="p-6">' +
       '<p class="text-slate-600 leading-relaxed mb-6">' + esc(day.desc) + '</p>' +
-      (done ? '<div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center"><p class="text-emerald-700 font-semibold">✅ This task is completed!</p></div>' : '') +
+      (done ? '<div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-center"><p class="text-emerald-700 font-semibold">✅ This task is completed!</p></div>' : '') +
       '<div class="flex gap-3">' +
       '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">Open ' + esc(day.title.split(' ')[0]) + ' Tool</button>' +
       (!done
-        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition">Mark Complete ✓</button>'
+        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition">Mark Complete ✓</button>'
         : '<button onclick="window.STUDY_PLAN.uncompleteFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition">Undo ✓</button>') +
       '</div>' +
       '</div>' +
