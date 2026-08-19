@@ -83,6 +83,7 @@
     if (name === 'dashboard') renderDashboard();
     if (name === 'levels') window.IELTS_LEVELS.render();
     if (name === 'learning-path') window.LEARNING_PATH.render();
+    if (name === 'study-plan') window.STUDY_PLAN.render();
     if (name === 'reading-hub') window.LEARNING_PATH.renderHub();
     if (name === 'exam') window.IELTS_EXAM.render();
     if (name === 'training') window.IELTS_TRAINING.render();
@@ -105,6 +106,60 @@
   window.toggleMobileMenu = function () {
     $('#mobile-nav').classList.toggle('hidden');
   };
+
+  /* ---------------- Study Plan Dashboard Preview ---------------- */
+  function renderStudyPlanDashPreview(container) {
+    if (!window.STUDY_PLAN || !window.STUDY_PLAN.WEEKS) return;
+    var WEEKS = window.STUDY_PLAN.WEEKS;
+    var totalDays = 28;
+    var completedDays = window.STUDY_PLAN.getCompletedCount();
+    var overallPct = Math.round((completedDays / totalDays) * 100);
+
+    /* Find current week */
+    var currentWeekIdx = 0;
+    for (var wi = WEEKS.length - 1; wi >= 0; wi--) {
+      for (var di = 0; di < WEEKS[wi].days.length; di++) {
+        if (!window.STUDY_PLAN.isComplete(WEEKS[wi].days[di].id)) { currentWeekIdx = wi; break; }
+      }
+    }
+    var currentWeek = WEEKS[currentWeekIdx];
+
+    /* Show next 3 uncompleted tasks */
+    var nextTasks = [];
+    for (var wi2 = currentWeekIdx; wi2 < WEEKS.length && nextTasks.length < 3; wi2++) {
+      for (var di2 = 0; di2 < WEEKS[wi2].days.length && nextTasks.length < 3; di2++) {
+        var d = WEEKS[wi2].days[di2];
+        if (!window.STUDY_PLAN.isComplete(d.id)) nextTasks.push(d);
+      }
+    }
+
+    var taskRows = nextTasks.map(function (d) {
+      return '<div class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 hover:border-brand-300 hover:shadow-sm transition-all cursor-pointer" onclick="window.STUDY_PLAN.openTask(\'' + d.id + '\', \'' + d.action + '\')">' +
+        '<span class="text-2xl">' + d.icon + '</span>' +
+        '<div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-800 truncate">Day ' + d.day + ': ' + d.title + '</p><p class="text-xs text-slate-500 truncate">' + d.desc + '</p></div>' +
+        '<span class="text-brand-600 text-lg">→</span></div>';
+    }).join('');
+
+    container.innerHTML = '<div class="bg-gradient-to-r from-brand-600 to-indigo-500 rounded-2xl p-6 text-white mb-6">' +
+      '<div class="flex flex-wrap items-center justify-between gap-4">' +
+      '<div>' +
+      '<p class="text-sm text-white/80 font-medium">4-Week Study Plan</p>' +
+      '<p class="text-xl font-extrabold mt-1">' + completedDays + ' / ' + totalDays + ' days completed</p>' +
+      '<p class="text-sm text-white/70 mt-1">Currently: ' + currentWeek.name + '</p>' +
+      '</div>' +
+      '<div class="text-center shrink-0">' +
+      '<div class="relative w-20 h-20">' +
+      '<svg class="w-20 h-20 -rotate-90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + (2 * Math.PI * 42) + '" stroke-dashoffset="' + (2 * Math.PI * 42 * (1 - overallPct / 100)) + '"/></svg>' +
+      '<div class="absolute inset-0 flex items-center justify-center"><span class="text-lg font-extrabold">' + overallPct + '%</span></div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="mt-3 h-1.5 bg-white/20 rounded-full overflow-hidden">' +
+      '<div class="h-full bg-white rounded-full transition-all" style="width:' + overallPct + '%"></div>' +
+      '</div>' +
+      '</div>' +
+      (nextTasks.length ? '<div class="space-y-3">' + taskRows + '<button onclick="showSection(\'study-plan\')" class="w-full py-3 bg-white text-brand-700 rounded-xl font-bold hover:bg-brand-50 transition mt-2">📋 View Full 4-Week Plan</button></div>' : '<div class="bg-white rounded-2xl p-6 text-center border border-slate-200"><p class="text-2xl mb-2">🎉</p><p class="font-bold text-slate-800">All 28 days completed!</p><p class="text-sm text-slate-500">Congratulations on finishing your IELTS study plan!</p></div>');
+  }
 
   /* ---------------- Dashboard ---------------- */
   const maxXp = (window.IELTS_DATA && window.IELTS_DATA.LEVELS.length)
