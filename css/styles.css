@@ -679,7 +679,7 @@ header::after {
 }
 
 
-/* --- Hero inner watermark overlay --- */
+/* --- Hero illustrations: olive, watermelon, flag (VISIBLE) --- */
 .hero-watermark {
   position: absolute;
   inset: 0;
@@ -689,28 +689,36 @@ header::after {
 }
 .hero-watermark svg {
   position: absolute;
-  opacity: 0.12;
 }
 .hero-watermark .hw-flag {
-  right: -20px;
-  top: -20px;
-  width: 180px;
-  height: 180px;
-}
-.hero-watermark .hw-olive {
-  left: -10px;
-  bottom: -30px;
-  width: 140px;
-  height: 140px;
-}
-.hero-watermark .hw-melon {
-  right: 40px;
-  bottom: 10px;
-  width: 60px;
-  height: 60px;
+  right: -10px;
+  top: -10px;
+  width: 200px;
+  height: 200px;
   opacity: 0.18;
 }
-
+.hero-watermark .hw-olive {
+  left: -5px;
+  bottom: -20px;
+  width: 180px;
+  height: 180px;
+  opacity: 0.22;
+}
+.hero-watermark .hw-melon {
+  right: 30px;
+  bottom: 15px;
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+}
+.hero-watermark .hw-melon-sm {
+  right: 140px;
+  top: 10px;
+  width: 55px;
+  height: 55px;
+  opacity: 0.22;
+  transform: rotate(-15deg);
+}
 
 /* --- Olive branch frame around hero logo --- */
 .olive-frame {
@@ -721,13 +729,12 @@ header::after {
 }
 .olive-frame .olive-left,
 .olive-frame .olive-right {
-  position: absolute;
-  width: 60px;
-  height: 80px;
-  pointer-events: none;
+  right: -65px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1);
 }
 .olive-frame .olive-left {
-  left: -55px;
+  left: -65px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -738,11 +745,11 @@ header::after {
 }
 @media (max-width: 640px) {
   .olive-frame .olive-left, .olive-frame .olive-right {
-    width: 40px;
-    height: 55px;
+    width: 50px;
+    height: 70px;
   }
-  .olive-frame .olive-left { left: -35px; }
-  .olive-frame .olive-right { right: -35px; }
+  .olive-frame .olive-left { left: -45px; }
+  .olive-frame .olive-right { right: -45px; }
 }
 
 /* --- Footer olive corner decorations --- */
