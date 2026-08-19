@@ -170,13 +170,13 @@
     var overallCard = '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">' +
       '<div class="flex flex-wrap items-center justify-between gap-4">' +
       '<div>' +
-      '<p class="text-sm text-slate-500 font-medium">4-Week IELTS Study Plan</p>' +
+      '<p class="text-sm text-slate-500 font-medium">🍉 4-Week IELTS Study Plan</p>' +
       '<p class="text-2xl font-extrabold text-slate-900 mt-1">' + completedDays + ' / ' + totalDays + ' days completed</p>' +
       '<p class="text-sm text-slate-500 mt-1">You are on <strong class="text-brand-600">' + WEEKS[currentWeekIdx].name + ': ' + WEEKS[currentWeekIdx].subtitle + '</strong></p>' +
       '</div>' +
       '<div class="text-center">' +
       '<div class="relative w-24 h-24">' +
-      '<svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#009736" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + (2 * Math.PI * 42) + '" stroke-dashoffset="' + (2 * Math.PI * 42 * (1 - overallPct / 100)) + '" class="transition-all duration-700"/></svg>' +
+      '<svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/><circle stroke="#009736" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + (2 * Math.PI * 42) + '" stroke-dashoffset="' + (2 * Math.PI * 42 * (1 - overallPct / 100)) + '" class="transition-all duration-700"/></svg>' +
       '<div class="absolute inset-0 flex items-center justify-center"><span class="text-xl font-extrabold text-brand-600">' + overallPct + '%</span></div>' +
       '</div>' +
       '</div>' +
@@ -202,7 +202,7 @@
         var sc = skillColors[d.skill] || skillColors.training;
 
         dayRows += '<div class="flex items-center gap-3 p-3 rounded-xl ' + (done ? 'bg-green-50 border border-green-200' : 'bg-white border border-slate-200 hover:border-brand-300 hover:shadow-sm') + ' transition-all cursor-pointer group" onclick="window.STUDY_PLAN.openTask(\'' + d.id + '\', \'' + d.action + '\')">' +
-          '<div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ' + (done ? 'bg-emerald-100' : sc.bg) + '">' + (done ? '✅' : d.icon) + '</div>' +
+          '<div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ' + (done ? 'bg-emerald-100' : sc.bg) + '">' + (done ? '🍉' : d.icon) + '</div>' +
           '<div class="flex-1 min-w-0">' +
           '<p class="text-sm font-semibold ' + (done ? 'text-emerald-700 line-through' : 'text-slate-800') + '">Day ' + d.day + ': ' + esc(d.title) + '</p>' +
           '<p class="text-xs ' + (done ? 'text-emerald-500' : 'text-slate-500') + ' truncate">' + esc(d.desc) + '</p>' +
@@ -219,14 +219,14 @@
         '<div class="p-5 ' + (isActive ? 'bg-gradient-to-r from-brand-50 to-indigo-50' : isDone ? 'bg-emerald-50' : 'bg-slate-50') + '">' +
         '<div class="flex items-center justify-between">' +
         '<div>' +
-        '<h3 class="text-lg font-extrabold text-slate-900">' + w.name + ': ' + esc(w.subtitle) + '</h3>' +
+        '<h3 class="text-lg font-extrabold text-slate-900">' + '🍉 ' + w.name + ': ' + esc(w.subtitle) + '</h3>' +
         '<p class="text-xs text-slate-500 mt-0.5">' + w.days.length + ' days · ' + (isDone ? 'Completed ✅' : isActive ? 'In progress' : 'Upcoming') + '</p>' +
         '</div>' +
         '<div class="text-right">' +
         '<p class="text-2xl font-extrabold ' + (isDone ? 'text-emerald-600' : 'text-brand-600') + '">' + wp + '%</p>' +
         '</div>' +
         '</div>' +
-        '<div class="mt-3 h-2 bg-white/80 rounded-full overflow-hidden">' +
+        '<div class="mt-3 h-2 bg-white rounded-full overflow-hidden">' +
         '<div class="h-full ' + (isDone ? 'bg-emerald-500' : 'bg-brand-500') + ' rounded-full transition-all" style="width:' + wp + '%"></div>' +
         '</div>' +
         '</div>' +
@@ -282,7 +282,7 @@
       '<div class="flex gap-3">' +
       '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">Open ' + esc(day.title.split(' ')[0]) + ' Tool</button>' +
       (!done
-        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition">Mark Complete ✓</button>'
+        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 'bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition'>Mark Complete ✓</button>'
         : '<button onclick="window.STUDY_PLAN.uncompleteFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition">Undo ✓</button>') +
       '</div>' +
       '</div>' +

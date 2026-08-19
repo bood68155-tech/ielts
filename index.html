@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IELTS Master — Study with Purpose</title>
+  <title>IELTS Master — Study with Purpose 🇵🇸</title>
   <meta name="description" content="Free interactive IELTS practice: Listening, Reading, Writing and Speaking with timers, scoring and model answers." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css" />
@@ -38,10 +38,10 @@
   <!-- ============ AUTH SCREEN ============ -->
   <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-      <div class="bg-gradient-to-br from-palestine-green via-brand-600 to-palestine-black text-white px-8 py-9 text-center">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-white/15 flex items-center justify-center text-2xl font-extrabold mb-3">🇵🇸</div>
+      <div class="text-white px-8 py-9 text-center" style="background: linear-gradient(135deg, #009736, #1a1a2e);">
+        <div class="text-4xl mb-3">🇵🇸</div>
         <h2 class="text-2xl font-extrabold">Welcome to IELTS Master</h2>
-        <p class="text-brand-100 text-sm mt-1">Study with purpose. Every lesson builds a stronger you.</p>
+        <p class="text-white/80 text-sm mt-1">Study with purpose. Every lesson builds a stronger you.</p>
       </div>
       <div class="p-7">
         <div class="flex gap-2 mb-5">
@@ -49,49 +49,49 @@
           <button id="auth-tab-register" class="tab-pill" onclick="IELTS_AUTH.switchTab('register')">Create account</button>
         </div>
 
-        <div id="auth-error" class="hidden mb-4 text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-4 py-2.5"></div>
+        <div id="auth-error" class="hidden mb-4 text-sm text-palestine-red bg-red-50 border border-red-200 rounded-lg px-4 py-2.5"></div>
 
         <form id="auth-form-login" onsubmit="IELTS_AUTH.login(event)" class="space-y-4">
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="login-username">Username</label>
-            <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+            <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="login-password">Password</label>
-            <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+            <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
-          <button type="submit" class="btn-primary w-full !py-3">Sign in</button>
+          <button type="submit" class="btn-primary w-full !py-3 text-center">Sign in</button>
         </form>
 
         <form id="auth-form-register" onsubmit="IELTS_AUTH.register(event)" class="space-y-4 hidden">
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-username">Username</label>
-            <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+            <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div>
             <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-email">Email</label>
-            <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+            <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-password">Password</label>
-              <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+              <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
             </div>
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-password2">Confirm</label>
-              <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" required />
+              <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
             </div>
           </div>
-          <button type="submit" class="btn-primary w-full !py-3">Create account</button>
+          <button type="submit" class="btn-primary w-full !py-3 text-center">Create account</button>
         </form>
 
-        <p class="text-[11px] text-slate-400 text-center mt-5">Demo authentication — accounts sync to Supabase when configured, otherwise they stay in this browser (localStorage). Do not reuse a real password.</p>
+        <p class="text-[11px] text-slate-400 text-center mt-5">Demo authentication — accounts sync to Supabase when configured, otherwise they stay in this browser. Do not reuse a real password.</p>
       </div>
     </div>
   </div>
 
   <!-- ============ HEADER ============ -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm">
+  <header class="sticky top-0 z-40 bg-white border-b-2 border-slate-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between h-16">
         <button onclick="showSection('dashboard')" class="flex items-center gap-2 group" aria-label="Go to dashboard">
@@ -109,9 +109,8 @@
         </nav>
 
         <div class="hidden md:flex items-center gap-3 text-xs text-slate-500">
-          <!-- Signed-in user chip -->
-          <div id="user-chip" class="hidden items-center gap-2 bg-slate-100 border border-slate-200 rounded-full pl-1 pr-3 py-1">
-            <span id="user-avatar" class="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">U</span>
+          <div id="user-chip" class="hidden items-center gap-2 bg-green-50 border-2 border-green-200 rounded-full pl-1 pr-3 py-1">
+            <span id="user-avatar" class="w-7 h-7 rounded-full bg-palestine-green text-white flex items-center justify-center text-xs font-bold">U</span>
             <span class="flex flex-col leading-tight">
               <span id="user-name" class="font-semibold text-slate-800"></span>
               <span class="flex items-center gap-1.5">
@@ -120,18 +119,18 @@
               </span>
             </span>
           </div>
-          <button id="header-login-cta" onclick="IELTS_AUTH.showScreen()" class="bg-brand-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-brand-700 transition">Sign in</button>
-          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-slate-500 hover:text-rose-600 font-semibold px-3 py-2 rounded-lg hover:bg-rose-50 transition">Sign out</button>
+          <button id="header-login-cta" onclick="IELTS_AUTH.showScreen()" class="btn-primary text-sm">Sign in</button>
+          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-slate-500 hover:text-palestine-red font-semibold px-3 py-2 rounded-lg hover:bg-red-50 transition">Sign out</button>
         </div>
 
         <!-- Mobile hamburger -->
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-slate-100" aria-label="Open menu">
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-green-50" aria-label="Open menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
     <!-- Mobile nav -->
-    <nav id="mobile-nav" class="hidden md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1">
+    <nav id="mobile-nav" class="hidden md:hidden border-t-2 border-slate-100 bg-white px-4 py-3 space-y-1">
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
       <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
@@ -141,41 +140,33 @@
     </nav>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 relative z-10">
 
     <!-- ============ DASHBOARD ============ -->
     <section id="section-dashboard" class="section-view">
-      <!-- Study Plan Dashboard Preview -->
-      <div id="study-plan-dash-preview" class="mb-8">
-        <!-- Palestinian-themed study plan hero -->
-        <div class="rounded-2xl overflow-hidden mb-6" style="background: linear-gradient(135deg, #1a1a2e 0%, #002312 40%, #009736 100%);">
-          <div class="relative px-6 sm:px-10 py-8 sm:py-10 text-white">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
-            <div class="absolute bottom-0 left-0 w-24 h-24 bg-palestine-red/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl"></div>
-            <div class="relative z-10">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-3xl">🇵🇸</span>
-                <div>
-                  <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight">IELTS Master</h1>
-                  <p class="text-sm text-white/70 font-medium">Study with Purpose · Rise with Knowledge</p>
-                </div>
-              </div>
-              <p class="text-white/80 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
-              <div class="flex flex-wrap gap-3">
-                <button onclick="showSection('study-plan')" class="bg-white text-palestine-green font-bold px-5 py-2.5 rounded-xl hover:bg-brand-50 transition shadow-lg">📋 Open Study Plan</button>
-                <button onclick="showSection('training')" class="bg-white/15 border border-white/30 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-white/25 transition">🎓 Training</button>
+      <!-- Hero Banner: Palestinian themed -->
+      <div class="rounded-2xl overflow-hidden mb-8" style="background: linear-gradient(135deg, #1a1a2e 0%, #002312 50%, #009736 100%);">
+        <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative">
+          <div class="relative z-10">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="text-4xl">🇵🇸</span>
+              <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight">IELTS Master</h1>
+                <p class="text-sm text-white/80 font-medium">Study with Purpose · Rise with Knowledge</p>
               </div>
             </div>
-          </div>
-          <!-- Palestinian flag stripe accent -->
-          <div class="flex h-1.5">
-            <div class="flex-1" style="background:#1a1a2e"></div>
-            <div class="flex-1" style="background:#ffffff"></div>
-            <div class="flex-1" style="background:#009736"></div>
-            <div class="flex-1" style="background:#CE1126"></div>
+            <p class="text-white/90 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="showSection('study-plan')" class="bg-white text-palestine-green font-bold px-6 py-3 rounded-xl hover:bg-green-50 transition shadow-lg text-sm">📋 Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-palestine-red text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition shadow-lg text-sm">🎓 Training</button>
+            </div>
           </div>
         </div>
+        <div class="flag-stripe"><div></div><div></div><div></div><div></div></div>
       </div>
+
+      <!-- Study Plan Dashboard Preview -->
+      <div id="study-plan-dash-preview" class="mb-8"></div>
 
       <!-- Auth / progress banner -->
       <div id="dashboard-auth-banner"></div>
@@ -183,35 +174,35 @@
       <!-- Progress summary -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
 
-
       <h2 class="text-xl font-bold text-slate-900 mb-4">⚡ Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening')">
           <div class="skill-icon bg-red-50 text-palestine-red">🎧</div>
           <h3 class="font-bold text-slate-900 mb-1">Listening</h3>
           <p class="text-sm text-slate-500 mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
-          <span class="skill-link" style="color:#009736">Practice now →</span>
+          <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('reading')">
           <div class="skill-icon bg-green-50 text-palestine-green">📖</div>
           <h3 class="font-bold text-slate-900 mb-1">Reading</h3>
           <p class="text-sm text-slate-500 mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
-          <span class="skill-link" style="color:#009736">Practice now →</span>
+          <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('writing')">
           <div class="skill-icon bg-green-50 text-palestine-green">✍️</div>
           <h3 class="font-bold text-slate-900 mb-1">Writing</h3>
           <p class="text-sm text-slate-500 mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
-          <span class="skill-link" style="color:#009736">Practice now →</span>
+          <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('speaking')">
           <div class="skill-icon bg-red-50 text-palestine-red">🗣️</div>
           <h3 class="font-bold text-slate-900 mb-1">Speaking</h3>
           <p class="text-sm text-slate-500 mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
-          <span class="skill-link" style="color:#009736">Practice now →</span>
+          <span class="skill-link">Practice now →</span>
         </div>
       </div>
     </section>
+
     <!-- ============ STUDY PLAN ============ -->
     <section id="section-study-plan" class="section-view hidden">
       <div class="max-w-5xl mx-auto px-4 py-8">
@@ -226,48 +217,10 @@
           <h2 class="text-2xl font-extrabold text-slate-900">🎧 Listening</h2>
           <p class="text-sm text-slate-500">A full mock test: 4 sections · 40 questions · ~30 minutes</p>
         </div>
-        <button onclick="resetListening()" class="text-sm text-slate-500 hover:text-slate-800 border border-slate-300 px-4 py-2 rounded-lg transition">↺ Reset test</button>
+        <div class="flex gap-2" id="listening-tabs"></div>
       </div>
-
-      <!-- Audio player -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-6" id="audio-player">
-        <div class="flex items-center gap-4">
-          <button id="play-btn" onclick="togglePlayback()" class="shrink-0 w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center hover:bg-brand-700 transition shadow" aria-label="Play or pause audio">
-            <svg id="play-icon" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.8A1 1 0 0 0 4.7 3.7v12.6a1 1 0 0 0 1.6.9l10-6.3a1 1 0 0 0 0-1.7l-10-6.4z"/></svg>
-            <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M5.75 3a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h2.5a.75.75 0 0 0 .75-.75V3.75A.75.75 0 0 0 8.25 3h-2.5zM11.75 3a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h2.5a.75.75 0 0 0 .75-.75V3.75a.75.75 0 0 0-.75-.75h-2.5z"/></svg>
-          </button>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-slate-800" id="now-playing">Section 1 · Conversation</p>
-            <div class="flex items-center gap-2 text-xs text-slate-500">
-              <span id="audio-status">Ready to play</span>
-              <span class="text-slate-300">·</span>
-              <span id="audio-note">audio is read aloud by your browser (text-to-speech)</span>
-            </div>
-          </div>
-          <div class="hidden sm:flex gap-2">
-            <button onclick="showTranscript()" class="text-sm border border-slate-300 px-3 py-2 rounded-lg hover:bg-slate-50 transition">Show transcript</button>
-          </div>
-        </div>
-        <div class="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-          <div id="progress-bar" class="h-full bg-brand-500 rounded-full transition-all" style="width: 0%"></div>
-        </div>
-      </div>
-
-      <!-- Transcript modal (hidden by default) -->
-      <div id="transcript-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl">
-          <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-            <h3 class="font-bold text-slate-900">Transcript — <span id="transcript-title"></span></h3>
-            <button onclick="closeTranscript()" class="text-slate-400 hover:text-slate-700 text-xl leading-none">&times;</button>
-          </div>
-          <div id="transcript-body" class="overflow-y-auto px-6 py-5 text-sm text-slate-600 leading-relaxed whitespace-pre-line"></div>
-        </div>
-      </div>
-
-      <!-- Sections navigator -->
-      <div class="flex flex-wrap gap-2 mb-6" id="listening-sections"></div>
-
-      <!-- Questions area -->
+      <div id="listening-controls" class="mb-4"></div>
+      <div id="listening-sections"></div>
       <div id="listening-content"></div>
     </section>
 
@@ -276,13 +229,9 @@
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 class="text-2xl font-extrabold text-slate-900">📖 Reading</h2>
-          <p class="text-sm text-slate-500">3 passages · 40 questions · 60-minute timer</p>
+          <p class="text-sm text-slate-500">3 academic passages · 40 questions · 60-minute timer</p>
         </div>
-        <div class="flex flex-wrap items-center gap-3">
-          <div id="reading-timer" class="font-mono text-sm font-bold text-slate-700 bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm">00:00</div>
-          <button onclick="toggleReadingTimer()" id="reading-timer-btn" class="text-sm bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700 transition">Start timer</button>
-          <button onclick="resetReading()" class="text-sm text-slate-500 hover:text-slate-800 border border-slate-300 px-4 py-2 rounded-lg transition">↺ Reset</button>
-        </div>
+        <div class="flex gap-2" id="reading-tabs"></div>
       </div>
       <div id="reading-content"></div>
     </section>
@@ -292,139 +241,11 @@
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 class="text-2xl font-extrabold text-slate-900">✍️ Writing</h2>
-          <p class="text-sm text-slate-500">Academic Task 1 &amp; Task 2 · 60 minutes total</p>
+          <p class="text-sm text-slate-500">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p>
         </div>
-        <div class="flex flex-wrap items-center gap-3">
-          <div id="writing-timer" class="font-mono text-sm font-bold text-slate-700 bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm">00:00</div>
-          <button onclick="toggleWritingTimer()" id="writing-timer-btn" class="text-sm bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700 transition">Start timer</button>
-        </div>
+        <div class="flex gap-2" id="writing-tabs"></div>
       </div>
-
-      <!-- Task switcher -->
-      <div class="flex gap-2 mb-6" id="writing-tabs"></div>
-
       <div id="writing-content"></div>
-    </section>
-
-    <!-- ============ LEVELS ============ -->
-    <section id="section-levels" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📈 Learning path</h2>
-          <p class="text-sm text-slate-500">Progress from Beginner to Advanced by completing activities and weekly exams.</p>
-        </div>
-      </div>
-      <div id="levels-content"></div>
-    </section>
-
-    <!-- ============ WEEKLY EXAM ============ -->
-    <section id="section-exam" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📅 Weekly Exam</h2>
-          <p class="text-sm text-slate-500">A fresh 15-question timed quiz every week — earn XP for every correct answer.</p>
-        </div>
-      </div>
-      <div id="exam-content"></div>
-    </section>
-
-    <!-- ============ TRAINING ============ -->
-    <section id="section-training" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🎓 Skill Training</h2>
-          <p class="text-sm text-slate-500">Zero-to-hero paths for Vocabulary, Listening and Speaking.</p>
-        </div>
-      </div>
-      <div id="training-content"></div>
-    </section>
-
-    <!-- ============ GRADED READING (LEVEL READING) ============ -->
-    <section id="section-readings" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📚 Level Reading</h2>
-          <p class="text-sm text-slate-500">Graded passages for every CEFR level (A1–C2) — tap any word to translate it and add it to your vocabulary.</p>
-        </div>
-      </div>
-      <div id="readings-content"></div>
-    </section>
-
-    <!-- ============ TRANSLATOR ============ -->
-    <section id="section-translator" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🌐 Translator</h2>
-          <p class="text-sm text-slate-500">Built-in offline English ↔ Arabic glossary with instant word lookups and word-by-word translation.</p>
-        </div>
-      </div>
-      <div id="translator-content"></div>
-    </section>
-
-    <!-- ============ STUDY TRACKER ============ -->
-    <section id="section-study" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">⏱ Study Tracker</h2>
-          <p class="text-sm text-slate-500">Track your daily study hours with an interactive timer, weekly chart and streaks.</p>
-        </div>
-      </div>
-      <div id="study-content"></div>
-    </section>
-
-    <!-- ============ VOCABULARY BUILDER ============ -->
-    <section id="section-words" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📒 My Words</h2>
-          <p class="text-sm text-slate-500">Your personal vocabulary builder — save words, review them as flashcards and master them.</p>
-        </div>
-      </div>
-      <div id="words-content"></div>
-    </section>
-
-    <!-- ============ CATLANGO (word learning) ============ -->
-    <section id="section-catlango" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🐱 Catlango</h2>
-          <p class="text-sm text-slate-500">Master IELTS vocabulary word by word — curated packs from A1 Beginner to C2 Proficiency with interactive spelling practice.</p>
-        </div>
-      </div>
-      <div id="catlango-content"></div>
-    </section>
-
-    <!-- ============ CHAT & SUPPORT ============ -->
-    <section id="section-chat" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">💬 Chat &amp; Support</h2>
-          <p class="text-sm text-slate-500">Real-time community chat, learner-to-learner direct messages and official support.</p>
-        </div>
-      </div>
-      <div id="chat-content"></div>
-    </section>
-
-    <!-- ============ PROFILE ============ -->
-    <section id="section-profile" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">👤 My Profile</h2>
-          <p class="text-sm text-slate-500">Your stats, badges, progress and activity — all in one place.</p>
-        </div>
-      </div>
-      <div id="profile-content"></div>
-    </section>
-
-    <!-- ============ FEED ============ -->
-    <section id="section-feed" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">💬 Community Feed</h2>
-          <p class="text-sm text-slate-500">Post updates and share your progress with other learners.</p>
-        </div>
-      </div>
-      <div id="feed-content"></div>
     </section>
 
     <!-- ============ SPEAKING ============ -->
@@ -439,10 +260,16 @@
       <div id="speaking-content"></div>
     </section>
 
+    <!-- ============ LEVELS ============ -->
+    <section id="section-levels" class="section-view hidden">
+      <h2 class="text-2xl font-extrabold text-slate-900 mb-4">📈 CEFR Levels</h2>
+      <div id="levels-content"></div>
+    </section>
+
     <!-- ============ LEARNING PATH ============ -->
     <section id="section-learning-path" class="section-view hidden">
       <div class="max-w-5xl mx-auto px-4 py-8">
-        <div id="levels-content"></div>
+        <div id="learning-path-content"></div>
       </div>
     </section>
 
@@ -453,44 +280,143 @@
       </div>
     </section>
 
-    </main>
+    <!-- ============ EXAM ============ -->
+    <section id="section-exam" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">📅 Weekly Exam</h2>
+          <p class="text-sm text-slate-500">15 questions · 15-minute timer · fresh each week</p>
+        </div>
+      </div>
+      <div id="exam-content"></div>
+    </section>
 
-  <footer class="border-t border-slate-200 bg-white mt-10">
-    <!-- ============ ABOUT THE DEVELOPER ============ -->
+    <!-- ============ TRAINING ============ -->
+    <section id="section-training" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">🎓 Training</h2>
+          <p class="text-sm text-slate-500">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p>
+        </div>
+      </div>
+      <div id="training-content"></div>
+    </section>
+
+    <!-- ============ READINGS ============ -->
+    <section id="section-readings" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">📚 Level Reading</h2>
+          <p class="text-sm text-slate-500">Graded A1–C2 passages with comprehension quizzes</p>
+        </div>
+      </div>
+      <div id="readings-content"></div>
+    </section>
+
+    <!-- ============ TRANSLATOR ============ -->
+    <section id="section-translator" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">🌐 Translator</h2>
+          <p class="text-sm text-slate-500">Offline English ↔ Arabic glossary with instant word lookups</p>
+        </div>
+      </div>
+      <div id="translator-content"></div>
+    </section>
+
+    <!-- ============ CATLANGO ============ -->
+    <section id="section-catlango" class="section-view hidden">
+      <div id="catlango-content"></div>
+    </section>
+
+    <!-- ============ STUDY TRACKER ============ -->
+    <section id="section-study" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">⏱ Study Tracker</h2>
+          <p class="text-sm text-slate-500">Focus timer, daily goals and streak tracking</p>
+        </div>
+      </div>
+      <div id="study-content"></div>
+    </section>
+
+    <!-- ============ WORDS ============ -->
+    <section id="section-words" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">📒 My Words</h2>
+          <p class="text-sm text-slate-500">Personal vocabulary builder with flashcards</p>
+        </div>
+      </div>
+      <div id="words-content"></div>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section id="section-chat" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">💬 Chat</h2>
+          <p class="text-sm text-slate-500">Community room, support, and direct messages</p>
+        </div>
+      </div>
+      <div id="chat-content"></div>
+    </section>
+
+    <!-- ============ FEED ============ -->
+    <section id="section-feed" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">💬 Community Feed</h2>
+          <p class="text-sm text-slate-500">Post updates and share your progress with other learners.</p>
+        </div>
+      </div>
+      <div id="feed-content"></div>
+    </section>
+
+    <!-- ============ PROFILE ============ -->
+    <section id="section-profile" class="section-view hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">👤 My Profile</h2>
+          <p class="text-sm text-slate-500">Your stats, badges, progress and activity — all in one place.</p>
+        </div>
+      </div>
+      <div id="profile-content"></div>
+    </section>
+
+  </main>
+
+  <footer class="border-t-2 border-slate-200 bg-white mt-10 relative z-10">
+    <!-- Palestinian flag stripe -->
+    <div class="flag-stripe"><div></div><div></div><div></div><div></div></div>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-5">
       <div class="text-center">
         <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-6">About the Developer · 🇵🇸</h3>
         <div class="inline-flex flex-col items-center gap-3">
           <div class="relative">
-            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Abdelrahman Osama" class="w-24 h-24 rounded-full object-cover ring-4 ring-brand-100 shadow-lg" />
-            <a href="https://www.instagram.com/3bood_a7mad_90" target="_blank" rel="noopener noreferrer" aria-label="Follow Abdelrahman Osama on Instagram" title="Instagram" class="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-transform">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-            </a>
+            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Developer" class="w-24 h-24 rounded-full object-cover ring-4 ring-green-200 shadow-lg" />
           </div>
-          <div>
-            <p class="font-bold text-slate-900">Abdelrahman Osama</p>
-            <p class="text-sm text-slate-500">Developed with passion</p>
+          <p class="font-bold text-slate-900">Abdelrahman Osama</p>
+          <p class="text-sm text-slate-500">Built with ❤️ and purpose</p>
+          <div class="flex items-center gap-1 text-sm text-slate-400">
+            <span>🇵🇸</span>
+            <span>Free Palestine</span>
           </div>
         </div>
       </div>
-    </div>
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
-      <p>IELTS Master — a free interactive practice app. Not affiliated with the official IELTS test partners.</p>
-      <p class="font-mono text-xs">Built with HTML · Tailwind CSS · JavaScript · Supabase</p>
+      <p class="text-center text-[11px] text-slate-400 mt-8">IELTS Master is an unofficial practice tool. Not affiliated with the official IELTS test partners.</p>
     </div>
   </footer>
 
-  <!-- Supabase data layer — loaded first so js/supabaseClient.js can initialize -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- ============ SCRIPTS ============ -->
+  <script src="js/data.js"></script>
+  <script src="js/study-plan.js"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/supabaseClient.js"></script>
-
-  <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/learning-path.js"></script>
   <script src="js/levels.js"></script>
   <script src="js/exam.js"></script>
-  <script src="js/profile.js"></script>
-  <script src="js/feed.js"></script>
   <script src="js/training.js"></script>
   <script src="js/readings.js"></script>
   <script src="js/translator.js"></script>
@@ -498,8 +424,8 @@
   <script src="js/vocabulary.js"></script>
   <script src="js/catlango.js"></script>
   <script src="js/chat.js"></script>
-  <script src="js/study-plan.js"></script>
-  <script src="js/learning-path.js"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/profile.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

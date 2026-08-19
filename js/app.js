@@ -140,7 +140,7 @@
         '<span class="text-brand-600 text-lg">→</span></div>';
     }).join('');
 
-    container.innerHTML = '<div class="bg-gradient-to-r from-brand-600 to-indigo-500 rounded-2xl p-6 text-white mb-6">' +
+    container.innerHTML = '<div class="bg-gradient-to-r from-palestine-green to-palestine-black rounded-2xl p-6 text-white mb-6">' +
       '<div class="flex flex-wrap items-center justify-between gap-4">' +
       '<div>' +
       '<p class="text-sm text-white/80 font-medium">4-Week Study Plan</p>' +
@@ -174,7 +174,7 @@
     // Auth banner: sign-in prompt or user progress summary
     $('#dashboard-auth-banner').innerHTML = user
       ? `
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-white rounded-2xl border-2 border-green-200 shadow-sm p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-extrabold">${esc(user.username.charAt(0).toUpperCase())}</div>
             <div>
@@ -187,14 +187,14 @@
           </div>
           <div class="flex flex-wrap gap-2">
             <button class="btn-primary text-sm" onclick="showSection('feed')">💬 Community</button>
-            <button class="btn-secondary text-sm" onclick="showSection('training')">🎓 Training</button>
+            <button class="btn-primary text-sm" onclick="showSection('training')">🎓 Training</button>
             <button class="btn-secondary text-sm" onclick="showSection('levels')">📈 My levels</button>
             <button class="btn-primary text-sm" onclick="showSection('exam')">📅 Weekly exam</button>
             <button class="btn-secondary text-sm" onclick="showSection('profile')">👤 Profile</button>
           </div>
         </div>`
       : `
-        <div class="bg-gradient-to-r from-brand-600 to-indigo-500 rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-gradient-to-r from-palestine-green to-palestine-black rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
           <div>
             <p class="text-lg font-extrabold">Sign in to start your learning journey 🚀</p>
             <p class="text-sm text-brand-100 mt-0.5">Create a free account to earn XP, level up, and track your weekly exam scores.</p>
@@ -209,7 +209,7 @@
       { icon: '🗣️', label: 'Speaking', value: '3 parts', sub: 'Full test' }
     ];
     $('#dashboard-stats').innerHTML = stats.map((s) => `
-      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+      <div class="bg-white rounded-2xl border-2 border-slate-200 p-4 shadow-sm">
         <div class="text-2xl mb-1">${s.icon}</div>
         <div class="text-xl font-extrabold text-slate-900">${s.value}</div>
         <div class="text-xs text-slate-500 font-medium">${s.label} · ${s.sub}</div>
