@@ -17,16 +17,16 @@ body::before {
   background-size: 240px 240px;
 }
 
-/* Layer 2: Watermelon slice motifs scattered */
+/* Layer 2: Artistic watermelon slice motifs — scattered, low-opacity */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.018;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3C!-- watermelon slice --%3E%3Cpath d='M40 120 A50 50 0 0 1 120 120 Z' fill='%23CE1126' opacity='0.6'/%3E%3Cpath d='M45 120 A45 45 0 0 1 115 120 Z' fill='%23009736' opacity='0.5'/%3E%3Cpath d='M50 120 A40 40 0 0 1 110 120 Z' fill='%23CE1126' opacity='0.7'/%3E%3Ccircle cx='65' cy='108' r='2' fill='%231a1a2e' opacity='0.5'/%3E%3Ccircle cx='80' cy='104' r='2' fill='%231a1a2e' opacity='0.5'/%3E%3Ccircle cx='95' cy='108' r='2' fill='%231a1a2e' opacity='0.5'/%3E%3Ccircle cx='72' cy='112' r='1.5' fill='%231a1a2e' opacity='0.4'/%3E%3Ccircle cx='88' cy='112' r='1.5' fill='%231a1a2e' opacity='0.4'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3C!-- artistic watermelon slice --%3E%3Cpath d='M50 160 A70 70 0 0 1 150 160 Z' fill='%23009736' opacity='0.35'/%3E%3Cpath d='M55 160 A65 65 0 0 1 145 160 Z' fill='%23CE1126' opacity='0.5'/%3E%3Cpath d='M60 160 A60 60 0 0 1 140 160 Z' fill='%23CE1126' opacity='0.6'/%3E%3C!-- seeds --%3E%3Ccircle cx='78' cy='142' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='100' cy='134' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='122' cy='142' r='2.2' fill='%231a1a2e' opacity='0.45'/%3E%3Ccircle cx='88' cy='148' r='1.6' fill='%231a1a2e' opacity='0.35'/%3E%3Ccircle cx='112' cy='148' r='1.6' fill='%231a1a2e' opacity='0.35'/%3E%3Ccircle cx='100' cy='152' r='1.4' fill='%231a1a2e' opacity='0.3'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
 /* Layer 3: Palestinian flag triangle watermark (very faint, fixed center) */
@@ -709,4 +709,54 @@ header::after {
   width: 60px;
   height: 60px;
   opacity: 0.18;
+}
+
+
+/* --- Olive branch frame around hero logo --- */
+.olive-frame {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.olive-frame .olive-left,
+.olive-frame .olive-right {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  pointer-events: none;
+}
+.olive-frame .olive-left {
+  left: -55px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.olive-frame .olive-right {
+  right: -55px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1);
+}
+@media (max-width: 640px) {
+  .olive-frame .olive-left, .olive-frame .olive-right {
+    width: 40px;
+    height: 55px;
+  }
+  .olive-frame .olive-left { left: -35px; }
+  .olive-frame .olive-right { right: -35px; }
+}
+
+/* --- Footer olive corner decorations --- */
+.footer-olive-tl, .footer-olive-br {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.06;
+}
+.footer-olive-tl {
+  top: 20px;
+  left: 20px;
+}
+.footer-olive-br {
+  bottom: 20px;
+  right: 20px;
+  transform: rotate(180deg);
 }
