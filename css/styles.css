@@ -4,12 +4,12 @@
  * Champagne #FAF6EE, Taupe #D4CFC8, Red #B22222, Burgundy #8B1A1A
  */
 
-/* ========== BODY — FIXED FULL-COVER BACKGROUND IMAGE ========== */
+/* ========== BODY — FIXED FULL-COVER PALESTINIAN HERITAGE BACKGROUND ========== */
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #1A1714;
-  background-image: url("https://i.postimg.cc/CKpWVJvP/93997995-9468-46c5-9bess-34ff2458d0ac.jpg");
+  background-color: #F5F0E6;
+  background-image: url('../assets/palestine-bg.svg');
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
@@ -18,19 +18,7 @@ body {
   position: relative;
 }
 
-/* ========== KEFFIYEH OVERLAY — SUBTLE, NON-BLOCKING ========== */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: transparent;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M0 40L40 0l40 40-40 40Z' fill='none' stroke='%23C6A44E' stroke-width='.4' opacity='.05'/%3E%3Cpath d='M20 40L40 20l20 20-20 20Z' fill='none' stroke='%23C6A44E' stroke-width='.3' opacity='.04'/%3E%3C/svg%3E");
-  background-size: 80px 80px;
-  opacity: 0.08;
-}
+
 
 /* ========== NAV ========== */
 nav a, .nav-btn { color: #6B6560; border: 1px solid transparent; transition: all .15s }
