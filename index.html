@@ -22,10 +22,10 @@
     }
   </script>
 </head>
-<body style="background-image: url('./assets/palestine-bg-v2.jpg') !important; background-size: cover !important; background-position: center center !important; background-attachment: fixed !important; background-repeat: no-repeat !important; background-color: #F5F0E6 !important;">
+<body style="background-image: url('./assets/palestine-bg-v2.jpg?v=5') !important; background-size: cover !important; background-position: center center !important; background-attachment: fixed !important; background-repeat: no-repeat !important; background-color: #F5F0E6 !important;">
   <!-- AUTH -->
-  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[rgba(26,23,20,0.88)]/60 backdrop-blur-sm">
-    <div class="bg-[rgba(253,251,247,0.88)] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-[#D4CFC8]">
+  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[rgba(26,23,20,0.80)]/60 backdrop-blur-sm">
+    <div class="bg-[rgba(253,251,247,0.65)] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-[#D4CFC8]">
       <div class="px-8 py-9 text-center" style="background:linear-gradient(135deg,#1A1714,#2A2520 60%,#1A1714)">
         <div class="text-4xl mb-3">🇵🇸</div>
         <h2 class="text-2xl font-extrabold text-[#C6A44E]">Welcome to IELTS Master</h2>
@@ -79,7 +79,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between h-16">
         <button onclick="showSection('dashboard')" class="flex items-center gap-2 group" aria-label="Go to dashboard">
-          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-[rgba(26,23,20,0.88)] text-[#C6A44E] font-extrabold shadow-md transition text-sm border border-[#C6A44E]/30">🇵🇸</span>
+          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-[rgba(26,23,20,0.80)] text-[#C6A44E] font-extrabold shadow-md transition text-sm border border-[#C6A44E]/30">🇵🇸</span>
           <span class="text-lg font-bold text-[#1A1714]">IELTS <span class="text-[#C6A44E]">Master</span></span>
         </button>
         <nav class="hidden md:flex items-center gap-1" id="main-nav">
@@ -90,8 +90,8 @@
           <button data-section="profile" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#6B6560]">
-          <div id="user-chip" class="hidden items-center gap-2 bg-[rgba(253,248,238,0.7)] border border-[#E8D5A8] rounded-full pl-1 pr-3 py-1 backdrop-blur">
-            <span id="user-avatar" class="w-7 h-7 rounded-full bg-[rgba(26,23,20,0.88)] text-[#C6A44E] flex items-center justify-center text-xs font-bold">U</span>
+          <div id="user-chip" class="hidden items-center gap-2 bg-[rgba(253,248,238,0.55)] border border-[#E8D5A8] rounded-full pl-1 pr-3 py-1 backdrop-blur">
+            <span id="user-avatar" class="w-7 h-7 rounded-full bg-[rgba(26,23,20,0.80)] text-[#C6A44E] flex items-center justify-center text-xs font-bold">U</span>
             <span class="flex flex-col leading-tight">
               <span id="user-name" class="font-semibold text-[#1A1714]"></span>
               <span class="flex items-center gap-1.5">
@@ -101,14 +101,14 @@
             </span>
           </div>
           <button id="header-login-cta" onclick="IELTS_AUTH.showScreen()" class="btn-primary text-sm">Sign in</button>
-          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-[#6B6560] hover:text-[#B22222] font-semibold px-3 py-2 rounded-lg hover:bg-[rgba(254,242,242,0.5)] transition">Sign out</button>
+          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-[#6B6560] hover:text-[#B22222] font-semibold px-3 py-2 rounded-lg hover:bg-[rgba(254,242,242,0.40)] transition">Sign out</button>
         </div>
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-[rgba(250,246,238,0.5)]" aria-label="Open menu">
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-[rgba(250,246,238,0.40)]" aria-label="Open menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
-    <nav id="mobile-nav" class="hidden md:hidden border-t border-[#D4CFC8]/60 bg-[rgba(253,251,247,0.82)] backdrop-blur-md px-4 py-3 space-y-1">
+    <nav id="mobile-nav" class="hidden md:hidden border-t border-[#D4CFC8]/60 bg-[rgba(253,251,247,0.60)] backdrop-blur-md px-4 py-3 space-y-1">
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
       <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
@@ -174,8 +174,8 @@
             </div>
             <p class="text-[#FDFBF7]/70 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
             <div class="flex flex-wrap gap-3">
-              <button onclick="showSection('study-plan')" class="bg-[rgba(198,164,78,0.9)] text-[#1A1714] font-bold px-6 py-3 rounded-lg hover:bg-[#B8962E] transition shadow-md text-sm">📋 Open Study Plan</button>
-              <button onclick="showSection('training')" class="bg-[rgba(178,34,34,0.9)] text-[#FDFBF7] font-bold px-6 py-3 rounded-lg hover:bg-[#991B1B] transition shadow-md text-sm">🎓 Training</button>
+              <button onclick="showSection('study-plan')" class="bg-[rgba(198,164,78,0.82)] text-[#1A1714] font-bold px-6 py-3 rounded-lg hover:bg-[#B8962E] transition shadow-md text-sm">📋 Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-[rgba(178,34,34,0.82)] text-[#FDFBF7] font-bold px-6 py-3 rounded-lg hover:bg-[#991B1B] transition shadow-md text-sm">🎓 Training</button>
             </div>
           </div>
         </div>
@@ -188,25 +188,25 @@
       <h2 class="text-xl font-bold text-[#1A1714] mb-4">⚡ Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening')">
-          <div class="skill-icon bg-[rgba(254,242,242,0.5)] text-[#B22222]">🎧</div>
+          <div class="skill-icon bg-[rgba(254,242,242,0.40)] text-[#B22222]">🎧</div>
           <h3 class="font-bold text-[#1A1714] mb-1">Listening</h3>
           <p class="text-sm text-[#6B6560] mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('reading')">
-          <div class="skill-icon bg-[rgba(253,248,238,0.5)] text-[#1A1714]">📖</div>
+          <div class="skill-icon bg-[rgba(253,248,238,0.40)] text-[#1A1714]">📖</div>
           <h3 class="font-bold text-[#1A1714] mb-1">Reading</h3>
           <p class="text-sm text-[#6B6560] mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('writing')">
-          <div class="skill-icon bg-[rgba(253,248,238,0.5)] text-[#1A1714]">✍️</div>
+          <div class="skill-icon bg-[rgba(253,248,238,0.40)] text-[#1A1714]">✍️</div>
           <h3 class="font-bold text-[#1A1714] mb-1">Writing</h3>
           <p class="text-sm text-[#6B6560] mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('speaking')">
-          <div class="skill-icon bg-[rgba(254,242,242,0.5)] text-[#B22222]">🗣️</div>
+          <div class="skill-icon bg-[rgba(254,242,242,0.40)] text-[#B22222]">🗣️</div>
           <h3 class="font-bold text-[#1A1714] mb-1">Speaking</h3>
           <p class="text-sm text-[#6B6560] mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
           <span class="skill-link">Practice now →</span>
