@@ -9,11 +9,11 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: #F5F0E6;
-  background-image: url('../assets/palestine-bg.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-image: url('../assets/palestine-bg-v2.jpg');
+  background-size: cover !important;
+  background-position: center center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
   color: #1A1714;
   position: relative;
 }
@@ -40,7 +40,7 @@ nav a, .nav-btn { color: #6B6560; border: 1px solid transparent; transition: all
 
 /* ========== HEADER ========== */
 header {
-  background: rgba(253,251,247,.88);
+  background: #FDFBF7;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -97,7 +97,7 @@ header::after {
 
 /* ========== GLASSMORPHISM CARD BASE ========== */
 .glass {
-  background: rgba(255,255,255,.92);
+  background: #FFFFFF;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(212,207,200,.55);
@@ -105,7 +105,7 @@ header::after {
 
 /* ========== SKILL CARDS ========== */
 .skill-card {
-  background: rgba(255,255,255,.92);
+  background: #FFFFFF;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(212,207,200,.55);
@@ -130,39 +130,39 @@ header::after {
   background: linear-gradient(90deg, transparent, rgba(198,164,78,.3), transparent);
   pointer-events: none;
 }
-.skill-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px -8px rgba(26,23,20,.12); border-color: #C6A44E; background: rgba(255,255,255,.96) }
+.skill-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px -8px rgba(26,23,20,.12); border-color: #C6A44E; background: #FFFFFF }
 .skill-icon { width: 3rem; height: 3rem; border-radius: .75rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem }
 .skill-link { color: #1A1714; font-size: .875rem; font-weight: 700; text-decoration: none }
 .skill-link:hover { text-decoration: underline; color: #C6A44E }
 
 /* ========== QUESTION BLOCKS ========== */
-.q-card { background: rgba(255,255,255,.93); backdrop-filter: blur(10px); border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: 1.25rem }
+.q-card { background: #FFFFFF; backdrop-filter: blur(10px); border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: 1.25rem }
 .q-number { display: inline-flex; align-items: center; justify-content: center; min-width: 1.75rem; height: 1.75rem; padding: 0 .35rem; border-radius: .4rem; background: #1A1714; color: #C6A44E; font-weight: 700; font-size: .8rem }
-.opt { display: block; width: 100%; text-align: left; padding: .6rem .85rem; border-radius: .5rem; border: 1px solid rgba(212,207,200,.5); background: rgba(255,255,255,.88); font-size: .9rem; cursor: pointer; transition: all .12s }
-.opt:hover { border-color: #C6A44E; background: rgba(253,248,238,.85) }
-.opt.selected { border-color: #C6A44E; background: rgba(253,248,238,.92); color: #1A1714; font-weight: 600 }
-.opt.correct { border-color: #C6A44E; background: rgba(253,248,238,.92); color: #1A1714; font-weight: 600 }
-.opt.wrong { border-color: #B22222; background: rgba(254,242,242,.92); color: #991B1B }
-input[type="text"].fill-input { width: 100%; padding: .6rem .85rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .9rem; background: rgba(255,255,255,.92) }
+.opt { display: block; width: 100%; text-align: left; padding: .6rem .85rem; border-radius: .5rem; border: 1px solid rgba(212,207,200,.5); background: #FFFFFF; font-size: .9rem; cursor: pointer; transition: all .12s }
+.opt:hover { border-color: #C6A44E; background: #FFFDF8 }
+.opt.selected { border-color: #C6A44E; background: #FFFDF8; color: #1A1714; font-weight: 600 }
+.opt.correct { border-color: #C6A44E; background: #FFFDF8; color: #1A1714; font-weight: 600 }
+.opt.wrong { border-color: #B22222; background: #FEF2F2; color: #991B1B }
+input[type="text"].fill-input { width: 100%; padding: .6rem .85rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .9rem; background: #FFFFFF }
 input[type="text"].fill-input:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198,164,78,.12) }
-input[type="text"].fill-input.correct { border-color: #C6A44E; background: rgba(253,248,238,.88) }
-input[type="text"].fill-input.wrong { border-color: #B22222; background: rgba(254,242,242,.88) }
+input[type="text"].fill-input.correct { border-color: #C6A44E; background: #FFFDF8 }
+input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2 }
 
 /* ========== BUTTONS ========== */
 .btn-primary { background: #1A1714; color: #C6A44E; font-weight: 700; font-size: .9rem; padding: .65rem 1.4rem; border-radius: .5rem; border: 1px solid #C6A44E; cursor: pointer; transition: all .15s; box-shadow: 0 2px 8px -2px rgba(26,23,20,.3) }
 .btn-primary:hover { background: #0F0D0B; box-shadow: 0 4px 12px -2px rgba(26,23,20,.4) }
-.btn-secondary { background: rgba(255,255,255,.93); color: #6B6560; font-weight: 600; font-size: .9rem; padding: .65rem 1.4rem; border-radius: .5rem; border: 1px solid #D4CFC8; cursor: pointer; transition: all .15s; backdrop-filter: blur(6px) }
+.btn-secondary { background: #FFFFFF; color: #6B6560; font-weight: 600; font-size: .9rem; padding: .65rem 1.4rem; border-radius: .5rem; border: 1px solid #D4CFC8; cursor: pointer; transition: all .15s; backdrop-filter: blur(6px) }
 .btn-secondary:hover { background: rgba(255,255,255,.95); border-color: #C6A44E; color: #1A1714 }
 .btn-red { background: #B22222; color: #FFF; font-weight: 700; font-size: .9rem; padding: .65rem 1.4rem; border-radius: .5rem; border: none; cursor: pointer; transition: background .15s, box-shadow .15s; box-shadow: 0 2px 8px -2px rgba(178,34,34,.3) }
 .btn-red:hover { background: #991B1B; box-shadow: 0 4px 12px -2px rgba(178,34,34,.4) }
 
 /* ========== TAB PILLS ========== */
-.tab-pill { padding: .5rem 1.1rem; border-radius: 9999px; font-size: .875rem; font-weight: 600; border: 1px solid #D4CFC8; background: rgba(255,255,255,.92); color: #6B6560; cursor: pointer; transition: all .15s; backdrop-filter: blur(4px) }
+.tab-pill { padding: .5rem 1.1rem; border-radius: 9999px; font-size: .875rem; font-weight: 600; border: 1px solid #D4CFC8; background: #FFFFFF; color: #6B6560; cursor: pointer; transition: all .15s; backdrop-filter: blur(4px) }
 .tab-pill:hover { border-color: #C6A44E; color: #1A1714 }
 .tab-pill.active { background: #1A1714; border-color: #C6A44E; color: #C6A44E }
 
 /* ========== CUE CARD ========== */
-.cue-card { background: rgba(253,248,238,.94); border: 1px solid #E8D5A8; border-radius: .85rem; padding: 1.5rem; backdrop-filter: blur(8px) }
+.cue-card { background: #FFFDF8; border: 1px solid #E8D5A8; border-radius: .85rem; padding: 1.5rem; backdrop-filter: blur(8px) }
 .cue-card .cue-bullet { list-style: disc; margin-left: 1.25rem }
 
 /* ========== TEXT / ANSWERS ========== */
@@ -172,7 +172,7 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: rgba(25
 .timer-late { color: #B22222 }
 
 /* ========== WRITING TEXTAREA ========== */
-.writing-area { width: 100%; min-height: 18rem; padding: 1rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .95rem; line-height: 1.7; background: rgba(255,255,255,.93); resize: vertical; backdrop-filter: blur(8px) }
+.writing-area { width: 100%; min-height: 18rem; padding: 1rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .95rem; line-height: 1.7; background: #FFFFFF; resize: vertical; backdrop-filter: blur(8px) }
 .writing-area:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198,164,78,.12) }
 
 /* ========== ANIMATIONS ========== */
@@ -207,7 +207,7 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: rgba(25
 .dict-tooltip { position: fixed; z-index: 70; width: 15rem; background: rgba(255,255,255,.95); border: 1px solid #C6A44E; border-radius: .5rem; box-shadow: 0 10px 25px -5px rgba(26,23,20,.15); padding: .85rem .95rem; backdrop-filter: blur(8px) }
 
 /* ========== TRANSLATOR ========== */
-.tr-word { background: rgba(253,248,238,.88); color: #1A1714; border-radius: .25rem; padding: 0 .15rem; margin: 0 .1rem; cursor: default }
+.tr-word { background: #FFFDF8; color: #1A1714; border-radius: .25rem; padding: 0 .15rem; margin: 0 .1rem; cursor: default }
 .tr-unknown { background: #FEF3C7; color: #92400E; border-radius: .25rem; padding: 0 .15rem; margin: 0 .1rem }
 
 /* ========== CHAT ========== */
@@ -249,31 +249,31 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: rgba(25
 .cat-path-node.dim { opacity: .5 }
 .cat-path-line { flex: 1; width: 2px; min-height: 1.5rem; background: linear-gradient(#D4CFC8, #E5DDD4); margin: .15rem 0 }
 .cat-path-line.done { background: linear-gradient(#C6A44E, #D4CFC8) }
-.cat-level-card { flex: 1; min-width: 0; background: rgba(255,255,255,.92); border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: 1rem 1.1rem; box-shadow: 0 2px 8px -4px rgba(26,23,20,.06); transition: transform .15s, box-shadow .15s, border-color .15s; cursor: pointer; margin-bottom: .5rem; backdrop-filter: blur(6px) }
-.cat-level-card:hover { transform: translateY(-2px); border-color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(198,164,78,.2); background: rgba(255,255,255,.92) }
+.cat-level-card { flex: 1; min-width: 0; background: #FFFFFF; border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: 1rem 1.1rem; box-shadow: 0 2px 8px -4px rgba(26,23,20,.06); transition: transform .15s, box-shadow .15s, border-color .15s; cursor: pointer; margin-bottom: .5rem; backdrop-filter: blur(6px) }
+.cat-level-card:hover { transform: translateY(-2px); border-color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(198,164,78,.2); background: #FFFFFF }
 .cat-level-card.complete { border-color: #C6A44E; background: rgba(253,248,238,.95) }
 .cat-ring { transform: rotate(-90deg) }
 .cat-ring-track { stroke: #D4CFC8 }
 .cat-ring-fill { stroke: #C6A44E; stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.4,.2,.2,1) }
-.cat-word-row { background: rgba(255,255,255,.92); border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: .9rem 1rem; display: flex; align-items: flex-start; gap: .85rem; transition: border-color .15s, box-shadow .15s; backdrop-filter: blur(6px) }
-.cat-word-row:hover { border-color: #C6A44E; box-shadow: 0 4px 12px -6px rgba(198,164,78,.15); background: rgba(255,255,255,.92) }
+.cat-word-row { background: #FFFFFF; border: 1px solid rgba(212,207,200,.5); border-radius: .85rem; padding: .9rem 1rem; display: flex; align-items: flex-start; gap: .85rem; transition: border-color .15s, box-shadow .15s; backdrop-filter: blur(6px) }
+.cat-word-row:hover { border-color: #C6A44E; box-shadow: 0 4px 12px -6px rgba(198,164,78,.15); background: #FFFFFF }
 .cat-word-row.mastered { border-color: #C6A44E; background: rgba(253,248,238,.95) }
 .cat-word-badge { display: inline-flex; align-items: center; gap: .25rem; font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: .18rem .55rem; border-radius: 9999px }
 .cat-word-badge.mastered { background: rgba(253,248,238,.95); color: #1A1714 }
 .cat-word-badge.learning { background: rgba(253,248,238,.95); color: #C6A44E }
-.cat-creator { background: rgba(253,248,238,.85); border: 1px dashed #C6A44E; border-radius: .85rem; padding: 1.25rem; backdrop-filter: blur(6px) }
-.cat-creator input, .cat-creator select { width: 100%; padding: .6rem .9rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .875rem; background: rgba(255,255,255,.92) }
+.cat-creator { background: #FFFDF8; border: 1px dashed #C6A44E; border-radius: .85rem; padding: 1.25rem; backdrop-filter: blur(6px) }
+.cat-creator input, .cat-creator select { width: 100%; padding: .6rem .9rem; border: 1px solid #D4CFC8; border-radius: .5rem; font-size: .875rem; background: #FFFFFF }
 .cat-creator input:focus, .cat-creator select:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198,164,78,.12) }
 .cat-session-progress { height: .5rem; border-radius: 9999px; background: rgba(212,207,200,.45); overflow: hidden }
 .cat-session-progress > div { height: 100%; border-radius: 9999px; background: #1A1714; transition: width .3s }
 .cat-kbd { display: inline-block; min-width: 1.5rem; padding: .12rem .4rem; border-radius: .3rem; border: 1px solid #D4CFC8; border-bottom-width: 2px; background: rgba(253,251,247,.78); font-size: .68rem; font-weight: 700; color: #6B6560; text-align: center }
 .cat-session-btn { flex: 1; max-width: 11rem; padding: .8rem 1rem; border-radius: .6rem; font-weight: 700; font-size: .9rem; cursor: pointer; transition: transform .1s, box-shadow .15s }
 .cat-session-btn:active { transform: scale(.97) }
-.cat-session-btn.again { background: rgba(255,255,255,.93); color: #6B6560; border: 1px solid #D4CFC8 }
+.cat-session-btn.again { background: #FFFFFF; color: #6B6560; border: 1px solid #D4CFC8 }
 .cat-session-btn.again:hover { border-color: #B0A49A; background: rgba(255,255,255,.95) }
 .cat-session-btn.gotit { background: #1A1714; color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(26,23,20,.45) }
 .cat-session-btn.gotit:hover { background: #0F0D0B }
-.cat-filter-pill { padding: .42rem 1rem; border-radius: 9999px; font-size: .78rem; font-weight: 700; border: 1px solid #D4CFC8; background: rgba(255,255,255,.92); color: #6B6560; cursor: pointer; transition: all .15s; backdrop-filter: blur(4px) }
+.cat-filter-pill { padding: .42rem 1rem; border-radius: 9999px; font-size: .78rem; font-weight: 700; border: 1px solid #D4CFC8; background: #FFFFFF; color: #6B6560; cursor: pointer; transition: all .15s; backdrop-filter: blur(4px) }
 .cat-filter-pill:hover { border-color: #C6A44E; color: #1A1714 }
 .cat-filter-pill.active { background: #1A1714; border-color: #C6A44E; color: #C6A44E }
 .cat-spell-prompt { background: linear-gradient(135deg, rgba(253,248,238,.88), rgba(255,255,255,.82)); border: 1px solid #E8D5A8; backdrop-filter: blur(6px) }
