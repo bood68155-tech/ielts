@@ -16,16 +16,16 @@
           fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
           colors: {
             brand: {
-              50: '#F0F7F2', 100: '#E8F5EE', 200: '#A7D5BA', 300: '#6BBF8A',
-              400: '#40916C', 500: '#2D6A4F', 600: '#1B4332', 700: '#143728',
-              800: '#0D2818', 900: '#081A0F'
+              50: '#FDF8EE', 100: '#F0F7F2', 200: '#E5DDD4', 300: '#D4C5B9',
+              400: '#6B6560', 500: '#1A3326', 600: '#142A1E', 700: '#1E1B18',
+              800: '#0F0D0B', 900: '#080706'
             },
             palestine: {
-              black: '#2C2420',
-              green: '#2D6A4F',
-              red: '#B91C1C',
-              white: '#ffffff',
-              gold: '#B8860B'
+              black: '#1E1B18',
+              green: '#1A3326',
+              red: '#B22222',
+              white: '#FDFBF7',
+              gold: '#C6A44E'
             }
           }
         }
@@ -33,14 +33,14 @@
     }
   </script>
 </head>
-<body class="bg-[#FAF8F5] text-[#2C2420] antialiased">
+<body class="bg-[#FDFBF7] text-[#1E1B18] antialiased">
   <!-- ============ AUTH SCREEN ============ -->
-  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[#2C2420]/60 backdrop-blur-sm">
-    <div class="bg-[#FAF8F5] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-      <div class="text-white px-8 py-9 text-center" style="background: linear-gradient(135deg, #1B2A1B 0%, #2D6A4F 60%, #40916C 100%);">
+  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[#1E1B18]/60 backdrop-blur-sm">
+    <div class="bg-[#FDFBF7] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div class="text-[#FDFBF7] px-8 py-9 text-center" style="background: linear-gradient(135deg, #1E1B18 0%, #1A3326 60%, #243D30 100%);">
         <div class="text-4xl mb-3">🇵🇸</div>
         <h2 class="text-2xl font-extrabold">Welcome to IELTS Master</h2>
-        <p class="text-white/80 text-sm mt-1">Study with purpose. Every lesson builds a stronger you.</p>
+        <p class="text-[#C6A44E]/70 text-sm mt-1">Study with purpose. Every lesson builds a stronger you.</p>
       </div>
       <div class="p-7">
         <div class="flex gap-2 mb-5">
@@ -48,15 +48,15 @@
           <button id="auth-tab-register" class="tab-pill" onclick="IELTS_AUTH.switchTab('register')">Create account</button>
         </div>
 
-        <div id="auth-error" class="hidden mb-4 text-sm text-palestine-red bg-red-50 border border-red-200 rounded-lg px-4 py-2.5"></div>
+        <div id="auth-error" class="hidden mb-4 text-sm text-[#B22222] bg-[#FEF2F2] border border-[#FECACA] rounded-lg px-4 py-2.5"></div>
 
         <form id="auth-form-login" onsubmit="IELTS_AUTH.login(event)" class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="login-username">Username</label>
+            <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="login-username">Username</label>
             <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="login-password">Password</label>
+            <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="login-password">Password</label>
             <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <button type="submit" class="btn-primary w-full !py-3 text-center">Sign in</button>
@@ -64,20 +64,20 @@
 
         <form id="auth-form-register" onsubmit="IELTS_AUTH.register(event)" class="space-y-4 hidden">
           <div>
-            <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="reg-username">Username</label>
+            <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="reg-username">Username</label>
             <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="reg-email">Email</label>
+            <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="reg-email">Email</label>
             <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="reg-password">Password</label>
+              <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="reg-password">Password</label>
               <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-[#4A3F38] mb-1" for="reg-password2">Confirm</label>
+              <label class="block text-sm font-semibold text-[#6B6560] mb-1" for="reg-password2">Confirm</label>
               <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full px-4 py-2.5 border border-[#D4C5B9] rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20" required />
             </div>
           </div>
@@ -90,12 +90,12 @@
   </div>
 
   <!-- ============ HEADER ============ -->
-  <header class="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E8E0D8] shadow-sm">
+  <header class="sticky top-0 z-40 bg-[#FDFBF7]/97 backdrop-blur-md border-b border-[#E5DDD4] shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between h-16">
         <button onclick="showSection('dashboard')" class="flex items-center gap-2 group" aria-label="Go to dashboard">
-          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-palestine-green text-white font-extrabold shadow-md group-hover:bg-palestine-green/90 transition text-sm">🇵🇸</span>
-          <span class="text-lg font-bold text-[#2C2420]">IELTS <span class="text-palestine-green">Master</span></span>
+          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-palestine-green text-[#C6A44E] font-extrabold shadow-md group-hover:bg-palestine-green/90 transition text-sm border border-[#C6A44E]/30">🇵🇸</span>
+          <span class="text-lg font-bold text-[#1E1B18]">IELTS <span class="text-palestine-gold">Master</span></span>
         </button>
 
         <!-- Desktop nav -->
@@ -105,35 +105,35 @@
           <button data-section="training" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
           <button data-section="reading-hub" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
           <button data-section="profile" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
-        </nav>          <div class="hidden md:flex items-center gap-3 text-xs text-[#6B5E54]">
-          <div id="user-chip" class="hidden items-center gap-2 bg-[#F0F7F2] border-2 border-[#A7D5BA] rounded-full pl-1 pr-3 py-1">
+        </nav>          <div class="hidden md:flex items-center gap-3 text-xs text-[#6B6560]">
+          <div id="user-chip" class="hidden items-center gap-2 bg-[#FDF8EE] border border-[#E8D5A8] rounded-full pl-1 pr-3 py-1">
             <span id="user-avatar" class="w-7 h-7 rounded-full bg-palestine-green text-white flex items-center justify-center text-xs font-bold">U</span>
             <span class="flex flex-col leading-tight">
-              <span id="user-name" class="font-semibold text-[#2C2420]"></span>
+              <span id="user-name" class="font-semibold text-[#1E1B18]"></span>
               <span class="flex items-center gap-1.5">
                 <span id="user-level-badge" class="level-badge-emerald text-[9px] font-bold px-1.5 py-px rounded-full"></span>
-                <span id="user-xp" class="text-[9px] text-[#9B8E82]"></span>
+                <span id="user-xp" class="text-[9px] text-[#9B8E82]">0</span>
               </span>
             </span>
           </div>
           <button id="header-login-cta" onclick="IELTS_AUTH.showScreen()" class="btn-primary text-sm">Sign in</button>
-          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-[#6B5E54] hover:text-palestine-red font-semibold px-3 py-2 rounded-lg hover:bg-[#FEF2F2] transition">Sign out</button>
+          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-[#6B6560] hover:text-[#B22222] font-semibold px-3 py-2 rounded-lg hover:bg-[#FEF2F2] transition">Sign out</button>
         </div>
 
         <!-- Mobile hamburger -->
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-[#F5F0EB]" aria-label="Open menu">
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-[#FAF6EE]" aria-label="Open menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
     <!-- Mobile nav -->
-    <nav id="mobile-nav" class="hidden md:hidden border-t border-[#E8E0D8] bg-[#FAF8F5] px-4 py-3 space-y-1">
+    <nav id="mobile-nav" class="hidden md:hidden border-t border-[#E5DDD4] bg-[#FDFBF7] px-4 py-3 space-y-1">
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
       <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
       <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
-      <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-palestine-red">Sign out</button>
+      <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#B22222]">Sign out</button>
     </nav>
   </header>
 
@@ -146,14 +146,6 @@
         <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative">
           <!-- Hero watermarks: flag, olive, watermelon -->
           <div class="hero-watermark">
-            <!-- Palestinian flag (top-right, refined) -->
-            <svg class="hw-flag" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <rect x="0" y="0" width="200" height="50" fill="#2C2420" rx="0"/>
-              <rect x="0" y="50" width="200" height="50" fill="#FAF8F5"/>
-              <rect x="0" y="100" width="200" height="50" fill="#2D6A4F"/>
-              <rect x="0" y="150" width="200" height="50" fill="#B91C1C"/>
-              <polygon points="0,0 0,200 75,100" fill="#B91C1C"/>
-            </svg>
             <!-- Olive branch (bottom-left, elegant with olives) -->
             <svg class="hw-olive" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
               <path d="M160 170 C140 140 100 110 80 80 C60 50 50 25 65 8" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round"/>
@@ -172,27 +164,18 @@
             </svg>
             <!-- Watermelon slice (bottom-center, tasteful) -->
             <svg class="hw-melon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 80 A55 55 0 0 1 90 80 Z" fill="#2D6A4F"/>
+              <path d="M10 80 A55 55 0 0 1 90 80 Z" fill="#3B7A57"/>
               <path d="M14 80 A51 51 0 0 1 86 80 Z" fill="rgba(255,255,255,0.25)"/>
-              <path d="M18 80 A47 47 0 0 1 82 80 Z" fill="#B91C1C"/>
-              <ellipse cx="35" cy="65" rx="2" ry="3" fill="#2C2420" transform="rotate(-10 35 65)"/>
-              <ellipse cx="50" cy="58" rx="2" ry="3" fill="#2C2420"/>
-              <ellipse cx="65" cy="65" rx="2" ry="3" fill="#2C2420" transform="rotate(10 65 65)"/>
-              <ellipse cx="42" cy="72" rx="1.5" ry="2.5" fill="#2C2420" transform="rotate(-5 42 72)"/>
-              <ellipse cx="58" cy="72" rx="1.5" ry="2.5" fill="#2C2420" transform="rotate(5 58 72)"/>
-              <ellipse cx="50" cy="76" rx="1.5" ry="2" fill="#2C2420"/>
+              <path d="M18 80 A47 47 0 0 1 82 80 Z" fill="#B22222"/>
+              <ellipse cx="35" cy="65" rx="2" ry="3" fill="#1E1B18" transform="rotate(-10 35 65)"/>
+              <ellipse cx="50" cy="58" rx="2" ry="3" fill="#1E1B18"/>
+              <ellipse cx="65" cy="65" rx="2" ry="3" fill="#1E1B18" transform="rotate(10 65 65)"/>
+              <ellipse cx="42" cy="72" rx="1.5" ry="2.5" fill="#1E1B18" transform="rotate(-5 42 72)"/>
+              <ellipse cx="58" cy="72" rx="1.5" ry="2.5" fill="#1E1B18" transform="rotate(5 58 72)"/>
+              <ellipse cx="50" cy="76" rx="1.5" ry="2" fill="#1E1B18"/>
             </svg>
             <!-- Small watermelon (top-center, subtle) -->
-            <svg class="hw-melon-sm" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 50 A32 32 0 0 1 52 50 Z" fill="#2D6A4F"/>
-              <path d="M11 50 A29 29 0 0 1 49 50 Z" fill="rgba(255,255,255,0.25)"/>
-              <path d="M14 50 A26 26 0 0 1 46 50 Z" fill="#B91C1C"/>
-              <circle cx="24" cy="40" r="1.5" fill="#2C2420"/>
-              <circle cx="30" cy="36" r="1.5" fill="#2C2420"/>
-              <circle cx="36" cy="40" r="1.5" fill="#2C2420"/>
-              <circle cx="27" cy="45" r="1" fill="#2C2420"/>
-              <circle cx="33" cy="45" r="1" fill="#2C2420"/>
-            </svg>
+
           </div>
           <div class="relative z-10">
             <div class="flex items-center gap-3 mb-3">
@@ -220,14 +203,14 @@
               </svg>
             </div>
             <div>
-              <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight text-white">IELTS Master</h1>
-                <p class="text-sm text-white/75 font-medium">Study with Purpose · Rise with Knowledge</p>
+              <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight text-[#FDFBF7]">IELTS <span class="text-[#C6A44E]">Master</span></h1>
+                <p class="text-sm text-[#C6A44E]/70 font-medium">Study with Purpose · Rise with Knowledge</p>
               </div>
             </div>
-            <p class="text-white/85 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
+            <p class="text-[#FDFBF7]/80 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
             <div class="flex flex-wrap gap-3">
-              <button onclick="showSection('study-plan')" class="bg-[#FAF8F5] text-palestine-green font-bold px-6 py-3 rounded-lg hover:bg-[#F0F7F2] transition shadow-md text-sm">📋 Open Study Plan</button>
-              <button onclick="showSection('training')" class="bg-palestine-red text-white font-bold px-6 py-3 rounded-lg hover:bg-[#991B1B] transition shadow-md text-sm">🎓 Training</button>
+              <button onclick="showSection('study-plan')" class="bg-[#C6A44E] text-[#1E1B18] font-bold px-6 py-3 rounded-lg hover:bg-[#B8962E] transition shadow-md text-sm">📋 Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-[#B22222] text-[#FDFBF7] font-bold px-6 py-3 rounded-lg hover:bg-[#991B1B] transition shadow-md text-sm">🎓 Training</button>
             </div>
           </div>
         </div>
@@ -243,30 +226,30 @@
       <!-- Progress summary -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
 
-      <h2 class="text-xl font-bold text-[#2C2420] mb-4">⚡ Quick Practice</h2>
+      <h2 class="text-xl font-bold text-[#1E1B18] mb-4">⚡ Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening')">
-          <div class="skill-icon bg-[#FEF2F2] text-palestine-red">🎧</div>
-          <h3 class="font-bold text-[#2C2420] mb-1">Listening</h3>
-          <p class="text-sm text-[#6B5E54] mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
+          <div class="skill-icon bg-[#FEF2F2] text-[#B22222]">🎧</div>
+          <h3 class="font-bold text-[#1E1B18] mb-1">Listening</h3>
+          <p class="text-sm text-[#6B6560] mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('reading')">
-          <div class="skill-icon bg-[#F0F7F2] text-palestine-green">📖</div>
-          <h3 class="font-bold text-[#2C2420] mb-1">Reading</h3>
-          <p class="text-sm text-[#6B5E54] mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
+          <div class="skill-icon bg-[#FDF8EE] text-[#1A3326]">📖</div>
+          <h3 class="font-bold text-[#1E1B18] mb-1">Reading</h3>
+          <p class="text-sm text-[#6B6560] mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('writing')">
-          <div class="skill-icon bg-[#F0F7F2] text-palestine-green">✍️</div>
-          <h3 class="font-bold text-[#2C2420] mb-1">Writing</h3>
-          <p class="text-sm text-[#6B5E54] mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
+          <div class="skill-icon bg-[#FDF8EE] text-[#1A3326]">✍️</div>
+          <h3 class="font-bold text-[#1E1B18] mb-1">Writing</h3>
+          <p class="text-sm text-[#6B6560] mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('speaking')">
-          <div class="skill-icon bg-[#FEF2F2] text-palestine-red">🗣️</div>
-          <h3 class="font-bold text-[#2C2420] mb-1">Speaking</h3>
-          <p class="text-sm text-[#6B5E54] mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
+          <div class="skill-icon bg-[#FEF2F2] text-[#B22222]">🗣️</div>
+          <h3 class="font-bold text-[#1E1B18] mb-1">Speaking</h3>
+          <p class="text-sm text-[#6B6560] mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
           <span class="skill-link">Practice now →</span>
         </div>
       </div>
@@ -283,8 +266,8 @@
     <section id="section-listening" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">🎧 Listening</h2>
-          <p class="text-sm text-[#6B5E54]">A full mock test: 4 sections · 40 questions · ~30 minutes</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">🎧 Listening</h2>
+          <p class="text-sm text-[#6B6560]">A full mock test: 4 sections · 40 questions · ~30 minutes</p>
         </div>
         <div class="flex gap-2" id="listening-tabs"></div>
       </div>
@@ -297,8 +280,8 @@
     <section id="section-reading" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">📖 Reading</h2>
-          <p class="text-sm text-[#6B5E54]">3 academic passages · 40 questions · 60-minute timer</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">📖 Reading</h2>
+          <p class="text-sm text-[#6B6560]">3 academic passages · 40 questions · 60-minute timer</p>
         </div>
         <div class="flex gap-2" id="reading-tabs"></div>
       </div>
@@ -309,8 +292,8 @@
     <section id="section-writing" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">✍️ Writing</h2>
-          <p class="text-sm text-[#6B5E54]">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">✍️ Writing</h2>
+          <p class="text-sm text-[#6B6560]">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p>
         </div>
         <div class="flex gap-2" id="writing-tabs"></div>
       </div>
@@ -321,8 +304,8 @@
     <section id="section-speaking" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">🗣️ Speaking</h2>
-          <p class="text-sm text-[#6B5E54]">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">🗣️ Speaking</h2>
+          <p class="text-sm text-[#6B6560]">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p>
         </div>
         <div class="flex gap-2" id="speaking-tabs"></div>
       </div>
@@ -331,7 +314,7 @@
 
     <!-- ============ LEVELS ============ -->
     <section id="section-levels" class="section-view hidden">
-      <h2 class="text-2xl font-extrabold text-[#2C2420] mb-4">📈 CEFR Levels</h2>
+      <h2 class="text-2xl font-extrabold text-[#1E1B18] mb-4">📈 CEFR Levels</h2>
       <div id="levels-content"></div>
     </section>
 
@@ -353,8 +336,8 @@
     <section id="section-exam" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">📅 Weekly Exam</h2>
-          <p class="text-sm text-[#6B5E54]">15 questions · 15-minute timer · fresh each week</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">📅 Weekly Exam</h2>
+          <p class="text-sm text-[#6B6560]">15 questions · 15-minute timer · fresh each week</p>
         </div>
       </div>
       <div id="exam-content"></div>
@@ -364,8 +347,8 @@
     <section id="section-training" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">🎓 Training</h2>
-          <p class="text-sm text-[#6B5E54]">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">🎓 Training</h2>
+          <p class="text-sm text-[#6B6560]">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p>
         </div>
       </div>
       <div id="training-content"></div>
@@ -375,8 +358,8 @@
     <section id="section-readings" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">📚 Level Reading</h2>
-          <p class="text-sm text-[#6B5E54]">Graded A1–C2 passages with comprehension quizzes</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">📚 Level Reading</h2>
+          <p class="text-sm text-[#6B6560]">Graded A1–C2 passages with comprehension quizzes</p>
         </div>
       </div>
       <div id="readings-content"></div>
@@ -386,8 +369,8 @@
     <section id="section-translator" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">🌐 Translator</h2>
-          <p class="text-sm text-[#6B5E54]">Offline English ↔ Arabic glossary with instant word lookups</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">🌐 Translator</h2>
+          <p class="text-sm text-[#6B6560]">Offline English ↔ Arabic glossary with instant word lookups</p>
         </div>
       </div>
       <div id="translator-content"></div>
@@ -402,8 +385,8 @@
     <section id="section-study" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">⏱ Study Tracker</h2>
-          <p class="text-sm text-[#6B5E54]">Focus timer, daily goals and streak tracking</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">⏱ Study Tracker</h2>
+          <p class="text-sm text-[#6B6560]">Focus timer, daily goals and streak tracking</p>
         </div>
       </div>
       <div id="study-content"></div>
@@ -413,8 +396,8 @@
     <section id="section-words" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">📒 My Words</h2>
-          <p class="text-sm text-[#6B5E54]">Personal vocabulary builder with flashcards</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">📒 My Words</h2>
+          <p class="text-sm text-[#6B6560]">Personal vocabulary builder with flashcards</p>
         </div>
       </div>
       <div id="words-content"></div>
@@ -424,8 +407,8 @@
     <section id="section-chat" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">💬 Chat</h2>
-          <p class="text-sm text-[#6B5E54]">Community room, support, and direct messages</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">💬 Chat</h2>
+          <p class="text-sm text-[#6B6560]">Community room, support, and direct messages</p>
         </div>
       </div>
       <div id="chat-content"></div>
@@ -435,8 +418,8 @@
     <section id="section-feed" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">💬 Community Feed</h2>
-          <p class="text-sm text-[#6B5E54]">Post updates and share your progress with other learners.</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">💬 Community Feed</h2>
+          <p class="text-sm text-[#6B6560]">Post updates and share your progress with other learners.</p>
         </div>
       </div>
       <div id="feed-content"></div>
@@ -446,8 +429,8 @@
     <section id="section-profile" class="section-view hidden">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 class="text-2xl font-extrabold text-[#2C2420]">👤 My Profile</h2>
-          <p class="text-sm text-[#6B5E54]">Your stats, badges, progress and activity — all in one place.</p>
+          <h2 class="text-2xl font-extrabold text-[#1E1B18]">👤 My Profile</h2>
+          <p class="text-sm text-[#6B6560]">Your stats, badges, progress and activity — all in one place.</p>
         </div>
       </div>
       <div id="profile-content"></div>
@@ -455,38 +438,38 @@
 
   </main>
 
-  <footer class="border-t border-[#E8E0D8] bg-white mt-10 relative z-10 overflow-hidden">
+  <footer class="border-t border-[#E5DDD4] bg-white mt-10 relative z-10 overflow-hidden">
     <!-- Palestinian flag stripe -->
     <div class="flag-stripe"><div></div><div></div><div></div><div></div></div>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-5 relative">
       <div class="text-center">
         <div class="footer-olive-tl">
         <svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#2D6A4F" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#2D6A4F" opacity="0.4" transform="rotate(-35 42 72)"/>
-          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#2D6A4F" opacity="0.35" transform="rotate(-25 35 48)"/>
-          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#2D6A4F" opacity="0.3" transform="rotate(-15 38 28)"/>
-          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#2D6A4F" opacity="0.3" transform="rotate(-50 58 82)"/>
-          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#2D6A4F" opacity="0.25" transform="rotate(-40 28 58)"/>
+          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#3B7A57" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#3B7A57" opacity="0.4" transform="rotate(-35 42 72)"/>
+          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#3B7A57" opacity="0.35" transform="rotate(-25 35 48)"/>
+          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#3B7A57" opacity="0.3" transform="rotate(-15 38 28)"/>
+          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#3B7A57" opacity="0.3" transform="rotate(-50 58 82)"/>
+          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#3B7A57" opacity="0.25" transform="rotate(-40 28 58)"/>
         </svg>
       </div>
       <div class="footer-olive-br">
         <svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#2D6A4F" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#2D6A4F" opacity="0.4" transform="rotate(-35 42 72)"/>
-          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#2D6A4F" opacity="0.35" transform="rotate(-25 35 48)"/>
-          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#2D6A4F" opacity="0.3" transform="rotate(-15 38 28)"/>
-          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#2D6A4F" opacity="0.3" transform="rotate(-50 58 82)"/>
-          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#2D6A4F" opacity="0.25" transform="rotate(-40 28 58)"/>
+          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#3B7A57" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#3B7A57" opacity="0.4" transform="rotate(-35 42 72)"/>
+          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#3B7A57" opacity="0.35" transform="rotate(-25 35 48)"/>
+          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#3B7A57" opacity="0.3" transform="rotate(-15 38 28)"/>
+          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#3B7A57" opacity="0.3" transform="rotate(-50 58 82)"/>
+          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#3B7A57" opacity="0.25" transform="rotate(-40 28 58)"/>
         </svg>
       </div>
       <h3 class="text-xs font-extrabold uppercase tracking-widest text-[#9B8E82] mb-6">About the Developer · 🇵🇸</h3>
         <div class="inline-flex flex-col items-center gap-3">
           <div class="relative">
-            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Developer" class="w-24 h-24 rounded-full object-cover ring-4 ring-green-200 shadow-lg" />
+            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Developer" class="w-24 h-24 rounded-full object-cover ring-4 ring-[#C6A44E] shadow-lg" />
           </div>
-          <p class="font-bold text-[#2C2420]">Abdelrahman Osama</p>
-          <p class="text-sm text-[#6B5E54]">Built with ❤️ and purpose</p>
+          <p class="font-bold text-[#1E1B18]">Abdelrahman Osama</p>
+          <p class="text-sm text-[#6B6560]">Built with ❤️ and purpose</p>
           <div class="flex items-center gap-1 text-sm text-[#9B8E82]">
             <span>🇵🇸</span>
             <span>Free Palestine</span>
