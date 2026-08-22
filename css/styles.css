@@ -10,37 +10,59 @@
      Burgundy        #8B1A1A    Soft gold       #E8D5A8
    ================================================================ */
 
-/* ============ BODY ============ */
+/* ============ FULL-PAGE PALESTINIAN HERITAGE WALLPAPER ============ */
 body {
-  background-color: #FDFBF7;
+  background-color: #F5F0E8;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='0.8' fill='%23C6A44E' opacity='0.05'/%3E%3C/svg%3E");
-  background-size: 120px 120px;
+    /* === Layer 1: Tatreez cross-stitch embroidery pattern === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3C!-- Cross stitch diamond --%3E%3Cpath d='M60 10 L70 20 L60 30 L50 20 Z' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.12'/%3E%3Cpath d='M60 15 L67 22 L60 29 L53 22 Z' fill='none' stroke='%23B22222' stroke-width='0.5' opacity='0.08'/%3E%3C!-- Cross stitch X --%3E%3Cline x1='55' y1='17' x2='65' y2='23' stroke='%23C6A44E' stroke-width='0.6' opacity='0.1'/%3E%3Cline x1='65' y1='17' x2='55' y2='23' stroke='%23C6A44E' stroke-width='0.6' opacity='0.1'/%3E%3C!-- Small flower motif --%3E%3Ccircle cx='60' cy='20' r='2' fill='none' stroke='%23B22222' stroke-width='0.4' opacity='0.06'/%3E%3Ccircle cx='60' cy='20' r='1' fill='%23C6A44E' opacity='0.05'/%3E%3C!-- Corner stitches --%3E%3Cpath d='M10 60 L20 50 L30 60 L20 70 Z' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.08'/%3E%3Cpath d='M90 60 L100 50 L110 60 L100 70 Z' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.08'/%3E%3Cpath d='M60 90 L70 80 L80 90 L70 100 Z' fill='none' stroke='%23B22222' stroke-width='0.5' opacity='0.06'/%3E%3C!-- Tiny cross stitches scattered --%3E%3Cline x1='15' y1='15' x2='20' y2='20' stroke='%23C6A44E' stroke-width='0.4' opacity='0.06'/%3E%3Cline x1='20' y1='15' x2='15' y2='20' stroke='%23C6A44E' stroke-width='0.4' opacity='0.06'/%3E%3Cline x1='100' y1='15' x2='105' y2='20' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='105' y1='15' x2='100' y2='20' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='15' y1='100' x2='20' y2='105' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='20' y1='100' x2='15' y2='105' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='100' y1='100' x2='105' y2='105' stroke='%23C6A44E' stroke-width='0.4' opacity='0.06'/%3E%3Cline x1='105' y1='100' x2='100' y2='105' stroke='%23C6A44E' stroke-width='0.4' opacity='0.06'/%3E%3C/svg%3E"),
+    /* === Layer 2: Al-Aqsa Mosque / Dome of the Rock silhouettes === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3C!-- Dome of the Rock (center) --%3E%3Cpath d='M220 380 L220 260 Q220 180 300 160 Q380 180 380 260 L380 380' fill='none' stroke='%23C6A44E' stroke-width='1.2' opacity='0.06'/%3E%3Cpath d='M300 160 L300 120' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M295 118 Q300 108 305 118' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.05'/%3E%3C!-- Windows --%3E%3Cellipse cx='270' cy='290' rx='8' ry='14' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3Cellipse cx='300' cy='280' rx='8' ry='14' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3Cellipse cx='330' cy='290' rx='8' ry='14' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3C!-- Al-Aqsa Mosque (left) --%3E%3Cpath d='M60 380 L60 280 Q60 240 100 230 Q140 240 140 280 L140 380' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.04'/%3E%3Cpath d='M100 230 L100 200' fill='none' stroke='%23C6A44E' stroke-width='0.5' opacity='0.035'/%3E%3Cellipse cx='100' cy='198' rx='4' ry='5' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.035'/%3E%3C!-- Minaret (right) --%3E%3Cpath d='M480 380 L480 220 Q480 195 500 190 Q520 195 520 220 L520 380' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.035'/%3E%3Cpath d='M500 190 L500 165' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.03'/%3E%3Cellipse cx='500' cy='163' rx='3' ry='4' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.03'/%3E%3C/svg%3E"),
+    /* === Layer 3: Palestinian flags (outline style) === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3C!-- Flag 1 (top-left area) --%3E%3Crect x='40' y='40' width='50' height='35' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.06'/%3E%3Cline x1='40' y1='48' x2='90' y2='48' stroke='%23C6A44E' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='40' y1='57' x2='90' y2='57' stroke='%23B22222' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='40' y1='66' x2='90' y2='66' stroke='%23C6A44E' stroke-width='0.4' opacity='0.04'/%3E%3Cpath d='M40 40 L40 75 L55 57.5 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.05'/%3E%3C!-- Flag 2 (bottom-right area) --%3E%3Crect x='400' y='420' width='50' height='35' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.06'/%3E%3Cline x1='400' y1='428' x2='450' y2='428' stroke='%23C6A44E' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='400' y1='437' x2='450' y2='437' stroke='%23B22222' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='400' y1='446' x2='450' y2='446' stroke='%23C6A44E' stroke-width='0.4' opacity='0.04'/%3E%3Cpath d='M400 420 L400 455 L415 437.5 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.05'/%3E%3C!-- Flag 3 (center-right) --%3E%3Crect x='420' y='200' width='40' height='28' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3Cpath d='M420 200 L420 228 L432 214 Z' fill='none' stroke='%23B22222' stroke-width='0.5' opacity='0.035'/%3E%3C!-- Olive branch accent --%3E%3Cpath d='M250 450 C220 420 180 380 160 340' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3Cellipse cx='210' cy='400' rx='10' ry='5' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.03' transform='rotate(-30 210 400)'/%3E%3Cellipse cx='185' cy='370' rx='8' ry='4' fill='none' stroke='%23C6A44E' stroke-width='0.35' opacity='0.025' transform='rotate(-20 185 370)'/%3E%3C/svg%3E"),
+    /* === Layer 4: Keffiyeh diamond lattice === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M0 40 L40 0 L80 40 L40 80 Z' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.04'/%3E%3Cpath d='M20 40 L40 20 L60 40 L40 60 Z' fill='none' stroke='%23C6A44E' stroke-width='0.3' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 120px 120px, 600px 400px, 500px 500px, 80px 80px;
+  background-attachment: fixed;
+  background-position: center;
 }
 
-/* ============ FULL-PAGE KEFFIYEH + HERITAGE WATERMARK ============ */
+/* ============ FIXED FULL-PAGE HERITAGE WALLPAPER OVERLAY ============ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    /* === Al-Aqsa Mosque / Dome of the Rock — large, centered === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3C!-- Dome of the Rock --%3E%3Cpath d='M300 580 L300 400 Q300 280 400 250 Q500 280 500 400 L500 580' fill='none' stroke='%23C6A44E' stroke-width='1.5' opacity='0.08'/%3E%3Cpath d='M400 250 L400 195' fill='none' stroke='%23C6A44E' stroke-width='1' opacity='0.06'/%3E%3Cpath d='M394 192 Q400 178 406 192' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.06'/%3E%3C!-- Dome windows --%3E%3Cellipse cx='360' cy='420' rx='10' ry='18' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.05'/%3E%3Cellipse cx='400' cy='410' rx='10' ry='18' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.05'/%3E%3Cellipse cx='440' cy='420' rx='10' ry='18' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.05'/%3E%3C!-- Left minaret --%3E%3Cpath d='M120 580 L120 380 Q120 340 155 330 Q190 340 190 380 L190 580' fill='none' stroke='%23C6A44E' stroke-width='1' opacity='0.06'/%3E%3Cpath d='M155 330 L155 290' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.05'/%3E%3Cellipse cx='155' cy='287' rx='5' ry='7' fill='none' stroke='%23C6A44E' stroke-width='0.5' opacity='0.045'/%3E%3C!-- Right minaret --%3E%3Cpath d='M610 580 L610 380 Q610 340 645 330 Q680 340 680 380 L680 580' fill='none' stroke='%23C6A44E' stroke-width='1' opacity='0.06'/%3E%3Cpath d='M645 330 L645 290' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.05'/%3E%3Cellipse cx='645' cy='287' rx='5' ry='7' fill='none' stroke='%23C6A44E' stroke-width='0.5' opacity='0.045'/%3E%3C!-- Left building --%3E%3Cpath d='M50 580 L50 440 Q50 410 80 400 Q110 410 110 440 L110 580' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.04'/%3E%3C!-- Right building --%3E%3Cpath d='M700 580 L700 440 Q700 410 730 400 Q760 410 760 440 L760 580' fill='none' stroke='%23C6A44E' stroke-width='0.7' opacity='0.04'/%3E%3C!-- Connecting wall --%3E%3Cline x1='110' y1='580' x2='700' y2='580' stroke='%23C6A44E' stroke-width='0.5' opacity='0.03'/%3E%3C/svg%3E"),
+    /* === Palestinian flags (outline, scattered) === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700' viewBox='0 0 700 700'%3E%3C!-- Flag top-left --%3E%3Crect x='50' y='80' width='60' height='42' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.07'/%3E%3Cline x1='50' y1='90' x2='110' y2='90' stroke='%23C6A44E' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='50' y1='101' x2='110' y2='101' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='50' y1='112' x2='110' y2='112' stroke='%23C6A44E' stroke-width='0.4' opacity='0.05'/%3E%3Cpath d='M50 80 L50 122 L68 101 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.06'/%3E%3C!-- Flag top-right --%3E%3Crect x='590' y='80' width='60' height='42' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.07'/%3E%3Cline x1='590' y1='90' x2='650' y2='90' stroke='%23C6A44E' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='590' y1='101' x2='650' y2='101' stroke='%23B22222' stroke-width='0.4' opacity='0.05'/%3E%3Cline x1='590' y1='112' x2='650' y2='112' stroke='%23C6A44E' stroke-width='0.4' opacity='0.05'/%3E%3Cpath d='M590 80 L590 122 L608 101 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.06'/%3E%3C!-- Flag bottom-left --%3E%3Crect x='50' y='580' width='60' height='42' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.07'/%3E%3Cpath d='M50 580 L50 622 L68 601 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.06'/%3E%3C!-- Flag bottom-right --%3E%3Crect x='590' y='580' width='60' height='42' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.07'/%3E%3Cpath d='M590 580 L590 622 L608 601 Z' fill='none' stroke='%23B22222' stroke-width='0.6' opacity='0.06'/%3E%3C!-- Olive branches --%3E%3Cpath d='M350 650 C300 600 250 550 220 500' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.04'/%3E%3Cellipse cx='290' cy='580' rx='12' ry='6' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.03' transform='rotate(-30 290 580)'/%3E%3Cellipse cx='255' cy='545' rx='10' ry='5' fill='none' stroke='%23C6A44E' stroke-width='0.35' opacity='0.025' transform='rotate(-20 255 545)'/%3E%3C!-- Tatreez cross stitches --%3E%3Cline x1='340' y1='50' x2='350' y2='60' stroke='%23C6A44E' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='350' y1='50' x2='340' y2='60' stroke='%23C6A44E' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='350' y1='650' x2='360' y2='660' stroke='%23B22222' stroke-width='0.5' opacity='0.035'/%3E%3Cline x1='360' y1='650' x2='350' y2='660' stroke='%23B22222' stroke-width='0.5' opacity='0.035'/%3E%3C/svg%3E"),
+    /* === Keffiyeh diamond lattice (base layer) === */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M0 40 L40 0 L80 40 L40 80 Z' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.045'/%3E%3Cpath d='M20 40 L40 20 L60 40 L40 60 Z' fill='none' stroke='%23C6A44E' stroke-width='0.3' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 800px 600px, 700px 700px, 80px 80px;
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: repeat;
+}
+
+/* ============ MAIN CONTENT Z-INDEX LAYER ============ */
 main::before {
   content: '';
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
   z-index: 0;
-  background-image:
-    /* Keffiyeh diamond lattice */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M0 40 L40 0 L80 40 L40 80 Z' fill='none' stroke='%23C6A44E' stroke-width='0.45' opacity='0.035'/%3E%3Cpath d='M20 40 L40 20 L60 40 L40 60 Z' fill='none' stroke='%23C6A44E' stroke-width='0.3' opacity='0.025'/%3E%3C/svg%3E"),
-    /* Al-Aqsa silhouette */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cpath d='M200 420 L200 300 Q200 250 250 230 Q300 250 300 300 L300 420' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.018'/%3E%3Cpath d='M160 420 L160 340 Q160 310 190 300 Q220 310 220 340 L220 420' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.014'/%3E%3Cpath d='M280 420 L280 340 Q280 310 310 300 Q340 310 340 340 L340 420' fill='none' stroke='%23C6A44E' stroke-width='0.6' opacity='0.014'/%3E%3Cpath d='M250 230 L250 180 Q250 160 250 150' fill='none' stroke='%23C6A44E' stroke-width='0.5' opacity='0.012'/%3E%3Cellipse cx='250' cy='148' rx='8' ry='10' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.012'/%3E%3C/svg%3E"),
-    /* Olive branch */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500'%3E%3Cpath d='M450 480 C380 390 280 300 200 210 C140 145 115 75 135 20' fill='none' stroke='%23C6A44E' stroke-width='0.8' opacity='0.02'/%3E%3Cellipse cx='320' cy='360' rx='18' ry='9' fill='none' stroke='%23C6A44E' stroke-width='0.5' opacity='0.015' transform='rotate(-35 320 360)'/%3E%3Cellipse cx='260' cy='285' rx='15' ry='7.5' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.012' transform='rotate(-25 260 285)'/%3E%3Cellipse cx='220' cy='225' rx='12' ry='6' fill='none' stroke='%23C6A44E' stroke-width='0.4' opacity='0.01' transform='rotate(-15 220 225)'/%3E%3Cellipse cx='185' cy='170' rx='10' ry='5' fill='none' stroke='%23C6A44E' stroke-width='0.35' opacity='0.009' transform='rotate(-5 185 170)'/%3E%3C/svg%3E");
-  background-size: 80px 80px, 500px 500px, 500px 500px;
 }
 
 /* ============ NAVIGATION ============ */
 .nav-btn { color: #6B6560; border: 1px solid transparent; transition: all 0.15s ease; }
-.nav-btn:hover { background: #FAF6EE; color: #1A1714; border-color: #D4CFC8; }
+.nav-btn:hover { background: rgba(255,255,255,0.6); color: #1A1714; border-color: #D4CFC8; }
 .nav-btn.active { background: #1A1714; color: #C6A44E; font-weight: 600; border-color: #C6A44E; }
 .nav-btn-mobile { color: #6B6560; }
-.nav-btn-mobile:hover { background: #FAF6EE; }
+.nav-btn-mobile:hover { background: rgba(255,255,255,0.6); }
 .nav-btn-mobile.active { background: #1A1714; color: #C6A44E; font-weight: 600; }
 .nav-btn-featured { background: #1A1714; color: #C6A44E; font-weight: 600; border: 1px solid #C6A44E; }
 .nav-btn-featured:hover { background: #0F0D0B; color: #C6A44E; }
@@ -58,8 +80,9 @@ main::before {
 
 /* ============ HEADER ============ */
 header {
-  background: rgba(253, 251, 247, 0.97);
-  backdrop-filter: blur(12px);
+  background: rgba(253, 251, 247, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 header::after {
   content: '';
@@ -74,17 +97,18 @@ header::after {
 
 /* ============ HERO BANNER ============ */
 .hero-banner {
-  background: linear-gradient(135deg, #1A1714 0%, #1F1C18 35%, #2A2520 65%, #1A1714 100%);
+  background: linear-gradient(135deg, rgba(26,23,20,0.92) 0%, rgba(31,28,24,0.88) 35%, rgba(42,37,32,0.92) 65%, rgba(26,23,20,0.92) 100%);
   position: relative;
   overflow: hidden;
   box-shadow: 0 24px 60px -16px rgba(26, 23, 20, 0.5);
+  backdrop-filter: blur(2px);
 }
 .hero-banner::before {
   content: '';
   position: absolute;
   top: -50%; right: -20%;
   width: 60%; height: 200%;
-  background: radial-gradient(ellipse, rgba(198, 164, 78, 0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse, rgba(198, 164, 78, 0.1) 0%, transparent 60%);
   pointer-events: none;
 }
 .hero-banner::after {
@@ -138,14 +162,16 @@ header::after {
   .olive-frame .olive-right { right: -38px; }
 }
 
-/* ============ SKILL CARDS ============ */
+/* ============ SKILL CARDS — TRANSPARENT BG ============ */
 .skill-card {
-  background: #FFFFFF;
-  border: 1px solid #D4CFC8;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 207, 200, 0.6);
   border-radius: 1rem;
   padding: 1.5rem;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
   position: relative;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(26, 23, 20, 0.04);
@@ -169,6 +195,7 @@ header::after {
   transform: translateY(-3px);
   box-shadow: 0 12px 28px -8px rgba(26, 23, 20, 0.12);
   border-color: #C6A44E;
+  background: rgba(255, 255, 255, 0.9);
 }
 .skill-icon {
   width: 3rem; height: 3rem;
@@ -179,8 +206,15 @@ header::after {
 .skill-link { color: #1A1714; font-size: 0.875rem; font-weight: 700; text-decoration: none; }
 .skill-link:hover { text-decoration: underline; color: #C6A44E; }
 
-/* ============ QUESTION BLOCKS ============ */
-.q-card { background: #FFFFFF; border: 1px solid #D4CFC8; border-radius: 0.85rem; padding: 1.25rem; }
+/* ============ QUESTION BLOCKS — TRANSPARENT BG ============ */
+.q-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(212, 207, 200, 0.5);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+}
 .q-number {
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 1.75rem; height: 1.75rem; padding: 0 0.35rem;
@@ -190,22 +224,22 @@ header::after {
 .opt {
   display: block; width: 100%; text-align: left;
   padding: 0.6rem 0.85rem; border-radius: 0.5rem;
-  border: 1px solid #D4CFC8; background: #FFFFFF;
+  border: 1px solid rgba(212, 207, 200, 0.5); background: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem; cursor: pointer; transition: all 0.12s ease;
 }
-.opt:hover { border-color: #C6A44E; background: #FAF6EE; }
-.opt.selected { border-color: #C6A44E; background: #FDF8EE; color: #1A1714; font-weight: 600; }
-.opt.correct { border-color: #C6A44E; background: #FDF8EE; color: #1A1714; font-weight: 600; }
-.opt.wrong { border-color: #B22222; background: #FEF2F2; color: #991B1B; }
+.opt:hover { border-color: #C6A44E; background: rgba(253, 248, 238, 0.9); }
+.opt.selected { border-color: #C6A44E; background: rgba(253, 248, 238, 0.95); color: #1A1714; font-weight: 600; }
+.opt.correct { border-color: #C6A44E; background: rgba(253, 248, 238, 0.95); color: #1A1714; font-weight: 600; }
+.opt.wrong { border-color: #B22222; background: rgba(254, 242, 242, 0.95); color: #991B1B; }
 
 input[type="text"].fill-input {
   width: 100%; padding: 0.6rem 0.85rem;
   border: 1px solid #D4CFC8; border-radius: 0.5rem;
-  font-size: 0.9rem; background: #FFFFFF;
+  font-size: 0.9rem; background: rgba(255, 255, 255, 0.8);
 }
 input[type="text"].fill-input:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.12); }
-input[type="text"].fill-input.correct { border-color: #C6A44E; background: #FDF8EE; }
-input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2; }
+input[type="text"].fill-input.correct { border-color: #C6A44E; background: rgba(253, 248, 238, 0.9); }
+input[type="text"].fill-input.wrong { border-color: #B22222; background: rgba(254, 242, 242, 0.9); }
 
 /* ============ BUTTONS ============ */
 .btn-primary {
@@ -218,11 +252,12 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2
 .btn-primary:hover { background: #0F0D0B; box-shadow: 0 4px 12px -2px rgba(26, 23, 20, 0.4); }
 .btn-primary:active { transform: translateY(0); }
 .btn-secondary {
-  background: #FFFFFF; color: #6B6560; font-weight: 600; font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.85); color: #6B6560; font-weight: 600; font-size: 0.9rem;
   padding: 0.65rem 1.4rem; border-radius: 0.5rem;
   border: 1px solid #D4CFC8; cursor: pointer; transition: all 0.15s ease;
+  backdrop-filter: blur(6px);
 }
-.btn-secondary:hover { background: #FAF6EE; border-color: #C6A44E; color: #1A1714; }
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.95); border-color: #C6A44E; color: #1A1714; }
 .btn-red {
   background: #B22222; color: #FFFFFF; font-weight: 700; font-size: 0.9rem;
   padding: 0.65rem 1.4rem; border-radius: 0.5rem;
@@ -234,17 +269,18 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2
 /* ============ TAB PILLS ============ */
 .tab-pill {
   padding: 0.5rem 1.1rem; border-radius: 9999px; font-size: 0.875rem;
-  font-weight: 600; border: 1px solid #D4CFC8; background: #FFFFFF;
+  font-weight: 600; border: 1px solid #D4CFC8; background: rgba(255, 255, 255, 0.8);
   color: #6B6560; cursor: pointer; transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
 }
-.tab-pill:hover { border-color: #C6A44E; color: #1A1714; }
+.tab-pill:hover { border-color: #C6A44E; color: #1A1714; background: rgba(255, 255, 255, 0.95); }
 .tab-pill.active { background: #1A1714; border-color: #C6A44E; color: #C6A44E; }
 
 /* ============ RESULTS ============ */
 .result-banner { border-radius: 0.85rem; padding: 1.25rem 1.5rem; }
 
 /* ============ SPEAKING CUE CARD ============ */
-.cue-card { background: #FDF8EE; border: 1px solid #E8D5A8; border-radius: 0.85rem; padding: 1.5rem; }
+.cue-card { background: rgba(253, 248, 238, 0.9); border: 1px solid #E8D5A8; border-radius: 0.85rem; padding: 1.5rem; backdrop-filter: blur(6px); }
 .cue-card .cue-bullet { list-style: disc; margin-left: 1.25rem; }
 
 /* ============ PASSAGE TEXT ============ */
@@ -261,7 +297,9 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2
 .writing-area {
   width: 100%; min-height: 18rem; padding: 1rem;
   border: 1px solid #D4CFC8; border-radius: 0.5rem;
-  font-size: 0.95rem; line-height: 1.7; background: #FFFFFF; resize: vertical;
+  font-size: 0.95rem; line-height: 1.7;
+  background: rgba(255, 255, 255, 0.8); resize: vertical;
+  backdrop-filter: blur(6px);
 }
 .writing-area:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.12); }
 
@@ -270,7 +308,7 @@ input[type="text"].fill-input.wrong { border-color: #B22222; background: #FEF2F2
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ============ LEVEL BADGES ============ */
-.level-badge-emerald { background: #FDF8EE; color: #1A1714; }
+.level-badge-emerald { background: rgba(253, 248, 238, 0.9); color: #1A1714; }
 .level-badge-sky { background: #E0F2FE; color: #0369A1; }
 .level-badge-amber { background: #FEF3C7; color: #92400E; }
 .level-badge-orange { background: #FFEDD5; color: #9A3412; }
@@ -307,16 +345,17 @@ input:focus { outline: none; }
   color: #1A1714; font-weight: 600; border-bottom: 1px dashed #C6A44E;
   cursor: pointer; border-radius: 2px; transition: background 0.12s ease;
 }
-.dict-word:hover { background: #FDF8EE; }
-.dict-word:focus { outline: none; background: #FDF8EE; }
+.dict-word:hover { background: rgba(253, 248, 238, 0.8); }
+.dict-word:focus { outline: none; background: rgba(253, 248, 238, 0.8); }
 .dict-tooltip {
   position: fixed; z-index: 70; width: 15rem;
-  background: #FFFFFF; border: 1px solid #C6A44E; border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.95); border: 1px solid #C6A44E; border-radius: 0.5rem;
   box-shadow: 0 10px 25px -5px rgba(26, 23, 20, 0.15); padding: 0.85rem 0.95rem;
+  backdrop-filter: blur(8px);
 }
 
 /* ============ TRANSLATOR OUTPUT ============ */
-.tr-word { background: #FDF8EE; color: #1A1714; border-radius: 0.25rem; padding: 0 0.15rem; margin: 0 0.1rem; cursor: default; }
+.tr-word { background: rgba(253, 248, 238, 0.9); color: #1A1714; border-radius: 0.25rem; padding: 0 0.15rem; margin: 0 0.1rem; cursor: default; }
 .tr-unknown { background: #FEF3C7; color: #92400E; border-radius: 0.25rem; padding: 0 0.15rem; margin: 0 0.1rem; }
 
 /* ============ CHAT SCROLL ============ */
@@ -337,7 +376,7 @@ input:focus { outline: none; }
 .progress-watermelon {
   display: inline-flex; align-items: center; gap: 0.25rem;
   font-size: 0.75rem; font-weight: 700; color: #1A1714;
-  background: #FDF8EE; border: 1px solid #E8D5A8;
+  background: rgba(253, 248, 238, 0.9); border: 1px solid #E8D5A8;
   border-radius: 9999px; padding: 0.2rem 0.6rem;
 }
 
@@ -355,19 +394,20 @@ input:focus { outline: none; }
 /* ============ CATLANGO / TRAINING ============ */
 .cat-hero {
   position: relative; overflow: hidden; border-radius: 1.25rem;
-  background: linear-gradient(120deg, #1A1714 0%, #2A2520 50%, #1A1714 100%);
+  background: linear-gradient(120deg, rgba(26,23,20,0.95) 0%, rgba(42,37,32,0.92) 50%, rgba(26,23,20,0.95) 100%);
   color: #FFFFFF; padding: 2.25rem 1.75rem;
   box-shadow: 0 16px 36px -12px rgba(26, 23, 20, 0.5);
+  backdrop-filter: blur(4px);
 }
 .cat-hero::before {
   content: ''; position: absolute; right: -4rem; top: -4rem;
   width: 14rem; height: 14rem; border-radius: 9999px;
-  background: rgba(198, 164, 78, 0.06); filter: blur(34px);
+  background: rgba(198, 164, 78, 0.08); filter: blur(34px);
 }
 .cat-hero::after {
   content: ''; position: absolute; left: -3rem; bottom: -5rem;
   width: 11rem; height: 11rem; border-radius: 9999px;
-  background: rgba(198, 164, 78, 0.04); filter: blur(28px);
+  background: rgba(198, 164, 78, 0.05); filter: blur(28px);
 }
 .cat-hero-mascot {
   width: 4.25rem; height: 4.25rem; border-radius: 1rem;
@@ -390,50 +430,53 @@ input:focus { outline: none; }
 .cat-path-node {
   position: relative; width: 3.4rem; height: 3.4rem; border-radius: 9999px;
   display: flex; align-items: center; justify-content: center; font-size: 1.35rem;
-  flex-shrink: 0; background: #FFFFFF; box-shadow: 0 4px 12px -4px rgba(26, 23, 20, 0.1);
+  flex-shrink: 0; background: rgba(255, 255, 255, 0.85); box-shadow: 0 4px 12px -4px rgba(26, 23, 20, 0.1);
   z-index: 1; border: 1px solid #D4CFC8;
+  backdrop-filter: blur(4px);
 }
 .cat-path-node.done { background: #1A1714; color: #C6A44E; border-color: #C6A44E; }
 .cat-path-node.dim { opacity: 0.5; }
 .cat-path-line { flex: 1; width: 2px; min-height: 1.5rem; background: linear-gradient(#D4CFC8, #E5DDD4); margin: 0.15rem 0; }
 .cat-path-line.done { background: linear-gradient(#C6A44E, #D4CFC8); }
 .cat-level-card {
-  flex: 1; min-width: 0; background: #FFFFFF; border: 1px solid #D4CFC8; border-radius: 0.85rem;
+  flex: 1; min-width: 0; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(212, 207, 200, 0.5); border-radius: 0.85rem;
   padding: 1rem 1.1rem; box-shadow: 0 2px 8px -4px rgba(26, 23, 20, 0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   cursor: pointer; margin-bottom: 0.5rem;
+  backdrop-filter: blur(6px);
 }
-.cat-level-card:hover { transform: translateY(-2px); border-color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(198, 164, 78, 0.2); }
-.cat-level-card.complete { border-color: #C6A44E; background: #FDF8EE; }
+.cat-level-card:hover { transform: translateY(-2px); border-color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(198, 164, 78, 0.2); background: rgba(255, 255, 255, 0.92); }
+.cat-level-card.complete { border-color: #C6A44E; background: rgba(253, 248, 238, 0.9); }
 .cat-ring { transform: rotate(-90deg); }
 .cat-ring-track { stroke: #D4CFC8; }
 .cat-ring-fill { stroke: #C6A44E; stroke-linecap: round; transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }
 .cat-word-row {
-  background: #FFFFFF; border: 1px solid #D4CFC8; border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(212, 207, 200, 0.5); border-radius: 0.85rem;
   padding: 0.9rem 1rem; display: flex; align-items: flex-start; gap: 0.85rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  backdrop-filter: blur(6px);
 }
-.cat-word-row:hover { border-color: #C6A44E; box-shadow: 0 4px 12px -6px rgba(198, 164, 78, 0.15); }
-.cat-word-row.mastered { border-color: #C6A44E; background: #FDF8EE; }
+.cat-word-row:hover { border-color: #C6A44E; box-shadow: 0 4px 12px -6px rgba(198, 164, 78, 0.15); background: rgba(255, 255, 255, 0.92); }
+.cat-word-row.mastered { border-color: #C6A44E; background: rgba(253, 248, 238, 0.9); }
 .cat-word-badge {
   display: inline-flex; align-items: center; gap: 0.25rem;
   font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.04em; padding: 0.18rem 0.55rem; border-radius: 9999px;
 }
-.cat-word-badge.mastered { background: #FDF8EE; color: #1A1714; }
-.cat-word-badge.learning { background: #FDF8EE; color: #C6A44E; }
-.cat-creator { background: #FDF8EE; border: 1px dashed #C6A44E; border-radius: 0.85rem; padding: 1.25rem; }
+.cat-word-badge.mastered { background: rgba(253, 248, 238, 0.95); color: #1A1714; }
+.cat-word-badge.learning { background: rgba(253, 248, 238, 0.95); color: #C6A44E; }
+.cat-creator { background: rgba(253, 248, 238, 0.85); border: 1px dashed #C6A44E; border-radius: 0.85rem; padding: 1.25rem; backdrop-filter: blur(6px); }
 .cat-creator input, .cat-creator select {
   width: 100%; padding: 0.6rem 0.9rem; border: 1px solid #D4CFC8; border-radius: 0.5rem;
-  font-size: 0.875rem; background: #FFFFFF;
+  font-size: 0.875rem; background: rgba(255, 255, 255, 0.8);
 }
 .cat-creator input:focus, .cat-creator select:focus { outline: none; border-color: #C6A44E; box-shadow: 0 0 0 3px rgba(198, 164, 78, 0.12); }
-.cat-session-progress { height: 0.5rem; border-radius: 9999px; background: #D4CFC8; overflow: hidden; }
+.cat-session-progress { height: 0.5rem; border-radius: 9999px; background: rgba(212, 207, 200, 0.5); overflow: hidden; }
 .cat-session-progress > div { height: 100%; border-radius: 9999px; background: #1A1714; transition: width 0.3s ease; }
 .cat-kbd {
   display: inline-block; min-width: 1.5rem; padding: 0.12rem 0.4rem;
   border-radius: 0.3rem; border: 1px solid #D4CFC8; border-bottom-width: 2px;
-  background: #FDFBF7; font-size: 0.68rem; font-weight: 700; color: #6B6560; text-align: center;
+  background: rgba(253, 251, 247, 0.8); font-size: 0.68rem; font-weight: 700; color: #6B6560; text-align: center;
 }
 .cat-session-btn {
   flex: 1; max-width: 11rem; padding: 0.8rem 1rem; border-radius: 0.6rem;
@@ -441,24 +484,25 @@ input:focus { outline: none; }
   transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 .cat-session-btn:active { transform: scale(0.97); }
-.cat-session-btn.again { background: #FFFFFF; color: #6B6560; border: 1px solid #D4CFC8; }
-.cat-session-btn.again:hover { border-color: #B0A49A; background: #FDFBF7; }
+.cat-session-btn.again { background: rgba(255, 255, 255, 0.85); color: #6B6560; border: 1px solid #D4CFC8; }
+.cat-session-btn.again:hover { border-color: #B0A49A; background: rgba(255, 255, 255, 0.95); }
 .cat-session-btn.gotit { background: #1A1714; color: #C6A44E; box-shadow: 0 8px 18px -6px rgba(26, 23, 20, 0.45); }
 .cat-session-btn.gotit:hover { background: #0F0D0B; }
 .cat-filter-pill {
   padding: 0.42rem 1rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;
-  border: 1px solid #D4CFC8; background: #FFFFFF; color: #6B6560;
+  border: 1px solid #D4CFC8; background: rgba(255, 255, 255, 0.8); color: #6B6560;
   cursor: pointer; transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
 }
-.cat-filter-pill:hover { border-color: #C6A44E; color: #1A1714; }
+.cat-filter-pill:hover { border-color: #C6A44E; color: #1A1714; background: rgba(255, 255, 255, 0.95); }
 .cat-filter-pill.active { background: #1A1714; border-color: #C6A44E; color: #C6A44E; }
-.cat-spell-prompt { background: linear-gradient(135deg, #FDF8EE, #FFFFFF); border: 1px solid #E8D5A8; }
+.cat-spell-prompt { background: linear-gradient(135deg, rgba(253,248,238,0.9), rgba(255,255,255,0.85)); border: 1px solid #E8D5A8; backdrop-filter: blur(6px); }
 .cat-spell-input-wrap input[type='text'] { font-size: 1.25rem; letter-spacing: 0.02em; }
 .cat-spell-feedback { padding: 0.75rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; text-align: center; animation: catFadeIn 0.2s ease; }
-.cat-spell-feedback-correct { background: #FDF8EE; color: #1A1714; border: 1px solid #E8D5A8; }
-.cat-spell-feedback-incorrect { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+.cat-spell-feedback-correct { background: rgba(253, 248, 238, 0.9); color: #1A1714; border: 1px solid #E8D5A8; }
+.cat-spell-feedback-incorrect { background: rgba(254, 242, 242, 0.9); color: #991B1B; border: 1px solid #FECACA; }
 .cat-spell-feedback-hint { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
-.cat-spell-feedback-reveal { background: #FDF8EE; color: #1A1714; border: 1px solid #E8D5A8; }
+.cat-spell-feedback-reveal { background: rgba(253, 248, 238, 0.9); color: #1A1714; border: 1px solid #E8D5A8; }
 @keyframes catShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(4px); } }
 .cat-shake { animation: catShake 0.45s ease; }
 @keyframes catFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
