@@ -1,18 +1,23 @@
 /* ============================================================
-   IELTS Master — Supabase client + data-sync layer
+   IELTS Master — Supabase + Neon PostgreSQL data-sync layer
    ------------------------------------------------------------
    Initializes the Supabase JS client from js/supabase-config.js
    and exposes `window.IELTS_DB`, a local-first CRUD layer:
 
    • Writes always hit localStorage first (instant + offline-safe)
-     and are then pushed to Supabase in the background.
+     and are then pushed to Supabase/Neon in the background.
    • Reads come from the local cache and are refreshed from
-     Supabase in the background ("seamless synchronization").
+     the database in the background ("seamless synchronization").
    • If the anon key is missing, the SDK fails to load, or the
      network is down, every operation transparently degrades to
      localStorage only — the app keeps working exactly as before.
 
-   Tables (create them with supabase/schema.sql):
+   Database Options:
+     1. Supabase (default) - Uses Supabase JS client for PostgREST + Realtime
+     2. Neon PostgreSQL - Serverless Postgres, use backend API or 
+        direct connection via @neondatabase/serverless
+
+   Tables (create them in your database):
      users             – accounts (username, password hash, XP, claims)
      profiles          – display name, bio, target band, avatar, activity
      training_progress – zero-to-hero module progress (one row per user)
@@ -30,8 +35,17 @@
   const SUPABASE_URL = cfg.url || 'https://gmmbjgjrlgibglaojflh.supabase.co';
   const PLACEHOLDER = /YOUR_|PASTE|TODO|xxx/i;
 
+  // Neon PostgreSQL configuration (optional, for serverless setups)
+  const NEON_DATABASE_URL = cfg.neonDatabaseUrl || process.env?.DATABASE_URL || '';
+  const USE_NEON = !!(cfg.useNeon && NEON_DATABASE_URL && !PLACEHOLDER.test(NEON_DATABASE_URL));
+
   let anonKey = cfg.anonKey || '';
   if (!anonKey || PLACEHOLDER.test(anonKey)) anonKey = '';
+
+  // Log database configuration
+  console.log('[IELTS_DB] Supabase URL:', SUPABASE_URL ? 'configured' : 'not configured');
+  console.log('[IELTS_DB] Supabase Anon Key:', anonKey ? 'configured' : 'not configured');
+  console.log('[IELTS_DB] Neon PostgreSQL:', USE_NEON ? 'enabled' : 'disabled or not configured');
 
   const sdkLoaded = !!(window.supabase && window.supabase.createClient);
   let client = null;
@@ -51,8 +65,10 @@
 
   let online = (typeof navigator === 'undefined') ? true : navigator.onLine !== false;
 
-  function isConfigured() { return !!client; }
+  function isConfigured() { return !!client || USE_NEON; }
   function canSync() { return isConfigured() && online; }
+  function isUsingNeon() { return USE_NEON; }
+  function getDatabaseType() { return USE_NEON ? 'neon' : (!!client ? 'supabase' : 'localstorage'); }
 
   /* ---------------- local cache (localStorage mirror) ---------------- */
   const CACHE_PREFIX = 'ielts-db-cache:';
@@ -573,10 +589,13 @@
 
   /* ---------------- public API ---------------- */
   window.IELTS_DB = {
-    isConfigured, canSync,
+    isConfigured, canSync, isUsingNeon, getDatabaseType,
     getCache, setCache, removeCache,
     getMeta, setMeta,
     select, insert, upsert, update, remove,
+    neonQuery, neonSelect, neonInsert, neonUpdate, neonDelete, neonUpsert,
+    neonPullUserByUsername, neonPullUserById, neonUpsertUser,
+    neonPullProfile, neonUpsertProfile,
     pullUserByUsername, pullUserById, upsertUser,
     pullProfile, upsertProfile,
     pullTraining, upsertTraining,
@@ -589,6 +608,93 @@
     onSynced: null
   };
 
+  /* ============================================================
+     Neon PostgreSQL API Helpers (for backend/API route usage)
+     ============================================================
+     When using Neon with a backend API, you can use these helpers
+     to query the database directly. For browser usage, route through
+     your API endpoints to keep credentials secure.
+     ============================================================ */
+  
+  // Neon-specific query method (Node.js/backend only)
+  async function neonQuery(endpoint, method = 'GET', data = null) {
+    if (!USE_NEON || !window.fetch) return null;
+    try {
+      const options = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Database-Type': 'neon'
+        }
+      };
+      if (data) options.body = JSON.stringify(data);
+      const response = await fetch(endpoint, options);
+      if (!response.ok) throw new Error('API error: ' + response.status);
+      return await response.json();
+    } catch (e) {
+      console.warn('[IELTS_DB] Neon API query failed:', e);
+      return null;
+    }
+  }
+  
+  // Neon database operations (for backend/API usage)
+  // These use the Neon connection directly via an API layer
+  const NEON_API_BASE = '/api/neon';
+  
+  async function neonSelect(table, params = {}) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'GET', params);
+  }
+  
+  async function neonInsert(table, row) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'POST', row);
+  }
+  
+  async function neonUpdate(table, id, data) {
+    return neonQuery(`${NEON_API_BASE}/${table}/${id}`, 'PUT', data);
+  }
+  
+  async function neonDelete(table, id) {
+    return neonQuery(`${NEON_API_BASE}/${table}/${id}`, 'DELETE');
+  }
+  
+  // Neon-specific user operations
+  async function neonPullUserByUsername(username) {
+    const result = await neonSelect('users', { username });
+    return result && result.rows && result.rows[0] ? rowToUser(result.rows[0]) : null;
+  }
+  
+  async function neonPullUserById(id) {
+    const result = await neonSelect('users', { id });
+    return result && result.rows && result.rows[0] ? rowToUser(result.rows[0]) : null;
+  }
+  
+  async function neonUpsertUser(user) {
+    return neonInsert('users', userToRow(user));
+  }
+  
+  // Neon-specific profile operations
+  async function neonPullProfile(userId) {
+    const result = await neonSelect('profiles', { user_id: userId });
+    if (!result || !result.rows || !result.rows[0]) return null;
+    const r = result.rows[0];
+    return {
+      displayName: r.display_name || '',
+      bio: r.bio || '',
+      targetBand: r.target_band || '',
+      avatar: r.avatar || null,
+      activity: r.activity || [],
+      updatedAt: r.updated_at || 0
+    };
+  }
+  
+  async function neonUpsertProfile(userId, profile) {
+    return neonUpsert('profiles', { user_id: userId, ...profileToRow(userId, profile) });
+  }
+  
+  async function neonUpsert(table, row, onConflict) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'PUT', { ...row, onConflict });
+  }
+  
   /* re-sync everything when the connection comes back */
   if (typeof window !== 'undefined') {
     window.addEventListener('online', function () {

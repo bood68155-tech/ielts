@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IELTS Master — Study with Purpose 🇵🇸</title>
   <meta name="description" content="Free interactive IELTS practice: Listening, Reading, Writing and Speaking with timers, scoring and model answers." />
+  <style>
+    body {
+      background-image: url("./assets/palestine-bg.jpg") !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-attachment: fixed !important;
+      background-repeat: no-repeat !important;
+      background-color: #14120f !important;
+    }
+  </style>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,18 +25,7 @@
         extend: {
           fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
           colors: {
-            brand: {
-              50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac',
-              400: '#4ade80', 500: '#009736', 600: '#007A3D', 700: '#005C2E',
-              800: '#004020', 900: '#002312'
-            },
-            palestine: {
-              black: '#1a1a2e',
-              green: '#009736',
-              red: '#CE1126',
-              white: '#ffffff',
-              gold: '#D4AF37'
-            }
+            palestine: { black: '#14120f', gold: '#d4af37', red: '#b43232', white: '#f5f0e6' }
           }
         }
       }
@@ -185,425 +184,186 @@
     </div>
   </div>
 
-  <!-- ============ HEADER ============ -->
-  <header class="sticky top-0 z-40 bg-white border-b-2 border-slate-200 shadow-sm">
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-16">
+      <div class="flex items-center justify-between h-16" style="background:rgba(15,15,15,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(212,175,55,0.15);border-radius:0px;">
         <button onclick="showSection('dashboard')" class="flex items-center gap-2 group" aria-label="Go to dashboard">
-          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-palestine-green text-white font-extrabold shadow-md group-hover:bg-palestine-green/90 transition text-sm">🇵🇸</span>
-          <span class="text-lg font-bold text-slate-900">IELTS <span class="text-palestine-green">Master</span></span>
+          <span class="flex items-center justify-center w-9 h-9 bg-[rgba(20,18,15,0.95)] text-[#d4af37] font-extrabold shadow-md transition text-sm border border-[rgba(212,175,55,0.3)]">🇵🇸</span>
+          <span class="text-lg font-bold text-[#f5f0e6]">IELTS <span class="text-[#d4af37]">Master</span></span>
         </button>
-
-        <!-- Desktop nav -->
         <nav class="hidden md:flex items-center gap-1" id="main-nav">
-          <button data-section="dashboard" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('dashboard')">🏠 Home</button>
-          <button data-section="study-plan" class="nav-btn nav-btn-featured px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('study-plan')">📋 Study Plan</button>
-          <button data-section="training" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
-          <button data-section="reading-hub" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
-          <button data-section="profile" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
+          <button data-section="dashboard" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('dashboard')">🏠 Home</button>
+          <button data-section="study-plan" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('study-plan')">📋 Study Plan</button>
+          <button data-section="training" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
+          <button data-section="reading-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
+          <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
-
-        <div class="hidden md:flex items-center gap-3 text-xs text-slate-500">
-          <div id="user-chip" class="hidden items-center gap-2 bg-green-50 border-2 border-green-200 rounded-full pl-1 pr-3 py-1">
-            <span id="user-avatar" class="w-7 h-7 rounded-full bg-palestine-green text-white flex items-center justify-center text-xs font-bold">U</span>
+        <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
+          <div id="user-chip" class="hidden items-center gap-2 bg-[rgba(245,240,230,0.1)] border border-[rgba(212,175,55,0.3)] pl-1 pr-3 py-1 backdrop-blur">
+            <span id="user-avatar" class="w-7 h-7 bg-[rgba(20,18,15,0.95)] text-[#d4af37] flex items-center justify-center text-xs font-bold border border-[rgba(212,175,55,0.3)]">U</span>
             <span class="flex flex-col leading-tight">
-              <span id="user-name" class="font-semibold text-slate-800"></span>
+              <span id="user-name" class="font-semibold text-[#f5f0e6]"></span>
               <span class="flex items-center gap-1.5">
-                <span id="user-level-badge" class="level-badge-emerald text-[9px] font-bold px-1.5 py-px rounded-full"></span>
-                <span id="user-xp" class="text-[9px] text-slate-400"></span>
+                <span id="user-level-badge" class="level-badge-emerald text-[9px] font-bold px-1.5 py-px"></span>
+                <span id="user-xp" class="text-[9px] text-[#f5f0e6]/50"></span>
               </span>
             </span>
           </div>
           <button id="header-login-cta" onclick="IELTS_AUTH.showScreen()" class="btn-primary text-sm">Sign in</button>
-          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-slate-500 hover:text-palestine-red font-semibold px-3 py-2 rounded-lg hover:bg-red-50 transition">Sign out</button>
+          <button id="signout-btn" onclick="IELTS_AUTH.logout()" class="hidden text-[#f5f0e6]/60 hover:text-[#ff6b6b] font-semibold px-3 py-2 hover:bg-[rgba(255,100,100,0.1)] transition">Sign out</button>
         </div>
-
-        <!-- Mobile hamburger -->
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-green-50" aria-label="Open menu">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 hover:bg-[rgba(245,240,230,0.1)]" aria-label="Open menu">
+          <svg class="w-6 h-6 text-[#f5f0e6]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
-    <!-- Mobile nav -->
-    <nav id="mobile-nav" class="hidden md:hidden border-t-2 border-slate-100 bg-white px-4 py-3 space-y-1">
-      <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
-      <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
-      <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
-      <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
-      <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 rounded-lg text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
-      <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-palestine-red">Sign out</button>
+    <nav id="mobile-nav" class="hidden md:hidden border-t border-[rgba(212,175,55,0.1)] bg-[rgba(20,18,15,0.95)] backdrop-blur-md px-4 py-3 space-y-1">
+      <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
+      <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
+      <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
+      <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
+      <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
+      <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 text-sm font-medium text-[#ff6b6b]">Sign out</button>
     </nav>
   </header>
 
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 relative z-10">
-
-    <!-- ============ DASHBOARD ============ -->
+    <!-- DASHBOARD -->
     <section id="section-dashboard" class="section-view">
-      <!-- Hero Banner: Palestinian themed -->
-      <div class="rounded-2xl overflow-hidden mb-8" style="background: linear-gradient(135deg, #1a1a2e 0%, #002312 50%, #009736 100%);">
-        <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative">
-          <!-- Hero watermarks: flag, olive, watermelon -->
+      <div class="hero-banner mb-8">
+        <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative" style="background:rgba(15,25,18,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:0px !important;">
           <div class="hero-watermark">
-            <!-- Palestinian flag (top-right, clearly visible) -->
-            <svg class="hw-flag" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <rect x="0" y="0" width="200" height="50" fill="#1a1a2e"/>
-              <rect x="0" y="50" width="200" height="50" fill="#ffffff"/>
-              <rect x="0" y="100" width="200" height="50" fill="#009736"/>
-              <rect x="0" y="150" width="200" height="50" fill="#CE1126"/>
-              <polygon points="0,0 0,200 75,100" fill="#CE1126"/>
-            </svg>
-            <!-- Olive branch (bottom-left, curved with leaves) -->
+            <!-- Golden olive branch (bottom-left) -->
             <svg class="hw-olive" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-              <!-- main stem -->
-              <path d="M160 170 C140 140 100 110 80 80 C60 50 50 25 65 8" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-              <!-- left-side leaves -->
-              <ellipse cx="120" cy="135" rx="14" ry="7" fill="#ffffff" opacity="0.5" transform="rotate(-40 120 135)"/>
-              <ellipse cx="100" cy="110" rx="12" ry="6" fill="#ffffff" opacity="0.45" transform="rotate(-30 100 110)"/>
-              <ellipse cx="85" cy="85" rx="11" ry="5.5" fill="#ffffff" opacity="0.4" transform="rotate(-20 85 85)"/>
-              <ellipse cx="72" cy="60" rx="9" ry="5" fill="#ffffff" opacity="0.35" transform="rotate(-10 72 60)"/>
-              <ellipse cx="65" cy="35" rx="7" ry="4" fill="#ffffff" opacity="0.3" transform="rotate(0 65 35)"/>
-              <!-- right-side leaves -->
-              <ellipse cx="140" cy="148" rx="10" ry="5" fill="#ffffff" opacity="0.35" transform="rotate(50 140 148)"/>
-              <ellipse cx="115" cy="125" rx="9" ry="4.5" fill="#ffffff" opacity="0.3" transform="rotate(40 115 125)"/>
-              <ellipse cx="95" cy="98" rx="8" ry="4" fill="#ffffff" opacity="0.28" transform="rotate(30 95 98)"/>
-              <ellipse cx="78" cy="72" rx="7" ry="3.5" fill="#ffffff" opacity="0.25" transform="rotate(20 78 72)"/>
-              <!-- olives -->
-              <circle cx="108" cy="120" r="3.5" fill="#ffffff" opacity="0.3"/>
-              <circle cx="88" cy="92" r="3" fill="#ffffff" opacity="0.25"/>
-              <circle cx="70" cy="65" r="2.5" fill="#ffffff" opacity="0.22"/>
+              <path d="M160 170C140 140 100 110 80 80 60 50 50 25 65 8" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+              <ellipse cx="120" cy="135" rx="14" ry="7" fill="none" stroke="#d4af37" stroke-width="1" opacity=".4" transform="rotate(-40 120 135)"/>
+              <ellipse cx="100" cy="110" rx="12" ry="6" fill="none" stroke="#d4af37" stroke-width="1" opacity=".35" transform="rotate(-30 100 110)"/>
+              <ellipse cx="85" cy="85" rx="11" ry="5.5" fill="none" stroke="#d4af37" stroke-width="1" opacity=".3" transform="rotate(-20 85 85)"/>
+              <ellipse cx="72" cy="60" rx="9" ry="5" fill="none" stroke="#d4af37" stroke-width="1" opacity=".25" transform="rotate(-10 72 60)"/>
+              <ellipse cx="65" cy="35" rx="7" ry="4" fill="none" stroke="#d4af37" stroke-width="1" opacity=".2" transform="rotate(0 65 35)"/>
+              <ellipse cx="140" cy="148" rx="10" ry="5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".3" transform="rotate(50 140 148)"/>
+              <ellipse cx="115" cy="125" rx="9" ry="4.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".25" transform="rotate(40 115 125)"/>
+              <ellipse cx="95" cy="98" rx="8" ry="4" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".2" transform="rotate(30 95 98)"/>
+              <circle cx="108" cy="120" r="3.5" fill="#d4af37" opacity=".3"/>
+              <circle cx="88" cy="92" r="3" fill="#d4af37" opacity=".25"/>
+              <circle cx="70" cy="65" r="2.5" fill="#d4af37" opacity=".2"/>
             </svg>
-            <!-- Watermelon slice (bottom-right, bold and clear) -->
+            <!-- Watermelon slice (bottom-center) -->
             <svg class="hw-melon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <!-- green rind -->
-              <path d="M10 80 A55 55 0 0 1 90 80 Z" fill="#009736"/>
-              <!-- white rind layer -->
-              <path d="M14 80 A51 51 0 0 1 86 80 Z" fill="#ffffff" opacity="0.3"/>
-              <!-- red flesh -->
-              <path d="M18 80 A47 47 0 0 1 82 80 Z" fill="#CE1126"/>
-              <!-- seeds -->
-              <ellipse cx="35" cy="65" rx="2.5" ry="3.5" fill="#1a1a2e" transform="rotate(-10 35 65)"/>
-              <ellipse cx="50" cy="58" rx="2.5" ry="3.5" fill="#1a1a2e"/>
-              <ellipse cx="65" cy="65" rx="2.5" ry="3.5" fill="#1a1a2e" transform="rotate(10 65 65)"/>
-              <ellipse cx="42" cy="72" rx="2" ry="3" fill="#1a1a2e" transform="rotate(-5 42 72)"/>
-              <ellipse cx="58" cy="72" rx="2" ry="3" fill="#1a1a2e" transform="rotate(5 58 72)"/>
-              <ellipse cx="50" cy="76" rx="1.8" ry="2.5" fill="#1a1a2e"/>
-            </svg>
-            <!-- Small watermelon (top-center area) -->
-            <svg class="hw-melon-sm" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 50 A32 32 0 0 1 52 50 Z" fill="#009736"/>
-              <path d="M11 50 A29 29 0 0 1 49 50 Z" fill="#ffffff" opacity="0.3"/>
-              <path d="M14 50 A26 26 0 0 1 46 50 Z" fill="#CE1126"/>
-              <circle cx="24" cy="40" r="1.8" fill="#1a1a2e"/>
-              <circle cx="30" cy="36" r="1.8" fill="#1a1a2e"/>
-              <circle cx="36" cy="40" r="1.8" fill="#1a1a2e"/>
-              <circle cx="27" cy="45" r="1.3" fill="#1a1a2e"/>
-              <circle cx="33" cy="45" r="1.3" fill="#1a1a2e"/>
+              <path d="M10 80A55 55 0 0190 80Z" fill="none" stroke="#d4af37" stroke-width="1.5" opacity=".3"/>
+              <path d="M18 80A47 47 0 0182 80Z" fill="none" stroke="#b43232" stroke-width="1" opacity=".35"/>
+              <ellipse cx="50" cy="58" rx="2" ry="3" fill="#d4af37" opacity=".3"/>
+              <ellipse cx="38" cy="68" rx="1.5" ry="2.5" fill="#d4af37" opacity=".25"/>
+              <ellipse cx="62" cy="68" rx="1.5" ry="2.5" fill="#d4af37" opacity=".25"/>
             </svg>
           </div>
           <div class="relative z-10">
             <div class="flex items-center gap-3 mb-3">
               <div class="olive-frame">
-              <svg class="olive-left" viewBox="0 0 70 95" xmlns="http://www.w3.org/2000/svg">
-                <path d="M55 90 Q30 65 22 40 Q18 18 35 2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                <ellipse cx="35" cy="68" rx="11" ry="5.5" fill="#ffffff" opacity="0.55" transform="rotate(-35 35 68)"/>
-                <ellipse cx="26" cy="48" rx="9" ry="5" fill="#ffffff" opacity="0.5" transform="rotate(-25 26 48)"/>
-                <ellipse cx="24" cy="30" rx="7" ry="4" fill="#ffffff" opacity="0.45" transform="rotate(-15 24 30)"/>
-                <ellipse cx="30" cy="14" rx="5.5" ry="3" fill="#ffffff" opacity="0.4" transform="rotate(-5 30 14)"/>
-                <ellipse cx="48" cy="75" rx="8" ry="4" fill="#ffffff" opacity="0.4" transform="rotate(-50 48 75)"/>
-                <circle cx="30" cy="55" r="3" fill="#ffffff" opacity="0.35"/>
-                <circle cx="22" cy="38" r="2.5" fill="#ffffff" opacity="0.3"/>
-              </svg>
-              <span class="text-4xl relative z-10">🇵🇸</span>
-              <svg class="olive-right" viewBox="0 0 70 95" xmlns="http://www.w3.org/2000/svg">
-                <path d="M55 90 Q30 65 22 40 Q18 18 35 2" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                <ellipse cx="35" cy="68" rx="11" ry="5.5" fill="#ffffff" opacity="0.55" transform="rotate(-35 35 68)"/>
-                <ellipse cx="26" cy="48" rx="9" ry="5" fill="#ffffff" opacity="0.5" transform="rotate(-25 26 48)"/>
-                <ellipse cx="24" cy="30" rx="7" ry="4" fill="#ffffff" opacity="0.45" transform="rotate(-15 24 30)"/>
-                <ellipse cx="30" cy="14" rx="5.5" ry="3" fill="#ffffff" opacity="0.4" transform="rotate(-5 30 14)"/>
-                <ellipse cx="48" cy="75" rx="8" ry="4" fill="#ffffff" opacity="0.4" transform="rotate(-50 48 75)"/>
-                <circle cx="30" cy="55" r="3" fill="#ffffff" opacity="0.35"/>
-                <circle cx="22" cy="38" r="2.5" fill="#ffffff" opacity="0.3"/>
-              </svg>
-            </div>
-            <div>
-              <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight">IELTS Master</h1>
-                <p class="text-sm text-white/80 font-medium">Study with Purpose · Rise with Knowledge</p>
+                <svg class="olive-left" viewBox="0 0 70 95" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M55 90Q30 65 22 40 18 18 35 2" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+                  <ellipse cx="35" cy="68" rx="11" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".4" transform="rotate(-35 35 68)"/>
+                  <ellipse cx="26" cy="48" rx="9" ry="5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".35" transform="rotate(-25 26 48)"/>
+                  <ellipse cx="24" cy="30" rx="7" ry="4" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".3" transform="rotate(-15 24 30)"/>
+                  <circle cx="30" cy="55" r="2.5" fill="#d4af37" opacity=".25"/>
+                </svg>
+                <span class="text-4xl relative z-10">🇵🇸</span>
+                <svg class="olive-right" viewBox="0 0 70 95" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M55 90Q30 65 22 40 18 18 35 2" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+                  <ellipse cx="35" cy="68" rx="11" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".4" transform="rotate(-35 35 68)"/>
+                  <ellipse cx="26" cy="48" rx="9" ry="5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".35" transform="rotate(-25 26 48)"/>
+                  <ellipse cx="24" cy="30" rx="7" ry="4" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".3" transform="rotate(-15 24 30)"/>
+                  <circle cx="30" cy="55" r="2.5" fill="#d4af37" opacity=".25"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight text-[#f5f0e6]">IELTS <span class="text-[#d4af37]">Master</span></h1>
+                <p class="text-sm text-[#d4af37]/55 font-medium">Study with Purpose · Rise with Knowledge</p>
               </div>
             </div>
-            <p class="text-white/90 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
+            <p class="text-[#f5f0e6]/70 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
             <div class="flex flex-wrap gap-3">
-              <button onclick="showSection('study-plan')" class="bg-white text-palestine-green font-bold px-6 py-3 rounded-xl hover:bg-green-50 transition shadow-lg text-sm">📋 Open Study Plan</button>
-              <button onclick="showSection('training')" class="bg-palestine-red text-white font-bold px-6 py-3 rounded-xl hover:bg-red-700 transition shadow-lg text-sm">🎓 Training</button>
+              <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]">📋 Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]">🎓 Training</button>
             </div>
           </div>
         </div>
         <div class="flag-stripe"><div></div><div></div><div></div><div></div></div>
       </div>
 
-      <!-- Study Plan Dashboard Preview -->
       <div id="study-plan-dash-preview" class="mb-8"></div>
-
-      <!-- Auth / progress banner -->
       <div id="dashboard-auth-banner"></div>
-
-      <!-- Progress summary -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
-
-      <h2 class="text-xl font-bold text-slate-900 mb-4">⚡ Quick Practice</h2>
+      <h2 class="text-xl font-bold text-[#f5f0e6] mb-4">⚡ Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening')">
-          <div class="skill-icon bg-red-50 text-palestine-red">🎧</div>
-          <h3 class="font-bold text-slate-900 mb-1">Listening</h3>
-          <p class="text-sm text-slate-500 mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
+          <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]">🎧</div>
+          <h3 class="font-bold text-[#f5f0e6] mb-1">Listening</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('reading')">
-          <div class="skill-icon bg-green-50 text-palestine-green">📖</div>
-          <h3 class="font-bold text-slate-900 mb-1">Reading</h3>
-          <p class="text-sm text-slate-500 mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
+          <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]">📖</div>
+          <h3 class="font-bold text-[#f5f0e6] mb-1">Reading</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('writing')">
-          <div class="skill-icon bg-green-50 text-palestine-green">✍️</div>
-          <h3 class="font-bold text-slate-900 mb-1">Writing</h3>
-          <p class="text-sm text-slate-500 mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
+          <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]">✍️</div>
+          <h3 class="font-bold text-[#f5f0e6] mb-1">Writing</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
           <span class="skill-link">Practice now →</span>
         </div>
         <div class="skill-card" onclick="showSection('speaking')">
-          <div class="skill-icon bg-red-50 text-palestine-red">🗣️</div>
-          <h3 class="font-bold text-slate-900 mb-1">Speaking</h3>
-          <p class="text-sm text-slate-500 mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
+          <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]">🗣️</div>
+          <h3 class="font-bold text-[#f5f0e6] mb-1">Speaking</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
           <span class="skill-link">Practice now →</span>
         </div>
       </div>
     </section>
 
-    <!-- ============ STUDY PLAN ============ -->
-    <section id="section-study-plan" class="section-view hidden">
-      <div class="max-w-5xl mx-auto px-4 py-8">
-        <div id="study-plan-content"></div>
-      </div>
-    </section>
-
-    <!-- ============ LISTENING ============ -->
-    <section id="section-listening" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🎧 Listening</h2>
-          <p class="text-sm text-slate-500">A full mock test: 4 sections · 40 questions · ~30 minutes</p>
-        </div>
-        <div class="flex gap-2" id="listening-tabs"></div>
-      </div>
-      <div id="listening-controls" class="mb-4"></div>
-      <div id="listening-sections"></div>
-      <div id="listening-content"></div>
-    </section>
-
-    <!-- ============ READING ============ -->
-    <section id="section-reading" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📖 Reading</h2>
-          <p class="text-sm text-slate-500">3 academic passages · 40 questions · 60-minute timer</p>
-        </div>
-        <div class="flex gap-2" id="reading-tabs"></div>
-      </div>
-      <div id="reading-content"></div>
-    </section>
-
-    <!-- ============ WRITING ============ -->
-    <section id="section-writing" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">✍️ Writing</h2>
-          <p class="text-sm text-slate-500">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p>
-        </div>
-        <div class="flex gap-2" id="writing-tabs"></div>
-      </div>
-      <div id="writing-content"></div>
-    </section>
-
-    <!-- ============ SPEAKING ============ -->
-    <section id="section-speaking" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🗣️ Speaking</h2>
-          <p class="text-sm text-slate-500">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p>
-        </div>
-        <div class="flex gap-2" id="speaking-tabs"></div>
-      </div>
-      <div id="speaking-content"></div>
-    </section>
-
-    <!-- ============ LEVELS ============ -->
-    <section id="section-levels" class="section-view hidden">
-      <h2 class="text-2xl font-extrabold text-slate-900 mb-4">📈 CEFR Levels</h2>
-      <div id="levels-content"></div>
-    </section>
-
-    <!-- ============ LEARNING PATH ============ -->
-    <section id="section-learning-path" class="section-view hidden">
-      <div class="max-w-5xl mx-auto px-4 py-8">
-        <div id="learning-path-content"></div>
-      </div>
-    </section>
-
-    <!-- ============ READING HUB ============ -->
-    <section id="section-reading-hub" class="section-view hidden">
-      <div class="max-w-5xl mx-auto px-4 py-8">
-        <div id="reading-hub-content"></div>
-      </div>
-    </section>
-
-    <!-- ============ EXAM ============ -->
-    <section id="section-exam" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📅 Weekly Exam</h2>
-          <p class="text-sm text-slate-500">15 questions · 15-minute timer · fresh each week</p>
-        </div>
-      </div>
-      <div id="exam-content"></div>
-    </section>
-
-    <!-- ============ TRAINING ============ -->
-    <section id="section-training" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🎓 Training</h2>
-          <p class="text-sm text-slate-500">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p>
-        </div>
-      </div>
-      <div id="training-content"></div>
-    </section>
-
-    <!-- ============ READINGS ============ -->
-    <section id="section-readings" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📚 Level Reading</h2>
-          <p class="text-sm text-slate-500">Graded A1–C2 passages with comprehension quizzes</p>
-        </div>
-      </div>
-      <div id="readings-content"></div>
-    </section>
-
-    <!-- ============ TRANSLATOR ============ -->
-    <section id="section-translator" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">🌐 Translator</h2>
-          <p class="text-sm text-slate-500">Offline English ↔ Arabic glossary with instant word lookups</p>
-        </div>
-      </div>
-      <div id="translator-content"></div>
-    </section>
-
-    <!-- ============ CATLANGO ============ -->
-    <section id="section-catlango" class="section-view hidden">
-      <div id="catlango-content"></div>
-    </section>
-
-    <!-- ============ STUDY TRACKER ============ -->
-    <section id="section-study" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">⏱ Study Tracker</h2>
-          <p class="text-sm text-slate-500">Focus timer, daily goals and streak tracking</p>
-        </div>
-      </div>
-      <div id="study-content"></div>
-    </section>
-
-    <!-- ============ WORDS ============ -->
-    <section id="section-words" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">📒 My Words</h2>
-          <p class="text-sm text-slate-500">Personal vocabulary builder with flashcards</p>
-        </div>
-      </div>
-      <div id="words-content"></div>
-    </section>
-
-    <!-- ============ CHAT ============ -->
-    <section id="section-chat" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">💬 Chat</h2>
-          <p class="text-sm text-slate-500">Community room, support, and direct messages</p>
-        </div>
-      </div>
-      <div id="chat-content"></div>
-    </section>
-
-    <!-- ============ FEED ============ -->
-    <section id="section-feed" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">💬 Community Feed</h2>
-          <p class="text-sm text-slate-500">Post updates and share your progress with other learners.</p>
-        </div>
-      </div>
-      <div id="feed-content"></div>
-    </section>
-
-    <!-- ============ PROFILE ============ -->
-    <section id="section-profile" class="section-view hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">👤 My Profile</h2>
-          <p class="text-sm text-slate-500">Your stats, badges, progress and activity — all in one place.</p>
-        </div>
-      </div>
-      <div id="profile-content"></div>
-    </section>
-
+    <section id="section-study-plan" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="study-plan-content"></div></div></section>
+    <section id="section-listening" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🎧 Listening</h2><p class="text-sm text-[#f5f0e6]/60">A full mock test: 4 sections · 40 questions · ~30 minutes</p></div><div class="flex gap-2" id="listening-tabs"></div></div><div id="listening-controls" class="mb-4"></div><div id="listening-sections"></div><div id="listening-content"></div></section>
+    <section id="section-reading" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📖 Reading</h2><p class="text-sm text-[#f5f0e6]/60">3 academic passages · 40 questions · 60-minute timer</p></div><div class="flex gap-2" id="reading-tabs"></div></div><div id="reading-content"></div></section>
+    <section id="section-writing" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">✍️ Writing</h2><p class="text-sm text-[#f5f0e6]/60">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p></div><div class="flex gap-2" id="writing-tabs"></div></div><div id="writing-content"></div></section>
+    <section id="section-speaking" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🗣️ Speaking</h2><p class="text-sm text-[#f5f0e6]/60">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p></div><div class="flex gap-2" id="speaking-tabs"></div></div><div id="speaking-content"></div></section>
+    <section id="section-levels" class="section-view hidden"><h2 class="text-2xl font-extrabold text-[#f5f0e6] mb-4">📈 CEFR Levels</h2><div id="levels-content"></div></section>
+    <section id="section-learning-path" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="learning-path-content"></div></div></section>
+    <section id="section-reading-hub" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="reading-hub-content"></div></div></section>
+    <section id="section-exam" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📅 Weekly Exam</h2><p class="text-sm text-[#f5f0e6]/60">15 questions · 15-minute timer · fresh each week</p></div></div><div id="exam-content"></div></section>
+    <section id="section-training" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🎓 Training</h2><p class="text-sm text-[#f5f0e6]/60">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p></div></div><div id="training-content"></div></section>
+    <section id="section-readings" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📚 Level Reading</h2><p class="text-sm text-[#f5f0e6]/60">Graded A1–C2 passages with comprehension quizzes</p></div></div><div id="readings-content"></div></section>
+    <section id="section-translator" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🌐 Translator</h2><p class="text-sm text-[#f5f0e6]/60">Offline English ↔ Arabic glossary with instant word lookups</p></div></div><div id="translator-content"></div></section>
+    <section id="section-catlango" class="section-view hidden"><div id="catlango-content"></div></section>
+    <section id="section-study" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">⏱ Study Tracker</h2><p class="text-sm text-[#f5f0e6]/60">Focus timer, daily goals and streak tracking</p></div></div><div id="study-content"></div></section>
+    <section id="section-words" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📒 My Words</h2><p class="text-sm text-[#f5f0e6]/60">Personal vocabulary builder with flashcards</p></div></div><div id="words-content"></div></section>
+    <section id="section-chat" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">💬 Chat</h2><p class="text-sm text-[#f5f0e6]/60">Community room, support, and direct messages</p></div></div><div id="chat-content"></div></section>
+    <section id="section-feed" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">💬 Community Feed</h2><p class="text-sm text-[#f5f0e6]/60">Post updates and share your progress with other learners.</p></div></div><div id="feed-content"></div></section>
+    <section id="section-profile" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">👤 My Profile</h2><p class="text-sm text-[#f5f0e6]/60">Your stats, badges, progress and activity — all in one place.</p></div></div><div id="profile-content"></div></section>
   </main>
 
-  <footer class="border-t-2 border-slate-200 bg-white mt-10 relative z-10 overflow-hidden">
-    <!-- Palestinian flag stripe -->
+  <footer class="border-t border-[rgba(212,175,55,0.1)] mt-10 relative z-10 overflow-hidden">
     <div class="flag-stripe"><div></div><div></div><div></div><div></div></div>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-5 relative">
       <div class="text-center">
-        <div class="footer-olive-tl">
-        <svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#009736" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#009736" opacity="0.4" transform="rotate(-35 42 72)"/>
-          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#009736" opacity="0.35" transform="rotate(-25 35 48)"/>
-          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#009736" opacity="0.3" transform="rotate(-15 38 28)"/>
-          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#009736" opacity="0.3" transform="rotate(-50 58 82)"/>
-          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#009736" opacity="0.25" transform="rotate(-40 28 58)"/>
-        </svg>
-      </div>
-      <div class="footer-olive-br">
-        <svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 105 Q45 80 35 50 Q28 25 45 5" fill="none" stroke="#009736" stroke-width="2" stroke-linecap="round"/>
-          <ellipse cx="42" cy="72" rx="10" ry="5.5" fill="#009736" opacity="0.4" transform="rotate(-35 42 72)"/>
-          <ellipse cx="35" cy="48" rx="8" ry="4.5" fill="#009736" opacity="0.35" transform="rotate(-25 35 48)"/>
-          <ellipse cx="38" cy="28" rx="6" ry="3.5" fill="#009736" opacity="0.3" transform="rotate(-15 38 28)"/>
-          <ellipse cx="58" cy="82" rx="8" ry="4.5" fill="#009736" opacity="0.3" transform="rotate(-50 58 82)"/>
-          <ellipse cx="28" cy="58" rx="6" ry="3" fill="#009736" opacity="0.25" transform="rotate(-40 28 58)"/>
-        </svg>
-      </div>
-      <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-6">About the Developer · 🇵🇸</h3>
+        <div class="footer-olive-tl"><svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg"><path d="M80 105Q45 80 35 50 28 25 45 5" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".3"/><ellipse cx="42" cy="72" rx="10" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".2" transform="rotate(-35 42 72)"/><ellipse cx="35" cy="48" rx="8" ry="4.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".18" transform="rotate(-25 35 48)"/><ellipse cx="38" cy="28" rx="6" ry="3.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".15" transform="rotate(-15 38 28)"/></svg></div>
+        <div class="footer-olive-br"><svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg"><path d="M80 105Q45 80 35 50 28 25 45 5" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".3"/><ellipse cx="42" cy="72" rx="10" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".2" transform="rotate(-35 42 72)"/><ellipse cx="35" cy="48" rx="8" ry="4.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".18" transform="rotate(-25 35 48)"/><ellipse cx="38" cy="28" rx="6" ry="3.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".15" transform="rotate(-15 38 28)"/></svg></div>
+        <h3 class="text-xs font-extrabold uppercase tracking-widest text-[#f5f0e6]/50 mb-6">About the Developer · 🇵🇸</h3>
         <div class="inline-flex flex-col items-center gap-3">
           <div class="relative">
-            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Developer" class="w-24 h-24 rounded-full object-cover ring-4 ring-green-200 shadow-lg" />
+            <img src="https://i.ibb.co/396ZGDHg/image.jpg" alt="Developer" class="w-24 h-24 rounded-none object-cover ring-4 ring-[rgba(212,175,55,0.3)] shadow-lg" />
           </div>
-          <p class="font-bold text-slate-900">Abdelrahman Osama</p>
-          <p class="text-sm text-slate-500">Built with ❤️ and purpose</p>
-          <div class="flex items-center gap-1 text-sm text-slate-400">
-            <span>🇵🇸</span>
-            <span>Free Palestine</span>
-          </div>
+          <p class="font-bold text-[#f5f0e6]">Abdelrahman Osama</p>
+          <p class="text-sm text-[#f5f0e6]/60">Built with ❤️ and purpose</p>
+          <div class="flex items-center gap-1 text-sm text-[#f5f0e6]/50"><span>🇵🇸</span><span>Free Palestine</span></div>
         </div>
       </div>
-      <p class="text-center text-[11px] text-slate-400 mt-8">IELTS Master is an unofficial practice tool. Not affiliated with the official IELTS test partners.</p>
+      <p class="text-center text-[11px] text-[#f5f0e6]/50 mt-8">IELTS Master is an unofficial practice tool. Not affiliated with the official IELTS test partners.</p>
     </div>
   </footer>
 
-  <!-- ============ SCRIPTS ============ -->
   <script src="js/data.js"></script>
   <script src="js/study-plan.js"></script>
   <script src="js/supabase-config.js"></script>

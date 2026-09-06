@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <!-- Keffiyeh diamond lattice -->
+    <pattern id="keffiyeh" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M0 30L30 0l30 30-30 30Z" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.12"/>
+      <path d="M15 30L30 15l15 15-15 15Z" fill="none" stroke="#C6A44E" stroke-width="0.35" opacity="0.08"/>
+      <line x1="0" y1="0" x2="30" y2="30" stroke="#C6A44E" stroke-width="0.2" opacity="0.06"/>
+      <line x1="30" y1="0" x2="60" y2="30" stroke="#C6A44E" stroke-width="0.2" opacity="0.06"/>
+      <line x1="0" y1="30" x2="30" y2="60" stroke="#C6A44E" stroke-width="0.2" opacity="0.06"/>
+      <line x1="30" y1="30" x2="60" y2="60" stroke="#C6A44E" stroke-width="0.2" opacity="0.06"/>
+    </pattern>
+    <!-- Tatreez cross-stitch -->
+    <pattern id="tatreez" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <!-- Central diamond -->
+      <path d="M50 15L60 25 50 35 40 25Z" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.15"/>
+      <line x1="45" y1="22" x2="55" y2="28" stroke="#C6A44E" stroke-width="0.5" opacity="0.1"/>
+      <line x1="55" y1="22" x2="45" y2="28" stroke="#C6A44E" stroke-width="0.5" opacity="0.1"/>
+      <circle cx="50" cy="25" r="1.5" fill="#B22222" opacity="0.08"/>
+      <!-- Corner diamonds -->
+      <path d="M10 50L20 40 30 50 20 60Z" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.1"/>
+      <path d="M70 50L80 40 90 50 80 60Z" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.1"/>
+      <path d="M50 70L60 60 70 70 60 80Z" fill="none" stroke="#B22222" stroke-width="0.5" opacity="0.07"/>
+      <!-- Tiny cross stitches -->
+      <line x1="5" y1="5" x2="10" y2="10" stroke="#C6A44E" stroke-width="0.4" opacity="0.08"/>
+      <line x1="10" y1="5" x2="5" y2="10" stroke="#C6A44E" stroke-width="0.4" opacity="0.08"/>
+      <line x1="90" y1="5" x2="95" y2="10" stroke="#B22222" stroke-width="0.4" opacity="0.06"/>
+      <line x1="95" y1="5" x2="90" y2="10" stroke="#B22222" stroke-width="0.4" opacity="0.06"/>
+      <line x1="5" y1="90" x2="10" y2="95" stroke="#B22222" stroke-width="0.4" opacity="0.06"/>
+      <line x1="10" y1="90" x2="5" y2="95" stroke="#B22222" stroke-width="0.4" opacity="0.06"/>
+      <line x1="90" y1="90" x2="95" y2="95" stroke="#C6A44E" stroke-width="0.4" opacity="0.08"/>
+      <line x1="95" y1="90" x2="90" y2="95" stroke="#C6A44E" stroke-width="0.4" opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <!-- Base warm cream -->
+  <rect width="1200" height="900" fill="#F5F0E6"/>
+
+  <!-- Keffiyeh lattice layer -->
+  <rect width="1200" height="900" fill="url(#keffiyeh)" opacity="0.5"/>
+
+  <!-- Tatreez layer -->
+  <rect width="1200" height="900" fill="url(#tatreez)" opacity="0.6"/>
+
+  <!-- Al-Aqsa Mosque / Dome of the Rock — centered -->
+  <!-- Dome of the Rock -->
+  <path d="M440 820V620Q440 480 600 450Q760 480 760 620V820" fill="none" stroke="#C6A44E" stroke-width="2" opacity="0.2"/>
+  <path d="M600 450V370" fill="none" stroke="#C6A44E" stroke-width="1.5" opacity="0.16"/>
+  <path d="M592 367Q600 350 608 367" fill="none" stroke="#C6A44E" stroke-width="1.2" opacity="0.16"/>
+  <!-- Dome windows -->
+  <ellipse cx="530" cy="660" rx="14" ry="25" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.14"/>
+  <ellipse cx="600" cy="645" rx="14" ry="25" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.14"/>
+  <ellipse cx="670" cy="660" rx="14" ry="25" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.14"/>
+  <!-- Dome arch detail -->
+  <path d="M480 500Q600 420 720 500" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.1"/>
+
+  <!-- Left minaret -->
+  <path d="M200 820V650Q200 600 240 585Q280 600 280 650V820" fill="none" stroke="#C6A44E" stroke-width="1.5" opacity="0.15"/>
+  <path d="M240 585V540" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.12"/>
+  <ellipse cx="240" cy="535" rx="7" ry="10" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.12"/>
+
+  <!-- Right minaret -->
+  <path d="M920 820V650Q920 600 960 585Q1000 600 1000 650V820" fill="none" stroke="#C6A44E" stroke-width="1.5" opacity="0.15"/>
+  <path d="M960 585V540" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.12"/>
+  <ellipse cx="960" cy="535" rx="7" ry="10" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.12"/>
+
+  <!-- Left side building -->
+  <path d="M60 820V720Q60 690 85 680Q110 690 110 720V820" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.1"/>
+
+  <!-- Right side building -->
+  <path d="M1090 820V720Q1090 690 1115 680Q1140 690 1140 720V820" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.1"/>
+
+  <!-- Olive branch — bottom left -->
+  <path d="M180 870C220 830 280 790 350 760C420 730 480 710 520 700" fill="none" stroke="#C6A44E" stroke-width="1.2" opacity="0.15" stroke-linecap="round"/>
+  <ellipse cx="230" cy="840" rx="18" ry="9" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.12" transform="rotate(-30 230 840)"/>
+  <ellipse cx="300" cy="800" rx="15" ry="7.5" fill="none" stroke="#C6A44E" stroke-width="0.7" opacity="0.1" transform="rotate(-22 300 800)"/>
+  <ellipse cx="370" cy="770" rx="13" ry="6.5" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.09" transform="rotate(-15 370 770)"/>
+  <ellipse cx="430" cy="745" rx="11" ry="5.5" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.08" transform="rotate(-8 430 745)"/>
+  <ellipse cx="480" cy="725" rx="9" ry="4.5" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.07" transform="rotate(-3 480 725)"/>
+  <!-- Opposite leaves -->
+  <ellipse cx="260" cy="855" rx="12" ry="6" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.08" transform="rotate(40 260 855)"/>
+  <ellipse cx="335" cy="818" rx="10" ry="5" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.07" transform="rotate(32 335 818)"/>
+  <ellipse cx="400" cy="785" rx="9" ry="4.5" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.06" transform="rotate(24 400 785)"/>
+  <!-- Olives -->
+  <circle cx="275" cy="835" r="3.5" fill="#C6A44E" opacity="0.1"/>
+  <circle cx="345" cy="800" r="3" fill="#C6A44E" opacity="0.08"/>
+  <circle cx="410" cy="770" r="2.5" fill="#C6A44E" opacity="0.07"/>
+
+  <!-- Olive branch — top right -->
+  <path d="M1020 30C980 70 920 110 850 140C780 170 720 190 680 200" fill="none" stroke="#C6A44E" stroke-width="1.2" opacity="0.15" stroke-linecap="round"/>
+  <ellipse cx="970" cy="60" rx="18" ry="9" fill="none" stroke="#C6A44E" stroke-width="0.8" opacity="0.12" transform="rotate(30 970 60)"/>
+  <ellipse cx="900" cy="100" rx="15" ry="7.5" fill="none" stroke="#C6A44E" stroke-width="0.7" opacity="0.1" transform="rotate(22 900 100)"/>
+  <ellipse cx="830" cy="130" rx="13" ry="6.5" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.09" transform="rotate(15 830 130)"/>
+  <ellipse cx="770" cy="155" rx="11" ry="5.5" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.08" transform="rotate(8 770 155)"/>
+  <ellipse cx="720" cy="175" rx="9" ry="4.5" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.07" transform="rotate(3 720 175)"/>
+  <ellipse cx="940" cy="45" rx="12" ry="6" fill="none" stroke="#C6A44E" stroke-width="0.6" opacity="0.08" transform="rotate(-40 940 45)"/>
+  <ellipse cx="870" cy="82" rx="10" ry="5" fill="none" stroke="#C6A44E" stroke-width="0.5" opacity="0.07" transform="rotate(-32 870 82)"/>
+  <circle cx="930" cy="55" r="3.5" fill="#C6A44E" opacity="0.1"/>
+  <circle cx="860" cy="90" r="3" fill="#C6A44E" opacity="0.08"/>
+
+  <!-- Palestinian flag — top left -->
+  <rect x="50" y="50" width="70" height="50" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.18"/>
+  <line x1="50" y1="62" x2="120" y2="62" stroke="#C6A44E" stroke-width="0.5" opacity="0.12"/>
+  <line x1="50" y1="75" x2="120" y2="75" stroke="#B22222" stroke-width="0.5" opacity="0.12"/>
+  <line x1="50" y1="88" x2="120" y2="88" stroke="#C6A44E" stroke-width="0.5" opacity="0.12"/>
+  <path d="M50 50V100L72 75Z" fill="none" stroke="#B22222" stroke-width="0.8" opacity="0.15"/>
+
+  <!-- Palestinian flag — bottom right -->
+  <rect x="1080" y="800" width="70" height="50" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.18"/>
+  <path d="M1080 800V850L1102 825Z" fill="none" stroke="#B22222" stroke-width="0.8" opacity="0.15"/>
+
+  <!-- Palestinian flag — top right -->
+  <rect x="1080" y="50" width="70" height="50" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.18"/>
+  <path d="M1080 50V100L1102 75Z" fill="none" stroke="#B22222" stroke-width="0.8" opacity="0.15"/>
+
+  <!-- Palestinian flag — bottom left -->
+  <rect x="50" y="800" width="70" height="50" fill="none" stroke="#C6A44E" stroke-width="1" opacity="0.18"/>
+  <path d="M50 800V850L72 825Z" fill="none" stroke="#B22222" stroke-width="0.8" opacity="0.15"/>
+
+  <!-- Gold accent line at bottom -->
+  <line x1="0" y1="898" x2="1200" y2="898" stroke="#C6A44E" stroke-width="1" opacity="0.2"/>
+</svg>
