@@ -523,9 +523,7 @@ input::placeholder {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 0px;
 }
 
 #main-nav::-webkit-scrollbar {
@@ -687,24 +685,21 @@ input::placeholder {
 }
 
 /* ============ HEADER PALESTINE ACCENT ============ */
+header {
+  background: transparent !important;
+}
+
 header::after {
   content: '';
-  display: block;
-  height: 4px;
-  background: linear-gradient(90deg,
-    #1a1a2e 0%, #1a1a2e 25%,
-    #ffffff 25%, #ffffff 50%,
-    #009736 50%, #009736 75%,
-    #CE1126 75%, #CE1126 100%);
-  box-shadow: 0 2px 6px -1px rgba(0, 151, 54, 0.2);
+  display: none;
 }
 
 /* --- Hero Banner Enhanced --- */
 .hero-banner {
-  background: linear-gradient(135deg, #14120f 0%, #0d2818 30%, #1a3a0a 70%, #2a5a1a 100%);
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: transparent !important;
 }
 
 .hero-banner::before {
@@ -714,8 +709,9 @@ header::after {
   right: -20%;
   width: 60%;
   height: 200%;
-  background: radial-gradient(ellipse, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse, rgba(212, 175, 55, 0.06) 0%, transparent 60%);
   pointer-events: none;
+  border-radius: 0px;
 }
 
 .hero-banner::after {
@@ -725,23 +721,62 @@ header::after {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
 }
 
-.hero-banner .hero-text {
-  color: #ffffff;
+.hero-banner .text-white {
+  color: #ffffff !important;
+}
+
+.hero-banner .text-[#f5f0e6] {
+  color: #f5f0e6 !important;
 }
 
 .hero-banner h1 {
-  color: #f5f0e6;
+  color: #f5f0e6 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-banner h1 span {
-  color: #d4af37;
+  color: #d4af37 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-banner p {
-  color: rgba(245, 240, 230, 0.7);
+  color: rgba(245, 240, 230, 0.85) !important;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.hero-banner .text-[#d4af37]/55 {
+  color: rgba(212, 175, 55, 0.7) !important;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Hero inner content styling */
+.hero-banner > div > div {
+  color: #f5f0e6;
+}
+
+.hero-banner .skill-link {
+  color: #d4af37 !important;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.hero-banner .btn-primary {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.85), rgba(180, 150, 40, 0.85)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.5) !important;
+  color: #14120f !important;
+  text-shadow: none !important;
+}
+
+.hero-banner .btn-primary:hover {
+  background: linear-gradient(135deg, #d4af37, #b8962e) !important;
+}
+
+.hero-banner .btn-red, .hero-banner button.bg-\[rgba\(180\,50\,50\,0.9\)\] {
+  background: linear-gradient(135deg, rgba(180, 50, 50, 0.85), rgba(140, 30, 30, 0.85)) !important;
+  border: 1px solid rgba(255, 100, 100, 0.3) !important;
+  color: #ffffff !important;
 }
 
 /* ============ CATLANGO / TRAINING OVERRIDES ============ */
