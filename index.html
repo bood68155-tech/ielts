@@ -34,150 +34,167 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-slate antialiased">
   <!-- ============ AUTH SCREEN ============ -->
-  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-palestine-black/80 backdrop-blur-xl">
-    <!-- Olive branch decorations -->
-    <div class="absolute top-12 left-6 text-green-500/20 pointer-events-none">
-      <svg width="80" height="100" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M60 95 Q35 70 25 40 Q20 18 35 3" stroke="#009736" stroke-width="1.5" stroke-linecap="round"/>
-        <ellipse cx="32" cy="55" rx="9" ry="4" fill="#009736" opacity="0.3" transform="rotate(-30 32 55)"/>
-        <ellipse cx="25" cy="35" rx="7" ry="3" fill="#009736" opacity="0.25" transform="rotate(-20 25 35)"/>
-        <ellipse cx="45" cy="65" rx="7" ry="3" fill="#009736" opacity="0.2" transform="rotate(-45 45 65)"/>
-      </svg>
-    </div>
-    <div class="absolute bottom-12 right-6 text-red-500/20 pointer-events-none">
-      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 48 A27 27 0 0 1 52 48 Z" fill="#CE1126" opacity="0.3"/>
-        <path d="M11 48 A24 24 0 0 1 49 48 Z" fill="#CE1126" opacity="0.2"/>
-        <circle cx="24" cy="38" r="1.5" fill="#1a1a2e"/>
-        <circle cx="30" cy="34" r="1.5" fill="#1a1a2e"/>
-        <circle cx="36" cy="38" r="1.5" fill="#1a1a2e"/>
-      </svg>
-    </div>
-
-    <!-- Glassmorphism card -->
-    <div class="relative w-full max-w-md rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden">
-      <!-- Gradient header with Palestinian flag colors -->
-      <div class="relative px-8 py-9 text-center bg-gradient-to-br from-palestine-green via-palestine-black to-palestine-red/80">
-        <!-- Watermelon decoration -->
-        <div class="absolute top-3 right-4 text-2xl opacity-60">🍉</div>
-        <div class="text-4xl mb-3 relative z-10">🇵🇸</div>
-        <h2 class="text-2xl font-extrabold text-white relative z-10">Welcome to IELTS Master</h2>
-        <p class="text-green-200 text-sm mt-1 relative z-10">Study with purpose. Every lesson builds a stronger you.</p>
-        <!-- Flag stripe at bottom of header -->
-        <div class="absolute bottom-0 left-0 right-0 h-[3px] flex">
-          <div class="w-1/4 bg-palestine-black"></div>
-          <div class="w-1/4 bg-white"></div>
-          <div class="w-1/4 bg-palestine-green"></div>
-          <div class="w-1/4 bg-palestine-red"></div>
+  <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-slate-900/70 backdrop-blur-md">
+    <!-- Glassmorphism auth card -->
+    <div class="auth-card relative w-full max-w-md rounded-2xl bg-white/95 backdrop-blur-lg border-2 border-white/30 shadow-2xl overflow-hidden">
+      
+      <!-- Decorative background elements (clipped to card) -->
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-green-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-red-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <!-- Palestinian flag color accents -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-palestine-black via-white via-palestine-green via-palestine-red"></div>
+      
+      <!-- Header with Palestinian heritage -->
+      <div class="auth-header relative px-6 py-6 sm:px-8 sm:py-8 text-center bg-gradient-to-br from-palestine-green via-palestine-black to-palestine-red">
+        <!-- Flag emoji -->
+        <div class="flex justify-center mb-3">
+          <span class="text-5xl sm:text-6xl">🇵🇸</span>
         </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">Welcome to IELTS Master</h2>
+        <p class="text-green-200 text-xs sm:text-sm mt-1 opacity-90">Study with purpose. Every lesson builds a stronger you.</p>
+        
+        <!-- Decorative watermark - subtle olive branch -->
+        <svg class="absolute top-2 right-4 w-16 h-16 sm:w-20 sm:h-20 text-white/10 pointer-events-none" fill="none" viewBox="0 0 80 100">
+          <path d="M60 95 Q35 70 25 40 Q20 18 35 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="32" cy="55" rx="9" ry="4" fill="currentColor" opacity="0.3" transform="rotate(-30 32 55)"/>
+          <ellipse cx="25" cy="35" rx="7" ry="3" fill="currentColor" opacity="0.25" transform="rotate(-20 25 35)"/>
+        </svg>
+        
+        <!-- Bottom flag stripe -->
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-black"></div>
       </div>
 
-      <!-- Auth content with glass effect -->
-      <div class="p-7 relative" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
-        <div class="flex gap-2 mb-5">
-          <button id="auth-tab-login" class="tab-pill active" onclick="IELTS_AUTH.switchTab('login')">Sign in</button>
-          <button id="auth-tab-register" class="tab-pill" onclick="IELTS_AUTH.switchTab('register')">Create account</button>
+      <!-- Auth form content -->
+      <div class="auth-content px-6 py-5 sm:px-8 sm:py-6">
+        <!-- Tab buttons -->
+        <div class="flex gap-2 mb-5 bg-slate-100/50 rounded-xl p-1">
+          <button id="auth-tab-login" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('login')">
+            Sign in
+          </button>
+          <button id="auth-tab-register" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('register')">
+            Create account
+          </button>
         </div>
 
         <!-- Error message -->
-        <div id="auth-error" class="hidden mb-4 text-sm text-palestine-red bg-red-50 border border-red-200 rounded-lg px-4 py-2.5"></div>
+        <div id="auth-error" class="hidden mb-4">
+          <div class="flex items-center gap-2 px-4 py-2.5 bg-red-50 border border-red-200 rounded-lg">
+            <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="text-sm text-red-700"></p>
+          </div>
+        </div>
 
         <!-- Success message -->
-        <div id="auth-success" class="hidden mb-4 text-sm text-palestine-green bg-green-50 border border-green-200 rounded-lg px-4 py-2.5"></div>
+        <div id="auth-success" class="hidden mb-4">
+          <div class="flex items-center gap-2 px-4 py-2.5 bg-green-50 border border-green-200 rounded-lg">
+            <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="text-sm text-green-700"></p>
+          </div>
+        </div>
 
         <!-- Login form -->
         <form id="auth-form-login" onsubmit="IELTS_AUTH.login(event)" class="space-y-4 auth-forms-container">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="login-username">
+          <div class="form-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-username">
               Username or Email
             </label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner or email" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+              <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner or email" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900 focus ~ .auth-input-icon { color: #009736; }" required />
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="login-password">Password</label>
+          
+          <div class="form-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-password">Password</label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
               </svg>
-              <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+              <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
             </div>
           </div>
-          <button type="submit" class="btn-primary w-full !py-3 text-center relative overflow-hidden">
-            <span class="relative z-10">Sign in</span>
-            <div class="absolute inset-0 bg-gradient-to-r from-palestine-green/20 to-palestine-red/20 opacity-0 hover:opacity-100 transition duration-300"></div>
+          
+          <button type="submit" class="btn-primary w-full !py-3">
+            <span class="btn-text">Sign in</span>
           </button>
         </form>
 
         <!-- Register form -->
         <form id="auth-form-register" onsubmit="IELTS_AUTH.register(event)" class="space-y-4 hidden auth-forms-container">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-fullname">
+          <div class="form-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-fullname">
               Full Name (optional)
             </label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="reg-fullname" type="text" autocomplete="name" placeholder="Your full name" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" />
+              <input id="reg-fullname" type="text" autocomplete="name" placeholder="Your full name" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" />
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-username">Username</label>
+          
+          <div class="form-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-username">Username</label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+              <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-email">Email</label>
+          
+          <div class="form-group">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-email">Email</label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
               </svg>
-              <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+              <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
             </div>
           </div>
+          
           <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-password">Password</label>
+            <div class="form-group">
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password">Password</label>
               <div class="relative">
-                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
-                <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+                <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
               </div>
             </div>
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-1" for="reg-password2">Confirm</label>
+            
+            <div class="form-group">
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password2">Confirm</label>
               <div class="relative">
-                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
-                <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full px-10 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 pl-10" required />
+                <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
               </div>
             </div>
           </div>
-          <button type="submit" class="btn-primary w-full !py-3 text-center relative overflow-hidden">
-            <span class="relative z-10">Create account</span>
-            <div class="absolute inset-0 bg-gradient-to-r from-palestine-green/20 to-palestine-red/20 opacity-0 hover:opacity-100 transition duration-300"></div>
+          
+          <button type="submit" class="btn-primary w-full !py-3">
+            <span class="btn-text">Create account</span>
           </button>
         </form>
 
         <!-- Email verification container -->
-        <div id="verification-container" class="hidden verification-container"></div>
+        <div id="verification-container" class="hidden"></div>
 
         <!-- Footer note -->
-        <p class="text-[11px] text-slate-400 text-center mt-5 flex items-center justify-center gap-1.5">
-          <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-green"></span>
-          Demo authentication — accounts sync to Neon DB when configured, otherwise they stay in this browser.
-          <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-red ml-1"></span>
+        <p class="text-[11px] text-slate-400 text-center mt-5 leading-relaxed">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-green align-middle mr-1"></span>
+          Demo auth — Neon DB sync when configured, otherwise local storage.
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-red align-middle ml-2 mr-1"></span>
           Do not reuse a real password.
         </p>
       </div>

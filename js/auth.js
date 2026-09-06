@@ -569,29 +569,28 @@
       authForms.classList.add('hidden');
 
       verificationContainer.innerHTML = `
-                      <div class="verification-content text-center">
-                        <div class="verification-icon text-5xl mb-4">📧</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Check Your Email</h3>
-                        <p class="text-green-200 text-sm mb-4">A verification code has been sent to <strong>${escapeHtml(email)}</strong></p>
-                        <p class="text-white/70 text-xs mb-4">Enter the code below to verify your email address</p>
-                        <div class="flex justify-center gap-2 mb-4">
-                          ${Array(6).fill(0).map((_, i) => `
-                            <input type="text" maxlength="1" class="verification-digit w-10 h-12 text-center text-2xl text-white border-2 border-green-400/30 rounded-lg bg-white/10 focus:border-green-400 focus:bg-white/20 transition" data-index="${i}" autocomplete="off">
-                          `).join('')}
-                        </div>
-                        <div class="verification-logged-code text-green-300 text-sm mb-4 hidden">
-                          Code: <span class="font-bold tracking-wider">${code}</span>
-                        </div>
-                        <button id="verify-email-btn" class="btn-primary w-full mb-3">Verify Email</button>
-                        <p class="text-white/60 text-xs mt-3">
-                          Didn't receive the code? 
-                          <button type="button" class="text-green-400 hover:text-green-300 underline" id="resend-verification">Resend</button>
-                        </p>
-                        <button id="skip-verification" class="text-white/50 text-xs mt-2 underline hover:text-white transition">
-                          Skip for now (continue as guest)
-                        </button>
-                      </div>
-                    `;
+        <div class="verification-content">
+          <div class="verification-icon">📧</div>
+          <h3 class="verification-title">Check Your Email</h3>
+          <p class="verification-subtitle">A verification code has been sent to <strong>${escapeHtml(email)}</strong></p>
+          <p class="verification-subtitle" style="margin-bottom: 1rem;">Enter the code below to verify your email address</p>
+          <div class="verification-digits">
+            ${Array(6).fill(0).map((_, i) => `
+              <input type="text" maxlength="1" class="verification-digit" data-index="${i}" autocomplete="off">
+            `).join('')}
+          </div>
+          <div class="verification-actions">
+            <button id="verify-email-btn" class="btn-primary">Verify Email</button>
+          </div>
+          <p class="verification-meta">
+            Didn't receive the code? 
+            <button type="button" id="resend-verification">Resend</button>
+          </p>
+          <button id="skip-verification" class="verification-skip">
+            Skip for now (continue as guest)
+          </button>
+        </div>
+      `;
 
       // Setup verification inputs
       setupVerificationInputs(code, email, username);
