@@ -253,7 +253,7 @@
 .auth-input .auth-input-icon {
   position: absolute;
   left: 0.75rem;
-  top: 50%?
+  top: 50%;
   transform: translateY(-50%);
   width: 1.25rem;
   height: 1.25rem;
@@ -2350,4 +2350,414 @@ tr:last-child td {
   .card-group {
     grid-template-columns: 1fr;
   }
+}
+
+/* ============================================================
+   DARK THEME DESIGN FIXES — NAV, CARDS & BUTTONS
+   ============================================================ */
+
+/* --- 1. Navigation bar: dark glassmorphism + icon alignment + gold glow --- */
+
+/* Desktop nav strip — dark glass pill */
+#main-nav {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 119, 6, 0.22);
+  border-radius: 0.75rem;
+  padding: 0.3rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Header bar — match the dark glass nav */
+header > div > div {
+  background: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom-color: rgba(217, 119, 6, 0.2) !important;
+}
+
+/* Icon alignment — emoji + label centered on one line */
+.nav-btn,
+.nav-btn-mobile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.nav-btn {
+  justify-content: center;
+  color: rgba(245, 240, 230, 0.85);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(217, 119, 6, 0.12);
+  color: #fbbf24;
+  border-color: rgba(217, 119, 6, 0.35);
+}
+
+/* Active link — gold glow (#D97706) */
+.nav-btn.active {
+  background: rgba(217, 119, 6, 0.18);
+  color: #fbbf24;
+  font-weight: 700;
+  border-color: rgba(217, 119, 6, 0.55);
+  box-shadow: 0 0 14px rgba(217, 119, 6, 0.35), inset 0 0 10px rgba(217, 119, 6, 0.12);
+  text-shadow: 0 0 10px rgba(217, 119, 6, 0.55);
+}
+
+.nav-btn-featured {
+  background: rgba(217, 119, 6, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+.nav-btn-featured:hover {
+  background: rgba(217, 119, 6, 0.25);
+  color: #fde68a;
+}
+
+.nav-btn-featured.active {
+  background: rgba(217, 119, 6, 0.22);
+  color: #fbbf24;
+  box-shadow: 0 0 14px rgba(217, 119, 6, 0.35), inset 0 0 10px rgba(217, 119, 6, 0.12);
+  text-shadow: 0 0 10px rgba(217, 119, 6, 0.55);
+}
+
+/* Mobile nav — dark glass */
+#mobile-nav {
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.nav-btn-mobile {
+  justify-content: flex-start;
+  color: rgba(245, 240, 230, 0.85);
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.nav-btn-mobile:hover {
+  background: rgba(217, 119, 6, 0.12);
+  color: #fbbf24;
+}
+
+.nav-btn-mobile.active {
+  background: rgba(217, 119, 6, 0.18);
+  color: #fbbf24;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.45), 0 0 12px rgba(217, 119, 6, 0.25);
+  text-shadow: 0 0 10px rgba(217, 119, 6, 0.45);
+}
+
+.nav-btn-mobile-featured {
+  background: rgba(217, 119, 6, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+.nav-btn-mobile-featured:hover {
+  background: rgba(217, 119, 6, 0.25);
+  color: #fde68a;
+}
+
+.nav-btn-mobile-featured.active {
+  background: rgba(217, 119, 6, 0.22);
+  color: #fbbf24;
+  box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.45), 0 0 12px rgba(217, 119, 6, 0.25);
+  text-shadow: 0 0 10px rgba(217, 119, 6, 0.45);
+}
+
+/* --- 2. Cards & backgrounds: bright white → dark glassmorphism --- */
+
+/* Main card surfaces */
+.bg-white,
+.bg-slate-100,
+.bg-slate-200 {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.bg-slate-50,
+.bg-slate-50\/50,
+.bg-slate-50\/60 {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.hover\:bg-slate-100:hover,
+.hover\:bg-slate-200:hover {
+  background-color: rgba(217, 119, 6, 0.12) !important;
+}
+
+/* Progress fill inside translucent tracks stays gold */
+.bg-white\/20 > .h-full.bg-white,
+.bg-white\/20 > div.h-full.bg-white {
+  background: linear-gradient(90deg, #f59e0b, #d97706) !important;
+}
+
+/* Light slate borders → warm gold tint */
+.border-slate-100,
+.border-slate-200,
+.border-slate-300 {
+  border-color: rgba(217, 119, 6, 0.22) !important;
+}
+
+/* Text on dark cards — readable cream scale */
+.text-slate-900,
+.text-slate-800 {
+  color: #f5f0e6 !important;
+}
+
+.text-slate-700 {
+  color: rgba(245, 240, 230, 0.92) !important;
+}
+
+.text-slate-600,
+.text-slate-500 {
+  color: rgba(245, 240, 230, 0.72) !important;
+}
+
+.text-slate-400 {
+  color: rgba(245, 240, 230, 0.5) !important;
+}
+
+/* Pastel tinted cards → dark translucent tints */
+.bg-blue-50 {
+  background-color: rgba(30, 64, 175, 0.25) !important;
+}
+
+.bg-green-50,
+.bg-emerald-50 {
+  background-color: rgba(5, 150, 105, 0.2) !important;
+}
+
+.bg-red-50,
+.bg-rose-50 {
+  background-color: rgba(190, 18, 60, 0.2) !important;
+}
+
+.bg-amber-50 {
+  background-color: rgba(217, 119, 6, 0.2) !important;
+}
+
+.bg-emerald-100 {
+  background-color: rgba(5, 150, 105, 0.28) !important;
+}
+
+.text-blue-800,
+.text-blue-600 {
+  color: #93c5fd !important;
+}
+
+.text-green-800,
+.text-emerald-700,
+.text-emerald-600 {
+  color: #6ee7b7 !important;
+}
+
+.text-red-800,
+.text-red-600 {
+  color: #fda4af !important;
+}
+
+.border-emerald-200,
+.border-green-200 {
+  border-color: rgba(52, 211, 153, 0.4) !important;
+}
+
+.border-emerald-400 {
+  border-color: #34d399 !important;
+}
+
+.border-rose-400 {
+  border-color: #fb7185 !important;
+}
+
+/* --- 3. Buttons: vibrant gold/amber with high-contrast text --- */
+
+.btn-primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #14120f !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 4px 14px -3px rgba(217, 119, 6, 0.5) !important;
+  text-shadow: none !important;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: #14120f !important;
+  box-shadow: 0 6px 18px -3px rgba(217, 119, 6, 0.6) !important;
+}
+
+.btn-secondary {
+  background: rgba(15, 23, 42, 0.85) !important;
+  color: #f5f0e6 !important;
+  border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+.btn-secondary:hover {
+  background: rgba(217, 119, 6, 0.15) !important;
+  border-color: rgba(217, 119, 6, 0.6) !important;
+  color: #fbbf24 !important;
+}
+
+/* Tailwind brand buttons (bg-brand-*) → vibrant amber */
+.bg-brand-600,
+.bg-brand-700,
+.bg-brand-500 {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #14120f !important;
+}
+
+.hover\:bg-brand-700:hover,
+.hover\:bg-brand-600:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: #14120f !important;
+}
+
+.bg-brand-50 {
+  background-color: rgba(217, 119, 6, 0.15) !important;
+}
+
+.hover\:bg-brand-50:hover {
+  background-color: rgba(217, 119, 6, 0.25) !important;
+}
+
+.bg-brand-100 {
+  background-color: rgba(217, 119, 6, 0.22) !important;
+}
+
+.text-brand-600 {
+  color: #f59e0b !important;
+}
+
+.text-brand-700,
+.text-brand-800 {
+  color: #fbbf24 !important;
+}
+
+.text-brand-200 {
+  color: #fcd34d !important;
+}
+
+.text-brand-100 {
+  color: #fde68a !important;
+}
+
+.border-brand-200 {
+  border-color: rgba(217, 119, 6, 0.3) !important;
+}
+
+.border-brand-300 {
+  border-color: rgba(217, 119, 6, 0.45) !important;
+}
+
+.border-brand-400 {
+  border-color: rgba(217, 119, 6, 0.55) !important;
+}
+
+.border-brand-500 {
+  border-color: #f59e0b !important;
+}
+
+.hover\:border-brand-200:hover {
+  border-color: rgba(217, 119, 6, 0.5) !important;
+}
+
+.hover\:border-brand-300:hover {
+  border-color: rgba(217, 119, 6, 0.6) !important;
+}
+
+.ring-brand-100 {
+  --tw-ring-color: rgba(217, 119, 6, 0.3) !important;
+}
+
+.ring-brand-200 {
+  --tw-ring-color: rgba(217, 119, 6, 0.35) !important;
+}
+
+.ring-brand-400 {
+  --tw-ring-color: rgba(217, 119, 6, 0.5) !important;
+}
+
+.focus\:ring-brand-200:focus {
+  --tw-ring-color: rgba(217, 119, 6, 0.35) !important;
+}
+
+.focus\:ring-brand-400:focus {
+  --tw-ring-color: rgba(217, 119, 6, 0.5) !important;
+}
+
+.focus\:border-brand-500:focus {
+  border-color: #f59e0b !important;
+}
+
+.accent-brand-600 {
+  accent-color: #f59e0b !important;
+}
+
+/* Gradient headers / avatars → amber */
+.from-brand-600,
+.from-brand-500 {
+  --tw-gradient-from: #f59e0b !important;
+}
+
+.to-indigo-500,
+.to-indigo-400 {
+  --tw-gradient-to: #b45309 !important;
+}
+
+/* --- Auth screen: keep the recently-redesigned palette untouched --- */
+#auth-screen .border-slate-200 {
+  border-color: #e2e8f0 !important;
+}
+
+#auth-screen .text-slate-900 {
+  color: #0f172a !important;
+}
+
+#auth-screen .text-slate-800 {
+  color: #1e293b !important;
+}
+
+#auth-screen .text-slate-700 {
+  color: #334155 !important;
+}
+
+#auth-screen .text-slate-600,
+#auth-screen .text-slate-500 {
+  color: #64748b !important;
+}
+
+#auth-screen .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+#auth-screen .bg-red-50 {
+  background-color: #fef2f2 !important;
+}
+
+#auth-screen .bg-green-50 {
+  background-color: #f0fdf4 !important;
+}
+
+#auth-screen .text-red-700 {
+  color: #b91c1c !important;
+}
+
+#auth-screen .text-green-700 {
+  color: #15803d !important;
 }
