@@ -13,6 +13,21 @@
       background-attachment: fixed !important;
       background-repeat: no-repeat !important;
       background-color: #14120f !important;
+      opacity: 1 !important;
+      filter: brightness(100%) !important;
+    }
+    
+    /* Ensure no dark overlays on body */
+    body::before,
+    body::after {
+      content: none !important;
+      background: none !important;
+      opacity: 1 !important;
+    }
+    
+    /* Ensure background images are fully visible */
+    body > * {
+      background-blend-mode: normal !important;
     }
   </style>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -249,7 +264,7 @@
     <!-- DASHBOARD -->
     <section id="section-dashboard" class="section-view">
       <div class="hero-banner mb-8">
-        <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative" style="background:rgba(15,23,42,0.95);border-radius:0px !important;">
+        <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative" style="background:rgba(15,23,42,0.85);border-radius:0px !important;">
           <div class="hero-watermark">
             <!-- Golden olive branch (bottom-left) -->
             <svg class="hw-olive" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
