@@ -588,7 +588,9 @@
     getCache, setCache, removeCache,
     getMeta, setMeta,
     select, insert, upsert, update, remove,
-    neonQuery,
+    neonQuery, neonSelect, neonInsert, neonUpdate, neonDelete, neonUpsert,
+    neonPullUserByUsername, neonPullUserById, neonUpsertUser,
+    neonPullProfile, neonUpsertProfile,
     pullUserByUsername, pullUserById, upsertUser,
     pullProfile, upsertProfile,
     pullTraining, upsertTraining,
@@ -630,12 +632,63 @@
     }
   }
   
-  // Example Neon API endpoints (implement these in your backend):
-  // GET  /api/neon/users?username=xxx
-  // POST /api/neon/users (create/update user)
-  // GET  /api/neon/profile?userId=xxx
-  // POST /api/neon/profile (upsert profile)
-  // etc.
+  // Neon database operations (for backend/API usage)
+  // These use the Neon connection directly via an API layer
+  const NEON_API_BASE = '/api/neon';
+  
+  async function neonSelect(table, params = {}) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'GET', params);
+  }
+  
+  async function neonInsert(table, row) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'POST', row);
+  }
+  
+  async function neonUpdate(table, id, data) {
+    return neonQuery(`${NEON_API_BASE}/${table}/${id}`, 'PUT', data);
+  }
+  
+  async function neonDelete(table, id) {
+    return neonQuery(`${NEON_API_BASE}/${table}/${id}`, 'DELETE');
+  }
+  
+  // Neon-specific user operations
+  async function neonPullUserByUsername(username) {
+    const result = await neonSelect('users', { username });
+    return result && result.rows && result.rows[0] ? rowToUser(result.rows[0]) : null;
+  }
+  
+  async function neonPullUserById(id) {
+    const result = await neonSelect('users', { id });
+    return result && result.rows && result.rows[0] ? rowToUser(result.rows[0]) : null;
+  }
+  
+  async function neonUpsertUser(user) {
+    return neonInsert('users', userToRow(user));
+  }
+  
+  // Neon-specific profile operations
+  async function neonPullProfile(userId) {
+    const result = await neonSelect('profiles', { user_id: userId });
+    if (!result || !result.rows || !result.rows[0]) return null;
+    const r = result.rows[0];
+    return {
+      displayName: r.display_name || '',
+      bio: r.bio || '',
+      targetBand: r.target_band || '',
+      avatar: r.avatar || null,
+      activity: r.activity || [],
+      updatedAt: r.updated_at || 0
+    };
+  }
+  
+  async function neonUpsertProfile(userId, profile) {
+    return neonUpsert('profiles', { user_id: userId, ...profileToRow(userId, profile) });
+  }
+  
+  async function neonUpsert(table, row, onConflict) {
+    return neonQuery(`${NEON_API_BASE}/${table}`, 'PUT', { ...row, onConflict });
+  }
   
   /* re-sync everything when the connection comes back */
   if (typeof window !== 'undefined') {
