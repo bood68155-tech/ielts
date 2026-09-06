@@ -3,16 +3,262 @@
    Colors: Black (#1a1a2e), White (#ffffff), Green (#009736), Red (#CE1126)
    ================================================================ */
 
+/* ============================================================
+   AUTH SCREEN - PALESTINIAN HERITAGE GLASSMORPHISM THEME
+   ============================================================
 
+   Design principles:
+   - Glassmorphism: backdrop-blur, semi-transparent backgrounds, subtle borders
+   - Palestinian heritage: flag colors (black, white, green, red), olive branches, watermelon
+   - Modern UI: rounded corners, shadows, smooth transitions
+   ============================================================ */
 
+/* --- AUTH SCREEN CONTAINER --- */
+#auth-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(26, 26, 46, 0.8); /* Palestine black with opacity */
+  backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease;
+}
 
+#auth-screen.hidden {
+  display: none;
+}
 
+#auth-screen.flex {
+  display: flex;
+}
 
+/* --- GLASSMORPHISM CARD --- */
+#auth-screen > div {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.75rem;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
 
+/* --- AUTH HEADER --- */
+#auth-screen .px-8.py-9.text-center {
+  position: relative;
+  padding: 2rem 2rem 2.25rem;
+  text-align: center;
+  background: linear-gradient(135deg, #009736 0%, #1a1a2e 50%, #CE1126 100%);
+  color: white;
+}
 
+/* --- DECORATIVE ELEMENTS --- */
+#auth-screen .absolute.top-12,
+#auth-screen .absolute.bottom-12 {
+  pointer-events: none;
+  user-select: none;
+}
 
+/* --- AUTH FORM CONTAINER --- */
+#auth-screen .p-7 {
+  position: relative;
+  padding: 1.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
 
-/* --- Navigation --- */
+/* --- TAB PILLS --- */
+#auth-screen .flex.gap-2 {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* --- INPUT FIELDS WITH GLASS EFFECT --- */
+#auth-screen input[type="text"],
+#auth-screen input[type="email"],
+#auth-screen input[type="password"] {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  padding-left: 2.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+  color: #1e293b;
+}
+
+#auth-screen input::placeholder {
+  color: #94a3b8;
+}
+
+#auth-screen input:focus {
+  outline: none;
+  border-color: #009736;
+  box-shadow: 0 0 0 3px rgba(0, 151, 54, 0.15);
+  background: white;
+}
+
+#auth-screen input:focus + svg,
+#auth-screen input:focus ~ svg {
+  color: #009736;
+}
+
+/* --- INPUT ICON WRAPPER --- */
+#auth-screen .relative {
+  position: relative;
+}
+
+#auth-screen .absolute.left-3.top-1\/2.-translate-y-1\/2 {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+#auth-screen .pl-10 {
+  padding-left: 2.5rem;
+}
+
+/* --- BUTTONS --- */
+#auth-screen .btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: #009736;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#auth-screen .btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+#auth-screen .btn-primary:hover::before {
+  transform: translateX(100%);
+}
+
+#auth-screen .btn-primary:hover {
+  background: #007A3D;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 151, 54, 0.3);
+}
+
+#auth-screen .btn-primary:active {
+  transform: translateY(0);
+}
+
+#auth-screen .btn-primary .relative.z-10 {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- VERIFICATION UI STYLES --- */
+.verification-container {
+  margin-top: 1rem;
+}
+
+.verification-content {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.verification-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background: rgba(0, 151, 54, 0.1);
+  border-radius: 50%;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  border: 2px solid rgba(0, 151, 54, 0.2);
+}
+
+/* Verification digit inputs */
+.verification-digit {
+  width: 2.75rem;
+  height: 3rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  border: 2px solid rgba(0, 151, 54, 0.3);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+}
+
+.verification-digit:focus {
+  outline: none;
+  border-color: #009736;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 151, 54, 0.2);
+  transform: scale(1.05);
+}
+
+.verification-digit.filled {
+  border-color: #009736;
+  background: #f0fdf4;
+}
+
+/* Verification logged code display */
+.verification-logged-code {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 151, 54, 0.05);
+  border: 1px dashed rgba(0, 151, 54, 0.3);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.verification-logged-code .font-bold.tracking-wider {
+  letter-spacing: 0.2em;
+  color: #007A3D;
+}
+
+/* Verification skip link */
+#auth-screen .text-white\/50 {
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease;
+}
+
+#auth-screen .text-white\/50:hover {
+  color: white;
+}
+
+/* --- NAVIGATION --- */
 .nav-btn { color: #475569; border: 1px solid transparent; }
 .nav-btn:hover { background: #f0fdf4; color: #005C2E; border-color: #bbf7d0; }
 .nav-btn.active { background: #009736; color: #ffffff; font-weight: 600; border-color: #009736; }

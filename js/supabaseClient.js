@@ -187,6 +187,11 @@
     return rows && rows.length ? rowToUser(rows[0]) : null;
   }
 
+  async function pullUserByEmail(email) {
+    const rows = await select('users', { match: { email: String(email).trim().toLowerCase() }, limit: 1 });
+    return rows && rows.length ? rowToUser(rows[0]) : null;
+  }
+
   async function pullUserById(id) {
     const rows = await select('users', { match: { id }, limit: 1 });
     return rows && rows.length ? rowToUser(rows[0]) : null;

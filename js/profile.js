@@ -21,6 +21,7 @@
     return {
       username: user ? user.username : '',
       displayName: scoped.displayName || (user && user.displayName) || (user ? user.username : ''),
+      fullName: scoped.displayName || (user && user.fullName) || (user && user.displayName) || '',
       bio: scoped.bio || (user && user.bio) || '',
       targetBand: scoped.targetBand || (user && user.targetBand) || '',
       avatar: scoped.avatar || (user && user.avatar) || null,
@@ -71,7 +72,7 @@
   }
 
   function avatarOf(user) {
-    return user.avatar || String(user.displayName || user.username || 'U').charAt(0).toUpperCase();
+    return user.avatar || String(user.fullName || user.displayName || user.username || 'U').charAt(0).toUpperCase();
   }
 
   function skillProgress(user) {
@@ -183,10 +184,11 @@
         <div class="w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-indigo-400 text-white flex items-center justify-center text-4xl font-extrabold shadow-lg shrink-0">${esc(avatarOf(p))}</div>
         <div class="flex-1 text-center sm:text-left">
           <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-            <h3 class="text-2xl font-extrabold text-slate-900">${esc(p.displayName)}</h3>
+            <h3 class="text-2xl font-extrabold text-slate-900">${esc(p.fullName || p.displayName)}</h3>
+            ${p.fullName && p.fullName !== p.displayName ? `<span class="text-sm text-slate-400">@${esc(p.username)}</span>` : ''}
             <span class="text-xs font-bold level-badge-${level.color} px-2.5 py-1 rounded-full">${level.icon} ${level.name}</span>
           </div>
-          <p class="text-sm text-slate-500 mt-0.5">@${esc(p.username)} ${p.targetBand ? '· 🎯 Target band ' + esc(p.targetBand) : ''}</p>
+          <p class="text-sm text-slate-500 mt-0.5">${p.fullName && p.fullName !== p.displayName ? '' : '@'}${esc(p.username)} ${p.targetBand ? '· 🎯 Target band ' + esc(p.targetBand) : ''}</p>
           <p class="text-sm text-slate-600 mt-2 max-w-xl mx-auto sm:mx-0">${p.bio ? esc(p.bio) : 'No bio yet — tell other learners a little about yourself.'}</p>
           <p class="text-xs text-slate-400 mt-2">Member since ${joined} · ${user.xp} XP</p>
         </div>
@@ -247,11 +249,15 @@
             <input id="pf-name" type="text" maxlength="40" value="${esc(p.displayName)}" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-band">Target band</label>
-            <select id="pf-band" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white">
-              ${BAND_OPTIONS.map((b) => '<option value="' + b + '" ' + (p.targetBand === b ? 'selected' : '') + '>' + (b ? 'Band ' + b : 'Not set') + '</option>').join('')}
-            </select>
+            <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-fullname">Full name</label>
+            <input id="pf-fullname" type="text" maxlength="60" value="${esc(p.fullName)}" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
           </div>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-band">Target band</label>
+          <select id="pf-band" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white">
+            ${BAND_OPTIONS.map((b) => '<option value="' + b + '" ' + (p.targetBand === b ? 'selected' : '') + '>' + (b ? 'Band ' + b : 'Not set') + '</option>').join('')}
+          </select>
         </div>
         <div class="mt-4">
           <label class="block text-sm font-semibold text-slate-700 mb-1" for="pf-bio">Bio</label>
@@ -300,15 +306,19 @@
     if (!user) return;
     const p = profileData();
     const name = $('#pf-name').value.trim() || user.username;
+    const fullName = $('#pf-fullname').value.trim();
     const bio = $('#pf-bio').value.trim();
     const targetBand = $('#pf-band').value;
     const picked = document.querySelector('#profile-edit [data-avatar].border-brand-500');
     const avatar = picked ? picked.dataset.avatar : p.avatar;
     const bandChanged = targetBand !== p.targetBand;
 
-    window.IELTS_AUTH.updateProfile({ displayName: name, bio, targetBand, avatar });
+    window.IELTS_AUTH.updateProfile({ displayName: name, fullName: fullName || name, bio, targetBand, avatar });
     if (bandChanged && targetBand) {
       window.IELTS_AUTH.addActivity('profile', 'Set a target band of ' + targetBand, 0);
+    }
+    if (fullName && fullName !== p.fullName) {
+      window.IELTS_AUTH.addActivity('profile', 'Updated full name', 0);
     }
     window.IELTS_AUTH.addActivity('profile', 'Updated profile', 0);
     window.toast && window.toast('Profile saved ✅');
