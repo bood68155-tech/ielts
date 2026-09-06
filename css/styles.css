@@ -24,9 +24,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.95);
   transition: opacity 0.3s ease;
 }
 
@@ -657,9 +655,7 @@
 
 /* --- Skill Cards --- */
 .skill-card {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.2);
   padding: 1.5rem;
   cursor: pointer;
@@ -709,9 +705,7 @@
 
 /* --- Question Blocks --- */
 .q-card {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.2);
   padding: 1.25rem;
 }
@@ -818,8 +812,7 @@ input[type="text"].fill-input.wrong {
 }
 
 .btn-secondary {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
   color: #f5f0e6;
   font-weight: 600;
   font-size: 0.9rem;
@@ -877,16 +870,14 @@ input[type="text"].fill-input.wrong {
 
 /* --- Results --- */
 .result-banner {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.2);
   padding: 1.25rem 1.5rem;
 }
 
 /* --- Speaking Cue Card --- */
 .cue-card {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.3);
   padding: 1.5rem;
 }
@@ -1021,13 +1012,11 @@ input::placeholder {
 
 /* --- Auth Screen Container --- */
 #auth-screen {
-  background: rgba(20, 18, 15, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(20, 18, 15, 0.95);
 }
 
 #auth-screen > div {
-  background: rgba(20, 18, 15, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(20, 18, 15, 0.9);
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
