@@ -52,7 +52,7 @@ if (isNode) {
 // Database URL from environment
 // Loaded from .env file or environment variables
 const DATABASE_URL = process.env.DATABASE_URL 
-  || 'postgresql://neondb_owner:YOUR_PASSWORD@ep-spring-queen-ayxl4iqh-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require';
+  || 'postgresql://neondb_owner:npg_Eji7Y6olJKLV@ep-spring-queen-ayxl4iqh-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 // Initialize the database client
 function initClient() {
