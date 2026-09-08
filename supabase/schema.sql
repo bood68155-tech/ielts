@@ -25,12 +25,14 @@ create table if not exists public.users (
   updated_at    bigint not null default 0
 );
 
--- Profiles: display name, bio, target band, avatar and activity log.
+-- Profiles: display name, bio, target band, avatar, activity log and the
+-- baseline CEFR level captured by the placement test (initial_band, a1-c2).
 create table if not exists public.profiles (
   user_id      text primary key references public.users (id) on delete cascade,
   display_name text not null default '',
   bio          text not null default '',
   target_band  text not null default '',
+  initial_band text not null default '',
   avatar       text,
   activity     jsonb not null default '[]'::jsonb,
   updated_at   bigint not null default 0

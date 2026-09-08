@@ -222,6 +222,7 @@
       display_name: p.displayName || '',
       bio: p.bio || '',
       target_band: p.targetBand || '',
+      initial_band: p.initialBand || p.level || '',
       avatar: p.avatar || null,
       activity: p.activity || [],
       updated_at: p.updatedAt || Date.now()
@@ -234,6 +235,7 @@
       displayName: rows[0].display_name || '',
       bio: rows[0].bio || '',
       targetBand: rows[0].target_band || '',
+      initialBand: rows[0].initial_band || '',
       avatar: rows[0].avatar || null,
       activity: rows[0].activity || [],
       updatedAt: rows[0].updated_at || 0
@@ -579,7 +581,8 @@
     if (!local.updatedAt || (remote.updatedAt || 0) > (local.updatedAt || 0)) {
       writeScoped(userId, 'profile', {
         displayName: remote.displayName, bio: remote.bio, targetBand: remote.targetBand,
-        avatar: remote.avatar, activity: remote.activity || [], updatedAt: remote.updatedAt
+        initialBand: remote.initialBand || '', avatar: remote.avatar,
+        activity: remote.activity || [], updatedAt: remote.updatedAt
       });
       return true;
     }

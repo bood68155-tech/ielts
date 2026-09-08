@@ -182,18 +182,19 @@
     const user = window.IELTS_AUTH ? window.IELTS_AUTH.getCurrentUser() : null;
     const level = user ? window.IELTS_AUTH.getLevel(user.xp) : null;
     const nextLevel = user ? window.IELTS_AUTH.getNextLevel(user.xp) : null;
+    const placementBand = (window.IELTS_AUTH && window.IELTS_AUTH.getPlacementBand) ? window.IELTS_AUTH.getPlacementBand() : null;
 
     // Auth banner: sign-in prompt or user progress summary
     $('#dashboard-auth-banner').innerHTML = user
       ? `
-        <div class="bg-white rounded-2xl border-2 border-green-200 shadow-sm p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-extrabold">${esc(user.username.charAt(0).toUpperCase())}</div>
+            <div class="w-12 h-12 rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(212,175,55,0.12)] text-[#d4af37] flex items-center justify-center text-lg font-extrabold">${esc(user.username.charAt(0).toUpperCase())}</div>
             <div>
-              <p class="font-bold text-slate-900">Welcome back, ${esc(user.username)}</p>
-              <p class="text-xs text-slate-500">${level.icon} ${level.name} level · ${user.xp} XP ${nextLevel ? '· ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
-              <div class="mt-2 h-1.5 w-40 bg-slate-100 rounded-full overflow-hidden">
-                <div class="h-full bg-brand-500 rounded-full" style="width: ${Math.min(100, Math.max(3, Math.round((user.xp / maxXp) * 100)))}%"></div>
+              <p class="font-bold text-[#f5f0e6]">Welcome back, ${esc(user.username)}</p>
+              <p class="text-xs text-[#f5f0e6]/60">${level.icon} ${level.name} level · ${user.xp} XP ${nextLevel ? '· ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}${placementBand && placementBand.shortName ? ' · Placed ' + placementBand.shortName : ''}</p>
+              <div class="mt-2 h-1.5 w-40 bg-[rgba(212,175,55,0.15)] rounded-full overflow-hidden">
+                <div class="h-full bg-[#d4af37] rounded-full" style="width: ${Math.min(100, Math.max(3, Math.round((user.xp / maxXp) * 100)))}%"></div>
               </div>
             </div>
           </div>
@@ -209,7 +210,7 @@
         <div class="bg-gradient-to-r from-palestine-green to-palestine-black rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
           <div>
             <p class="text-lg font-extrabold">Sign in to start your learning journey 🚀</p>
-            <p class="text-sm text-brand-100 mt-0.5">Create a free account to earn XP, level up, and track your weekly exam scores.</p>
+            <p class="text-sm text-brand-100 mt-0.5">Create a free account, take a placement test to find your level, then earn XP and track your weekly exam scores.</p>
           </div>
           <button onclick="IELTS_AUTH.showScreen()" class="bg-white text-brand-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-50 transition">Sign in / Register</button>
         </div>`;
@@ -221,11 +222,98 @@
       { icon: '🗣️', label: 'Speaking', value: '3 parts', sub: 'Full test' }
     ];
     $('#dashboard-stats').innerHTML = stats.map((s) => `
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-4 shadow-sm">
+      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-2xl p-4 shadow-sm">
         <div class="text-2xl mb-1">${s.icon}</div>
-        <div class="text-xl font-extrabold text-slate-900">${s.value}</div>
-        <div class="text-xs text-slate-500 font-medium">${s.label} · ${s.sub}</div>
+        <div class="text-xl font-extrabold text-[#d4af37]">${s.value}</div>
+        <div class="text-xs text-[#f5f0e6]/60 font-medium">${s.label} · ${s.sub}</div>
       </div>`).join('');
+
+    if (user) renderNextStepsRoadmap(user);
+  }
+
+  /* ---------------- Next Steps Roadmap (adaptive, placement-driven) ---------------- */
+  function renderNextStepsRoadmap(user) {
+    const el = $('#dashboard-roadmap');
+    if (!el) return;
+    const placement = (window.IELTS_AUTH && window.IELTS_AUTH.getScoped) ? window.IELTS_AUTH.getScoped('placement', null) : null;
+    const placed = !!(placement && placement.completed && placement.lastLevel);
+    const band = placed ? placement.lastLevel : window.IELTS_AUTH.getLevel(user.xp);
+    const nextLevel = window.IELTS_AUTH.getNextLevel(user.xp);
+
+    if (!placed) {
+      el.innerHTML = `
+        <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <span class="text-4xl">🧭</span>
+            <div>
+              <h2 class="text-xl font-extrabold text-[#f5f0e6]">Start with your Roadmap</h2>
+              <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">Take the 5-minute Placement Test and IELTS PA will map a personalised study path, unlock the right content for your band, and give you a live band estimate to improve on.</p>
+            </div>
+          </div>
+          <button onclick="showSection('placement')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#b8962e] transition shadow-md">🚀 Take Placement Test</button>
+        </div>`;
+      return;
+    }
+
+    let pctTxt = '';
+    if (placement.lastScore != null && placement.lastTotal) {
+      pctTxt = Math.round((placement.lastScore / placement.lastTotal) * 100) + '% on placement';
+    }
+    const xpPct = Math.min(100, Math.max(3, Math.round((user.xp / maxXp) * 100)));
+
+    const tier = (band.id === 'a1' || band.id === 'a2') ? 'foundation'
+      : (band.id === 'b1' || band.id === 'b2') ? 'intermediate' : 'advanced';
+
+    let steps = [];
+    if (tier === 'foundation') {
+      steps = [
+        { icon: '📚', title: 'Core AWL Vocabulary', desc: 'Build the 570 academic word families that appear in every IELTS paper.', section: 'awl', cta: 'Start drilling' },
+        { icon: '📖', title: 'Foundation Reading', desc: 'Short, clear passages with instant feedback plus skimming and scanning tips.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: '🎧', title: 'Listening Basics', desc: 'Part 1 & 2 listening practice with full transcripts and speed control.', section: 'listening-master', cta: 'Practise listening' }
+      ];
+    } else if (tier === 'intermediate') {
+      steps = [
+        { icon: '📖', title: 'Reading Mastery', desc: 'Push toward Band 6–7 on longer passages and inferred meaning.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: '🎧', title: 'Listening Mastery', desc: 'Part 3 & 4 tutorials with paraphrase spotting and faster delivery.', section: 'listening-master', cta: 'Practise listening' },
+        { icon: '🎯', title: 'Focused Practice Sets', desc: 'Grammar, vocabulary and skill quizzes sized for your band.', section: 'quiz-hub', cta: 'Open quiz hub' }
+      ];
+    } else {
+      steps = [
+        { icon: '👑', title: 'Advanced Reading', desc: 'Band 8–9 passages: dense academic texts with implied meaning.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: '✍️', title: 'Writing & Speaking Studio', desc: 'Timed tasks with band-descriptor feedback for Task 1 and Task 2.', section: 'wss', cta: 'Open studio' },
+        { icon: '📅', title: 'Weekly Exam', desc: 'Sit the exam under realistic conditions and watch your band trend.', section: 'exam', cta: 'Take exam' }
+      ];
+    }
+
+    el.innerHTML = `
+      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-[10px] font-bold text-[#d4af37] uppercase tracking-widest">Next Steps Roadmap · ${band.id.toUpperCase()}</p>
+            <h2 class="text-xl font-extrabold text-[#f5f0e6]">🧭 Personalised path from ${esc(band.name)}</h2>
+            <p class="text-sm text-[#f5f0e6]/60 mt-1">${band.icon} ${esc(band.name)}${pctTxt ? ' · ' + pctTxt : ''}${nextLevel ? ' · ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
+          </div>
+          <button class="btn-secondary text-sm" onclick="showSection('placement')">🔁 Re-test level</button>
+        </div>
+        <div class="mt-4 h-1.5 bg-[rgba(212,175,55,0.15)] rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-[#d4af37] to-[#f5f0e6] rounded-full transition-all" style="width:${xpPct}%"></div>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+        ${steps.map((s) => `
+          <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 flex flex-col">
+            <span class="text-3xl mb-2">${s.icon}</span>
+            <h3 class="text-sm font-extrabold text-[#f5f0e6]">${s.title}</h3>
+            <p class="text-xs text-[#f5f0e6]/60 mt-1 flex-1 leading-relaxed">${s.desc}</p>
+            <button type="button" class="mt-3 self-start text-xs font-bold text-[#14120f] bg-[rgba(212,175,55,0.9)] hover:bg-[#b8962e] px-4 py-2 rounded-lg transition" onclick="showSection('${s.section}')">${s.cta}</button>
+          </div>`).join('')}
+      </div>
+      <div class="flex flex-wrap gap-2 mb-8">
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('diagnostics')">📊 Live band report</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('curriculum')">📘 Academic curriculum</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('study-plan')">🗓️ 4-week plan</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('training')">🎓 Training</button>
+      </div>`;
   }
 
   function countListeningScore() {

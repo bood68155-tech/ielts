@@ -43,7 +43,6 @@
     {
       id: 'r4', level: 'b1', passage: 'Many cities are now investing in cycling infrastructure to reduce traffic congestion and improve air quality. Amsterdam and Copenhagen are often cited as examples of cities that have successfully encouraged cycling through dedicated lanes, secure parking and affordable bike-sharing schemes.',
       q: 'Why are cities investing in cycling infrastructure?', opts: ['To increase car sales', 'To reduce congestion and pollution', 'To attract tourists', 'To build new roads'], ans: 'B', tip: '"to reduce traffic congestion and improve air quality"' },
-    },
     {
       id: 'r5', level: 'b2', passage: 'The concept of "food miles" — the distance food travels from farm to plate — has gained attention as consumers become more aware of the environmental impact of their choices. However, research suggests that transportation accounts for only about 11% of food-related greenhouse gas emissions. Production methods, storage and packaging are often far more significant factors.',
       q: 'What percentage of food-related emissions comes from transportation?', opts: ['About 5%', 'About 11%', 'About 25%', 'About 50%'], ans: 'B', tip: '"transportation accounts for only about 11%"' },
@@ -265,6 +264,9 @@
     const total = ALL_QUESTIONS.length;
     const detectedLevel = getLevel(correct, total);
 
+    const bySection = { grammar: { c: 0, t: 0 }, reading: { c: 0, t: 0 }, listening: { c: 0, t: 0 } };
+    details.forEach((d) => { bySection[d.section].t++; if (d.isCorrect) bySection[d.section].c++; });
+
     /* update user XP to match detected level */
     const user = window.IELTS_AUTH.getCurrentUser();
     if (user && detectedLevel.minXp > user.xp) {
@@ -276,17 +278,36 @@
 
     window.IELTS_AUTH.addActivity('placement', 'Completed placement test: ' + detectedLevel.name + ' (' + correct + '/' + total + ')', PLACEMENT_XP);
 
-    /* Supabase profile update */
+    /* persist baseline band + section scores to Supabase/Neon profile */
     try {
       if (user && window.IELTS_DB && window.IELTS_DB.upsertProfile) {
-        window.IELTS_DB.upsertProfile(user.id, { level: detectedLevel.id, levelName: detectedLevel.name, placementScore: correct, placementTotal: total, placementPct: Math.round((correct / total) * 100) });
+        window.IELTS_DB.upsertProfile(user.id, {
+          initialBand: detectedLevel.id,
+          level: detectedLevel.id,
+          levelName: detectedLevel.name,
+          placementScore: correct,
+          placementTotal: total,
+          placementPct: Math.round((correct / total) * 100)
+        });
       }
     } catch (e) { /* offline or no supabase */ }
 
+    /* feed the placement result into the diagnostic band engine */
+    try {
+      if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+        window.IELTS_DIAG.record('reading', 'Placement · Reading', bySection.reading.c, bySection.reading.t);
+        window.IELTS_DIAG.record('listening', 'Placement · Listening', bySection.listening.c, bySection.listening.t);
+        window.IELTS_DIAG.record('vocabulary', 'Placement · Grammar', bySection.grammar.c, bySection.grammar.t);
+      }
+    } catch (e) { /* diagnostics engine unavailable */ }
+
     const c = cache();
     c.lastScore = correct;
+    c.lastTotal = total;
     c.lastLevel = detectedLevel;
     c.completed = true;
+    c.sections = bySection;
+    c.savedAt = Date.now();
     save(c);
 
     window.toast && window.toast('+' + PLACEMENT_XP + ' XP! Your level: ' + detectedLevel.name);
@@ -355,5 +376,54 @@
 
   function back() { stopTimer(); state.view = 'home'; render(); }
 
-  window.IELTS_PLACEMENT = { render, start, answer, prev, next, back };
+  /* ---------- onboarding prompt ---------- */
+  /* After sign-in, a brand-new user who has never placed is offered the
+     placement test once per session (dismissal is sticky via sessionStorage). */
+  function maybePrompt() {
+    const user = window.IELTS_AUTH.getCurrentUser();
+    if (!user) return;
+    try { const c = cache(); if (c && c.completed) return; } catch (e) { /* fall through */ }
+    const as = $('#auth-screen');
+    if (as && !as.classList.contains('hidden')) return;
+    const uid = user.userId || user.username;
+    if (uid && sessionStorage.getItem('ielts-placement-skip_' + uid)) return;
+    if (document.getElementById('placement-prompt-modal')) return;
+
+    const el = document.createElement('div');
+    el.id = 'placement-prompt-modal';
+    el.className = 'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm';
+    el.innerHTML = `
+      <div class="w-full max-w-md bg-[rgba(15,23,42,0.95)] backdrop-blur-md border border-[rgba(212,175,55,0.3)] rounded-2xl p-6 shadow-2xl">
+        <div class="text-center mb-5">
+          <span class="text-5xl">📋</span>
+          <h3 class="text-xl font-extrabold text-[#f5f0e6] mt-2">Find your level first</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mt-1 leading-relaxed">Take the 5-minute Placement Test so IELTS PA can build a study path, unlock content, and track your band — all matched to your real English level.</p>
+        </div>
+        <div class="space-y-2">
+          <button type="button" class="w-full py-3 bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold rounded-xl hover:bg-[#b8962e] transition" onclick="IELTS_PLACEMENT.startFromPrompt()">🚀 Take the Placement Test</button>
+          <button type="button" class="w-full py-3 border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 font-semibold rounded-xl hover:bg-[rgba(212,175,55,0.1)] transition" onclick="IELTS_PLACEMENT.dismissPrompt()">Browse for now</button>
+        </div>
+      </div>`;
+    document.body.appendChild(el);
+    el.addEventListener('click', function (ev) { if (ev.target === el) dismissPrompt(); });
+  }
+
+  function dismissPrompt() {
+    const user = window.IELTS_AUTH.getCurrentUser();
+    if (user) {
+      const uid = user.userId || user.username;
+      if (uid) sessionStorage.setItem('ielts-placement-skip_' + uid, '1');
+    }
+    const el = document.getElementById('placement-prompt-modal');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  function startFromPrompt() {
+    dismissPrompt();
+    if (window.showSection) window.showSection('placement');
+  }
+
+  if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) window.IELTS_AUTH.onUserChange(maybePrompt);
+
+  window.IELTS_PLACEMENT = { render, start, answer, prev, next, back, maybePrompt, dismissPrompt, startFromPrompt };
 })();

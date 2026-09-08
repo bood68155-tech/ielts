@@ -238,10 +238,21 @@
           displayName: profile.displayName,
           bio: profile.bio,
           targetBand: profile.targetBand,
+          initialBand: profile.initialBand || '',
           avatar: profile.avatar,
           activity: profile.activity || [],
           updatedAt: profile.updatedAt
         });
+
+        // Hydrate the placement cache from the DB baseline band so level
+        // gating + the roadmap work on a fresh device before a new test.
+        if (profile.initialBand) {
+          const pl = getScoped('placement', null);
+          if (!pl || !pl.completed) {
+            const lvl = LEVELS.find((L) => L.id === profile.initialBand);
+            if (lvl) setScoped('placement', { lastScore: null, lastTotal: null, lastLevel: lvl, completed: true, restored: true, savedAt: Date.now() });
+          }
+        }
       }
 
       // Fetch fresh training progress
@@ -359,10 +370,26 @@
     return idx < LEVELS.length - 1 ? LEVELS[idx + 1] : null;
   }
 
+  // Placement baseline: the CEFR band diagnosed by the placement test, or null.
+  function getPlacementBand() {
+    if (!currentUser) return null;
+    try {
+      const c = getScoped('placement', null);
+      return (c && c.completed && c.lastLevel) ? c.lastLevel : null;
+    } catch (e) { return null; }
+  }
+
+  // Content unlocks are driven by XP level, upgraded to the diagnosed
+  // placement band when the learner is stronger on paper than their XP.
   function isUnlocked(skill, index) {
     if (!currentUser) return false;
     const levelId = getLevel(currentUser.xp).id;
-    const count = (LEVEL_UNLOCKS[skill] || {})[levelId] || 0;
+    let count = (LEVEL_UNLOCKS[skill] || {})[levelId] || 0;
+    const band = getPlacementBand();
+    if (band && band.id) {
+      const bandCount = (LEVEL_UNLOCKS[skill] || {})[band.id] || 0;
+      count = Math.max(count, bandCount);
+    }
     return index < count;
   }
 
@@ -1136,6 +1163,7 @@
     getCurrentUser,
     getLevel,
     getNextLevel,
+    getPlacementBand,
     isUnlocked,
     addXp,
     recordExam,
