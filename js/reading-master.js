@@ -153,6 +153,7 @@
       window.toast && window.toast('+20 XP!');
     }
     if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('reading', pct);
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) window.IELTS_DIAG.record('reading', p.title, correct, total);
     state.view = 'review';
     render();
   }

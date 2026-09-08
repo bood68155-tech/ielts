@@ -142,6 +142,10 @@
     state.submitted++;
     window.IELTS_AUTH.addActivity('writing', 'Writing Task ' + state.task + ' draft (' + w + ' words)', 5);
     if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('writing', state.checklist.filter(Boolean).length * 20);
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      const checked = state.checklist.filter(Boolean).length;
+      window.IELTS_DIAG.record('writing', 'Writing Task ' + state.task + ' self-assessment', checked, state.checklist.length, { correct: checked, total: state.checklist.length });
+    }
     render();
   }
 

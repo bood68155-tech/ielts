@@ -147,6 +147,7 @@
       <div id="profile-edit" class="hidden"></div>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6" id="profile-stats"></div>
       <div class="grid lg:grid-cols-2 gap-5 mt-6" id="profile-progress"></div>
+      <div class="mt-6" id="profile-diagnostics"></div>
       <div class="mt-6" id="profile-badges"></div>
       <div class="mt-6" id="profile-activity"></div>`;
 
@@ -159,6 +160,7 @@
         <div class="text-[11px] text-slate-500 font-medium">${s.label}</div>
       </div>`).join('');
     renderProgress(user);
+    renderDiagnostics();
     renderBadges(user);
     renderActivity(user);
 
@@ -235,6 +237,13 @@
         <p class="font-bold text-slate-900 mb-4">🎓 Zero-to-hero training</p>
         <div class="space-y-4">${training}</div>
       </div>`;
+  }
+
+  /* ---------- diagnostic analytics widget (band report engine) ---------- */
+  function renderDiagnostics() {
+    const el = $('#profile-diagnostics');
+    if (!el) return;
+    el.innerHTML = window.IELTS_DIAG && window.IELTS_DIAG.widgetHTML ? window.IELTS_DIAG.widgetHTML() : '';
   }
 
   /* ---------- edit form ---------- */

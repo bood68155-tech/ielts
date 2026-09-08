@@ -272,6 +272,16 @@
     return upsert('study_log', { user_id: userId, data: data || {}, updated_at: Date.now() }, 'user_id');
   }
 
+  /* ---------------- diagnostic analytics (band report engine) ---------------- */
+  async function pullDiagnostics(userId) {
+    const rows = await select('diagnostics', { match: { user_id: userId }, limit: 1 });
+    return rows && rows.length ? rows[0] : null; // { user_id, data, updated_at }
+  }
+
+  async function upsertDiagnostics(userId, data) {
+    return upsert('diagnostics', { user_id: userId, data: data || {}, updated_at: Date.now() }, 'user_id');
+  }
+
   /* ---------------- chat messages (community / support / DMs) ---------------- */
   function chatToRow(m) {
     return {
@@ -601,6 +611,7 @@
     pullTraining, upsertTraining,
     pullSavedWords, upsertSavedWords,
     pullStudyLog, upsertStudyLog,
+    pullDiagnostics, upsertDiagnostics,
     pullExamHistory, insertExamResult,
     pullPosts, upsertPost, updatePost, deletePost,
     pullChatMessages, insertChatMessage, pullAllUsers, subscribeChat,

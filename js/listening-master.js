@@ -167,6 +167,15 @@
       window.toast && window.toast('+20 XP!');
     }
     if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('listening', pct);
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      const qtypes = { fill: { correct: 0, total: 0 }, mcq: { correct: 0, total: 0 } };
+      p.questions.forEach((q, i) => {
+        const k = q.t === 'mcq' ? 'mcq' : 'fill';
+        qtypes[k].total++;
+        if (isCorrect(q, state.answers[i])) qtypes[k].correct++;
+      });
+      window.IELTS_DIAG.record('listening', p.title, correct, total, { qtypes });
+    }
     state.view = 'review';
     render();
   }

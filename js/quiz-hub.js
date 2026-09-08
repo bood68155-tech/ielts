@@ -743,6 +743,18 @@
     if (!c.bestScores[test.id] || pct > c.bestScores[test.id]) c.bestScores[test.id] = pct;
     save(c);
 
+    /* diagnostic analytics: per-question-type accuracy breakdown */
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      var qtypes = {};
+      questions.forEach(function (q, i) {
+        var k = q.type || q.qtype || 'question';
+        qtypes[k] = qtypes[k] || { correct: 0, total: 0 };
+        qtypes[k].total++;
+        if (isAnsCorrect(q, state.answers[i])) qtypes[k].correct++;
+      });
+      window.IELTS_DIAG.record(test.type, test.title, correct, total, { qtypes: qtypes });
+    }
+
     var claimKey = 'quizhub-' + test.id;
     var claimed = window.IELTS_AUTH.completeClaim(claimKey);
     if (pct >= 60 && claimed) {

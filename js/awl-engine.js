@@ -419,6 +419,9 @@
     if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) {
       window.IELTS_BAND.recordMastery('vocabulary', pct);
     }
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      window.IELTS_DIAG.record('vocabulary', 'AWL Vocabulary Quiz', correct, state.quizList.length);
+    }
     render();
   }
 

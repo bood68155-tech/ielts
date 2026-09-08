@@ -103,6 +103,9 @@
       window.toast && window.toast('+15 XP!');
     }
     if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('speaking', Math.round((state.chk.filter(Boolean).length / state.chk.length) * 100));
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      window.IELTS_DIAG.record('speaking', 'Speaking Part ' + state.part + ' self-assessment', state.chk.filter(Boolean).length, state.chk.length);
+    }
     state.done = true;
     render();
   }

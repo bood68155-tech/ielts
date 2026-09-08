@@ -237,9 +237,18 @@
       ${targetBandPanel(c)}
       ${pathPanel()}
       ${skillMasteryPanel(info)}
+      ${diagPanel()}
       ${roadmapPanel(c)}
       ${badgePanel()}
     `;
+  }
+
+  /* ---------- diagnostic analytics widget (band report engine) ---------- */
+  function diagPanel() {
+    if (window.IELTS_DIAG && window.IELTS_DIAG.widgetHTML) {
+      try { return window.IELTS_DIAG.widgetHTML(); } catch (e) { return ''; }
+    }
+    return '';
   }
 
   function targetBandPanel(c) {

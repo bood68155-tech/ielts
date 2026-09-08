@@ -110,6 +110,7 @@
     if (name === 'writing-coach' && window.IELTS_WRITING_COACH) window.IELTS_WRITING_COACH.render();
     if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
     if (name === 'curriculum' && window.IELTS_CURRICULUM) window.IELTS_CURRICULUM.render();
+    if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -360,6 +361,11 @@
       toast('+' + XP_REWARDS.listening + ' XP for completing ' + section.title.split('·')[0].trim() + '!');
     }
 
+    // Diagnostic analytics
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      window.IELTS_DIAG.record('listening', 'Mock Listening: ' + section.title.split('·')[0].trim(), correct, total);
+    }
+
     saveProgress();
   };
 
@@ -531,6 +537,11 @@
       window.IELTS_AUTH.addXp(XP_REWARDS.reading);
       window.IELTS_AUTH.addActivity('reading', 'Completed ' + passage.title.split('·')[0].trim(), XP_REWARDS.reading);
       toast('+' + XP_REWARDS.reading + ' XP for completing ' + passage.title.split('·')[0].trim() + '!');
+    }
+
+    // Diagnostic analytics
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      window.IELTS_DIAG.record('reading', 'Mock Reading: ' + passage.title.split('·')[0].trim(), correct, total);
     }
 
     saveProgress();

@@ -204,6 +204,11 @@
         d.upsertStudyLog(activeUserId, value);
         d.setMeta(activeUserId, { studyUpdatedAt: ts });
       }
+    } else if (suffix === 'diagnostics') {
+      if (value && typeof value === 'object' && Object.keys(value).length) {
+        d.upsertDiagnostics(activeUserId, value);
+        d.setMeta(activeUserId, { diagnosticsUpdatedAt: ts });
+      }
     }
   }
 
