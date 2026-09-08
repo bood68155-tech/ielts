@@ -103,6 +103,12 @@
     if (name === 'vocab-trainer' && window.IELTS_VOCAB_TRAINER) window.IELTS_VOCAB_TRAINER.render();
     if (name === 'wss' && window.IELTS_WSS) window.IELTS_WSS.render();
     if (name === 'placement' && window.IELTS_PLACEMENT) window.IELTS_PLACEMENT.render();
+    if (name === 'band' && window.IELTS_BAND) window.IELTS_BAND.render();
+    if (name === 'awl' && window.IELTS_AWL) window.IELTS_AWL.render();
+    if (name === 'reading-master' && window.IELTS_READMASTER) window.IELTS_READMASTER.render();
+    if (name === 'listening-master' && window.IELTS_LISTMASTER) window.IELTS_LISTMASTER.render();
+    if (name === 'writing-coach' && window.IELTS_WRITING_COACH) window.IELTS_WRITING_COACH.render();
+    if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

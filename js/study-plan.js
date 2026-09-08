@@ -105,19 +105,19 @@
   function launchTask(action) {
     switch (action) {
       case 'listening':
-        window.showSection('listening');
+        window.showSection('listening-master');
         break;
       case 'reading':
-        window.showSection('reading');
+        window.showSection('reading-master');
         break;
       case 'readings':
         window.showSection('readings');
         break;
       case 'writing':
-        window.showSection('writing');
+        window.showSection('writing-coach');
         break;
       case 'speaking':
-        window.showSection('speaking');
+        window.showSection('speaking-sim');
         break;
       case 'catlango':
         window.showSection('catlango');
@@ -282,7 +282,7 @@
       '<div class="flex gap-3">' +
       '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">Open ' + esc(day.title.split(' ')[0]) + ' Tool</button>' +
       (!done
-        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 'bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition'>Mark Complete ✓</button>'
+        ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition">Mark Complete ✓</button>'
         : '<button onclick="window.STUDY_PLAN.uncompleteFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition">Undo ✓</button>') +
       '</div>' +
       '</div>' +

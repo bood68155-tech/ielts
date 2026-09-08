@@ -228,6 +228,7 @@
           <button data-section="dashboard" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('dashboard')">🏠 Home</button>
           <button data-section="study-plan" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('study-plan')">📋 Study Plan</button>
           <button data-section="training" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
+          <button data-section="band" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('band')">🎖️ Mastery</button>
           <button data-section="reading-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
           <button data-section="quiz-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
           <button data-section="vocab-trainer" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
@@ -258,6 +259,7 @@
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('dashboard')">🏠 Home</button>
       <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
+      <button data-section="band" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('band')">🎖️ Mastery</button>
       <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
       <button data-section="quiz-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
       <button data-section="vocab-trainer" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
@@ -337,28 +339,28 @@
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
       <h2 class="text-xl font-bold text-[#f5f0e6] mb-4">⚡ Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="skill-card" onclick="showSection('listening')">
+        <div class="skill-card" onclick="showSection('listening-master')">
           <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]">🎧</div>
           <h3 class="font-bold text-[#f5f0e6] mb-1">Listening</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">4 sections, 40 questions. Play the audio and answer in real time.</p>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–4 with transcripts, auto-grading and speed controls for Band 1–9.</p>
           <span class="skill-link">Practice now →</span>
         </div>
-        <div class="skill-card" onclick="showSection('reading')">
+        <div class="skill-card" onclick="showSection('reading-master')">
           <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]">📖</div>
           <h3 class="font-bold text-[#f5f0e6] mb-1">Reading</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">3 passages with multiple choice, True/False/Not Given and gap-fill.</p>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Graded passages from Band 3.0 to 9.0 with timed exams and band analysis.</p>
           <span class="skill-link">Practice now →</span>
         </div>
-        <div class="skill-card" onclick="showSection('writing')">
+        <div class="skill-card" onclick="showSection('writing-coach')">
           <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]">✍️</div>
           <h3 class="font-bold text-[#f5f0e6] mb-1">Writing</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Task 1 &amp; Task 2 prompts with a live word counter and 60-minute timer.</p>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Task 1 &amp; 2 with Band 9 models, structure generators and vocabulary boosters.</p>
           <span class="skill-link">Practice now →</span>
         </div>
-        <div class="skill-card" onclick="showSection('speaking')">
+        <div class="skill-card" onclick="showSection('speaking-sim')">
           <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]">🗣️</div>
           <h3 class="font-bold text-[#f5f0e6] mb-1">Speaking</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–3 with cue cards, 1-minute prep timer and model answers.</p>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–3 with timers, recorder and fluency checklists for every band.</p>
           <span class="skill-link">Practice now →</span>
         </div>
       </div>
@@ -387,6 +389,12 @@
     <section id="section-vocab-trainer" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vocab-trainer-content"></div></div></section>
     <section id="section-wss" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="wss-content"></div></div></section>
     <section id="section-placement" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="placement-content"></div></div></section>
+    <section id="section-band" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="bandsys-content"></div></div></section>
+    <section id="section-awl" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="awl-content"></div></div></section>
+    <section id="section-reading-master" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="readmaster-content"></div></div></section>
+    <section id="section-listening-master" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="listmaster-content"></div></div></section>
+    <section id="section-writing-coach" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="writing-coach-content"></div></div></section>
+    <section id="section-speaking-sim" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="speaking-sim-content"></div></div></section>
   </main>
 
   <footer class="border-t border-[rgba(212,175,55,0.1)] mt-10 relative z-10 overflow-hidden">
@@ -430,6 +438,12 @@
   <script src="js/quiz-hub.js"></script>
   <script src="js/writing-speaking-studio.js"></script>
   <script src="js/placement-test.js"></script>
+  <script src="js/band-system.js"></script>
+  <script src="js/awl-engine.js"></script>
+  <script src="js/reading-master.js"></script>
+  <script src="js/listening-master.js"></script>
+  <script src="js/writing-coach.js"></script>
+  <script src="js/speaking-sim.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
