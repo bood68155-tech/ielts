@@ -6,26 +6,26 @@
 
 /* ============ PALESTINIAN HERITAGE BACKGROUND — FULLY VISIBLE ============ */
 
-body {
-  background-image: url('palestine-bg.jpg') !important;
+html, body {
+  background-image: url('../assets/palestine-bg.jpg') !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
-  background-color: transparent !important;
+  background-color: #0f172a !important;
   opacity: 1 !important;
   filter: none !important;
 }
 
-/* Ensure no full-width containers (html/body/#app/#main-wrapper) block the image */
-body,
-html,
-body.bg-slate-50,
-html body,
+/* Ensure no full-width wrapper containers (if present) block the heritage image */
 #app,
 #main-wrapper,
-#root {
+#root,
+body.bg-slate-50,
+body.bg-white,
+body.bg-gray-900 {
   background-color: transparent !important;
+  background-image: none !important;
 }
 
 body::before, body::after {
