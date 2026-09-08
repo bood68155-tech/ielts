@@ -229,6 +229,10 @@
           <button data-section="study-plan" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('study-plan')">📋 Study Plan</button>
           <button data-section="training" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('training')">🎓 Training</button>
           <button data-section="reading-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
+          <button data-section="quiz-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
+          <button data-section="vocab-trainer" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
+          <button data-section="wss" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('wss')">✍️🗣️ Studio</button>
+          <button data-section="placement" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('placement')">📋 Placement</button>
           <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
@@ -255,6 +259,10 @@
       <button data-section="study-plan" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('study-plan')">📋 Study Plan</button>
       <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('training')">🎓 Training</button>
       <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
+      <button data-section="quiz-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
+      <button data-section="vocab-trainer" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
+      <button data-section="wss" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('wss')">✍️🗣️ Studio</button>
+      <button data-section="placement" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('placement')">📋 Placement</button>
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 text-sm font-medium text-[#ff6b6b]">Sign out</button>
     </nav>
@@ -374,6 +382,11 @@
     <section id="section-chat" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">💬 Chat</h2><p class="text-sm text-[#f5f0e6]/60">Community room, support, and direct messages</p></div></div><div id="chat-content"></div></section>
     <section id="section-feed" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">💬 Community Feed</h2><p class="text-sm text-[#f5f0e6]/60">Post updates and share your progress with other learners.</p></div></div><div id="feed-content"></div></section>
     <section id="section-profile" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">👤 My Profile</h2><p class="text-sm text-[#f5f0e6]/60">Your stats, badges, progress and activity — all in one place.</p></div></div><div id="profile-content"></div></section>
+
+    <section id="section-quiz-hub" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="quiz-hub-content"></div></div></section>
+    <section id="section-vocab-trainer" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vocab-trainer-content"></div></div></section>
+    <section id="section-wss" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="wss-content"></div></div></section>
+    <section id="section-placement" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="placement-content"></div></div></section>
   </main>
 
   <footer class="border-t border-[rgba(212,175,55,0.1)] mt-10 relative z-10 overflow-hidden">
@@ -413,6 +426,10 @@
   <script src="js/chat.js"></script>
   <script src="js/feed.js"></script>
   <script src="js/profile.js"></script>
+  <script src="js/vocab-trainer.js"></script>
+  <script src="js/quiz-hub.js"></script>
+  <script src="js/writing-speaking-studio.js"></script>
+  <script src="js/placement-test.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

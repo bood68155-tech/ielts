@@ -99,6 +99,10 @@
     if (name === 'reading') renderReading();
     if (name === 'writing') renderWriting();
     if (name === 'speaking') renderSpeaking();
+    if (name === 'quiz-hub' && window.IELTS_QUIZ_HUB) window.IELTS_QUIZ_HUB.render();
+    if (name === 'vocab-trainer' && window.IELTS_VOCAB_TRAINER) window.IELTS_VOCAB_TRAINER.render();
+    if (name === 'wss' && window.IELTS_WSS) window.IELTS_WSS.render();
+    if (name === 'placement' && window.IELTS_PLACEMENT) window.IELTS_PLACEMENT.render();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

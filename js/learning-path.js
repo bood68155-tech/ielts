@@ -270,10 +270,10 @@
       { title: 'BBC Podcasts', url: 'https://www.bbc.co.uk/podcasts', icon: '\uD83C\uDFA7' }
     ];
     var essentialGuides = [
-      { title: 'Reading Guide', url: 'http://bit.ly/D4l-reading', icon: '\uD83D\uDCD4' },
-      { title: 'IELTS Guide 01', url: 'https://bit.ly/dalilk01', icon: '\uD83D\uDCC1' },
-      { title: 'IELTS Guide 03', url: 'https://bit.ly/dalilk03', icon: '\uD83D\uDCC1' },
-      { title: 'Additional Practice Resource', url: 'http://qrs.ly/d77nbi9', icon: '\uD83D\uDCDD' }
+      { title: 'Reading Guide', url: 'https://www.ielts.org/for-test-takers/sample-test-questions', icon: '\uD83D\uDCD4' },
+      { title: 'IELTS Guide 01', url: 'https://takeielts.britishcouncil.org/take-ielts/prepare/free-ielts-practice-tests', icon: '\uD83D\uDCC1' },
+      { title: 'IELTS Guide 03', url: 'https://www.ieltsessential.com/', icon: '\uD83D\uDCC1' },
+      { title: 'Additional Practice Resource', url: 'https://mini-ielts.com/', icon: '\uD83D\uDCDD' }
     ];
 
     function essentialCards(list) {
