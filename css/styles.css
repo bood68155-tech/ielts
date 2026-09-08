@@ -7,25 +7,17 @@
 /* ============ PALESTINIAN HERITAGE BACKGROUND — FULLY VISIBLE ============ */
 
 body {
-  background-color: transparent !important;
+  background-image: url('palestine-bg.jpg') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
   opacity: 1 !important;
   filter: none !important;
-  -webkit-filter: none !important;
 }
 
-body::before,
-body::after {
-  content: none !important;
-  background: none !important;
-  opacity: 1 !important;
-  filter: none !important;
+body::before, body::after {
   display: none !important;
-  pointer-events: none !important;
-  z-index: -9999 !important;
-}
-
-body > * {
-  background-blend-mode: normal !important;
 }
 
 /* ============================================================
