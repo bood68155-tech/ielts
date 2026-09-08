@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Band 1.0-9.0 Progression Architecture
+   IELTS PA — Band 1.0-9.0 Progression Architecture
    Dynamic level paths (Foundation / Intermediate / Advanced),
    daily skill roadmaps, band badges, and Neon/Supabase sync.
    ============================================================ */

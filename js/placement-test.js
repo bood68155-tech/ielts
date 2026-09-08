@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Level Placement Test
+   IELTS PA — Level Placement Test
    Diagnostic test across Grammar, Reading, and Listening sections.
    Auto-scores → LEVELS lookup → updates XP + Supabase profile.
    ============================================================ */

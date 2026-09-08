@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — graded reading library (CEFR A1–C2)
+   IELTS PA — graded reading library (CEFR A1–C2)
    Level-filtered passages with tap-to-translate words and a
    comprehension quiz per passage. Completing a passage awards XP
    (once) and glossary words can be added to the personal

@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Supabase configuration
+   IELTS PA — Supabase configuration
    ------------------------------------------------------------
    1. Create a free project at https://supabase.com
    2. Open Project Settings → API Keys and copy the

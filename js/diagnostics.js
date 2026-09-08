@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Automated Diagnostic Band Analytics & Report Engine
+   IELTS PA — Automated Diagnostic Band Analytics & Report Engine
    Tracks per-skill accuracy across every assessment module, computes
    an estimated IELTS band, and renders an interactive diagnostic
    performance report (radar, strengths/weaknesses, Band 9 action plan).

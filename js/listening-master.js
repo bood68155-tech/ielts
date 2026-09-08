@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Listening Master Suite
+   IELTS PA — Listening Master Suite
    Parts 1-4 with transcripts, auto-grading, speed controls
    (0.75x / 1x / 1.25x) and band feedback.
    ============================================================ */

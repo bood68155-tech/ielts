@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Neon PostgreSQL Client
+   IELTS PA — Neon PostgreSQL Client
    ------------------------------------------------------------
    This module provides a PostgreSQL client using the Neon
    serverless driver for optimal performance in serverless/

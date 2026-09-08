@@ -1,8 +1,8 @@
 /* ============================================================
-   IELTS Master — real-time chat & community support
+   IELTS PA — real-time chat & community support
    Three rooms:
      • community — open chat for every learner
-     • support   — official IELTS Master support (canned replies)
+     • support   — official IELTS PA support (canned replies)
      • dm:<a>:<b> — learner-to-learner direct messages
    With Supabase configured, messages live in the chat_messages
    table and arrive in real time via postgres_changes. Without it,
@@ -17,11 +17,11 @@
 
   const ROOMS = {
     community: { label: 'Community room', icon: '🌍', desc: 'Chat with every learner — ask questions, share tips, celebrate wins.' },
-    support: { label: 'Official support', icon: '🎧', desc: 'Ask the IELTS Master team anything about the app, levels or exams.' },
+    support: { label: 'Official support', icon: '🎧', desc: 'Ask the IELTS PA team anything about the app, levels or exams.' },
     dms: { label: 'Direct messages', icon: '💌', desc: 'Message another learner one-to-one.' }
   };
 
-  const SUPPORT_BOT = 'IELTS Master';
+  const SUPPORT_BOT = 'IELTS PA';
   let activeTab = 'community';
   let dmUser = null;
   let messages = {};   // room -> [msg]
@@ -83,7 +83,7 @@
       if (!messages[room].length && room === 'support') {
         messages[room] = [
           { id: 'sup-hello', room, sender: SUPPORT_BOT, senderAvatar: '🎧', kind: 'system',
-            text: 'Welcome to IELTS Master support! 👋 Ask us anything about the app — how levels work, how to unlock content, or how to sync your progress with Supabase. We usually reply within a few minutes.',
+            text: 'Welcome to IELTS PA support! 👋 Ask us anything about the app — how levels work, how to unlock content, or how to sync your progress with Supabase. We usually reply within a few minutes.',
             date: Date.now() - 60000 }
         ];
         saveRoom(room);
@@ -231,7 +231,7 @@
       if (activeTab === 'support' && window.__IELTS_STATE && window.__IELTS_STATE.currentSection === 'chat') {
         renderMessages();
         scrollToBottom();
-        window.toast && window.toast('🎧 IELTS Master support replied');
+        window.toast && window.toast('🎧 IELTS PA support replied');
       }
     }, 2200);
   }
@@ -386,7 +386,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col" style="height: min(65vh, 640px)">
         <div class="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-brand-600 to-indigo-500 text-white">
           <p class="font-extrabold">${ROOMS[room].icon} ${ROOMS[room].label}</p>
-          <p class="text-xs text-brand-100 mt-0.5">${ROOMS[room].desc} ${room === 'support' ? '· replies come from the IELTS Master team 🎧' : ''}</p>
+          <p class="text-xs text-brand-100 mt-0.5">${ROOMS[room].desc} ${room === 'support' ? '· replies come from the IELTS PA team 🎧' : ''}</p>
         </div>
         <div id="chat-messages" class="flex-1 overflow-y-auto px-4 py-4 space-y-1 bg-slate-50/60"></div>
         <div class="flex items-center gap-2 px-4 py-3 border-t border-slate-100 bg-white">

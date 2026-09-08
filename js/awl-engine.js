@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — AWL & Collocation Engine
+   IELTS PA — AWL & Collocation Engine
    360+ academic words (Band 7-9) with definitions, collocations,
    context sentences, CEFR/band tags, flashcards and spaced
    repetition scheduling. Uses setScoped('awl', ...) persistence.

@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — zero-to-hero training modules
+   IELTS PA — zero-to-hero training modules
    Vocabulary, Listening and Speaking skill paths with stages.
    Progress + XP stored per user under a user-scoped key.
    ============================================================ */

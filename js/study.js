@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — daily study hours tracker
+   IELTS PA — daily study hours tracker
    An interactive study timer that accumulates focused minutes
    into a per-user daily log (user_<id>_study), with a daily goal,
    weekly chart, streaks and XP rewards for consistency.

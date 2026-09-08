@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — personal vocabulary builder
+   IELTS PA — personal vocabulary builder
    Save words from the graded readers, the translator or manually,
    review them as flashcards and mark them as learned. Stored per
    user under user_<id>_words and mirrored to the saved_words

@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Supabase + Neon PostgreSQL data-sync layer
+   IELTS PA — Supabase + Neon PostgreSQL data-sync layer
    ------------------------------------------------------------
    Initializes the Supabase JS client from js/supabase-config.js
    and exposes `window.IELTS_DB`, a local-first CRUD layer:
@@ -419,10 +419,10 @@
   function seedPosts() {
     const now = Date.now();
     return [
-      { id: 'seed-1', author: 'IELTS Master', avatar: 'I', level: 'Advanced', system: true,
-        text: 'Welcome to the IELTS Master community! 🎉 Share your scores, ask questions and keep each other motivated on the road to your target band.',
+      { id: 'seed-1', author: 'IELTS PA', avatar: 'I', level: 'Advanced', system: true,
+        text: 'Welcome to the IELTS PA community! 🎉 Share your scores, ask questions and keep each other motivated on the road to your target band.',
         attachment: null, likes: [], comments: [], date: now - 2 * 86400000 },
-      { id: 'seed-2', author: 'IELTS Master', avatar: 'I', level: 'Advanced', system: true,
+      { id: 'seed-2', author: 'IELTS PA', avatar: 'I', level: 'Advanced', system: true,
         text: 'Tip of the week: 15 focused minutes of vocabulary every day beats a 3-hour cram on Sunday. Consistency wins. 📚',
         attachment: null, likes: [], comments: [], date: now - 86400000 }
     ];

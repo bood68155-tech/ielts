@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — application logic
+   IELTS PA — application logic
    ============================================================ */
 (function () {
   'use strict';

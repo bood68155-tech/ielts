@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — authentication, user profiles & level system
+   IELTS PA — authentication, user profiles & level system
    Supports: register, login, logout, email verification,
    session persistence, and Neon DB profile state reload.
    Accounts sync to Neon DB when configured; otherwise they live
@@ -544,7 +544,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             to: email,
-            subject: 'Verify your IELTS Master account',
+            subject: 'Verify your IELTS PA account',
             html: `
                               <h1>Email Verification</h1>
                               <p>Hello ${username},</p>
@@ -709,7 +709,7 @@
 
       clearVerificationToken();
       hideScreen();
-      window.toast && window.toast('✅ Email verified successfully! Welcome to IELTS Master.');
+      window.toast && window.toast('✅ Email verified successfully! Welcome to IELTS PA.');
       hideSuccess();
     }
   }
@@ -740,7 +740,7 @@
 
           clearVerificationToken();
           window.history.replaceState({}, document.title, window.location.pathname);
-          window.toast && window.toast('✅ Email verified successfully! Welcome to IELTS Master.');
+          window.toast && window.toast('✅ Email verified successfully! Welcome to IELTS PA.');
           return true;
         }
       }

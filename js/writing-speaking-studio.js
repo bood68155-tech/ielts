@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Writing & Speaking Studio
+   IELTS PA — Writing & Speaking Studio
    Extended writing prompts with band descriptors & structure
    templates, plus MediaRecorder-based speaking practice.
    ============================================================ */

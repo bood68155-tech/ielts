@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — interactive profile system
+   IELTS PA — interactive profile system
    Editable profile, stats, badges and activity log.
    Data is stored per active user under a user-scoped key and
    mirrored to the Supabase `profiles` table (UPSERT) when

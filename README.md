@@ -1,4 +1,4 @@
-# IELTS Master 🎧📖✍️🗣️
+# IELTS PA 🎧📖✍️🗣️
 
 A free, interactive IELTS practice web application built with **HTML, Tailwind CSS and vanilla JavaScript** — no build step, no dependencies, runs entirely in the browser.
 
@@ -77,7 +77,7 @@ A free, interactive IELTS practice web application built with **HTML, Tailwind C
 
 ### 💬 Chat & Support (real-time)
 - **Community room** — real-time chat with every learner (Supabase Realtime, `postgres_changes`)
-- **Official support** — ask the IELTS Master team anything; auto-replies with helpful answers
+- **Official support** — ask the IELTS PA team anything; auto-replies with helpful answers
 - **Direct messages** — private learner-to-learner chat
 - Falls back to a shared local cache with polling when database isn't configured
 

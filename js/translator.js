@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — built-in translator (offline English ↔ Arabic)
+   IELTS PA — built-in translator (offline English ↔ Arabic)
    Word / phrase lookups from the TRANSLATION_DICT glossary plus
    word-by-word sentence translation. Every looked-up word can be
    saved straight into the personal vocabulary builder.

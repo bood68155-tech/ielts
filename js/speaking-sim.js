@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Speaking Simulator
+   IELTS PA — Speaking Simulator
    Parts 1-3 with recorder, countdown timers, fluency
    checklists and Band 9 sample answers.
    ============================================================ */

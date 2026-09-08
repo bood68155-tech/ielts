@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Interactive Vocabulary Trainer
+   IELTS PA — Interactive Vocabulary Trainer
    Academic Word List (AWL) cards, interactive flashcards and
    daily word quizzes with score tracking. State is stored per
    user under user_<id>_vocab and mirrored to Supabase when

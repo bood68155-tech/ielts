@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — 4-Week Study Plan (study-plan-centric refactor)
+   IELTS PA — 4-Week Study Plan (study-plan-centric refactor)
    The main dashboard entry point. Every daily task maps to an
    existing module: Listening, Reading, Writing, Speaking, Training,
    Catlango, Readings, Translator, or Weekly Exam.

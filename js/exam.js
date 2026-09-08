@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — weekly exam module
+   IELTS PA — weekly exam module
    15 questions picked deterministically from the pool each week,
    a 15-minute timer, and per-user score history.
    Exam results are pushed to the Supabase `exam_results` table

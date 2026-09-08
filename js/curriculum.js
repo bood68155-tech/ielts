@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Band 4-9 Academic Curriculum Hub
+   IELTS PA — Band 4-9 Academic Curriculum Hub
    4 levels (Foundation → Expert), 6 skill units per level,
    18 guided lessons with checkpoints and XP rewards.
    ============================================================ */

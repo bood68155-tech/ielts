@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Catlango 🐱📚
+   IELTS PA — Catlango 🐱📚
    A dedicated vocabulary and word-learning section.
    Curated word packs organised by CEFR level (A1 Beginner →
    C2 Proficiency), studied with interactive spelling practice.

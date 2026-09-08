@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — learning path (levels) module
+   IELTS PA — learning path (levels) module
    ============================================================ */
 (function () {
   'use strict';

@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Writing AI Coach & Studio
+   IELTS PA — Writing AI Coach & Studio
    Task 1 & Task 2 with Band 9 model answers, structure
    generators, vocabulary boosters and self-coaching checklist.
    ============================================================ */

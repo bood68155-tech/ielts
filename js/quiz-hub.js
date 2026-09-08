@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Reading & Listening Quiz Hub
+   IELTS PA — Reading & Listening Quiz Hub
    Comprehensive Academic Reading & Listening question bank
    with detailed passages, auto-grading, timers, and XP sync.
    ============================================================ */

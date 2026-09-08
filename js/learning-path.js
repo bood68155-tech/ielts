@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Learning Path & Reading Comprehension Hub
+   IELTS PA — Learning Path & Reading Comprehension Hub
    Integrates: British Council, ReadTheory, BBC Learning English
    ============================================================ */
 (function () {

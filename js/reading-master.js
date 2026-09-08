@@ -1,5 +1,5 @@
 /* ============================================================
-   IELTS Master — Reading Master Suite
+   IELTS PA — Reading Master Suite
    Full Band 1-9 graded passage library with timed exams,
    automatic scoring, and Band-specific answer analysis.
    ============================================================ */
