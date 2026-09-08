@@ -17,14 +17,14 @@ body {
   filter: none !important;
 }
 
-/* Ensure Tailwind's body bg classes never cover the heritage image */
-body.bg-slate-50,
+/* Ensure no full-width containers (html/body/#app/#main-wrapper) block the image */
+body,
 html,
-html body {
-  background-color: transparent !important;
-}
-
-html {
+body.bg-slate-50,
+html body,
+#app,
+#main-wrapper,
+#root {
   background-color: transparent !important;
 }
 
