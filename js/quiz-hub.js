@@ -200,6 +200,192 @@
           { id: 'r6-q9', type: 'sa', question: 'How much electricity has the MeyGen project generated since 2018?', answer: 'Over 35 GWh', explanation: 'Paragraph 6 states it has generated "over 35 gigawatt-hours of electricity since its commissioning in 2018."' },
           { id: 'r6-q10', type: 'sa', question: 'By what percentage have battery storage costs fallen since 1991?', answer: '97%', explanation: 'Paragraph 7 states "Battery storage costs have fallen by 97% since 1991."' }
         ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 7 – The Hidden Ladder: Inside the Semiconductor
+         Supply Chain [Technology]
+         Question types: Multiple Choice, True/False/Not Given,
+         Sentence Completion, Short Answer
+         ------------------------------------------------------- */
+      {
+        id: 'r7', title: 'The Hidden Ladder: Inside the Semiconductor Supply Chain',
+        type: 'reading', level: 'b2', timerMinutes: 20, band: '6.5',
+        passage: [
+          'Most people never see a semiconductor, yet these slivers of silicon run almost everything around us: cars, phones, medical devices and the power grid. What is far less visible is how extremely concentrated their production has become. A small group of firms in a handful of countries controls the advanced chips that modern economies depend on.',
+          'Making a modern chip begins in a fabrication plant, commonly called a fab. Inside, silicon wafers are processed in cleanrooms so pure that fewer than one particle may exist per cubic metre of air. Workers wear full bodysuits, and the air is filtered, recycled and monitored continuously, because a single speck of dust can ruin an entire batch of microchips.',
+          'The heart of chipmaking is photolithography, in which light projects microscopic circuit patterns onto light-sensitive wafers. The most advanced machines use extreme ultraviolet light, and only one company in the world, the Dutch firm ASML, can build them. Each EUV machine costs more than 150 million dollars and takes months to assemble.',
+          'Production is also global in the extreme. Design happens mostly in the United States, equipment comes mainly from the Netherlands and Japan, advanced manufacturing is concentrated in Taiwan, and assembly and testing are often done in Malaysia and the Philippines. A single finished chip may cross national borders more than seventy times before it reaches a consumer device.',
+          'This concentration brings real risk. Advanced-chip output depends heavily on one Taiwanese firm, and even a local drought that restricts the large volume of water a fab consumes can affect worldwide supply. Geopolitical tension between major economies has therefore pushed governments to pour money into domestic plants. The United States, for example, committed 52 billion dollars through the CHIPS and Science Act, with similar programmes emerging in Europe, Japan and India.',
+          'Yet rebuilding capacity is slow. A leading-edge fab costs close to 20 billion dollars and takes several years to construct, and the industry faces a chronic shortage of the highly skilled engineers such plants require. Governments can spend heavily, but they cannot fast-forward a supply chain that has taken four decades to mature.',
+          'The likely outcome is not total independence but greater resilience through diversification. Economists argue that a network of suppliers spread across several countries, however imperfect, is safer than one in which a single region carries the entire industry on its shoulders.'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r7-q1', type: 'mcq', question: 'Why are cleanrooms in a semiconductor fab kept so pure?', options: ['To cool the machines', 'Because a single speck of dust can ruin an entire batch', 'To protect workers from sunlight', 'To reduce electricity use'], answer: 'B', explanation: 'Paragraph 2 states that a single speck of dust "can ruin an entire batch of microchips."', kw: 'cleanrooms', loc: 'Paragraph 2', tip: 'Band 6.5 target: locate the reason through the keyword "cleanroom", then read the sentence that follows.' },
+          { id: 'r7-q2', type: 'mcq', question: 'What is the Dutch firm ASML famous for?', options: ['Designing smartphone processors', 'Building extreme-ultraviolet lithography machines', 'Manufacturing silicon wafers', 'Assembling consumer devices'], answer: 'B', explanation: 'Paragraph 3 credits ASML as "the only company in the world" able to build extreme-ultraviolet machines.', kw: 'ASML', loc: 'Paragraph 3', tip: 'Band 6.5 target: proper nouns are the fastest keywords to scan for.' },
+          { id: 'r7-q3', type: 'mcq', question: 'Why have governments invested heavily in domestic chip plants?', options: ['To reduce electricity prices', 'Because supply is concentrated and therefore risky', 'To produce cheaper smartphones', 'To compete with software companies'], answer: 'B', explanation: 'Paragraph 5 links concentration to risk — a single firm, droughts and geopolitics — and describes the resulting government investment.', kw: 'CHIPS and Science Act', loc: 'Paragraph 5', tip: 'Cause-and-effect questions reward reading the paragraph around a number or law, not just the word itself.' },
+          { id: 'r7-q4', type: 'mcq', question: 'What does the passage suggest about rebuilding chip-making capacity?', options: ['It is quick and easy', 'It is slow and extremely expensive', 'It has already been completed', 'It is completely unnecessary'], answer: 'B', explanation: 'Paragraph 6 states a leading-edge fab costs "close to 20 billion dollars" and takes years, with a chronic engineer shortage.', kw: '20 billion dollars', loc: 'Paragraph 6', tip: 'Numbers carry the answer; approximate language ("close to") is typical of Band 7 reports.' },
+          { id: 'r7-q5', type: 'tfng', question: 'A finished chip may cross national borders more than seventy times.', answer: 'T', explanation: 'Paragraph 4 states a finished chip "may cross national borders more than seventy times."', kw: 'seventy times', loc: 'Paragraph 4', tip: '"More than" matches exactly — True, never Not Given.' },
+          { id: 'r7-q6', type: 'tfng', question: 'ASML produces EUV machines for less than one million dollars each.', answer: 'F', explanation: 'Paragraph 3 says each machine "costs more than 150 million dollars" — the statement contradicts the passage.', kw: '150 million', loc: 'Paragraph 3', tip: 'A figure that contradicts the text is False, not Not Given.' },
+          { id: 'r7-q7', type: 'tfng', question: 'A local drought can affect the worldwide supply of advanced chips.', answer: 'T', explanation: 'Paragraph 5 explains that a drought restricting water can "affect worldwide supply."', kw: 'drought', loc: 'Paragraph 5', tip: 'The word "local" in the statement is echoed exactly — confirm before marking True.' },
+          { id: 'r7-q8', type: 'tfng', question: 'India now manufactures the majority of the world\'s advanced chips.', answer: 'F', explanation: 'Paragraph 4 names Taiwan as the location where advanced manufacturing is concentrated; India is only mentioned as a new investor.', kw: 'Taiwan', loc: 'Paragraph 4', tip: 'Attribution questions: check WHO does the action, not simply that the country appears in the text.' },
+          { id: 'r7-q9', type: 'sc', question: 'Complete the sentence: While design happens largely in the United States, assembly and testing are often done in Malaysia and the ___.', answer: 'Philippines/Philippines.', explanation: 'Paragraph 4 lists "assembly and testing are often done in Malaysia and the Philippines."', kw: 'assembly', loc: 'Paragraph 4', tip: 'Gap hints: "Malaysia and the ___" needs a paired country name.' },
+          { id: 'r7-q10', type: 'sa', question: 'Which country is described as dominating advanced-chip manufacturing?', answer: 'Taiwan', explanation: 'Paragraph 5 says output depends on "one Taiwanese firm," and Paragraph 4 says advanced manufacturing is concentrated in Taiwan.', kw: 'single Taiwanese firm', loc: 'Paragraph 5', tip: 'Short answers: one word or a few words; here the country name is enough.' }
+        ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 8 – Assessment for Learning: Rethinking the Grade
+         [Education]
+         Question types: Multiple Choice, True/False/Not Given,
+         Sentence Completion
+         ------------------------------------------------------- */
+      {
+        id: 'r8', title: 'Assessment for Learning: Rethinking the Grade',
+        type: 'reading', level: 'b2', timerMinutes: 20, band: '6.0',
+        passage: [
+          'For more than a century, school assessment has meant a final grade: a number stamped at the end of a term that tells students how well they performed. This summative model prizes the outcome of learning. Yet a growing body of research argues that when assessment stops at the grade, it throws away most of its educational value.',
+          'Formative assessment works differently. It is continuous: teachers gather evidence of learning during lessons, adjust their teaching in response, and give feedback while students can still use it. The classroom becomes a feedback loop instead of a memory test.',
+          'Feedback research is strikingly consistent. It is not the quantity of comments that improves learning but their quality. Specific, task-focused feedback that tells a student exactly what to improve, and how, produces large gains. Vague praise such as "good effort" has almost no effect.',
+          'Self-assessment and peer review turn students into judges of their own work. Pupils who can appraise their own performance against clear criteria tend to improve faster, because they internalise the standards the teacher is using. Peer feedback adds a second perspective, although it needs careful guidance to avoid inaccuracy.',
+          'Digital platforms have accelerated this shift. Adaptive software can present a learner with a tailored question, mark it instantly, and select the next task on the basis of the response, giving every student a personalised path. The same technology, however, raises concerns about privacy and about reducing learning to a stream of micro-scores.',
+          'The Assessment for Learning movement has gathered strong institutional backing. Studies coordinated by the OECD suggest that schools using formative techniques well can raise achievement by the equivalent of roughly half a standard deviation, a substantial boost for no extra teaching time.',
+          'The conclusion is not that grades are worthless, but that they should serve learning rather than replace it. Assessment becomes powerful when it answers three questions: where is the learner now, where does the learner need to be, and what is the fastest route between the two?'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r8-q1', type: 'mcq', question: 'According to the passage, what is the main weakness of summative assessment?', options: ['It is too expensive to run', 'It stops at the grade and wastes educational value', 'It takes too long to mark', 'It only tests speaking and listening'], answer: 'B', explanation: 'Paragraph 1 says stopping at the grade "throws away most of its educational value."', kw: 'summative', loc: 'Paragraph 1', tip: 'Band 6: answer with the reason the passage gives, not a common-sense reason.' },
+          { id: 'r8-q2', type: 'mcq', question: 'What kind of feedback is most effective, according to the research?', options: ['Vague praise such as "good effort"', 'The quantity of comments', 'Specific, task-focused feedback', 'Grades without any comments'], answer: 'C', explanation: 'Paragraph 3 states that specific, task-focused feedback "produces large gains."', kw: 'task-focused', loc: 'Paragraph 3', tip: 'Look for the qualifying words: the passage contrasts specificity with vague praise.' },
+          { id: 'r8-q3', type: 'mcq', question: 'Why do students who self-assess tend to improve faster?', options: ['They study for longer hours', 'They internalise the standards the teacher uses', 'They work completely alone', 'They avoid all examinations'], answer: 'B', explanation: 'Paragraph 4 says they "internalise the standards the teacher is using."', kw: 'internalise', loc: 'Paragraph 4', tip: 'Match the cause: the passage links self-assessment to internalising criteria.' },
+          { id: 'r8-q4', type: 'mcq', question: 'What concern does the passage raise about digital assessment platforms?', options: ['They are too slow to mark', 'Privacy issues and reducing learning to micro-scores', 'They cannot be graded', 'They only work offline'], answer: 'B', explanation: 'Paragraph 5 mentions "concerns about privacy and about reducing learning to a stream of micro-scores."', kw: 'privacy', loc: 'Paragraph 5', tip: 'Answer questions that pair concerns: expect two items joined by "and".' },
+          { id: 'r8-q5', type: 'tfng', question: 'Formative assessment happens only at the end of a term.', answer: 'F', explanation: 'Paragraph 2 calls it "continuous" and part of lessons — the opposite of end-of-term testing.', kw: 'continuous', loc: 'Paragraph 2', tip: 'A negation in the statement ("only at the end") often signals False.' },
+          { id: 'r8-q6', type: 'tfng', question: 'OECD studies link good formative practice to gains of roughly half a standard deviation.', answer: 'T', explanation: 'Paragraph 6 states schools using formative techniques well can raise achievement "by the equivalent of roughly half a standard deviation."', kw: 'standard deviation', loc: 'Paragraph 6', tip: 'Key figures in both passage and statement must agree exactly.' },
+          { id: 'r8-q7', type: 'tfng', question: 'The passage claims that grades are completely worthless.', answer: 'F', explanation: 'Paragraph 7 opens: "The conclusion is not that grades are worthless."', kw: 'grades are worthless', loc: 'Paragraph 7', tip: 'Watch for absolutes like "completely" — the passage explicitly denies this.' },
+          { id: 'r8-q8', type: 'sc', question: 'Complete the sentence: Adaptive software marks an answer instantly and selects the next task on the basis of the student\'s ___.', answer: 'response', explanation: 'Paragraph 5 says the software selects the next task "on the basis of the response."', kw: 'adaptive software', loc: 'Paragraph 5', tip: 'Copy the exact passage word; the singular form matters here.' },
+          { id: 'r8-q9', type: 'sc', question: 'Complete the sentence: Pupils who can appraise their own work against clear ___ tend to improve faster.', answer: 'criteria', explanation: 'Paragraph 4 mentions appraising performance "against clear criteria."', kw: 'appraise', loc: 'Paragraph 4', tip: 'The gap follows an adjective ("clear"), so a plural noun fits.' },
+          { id: 'r8-q10', type: 'sc', question: 'Complete the sentence: With formative assessment, the classroom becomes a ___ loop instead of a memory test.', answer: 'feedback', explanation: 'Paragraph 2 closes: "The classroom becomes a feedback loop instead of a memory test."', kw: 'feedback loop', loc: 'Paragraph 2', tip: 'Collocation alert: "feedback loop" is a fixed noun phrase.' }
+        ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 9 – The Circular Economy and Its Limits
+         [Environment]
+         Question types: Matching Headings, Multiple Choice,
+         Short Answer
+         ------------------------------------------------------- */
+      {
+        id: 'r9', title: 'The Circular Economy and Its Limits',
+        type: 'reading', level: 'c1', timerMinutes: 20, band: '7.0',
+        passage: [
+          'For most of industrial history, the economy has been linear: we take raw materials from the ground, make products from them, and throw the products away when they wear out. This take-make-dispose model is now colliding with the physical limits of the planet, and reformers increasingly point to a circular alternative.',
+          'A circular economy keeps materials in use. Its guiding principles are three: design out waste and pollution, keep products and materials circulating, and regenerate natural systems. In practice, this means products that are durable, repairable and easy to upgrade, rather than cheap and disposable.',
+          'The European Union has made circularity explicit policy. Its Circular Economy Action Plan, launched in 2020, sets targets for product durability, repair and recycling, and extends responsibility to producers so that companies pay for the waste their goods eventually create.',
+          'Recycling is the most familiar face of circularity, but it has limits. Most plastics are downcycled: bottles become fibres of lower value, not new bottles. Contamination means that in many countries a large share of collected material is eventually discarded, and some waste is exported abroad, where it is processed poorly. Recycling recovers value, yet it rarely captures the original quality.',
+          'A more radical shift is selling services instead of goods. Instead of selling a washing machine, a firm sells "washing as a service": it retains ownership, maintains the machine, and upgrades components when they fail. Designers then have a financial reason to build machines that last, because the manufacturer still owns the breakdowns.',
+          'Critics add a caution: circularity can rebound. If a recycled product is cheaper, people may consume more of it, erasing environmental gains. Furthermore, the energy for recycling loops often comes from fossil fuels, which limits the climate benefit unless the electricity grid is decarbonised first.',
+          'The honest conclusion is that circularity is a direction, not a destination. Used well, it reduces demand for virgin materials and reshapes business incentives; used naively, it becomes little more than greenwashing. The measure of success is not the recycling rate, but the overall reduction in material throughput and environmental impact.'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r9-q1', type: 'mh', question: 'Match the heading to the paragraph: "Three principles that define a circular economy"', options: ['1', '2', '3', '4'], answer: 'B', explanation: 'Heading Q1 (A="1") maps to Paragraph 2, which lists the three guiding principles.', kw: 'design out waste', loc: 'Paragraph 2', tip: 'Headings test the MAIN idea — the principles are announced in the first sentences of Paragraph 2.' },
+          { id: 'r9-q2', type: 'mh', question: 'Match the heading to the paragraph: "Why recycling alone is not enough"', options: ['1', '2', '3', '4'], answer: 'D', explanation: 'The heading appears for Paragraph 4, which explains downcycling and contamination.', kw: 'downcycled', loc: 'Paragraph 4', tip: 'Scan the keyword "downcycled" to confirm the location before matching.' },
+          { id: 'r9-q3', type: 'mh', question: 'Match the heading to the paragraph: "Selling services instead of goods"', options: ['4', '5', '6', '7'], answer: 'B', explanation: 'Paragraph 5 introduces product-as-a-service with the washing machine example.', kw: 'washing as a service', loc: 'Paragraph 5', tip: 'Topic sentences lead: Paragraph 5 opens with "A more radical shift is selling services."' },
+          { id: 'r9-q4', type: 'mh', question: 'Match the heading to the paragraph: "A cautionary note about rebound effects"', options: ['4', '5', '6', '7'], answer: 'C', explanation: 'Paragraph 6 warns that circularity "can rebound" if cheaper products raise consumption.', kw: 'rebound', loc: 'Paragraph 6', tip: 'A heading about a warning sits with a paragraph that opens with "Critics add a caution."' },
+          { id: 'r9-q5', type: 'mcq', question: 'What is a "circular economy"?', options: ['One that produces no waste at all', 'An economy that keeps materials in use', 'An economy that only uses renewable energy', 'An economy based solely on services'], answer: 'B', explanation: 'Paragraph 2 defines it: a circular economy "keeps materials in use."', kw: 'keeps materials in use', loc: 'Paragraph 2', tip: 'Definition questions give the exact phrase in the passage.' },
+          { id: 'r9-q6', type: 'mcq', question: 'Why is most plastic recycling limited in effect, according to the passage?', options: ['Plastic is easy to fully recycle', 'Most plastics are downcycled and lose value', 'Plastic cannot be separated from paper', 'Recycling plastic is too profitable'], answer: 'B', explanation: 'Paragraph 4 states "Most plastics are downcycled: bottles become fibres of lower value."', kw: 'downcycled', loc: 'Paragraph 4', tip: 'The passage contrasts recycling potential with the reality of downcycling.' },
+          { id: 'r9-q7', type: 'mcq', question: 'What is the real measure of success for circularity, according to the author?', options: ['The rate of recycling alone', 'The reduction in material throughput and environmental impact', 'The number of repair shops', 'The price of recycled goods'], answer: 'B', explanation: 'Paragraph 7: success is "the overall reduction in material throughput and environmental impact."', kw: 'measure of success', loc: 'Paragraph 7', tip: 'Final-paragraph conclusions often carry the author\'s judgement.' },
+          { id: 'r9-q8', type: 'sa', question: 'What is the name of the European Union policy launched in 2020?', answer: 'Circular Economy Action Plan', explanation: 'Paragraph 3 names the Circular Economy Action Plan, "launched in 2020."', kw: '2020', loc: 'Paragraph 3', tip: 'Short answers: copy the exact title from the passage.' },
+          { id: 'r9-q9', type: 'sa', question: 'What example of selling a service instead of a product is given?', answer: 'washing as a service', explanation: 'Paragraph 5 gives the "washing as a service" example.', kw: 'washing machine', loc: 'Paragraph 5', tip: 'One noun phrase is sufficient; do not add a full sentence.' },
+          { id: 'r9-q10', type: 'sa', question: 'According to the critics, what fuel often powers recycling loops?', answer: 'fossil fuels', explanation: 'Paragraph 6 states the energy for recycling loops "often comes from fossil fuels."', kw: 'fossil fuels', loc: 'Paragraph 6', tip: '"Fuel" in the question signals the exact phrase "fossil fuels".' }
+        ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 10 – The Double-Edged Global Office
+         [Globalization]
+         Question types: Yes/No/Not Given, Multiple Choice,
+         Short Answer
+         ------------------------------------------------------- */
+      {
+        id: 'r10', title: 'The Double-Edged Global Office',
+        type: 'reading', level: 'c1', timerMinutes: 20, band: '7.5',
+        passage: [
+          'For thirty years, multinational corporations have moved production abroad, chasing cheaper labour, lower taxes and faster-growing markets. Offshoring turned a factory in Shenzhen into the workshop for a smartphone assembled from hundreds of suppliers spread across a dozen countries.',
+          'The economic case is powerful. Offshoring lets firms reach scale quickly, and host economies gain jobs, wages, skills and technology transfer. Countries such as Vietnam and Mexico have industrialised partly because global production networks inserted their factories into world value chains.',
+          'Yet the picture is double-edged. Studies find that difficult working conditions persist in the most competitive segments, and that the bargaining power of workers has weakened as governments race to attract investors. The phenomenon is sometimes described as a race to the bottom.',
+          'A further cost is fiscal. Multinationals can shift profits to low-tax jurisdictions, eroding the tax base of the countries where their factories actually operate. International cooperation, such as the OECD minimum corporate tax agreed in 2021, tries to close this gap, but implementation has been slow.',
+          'Culture also enters the equation. Global brands carry a standardised image around the world, and critics argue that this homogenises tastes and squeezes local businesses. Supporters respond that consumers adapt global products to local meaning, and that local firms often prosper by imitating and then differentiating.',
+          'Policymakers are reaching for new tools. Supply-chain due diligence laws in Europe now require companies to monitor labour and environmental standards among their suppliers, while reshoring and proximity strategies shorten distances for reasons of security as much as speed.',
+          'The balanced conclusion is that globalisation is not a one-way street. It has lifted millions out of poverty, yet it concentrates power and risk wherever one link in the chain is weakest. The policy question is no longer whether to globalise, but how to share the gains and the losses equitably.'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r10-q1', type: 'ynng', question: 'The passage states that countries such as Vietnam industrialised only through offshoring.', answer: 'N', explanation: 'Paragraph 2 says they industrialised "partly because" of production networks — contradictory to "only through."', kw: 'Vietnam', loc: 'Paragraph 2', tip: 'The word "partly" directly contradicts "only" — a clear No.' },
+          { id: 'r10-q2', type: 'ynng', question: 'The author states that globalisation has lifted millions of people out of poverty.', answer: 'Y', explanation: 'Paragraph 7 states it "has lifted millions out of poverty."', kw: 'lifted millions', loc: 'Paragraph 7', tip: 'The author explicitly endorses the claim in the conclusion.' },
+          { id: 'r10-q3', type: 'ynng', question: 'Offshoring has never created jobs in host economies.', answer: 'N', explanation: 'Paragraph 2 lists jobs among the gains; "never" is a direct contradiction.', kw: 'jobs', loc: 'Paragraph 2', tip: 'Absolute words ("never", "all") usually signal a No.' },
+          { id: 'r10-q4', type: 'ynng', question: 'Vietnam and Mexico are now the two largest economies in the world.', answer: 'NG', explanation: 'The passage mentions neither economy ranking; the size of their economies is not discussed.', kw: 'largest economies', loc: 'No location', tip: 'If the passage is silent on the claim, the answer is Not Given — never guess from general knowledge.' },
+          { id: 'r10-q5', type: 'mcq', question: 'What is described as a "race to the bottom"?', options: ['A competition between factories', 'Weakening worker bargaining power as governments compete for investment', 'A policy to raise wages', 'The decline of multinational firms'], answer: 'B', explanation: 'Paragraph 3 links the term to weakened worker bargaining caused by competition among governments.', kw: 'race to the bottom', loc: 'Paragraph 3', tip: 'Definition terms are usually explained immediately before or after the term appears.' },
+          { id: 'r10-q6', type: 'mcq', question: 'How do European supply-chain due diligence laws work?', options: ['They ban all imports', 'They require firms to monitor labour and environmental standards among suppliers', 'They raise taxes on consumers', 'They close overseas factories'], answer: 'B', explanation: 'Paragraph 6 says the laws "require companies to monitor labour and environmental standards among their suppliers."', kw: 'due diligence', loc: 'Paragraph 6', tip: 'Answer with the precise mechanism, not a paraphrase that overstates it.' },
+          { id: 'r10-q7', type: 'mcq', question: 'What is the author\'s overall position on globalisation?', options: ['It is entirely positive', 'It is entirely negative', 'It is mixed and requires equitable sharing of gains and losses', 'It has already ended'], answer: 'C', explanation: 'Paragraph 7 concludes it "has lifted millions... yet it concentrates power and risk," so sharing must be equitable.', kw: 'balanced conclusion', loc: 'Paragraph 7', tip: 'Attitude MCQs: the last paragraph usually states the author\'s judgement.' },
+          { id: 'r10-q8', type: 'sa', question: 'Which international organisation agreed a minimum corporate tax in 2021?', answer: 'OECD', explanation: 'Paragraph 4 names the "OECD minimum corporate tax agreed in 2021."', kw: '2021', loc: 'Paragraph 4', tip: 'Years are excellent scan magnets in Note/Short-Answer questions.' },
+          { id: 'r10-q9', type: 'sa', question: 'What strategy shortens production distances for reasons of security as well as speed?', answer: 'reshoring', explanation: 'Paragraph 6 says "reshoring and proximity strategies shorten distances for reasons of security as much as speed."', kw: 'proximity', loc: 'Paragraph 6', tip: 'The term appears with its two motivations; pick the one word it names.' },
+          { id: 'r10-q10', type: 'sa', question: 'According to supporters of global brands, what do consumers do with global products?', answer: 'adapt them to local meaning', explanation: 'Paragraph 5 says "consumers adapt global products to local meaning."', kw: 'adapt', loc: 'Paragraph 5', tip: 'Report the supporters\' exact claim — do not mix in the critics\' view.' }
+        ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 11 – Decision Fatigue at the End of the Day
+         [Psychology]
+         Question types: Multiple Choice, True/False/Not Given,
+         Sentence Completion
+         ------------------------------------------------------- */
+      {
+        id: 'r11', title: 'Decision Fatigue at the End of the Day',
+        type: 'reading', level: 'c1', timerMinutes: 20, band: '7.5',
+        passage: [
+          'Judges hear dozens of parole hearings a day. A celebrated study of Israeli parole boards found that petitioners were markedly less likely to win release as the morning progressed, and more likely again immediately after a food break. The explanation offered was decision fatigue: making choice after choice drains the mental resource needed for good judgement.',
+          'This is the theory of ego depletion, developed by the psychologist Roy Baumeister. According to the theory, self-control is a limited fuel tank: every act of effortful decision dips into the same reserve, so judgement grows worse with use.',
+          'The theory has had a turbulent decade. Large-scale replications have failed to find the expected depletion effect, and many researchers now doubt the fuel-tank metaphor. What remains persuasive is narrower: laboratory tasks show modest effects, while real-world contexts show that people avoid making decisions at all when their resources are spent.',
+          'A related body of work studies choice overload. In a famous field experiment, shoppers tasting jams were more likely to buy when offered six varieties than when offered twenty-four. More options meant more comparison and more effort, and many customers simply walked away.',
+          'Because humans are decision-averse under load, smart design works with the grain. Defaults, such as a pension scheme people join unless they opt out, or a checkpoint that passes unless it is refused, reliably change behaviour at a scale that persuasion cannot reach.',
+          'Real-world evidence is mixed but suggestive. Judicial outcomes, hospital prescribing at the end of long shifts, and consumer choices late in the day all show similar patterns of degraded judgement. Yet the effects are smaller and less deterministic than popular accounts suggest.',
+          'Practical advice follows. When the stakes are high, schedule important decisions early in the day, break big choices into smaller ones, and protect decision-makers, whether they are judges, doctors or students, from the slow drain of minute choices.'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r11-q1', type: 'mcq', question: 'What did the Israeli parole board study find?', options: ['Judges never grant parole', 'Petitioners were less likely to win release as the morning progressed', 'Food breaks had no effect on decisions', 'Parole decisions are made at night'], answer: 'B', explanation: 'Paragraph 1 states petitioners were "markedly less likely to win release as the morning progressed."', kw: 'parole', loc: 'Paragraph 1', tip: 'Attribution: the effect is about the time of day, not about judges being unfair.' },
+          { id: 'r11-q2', type: 'mcq', question: 'What is the theory of ego depletion?', options: ['A diet plan', 'The idea that self-control is a limited resource drained by use', 'A memory technique', 'A form of therapy'], answer: 'B', explanation: 'Paragraph 2 describes self-control as "a limited fuel tank" that drains with use.', kw: 'ego depletion', loc: 'Paragraph 2', tip: 'Theory-definition questions are usually answered in the same sentence as the term.' },
+          { id: 'r11-q3', type: 'mcq', question: 'Why do researchers now doubt ego depletion?', options: ['It was never published', 'Large-scale replications have failed to find the expected effect', 'No one studies decisions anymore', 'It has been banned by regulators'], answer: 'B', explanation: 'Paragraph 3 says "large-scale replications have failed to find the expected depletion effect."', kw: 'replications', loc: 'Paragraph 3', tip: 'Careful: the doubt is about the laboratory effect, not about real-world fatigue.' },
+          { id: 'r11-q4', type: 'mcq', question: 'Why did shoppers buy more jams when offered fewer varieties?', options: ['Six varieties were tastier', 'Fewer options meant less comparison and effort', 'Twenty-four jams were too cheap', 'The experiment had no results'], answer: 'B', explanation: 'Paragraph 4: "more options meant more comparison and more effort, and many customers simply walked away."', kw: 'jams', loc: 'Paragraph 4', tip: 'The answer inverts the mechanism: more choice → more effort → less buying.' },
+          { id: 'r11-q5', type: 'tfng', question: 'Defaults reliably change behaviour at a scale that persuasion cannot reach.', answer: 'T', explanation: 'Paragraph 5 states defaults "reliably change behaviour at a scale that persuasion cannot reach."', kw: 'defaults', loc: 'Paragraph 5', tip: 'The sentence is nearly verbatim — mark True immediately.' },
+          { id: 'r11-q6', type: 'tfng', question: 'The parole board study was conducted in China.', answer: 'F', explanation: 'Paragraph 1 describes the panels as Israeli; the statement contradicts the passage.', kw: 'Israeli', loc: 'Paragraph 1', tip: 'A wrong location is a direct contradiction, so False.' },
+          { id: 'r11-q7', type: 'tfng', question: 'The author believes that popular accounts overstate the size of decision-fatigue effects.', answer: 'T', explanation: 'Paragraph 6 says the effects are "smaller and less deterministic than popular accounts suggest."', kw: 'less deterministic', loc: 'Paragraph 6', tip: 'Author-attitude questions: trust evaluative adverbs such as "smaller" and "less".' },
+          { id: 'r11-q8', type: 'tfng', question: 'The passage advises scheduling important decisions early in the day.', answer: 'T', explanation: 'Paragraph 7 advises readers to "schedule important decisions early in the day."', kw: 'schedule', loc: 'Paragraph 7', tip: 'Advice statements in the final paragraph often match True/False items exactly.' },
+          { id: 'r11-q9', type: 'sc', question: 'Complete the sentence: When their resources are spent, people ___ making decisions at all.', answer: 'avoid', explanation: 'Paragraph 3 says people "avoid making decisions at all when their resources are spent."', kw: 'avoid', loc: 'Paragraph 3', tip: 'The gap needs a verb; the passage supplies "avoid".' },
+          { id: 'r11-q10', type: 'sc', question: 'Complete the sentence: Practical advice says to break big choices into smaller ___.', answer: 'ones', explanation: 'Paragraph 7 advises to "break big choices into smaller ones."', kw: 'smaller ones', loc: 'Paragraph 7', tip: '"Ones" replaces the repeated noun "choices" — copy it exactly.' }
+        ]
+      },
+      /* -------------------------------------------------------
+         PASSAGE 12 – The Anthropology of the Shared Table
+         [Culture]
+         Question types: Matching Headings, Multiple Choice,
+         Yes/No/Not Given
+         ------------------------------------------------------- */
+      {
+        id: 'r12', title: 'The Anthropology of the Shared Table',
+        type: 'reading', level: 'c1', timerMinutes: 20, band: '8.0',
+        passage: [
+          'Almost every society marks its most important moments with food. Meals bind families, seal alliances and celebrate the calendar. Anthropology calls the act of eating together commensality, and it is one of the oldest and most universal instruments of social bonding.',
+          'Food is also a boundary. Dietary codes such as halal and kosher do more than regulate what a body may eat; they mark who belongs to the group. To share a meal is to declare trust, which is why diplomatic banquets carry such weight.',
+          'Ritual timing gives food its rhythm. Fasts and feasts alternate across the year, from Ramadan to Carnival, calibrating self-discipline and indulgence. The shared memory of a communal feast cements identity in ways that words rarely achieve.',
+          'Feasting has always been political. Anthropologists who study gift exchange observe that a lavish feast obliges the recipient to return an even greater one, so prestige accumulates to whoever can give most generously. Food is thus currency in the economy of honour.',
+          'Migration rewrites the menu. Diaspora communities fuse old recipes with new ingredients, and the hybrid cuisines that result, from Chinese-Indian to Mexican-American, become symbols of reinvention rather than loss. The shared table is a stage on which cultural identity is performed and renegotiated.',
+          'The industrial food system pulls in the opposite direction. In high-income countries the family meal has declined sharply, replaced by solitary, screen-lit dining. Sociologists link this decline to weaker transmission of cooking knowledge between generations and to rising rates of diet-related disease.',
+          'Culture, food and identity are therefore inseparable. Understanding what a society eats, and who it eats with, tells you how it allocates trust, power and memory. The plate is never only a plate.'
+        ].join('\n\n'),
+        questions: [
+          { id: 'r12-q1', type: 'mh', question: 'Match the heading to the paragraph: "Food as a mark of belonging"', options: ['1', '2', '3', '4'], answer: 'B', explanation: 'Paragraph 2 explains that dietary codes "mark who belongs to the group."', kw: 'belongs to the group', loc: 'Paragraph 2', tip: 'Paraphrase hunt: "mark who belongs" equals "mark of belonging".' },
+          { id: 'r12-q2', type: 'mh', question: 'Match the heading to the paragraph: "Feasts as an economy of honour"', options: ['4', '5', '6', '7'], answer: 'A', explanation: 'Paragraph 4 describes prestige accumulating through generous giving — an economy of honour.', kw: 'prestige', loc: 'Paragraph 4', tip: 'The keyword "prestige" locks the match to Paragraph 4.' },
+          { id: 'r12-q3', type: 'mh', question: 'Match the heading to the paragraph: "The slow disappearance of the shared family meal"', options: ['4', '5', '6', '7'], answer: 'C', explanation: 'Paragraph 6 reports the sharp decline of the family meal in high-income countries.', kw: 'family meal', loc: 'Paragraph 6', tip: 'Location words like "in high-income countries" help confirm the paragraph.' },
+          { id: 'r12-q4', type: 'mcq', question: 'What is commensality?', options: ['A cooking technique', 'The act of eating together', 'A type of spice', 'A religious fast'], answer: 'B', explanation: 'Paragraph 1 defines commensality as "the act of eating together."', kw: 'commensality', loc: 'Paragraph 1', tip: 'Definitions in parentheses or appositive phrases carry the answer.' },
+          { id: 'r12-q5', type: 'mcq', question: 'Why do diplomatic banquets carry such weight?', options: ['They are extremely expensive', 'To share a meal is to declare trust', 'They are held in secret', 'They are televised worldwide'], answer: 'B', explanation: 'Paragraph 2: "to share a meal is to declare trust, which is why diplomatic banquets carry such weight."', kw: 'trust', loc: 'Paragraph 2', tip: 'Cause-effect chains give you the "why" directly after the keyword.' },
+          { id: 'r12-q6', type: 'mcq', question: 'How does a lavish feast build prestige, according to anthropologists?', options: ['It wastes the host\'s wealth', 'It obliges the recipient to return an even greater feast', 'It has no social meaning', 'It is forbidden in most cultures'], answer: 'B', explanation: 'Paragraph 4 says a lavish feast "obliges the recipient to return an even greater one."', kw: 'obliges', loc: 'Paragraph 4', tip: 'Anthropologists\' claims are reported with verbs like "observe" — treat them as evidence.' },
+          { id: 'r12-q7', type: 'ynng', question: 'The passage claims that halal and kosher rules exist only for health reasons.', answer: 'N', explanation: 'Paragraph 2 says they do more than regulate the body: they "mark who belongs to the group."', kw: 'halal', loc: 'Paragraph 2', tip: '"Only" makes the claim extreme; the passage explicitly widens the purpose.' },
+          { id: 'r12-q8', type: 'ynng', question: 'Hybrid cuisines are described as symbols of reinvention.', answer: 'Y', explanation: 'Paragraph 5 says hybrids "become symbols of reinvention rather than loss."', kw: 'hybrid', loc: 'Paragraph 5', tip: 'The author states the symbols directly — agree with the author, not with critics.' },
+          { id: 'r12-q9', type: 'ynng', question: 'The passage states that family meals have increased in high-income countries.', answer: 'N', explanation: 'Paragraph 6 says the family meal "has declined sharply" in high-income countries.', kw: 'family meal', loc: 'Paragraph 6', tip: 'Direction words ("declined") contradict "increased" — No.' },
+          { id: 'r12-q10', type: 'ynng', question: 'Anthropologists agree that Ramadan is an older tradition than Carnival.', answer: 'NG', explanation: 'Paragraph 3 names both celebrations but never compares their ages.', kw: 'Ramadan', loc: 'Paragraph 3', tip: 'Both names appear, but no comparison is made — that is the classic Not Given trap.' }
+        ]
       }
     ],
 
@@ -395,8 +581,20 @@
     var bank = TESTS[type] || [];
     var c = cache();
     return bank.map(function (t) {
-      return { level: { id: t.level, name: t.title, icon: t.type === 'reading' ? '📖' : '🎧' }, type: type, completed: !!c.completed[t.id], testId: t.id, timerMinutes: t.timerMinutes, questionCount: t.questions.length };
+      return { level: { id: t.level, name: t.title, icon: t.type === 'reading' ? '📖' : '🎧' }, type: type, completed: !!c.completed[t.id], testId: t.id, timerMinutes: t.timerMinutes, questionCount: t.questions.length, band: t.band || '' };
     });
+  }
+
+  /* ---------- tolerant answer matching ---------- */
+  function cleanAns(s) {
+    return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+  function isAnsCorrect(q, ua) {
+    var targets = String(q.answer || '').split('/').map(function (x) { return cleanAns(x); });
+    var given = cleanAns(ua);
+    if (!given) return false;
+    for (var i = 0; i < targets.length; i++) { if (targets[i] && targets[i] === given) return true; }
+    return false;
   }
 
   /* ---------- render ---------- */
@@ -417,6 +615,7 @@
           '<div class="flex items-center gap-2 mb-1">' +
             '<span class="text-2xl">' + t.level.icon + '</span>' +
             '<span class="text-sm font-bold text-[#f5f0e6]">' + esc(t.level.name) + '</span>' +
+            (t.band ? '<span class="text-[9px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.3)] px-1.5 py-0.5 rounded uppercase">' + esc(t.band) + '</span>' : '') +
           '</div>' +
           '<p class="text-xs text-[#f5f0e6]/60">' + (t.completed ? '✓ Completed' : t.questionCount + ' questions · ' + t.timerMinutes + '-min timer · Auto-graded') + '</p>' +
         '</div>' +
@@ -463,14 +662,21 @@
     var q = questions[state.qi];
     if (!q) { state.view = 'review'; render(); return; }
 
-    var opts = (q.options || []).map(function (o, i) {
-      var letter = String.fromCharCode(65 + i);
-      var sel = state.answers[state.qi] === letter;
-      return '<button type="button" class="text-left w-full bg-[rgba(20,18,15,0.85)] backdrop-blur-md border ' + (sel ? 'border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.15)]' : 'border-[rgba(212,175,55,0.15)] hover:border-[rgba(212,175,55,0.4)]') + ' rounded-lg px-4 py-3 transition-all flex items-center gap-3" onclick="IELTS_QUIZ_HUB.answer(' + state.qi + ', \'' + letter + '\')">' +
-        '<span class="inline-block w-5 text-[#f5f0e6]/40 font-semibold">' + letter + '</span>' +
-        '<span class="text-sm text-[#f5f0e6]">' + esc(o) + '</span>' +
-      '</button>';
-    }).join('');
+    var hasOpts = q.options && q.options.length;
+    var opts = '';
+    if (hasOpts) {
+      opts = '<div class="grid gap-2 mb-5">' + (q.options.map(function (o, i) {
+        var letter = String.fromCharCode(65 + i);
+        var sel = state.answers[state.qi] === letter;
+        return '<button type="button" class="text-left w-full bg-[rgba(20,18,15,0.85)] backdrop-blur-md border ' + (sel ? 'border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.15)]' : 'border-[rgba(212,175,55,0.15)] hover:border-[rgba(212,175,55,0.4)]') + ' rounded-lg px-4 py-3 transition-all flex items-center gap-3" onclick="IELTS_QUIZ_HUB.answer(' + state.qi + ', \'' + letter + '\')">' +
+          '<span class="inline-block w-5 text-[#f5f0e6]/40 font-semibold">' + letter + '</span>' +
+          '<span class="text-sm text-[#f5f0e6]">' + esc(o) + '</span>' +
+        '</button>';
+      }).join('')) + '</div>';
+    } else {
+      opts = '<div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-3 mb-5"><input type="text" id="qh-freetext" value="' + esc(state.answers[state.qi] || '') + '" placeholder="Type your answer…" class="w-full bg-transparent text-sm text-[#f5f0e6] focus:outline-none" oninput="IELTS_QUIZ_HUB.text(' + state.qi + ', this.value)" /></div>' +
+        '<p class="text-[11px] text-[#f5f0e6]/40 -mt-3 mb-4">Spelling is flexible but the answer must match the passage. Where alternatives exist, either is accepted.</p>';
+    }
 
     var passageHtml = '';
     if (test.passage) {
@@ -498,7 +704,7 @@
         '<div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.1)] rounded-xl p-4 mb-5">' +
           '<p class="text-sm font-medium text-[#f5f0e6]">' + esc(q.question) + '</p>' +
         '</div>' +
-        '<div class="grid gap-2 mb-5">' + opts + '</div>' +
+        opts +
         '<div class="flex justify-between">' +
           '<button class="btn-secondary text-sm ' + (state.qi === 0 ? 'invisible' : '') + '" onclick="IELTS_QUIZ_HUB.prev()">← Prev</button>' +
           '<button class="btn-primary text-sm" onclick="IELTS_QUIZ_HUB.next()">' + (state.qi === total - 1 ? 'Submit' : 'Next →') + '</button>' +
@@ -507,6 +713,8 @@
   }
 
   function answer(i, letter) { state.answers[i] = letter; renderTaking(); }
+
+  function text(i, val) { state.answers[i] = val; }
 
   function next() {
     var test = getTestByKey(state.testKey);
@@ -524,7 +732,7 @@
     var correct = 0;
     questions.forEach(function (q, i) {
       var ua = state.answers[i];
-      if (q.answer && ua && String(ua).toLowerCase() === String(q.answer).toLowerCase()) correct++;
+      if (isAnsCorrect(q, ua)) correct++;
     });
     var total = questions.length;
     var pct = total ? Math.round((correct / total) * 100) : 0;
@@ -571,20 +779,31 @@
     if (!r) return;
     var reviewRows = r.questions.map(function (q, i) {
       var ua = state.answers[i];
-      var isCorrect = q.answer && ua && String(ua).toLowerCase() === String(q.answer).toLowerCase();
+      var isCorrect = isAnsCorrect(q, ua);
       return '<div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-lg p-4">' +
         '<p class="text-sm font-semibold text-[#f5f0e6]">Q' + (i + 1) + ' ' + (isCorrect ? '✅' : '❌') + ' — ' + esc(q.question) + '</p>' +
         (!isCorrect ? '<p class="text-xs text-[#f5f0e6]/50 mt-1">Your: ' + esc(ua || '—') + ' · Correct: <span class="text-[#d4af37]">' + esc(String(q.answer || '')) + '</span></p>' : '') +
         '<p class="text-xs text-[#f5f0e6]/60 mt-1">💡 ' + esc(q.explanation || '') + '</p>' +
+        (q.tip ? '<p class="text-[11px] text-[#d4af37]/80 mt-1">🎯 ' + esc(q.tip) + '</p>' : '') +
       '</div>';
     }).join('');
+
+    var hasLoc = r.test.type === 'reading' && r.questions.some(function (q) { return q.kw || q.loc; });
+    var locRows = hasLoc ? r.questions.map(function (q, i) {
+      return '<tr class="border-t border-[rgba(212,175,55,0.1)]"><td class="py-1.5 pr-3 text-xs text-[#f5f0e6]/60">Q' + (i + 1) + '</td><td class="py-1.5 pr-3 text-xs text-[#f5f0e6]">' + esc(q.kw || '—') + '</td><td class="py-1.5 text-xs text-[#d4af37]">' + esc(q.loc || '—') + '</td></tr>';
+    }).join('') : '';
 
     $('#quiz-hub-content').innerHTML =
       '<div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-8 text-center mb-6">' +
         '<p class="text-5xl font-extrabold ' + (r.pct >= 80 ? 'text-[#d4af37]' : r.pct >= 60 ? 'text-emerald-400' : 'text-[#f5f0e6]/70') + '">' + r.pct + '%</p>' +
         '<p class="text-[#f5f0e6]/70 mt-2">' + r.correct + ' / ' + r.total + ' correct · Time: ' + r.time + '</p>' +
         '<p class="text-sm mt-1 ' + (r.pct >= 60 ? 'text-emerald-400 font-semibold' : 'text-[#f5f0e6]/60') + '">' + (r.pct >= 80 ? 'Excellent! Band 8+ territory.' : r.pct >= 60 ? 'Good effort — review the explanations.' : 'Keep practising — review the answers below.') + '</p>' +
+        (r.test.band ? '<p class="text-xs text-[rgba(212,175,55,0.7)] mt-2 font-semibold">Target band: ' + esc(r.test.band) + '</p>' : '') +
       '</div>' +
+      (hasLoc ? '<h3 class="text-lg font-bold text-[#f5f0e6] mb-3">🔑 Keyword Locator</h3>' +
+        '<div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-4 mb-6">' +
+        '<p class="text-[11px] text-[#f5f0e6]/50 mb-2">Search for these words (or their synonyms) in the passage to locate each answer.</p>' +
+        '<table class="w-full"><thead><tr><th class="text-left text-[10px] uppercase tracking-wider text-[#f5f0e6]/40 pb-2 pr-3">Question</th><th class="text-left text-[10px] uppercase tracking-wider text-[#f5f0e6]/40 pb-2 pr-3">Keyword to locate</th><th class="text-left text-[10px] uppercase tracking-wider text-[#f5f0e6]/40 pb-2">Position</th></tr></thead><tbody>' + locRows + '</tbody></table></div>' : '') +
       '<h3 class="text-lg font-bold text-[#f5f0e6] mb-4">Answer Review</h3>' +
       '<div class="space-y-3 mb-6">' + reviewRows + '</div>' +
       '<div class="flex gap-3">' +
@@ -600,5 +819,5 @@
     render();
   }
 
-  window.IELTS_QUIZ_HUB = { render: render, switchTab: switchTab, start: start, answer: answer, next: next, prev: prev, back: back };
+  window.IELTS_QUIZ_HUB = { render: render, switchTab: switchTab, start: start, answer: answer, text: text, next: next, prev: prev, back: back };
 })();
