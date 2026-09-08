@@ -259,9 +259,38 @@
 
     var el = $('#reading-hub-content') || document.getElementById('reading-hub-content');
     if (!el) return;
+
+    var essentialNews = [
+      { title: 'BBC News', url: 'https://www.bbc.com/news', icon: '\uD83C\uDF10' },
+      { title: 'CNN', url: 'https://www.cnn.com', icon: '\uD83D\uDCF0' },
+      { title: 'Read Theory', url: 'https://readtheory.org/', icon: '\uD83D\uDCD6' },
+      { title: 'Learn English \u2013 British Council', url: 'https://learnenglish.britishcouncil.org/', icon: '\uD83C\uDFDB\uFE0F' }
+    ];
+    var essentialAudio = [
+      { title: 'BBC Podcasts', url: 'https://www.bbc.co.uk/podcasts', icon: '\uD83C\uDFA7' }
+    ];
+    var essentialGuides = [
+      { title: 'Reading Guide', url: 'http://bit.ly/D4l-reading', icon: '\uD83D\uDCD4' },
+      { title: 'IELTS Guide 01', url: 'https://bit.ly/dalilk01', icon: '\uD83D\uDCC1' },
+      { title: 'IELTS Guide 03', url: 'https://bit.ly/dalilk03', icon: '\uD83D\uDCC1' },
+      { title: 'Additional Practice Resource', url: 'http://qrs.ly/d77nbi9', icon: '\uD83D\uDCDD' }
+    ];
+
+    function essentialCards(list) {
+      var out = '';
+      for (var i = 0; i < list.length; i++) {
+        out += '<a href="' + list[i].url + '" target="_blank" rel="noopener noreferrer" class="block bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-4 hover:border-[rgba(212,175,55,0.6)] hover:shadow-lg transition"><div class="flex items-start gap-3"><span class="text-2xl">' + list[i].icon + '</span><div><h4 class="font-bold text-[#f5f0e6] text-sm">' + list[i].title + '</h4><span class="text-xs text-[#d4af37] font-medium">Open resource \u2192</span></div></div></a>';
+      }
+      return out;
+    }
+
     el.innerHTML = '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6"><h2 class="text-2xl font-extrabold text-slate-900 mb-2">\uD83D\uDCDA Reading &amp; Comprehension Hub</h2><p class="text-slate-500 text-sm">Practice reading comprehension with curated resources from British Council, ReadTheory, and BBC Learning English.</p></div>' +
     '<div class="mb-6"><h3 class="text-lg font-bold text-slate-900 mb-3">Select a Level for Practice Tests</h3><div class="flex flex-wrap gap-3">' + lvlBtns + '</div></div>' +
     '<div class="mb-8"><h3 class="text-lg font-bold text-slate-900 mb-4">\uD83E\uDDEA Practice Tests by Level</h3><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">' + allTestCards + '</div></div>' +
+    '<div class="mb-8"><h3 class="text-lg font-bold text-slate-900 mb-4">\uD83C\uDF10 Essential English Resources</h3>' +
+    '<div class="mb-5"><h4 class="text-sm font-bold text-slate-700 mb-3">\uD83D\uDCF0 News &amp; Reading Practice</h4><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">' + essentialCards(essentialNews) + '</div></div>' +
+    '<div class="mb-5"><h4 class="text-sm font-bold text-slate-700 mb-3">\uD83C\uDFA7 Podcasts &amp; Audio</h4><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">' + essentialCards(essentialAudio) + '</div></div>' +
+    '<div><h4 class="text-sm font-bold text-slate-700 mb-3">\uD83C\uDFDB\uFE0F Specialized IELTS &amp; Reading Guides</h4><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">' + essentialCards(essentialGuides) + '</div></div></div>' +
     '<h3 class="text-lg font-bold text-slate-900 mb-4">\uD83C\uDF10 External Reading Resources</h3><div class="grid md:grid-cols-3 gap-4"><div class="bg-blue-50 rounded-2xl p-5 border border-blue-100"><h4 class="font-bold text-blue-800 mb-3">\uD83C\uDFDB\uFE0F British Council</h4><ul class="space-y-2">' + bcItems + '</ul></div><div class="bg-green-50 rounded-2xl p-5 border border-green-100"><h4 class="font-bold text-green-800 mb-3">\uD83D\uDCD6 ReadTheory</h4><ul class="space-y-2">' + rtItems + '</ul></div><div class="bg-red-50 rounded-2xl p-5 border border-red-100"><h4 class="font-bold text-red-800 mb-3">\uD83D\uDCFB BBC Learning English</h4><ul class="space-y-2">' + bbcItems + '</ul></div></div>';
   }
 
