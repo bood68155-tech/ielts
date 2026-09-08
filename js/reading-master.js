@@ -8,7 +8,7 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const state = { view: 'home', pt: null, qi: 0, answers: {}, running: false };
+  const state = { view: 'home', pt: null, qi: 0, answers: {}, running: false, timer: { remaining: 0, interval: null } };
 
   /* Passage bank: [band, title, passage, questions[], timerMin] */
   const PASSAGES = [
@@ -117,12 +117,37 @@
   function start(title) {
     const p = PASSAGES.find((x) => x.title === title);
     if (!p) return;
+    clearExamTimer();
     state.pt = p;
     state.qi = 0;
     state.answers = {};
     state.running = true;
     state.view = 'taking';
+    state.timer.remaining = (p.timerMin || 20) * 60;
+    state.timer.last = Date.now();
+    state.timer.interval = setInterval(examTick, 1000);
     render();
+  }
+
+  function clearExamTimer() {
+    clearInterval(state.timer.interval);
+    state.timer.interval = null;
+    state.timer.remaining = 0;
+  }
+
+  function examTick() {
+    if (state.view !== 'taking') { clearExamTimer(); return; }
+    state.timer.remaining--;
+    const el = $('#rm-time');
+    if (el) {
+      el.textContent = fmtTime(Math.max(0, state.timer.remaining));
+      if (state.timer.remaining <= 60 && state.timer.remaining > 0) el.classList.add('text-[#ff6b6b]');
+    }
+    if (state.timer.remaining <= 0) {
+      clearExamTimer();
+      window.toast && window.toast('⏰ Time is up — auto-submitting your answers');
+      finish();
+    }
   }
 
   function answer(i, letter) { state.answers[i] = letter; render(); }
@@ -135,6 +160,7 @@
 
   function finish() {
     state.running = false;
+    clearExamTimer();
     const p = state.pt;
     let correct = 0;
     p.questions.forEach((q, i) => {
@@ -208,6 +234,7 @@
             <h3 class="text-lg font-extrabold text-[#f5f0e6]">${esc(p.title)}</h3>
             <p class="text-xs text-[#f5f0e6]/60">Q${state.qi + 1} / ${total} · Band ${esc(p.band)} · ${p.timerMin} min</p>
           </div>
+          <span id="rm-time" class="font-mono text-sm font-bold text-[#d4af37] bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.3)] px-4 py-2 rounded-lg">${fmtTime(Math.max(0, state.timer.remaining))}</span>
         </div>
         <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.1)] rounded-xl p-4 mb-5 max-h-56 overflow-y-auto">
           <p class="text-sm text-[#f5f0e6]/75 leading-relaxed">${esc(p.text)}</p>
@@ -261,7 +288,7 @@
       </div>`;
   }
 
-  function back() { state.view = 'home'; render(); }
+  function back() { clearExamTimer(); state.view = 'home'; render(); }
 
   window.IELTS_READMASTER = { render, start, answer, next, prev, back };
 })();

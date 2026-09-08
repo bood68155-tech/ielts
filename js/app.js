@@ -9,8 +9,8 @@
   /* ---------------- State ---------------- */
   const state = {
     currentSection: 'dashboard',
-    listening: { section: 0, answers: {} },
-    reading: { answers: {}, timer: { running: false, seconds: 0, interval: null } },
+    listening: { section: 0, answers: {}, strict: { running: false, seconds: 0, interval: null, length: 1800 } },
+    reading: { answers: {}, timer: { running: false, seconds: 0, interval: null }, strict: { running: false, seconds: 0, interval: null, length: 3600 } },
     writing: { task: 0, timer: { running: false, seconds: 0, interval: null } },
     speaking: { part: 1, prepTimer: { running: false, seconds: 0, interval: null }, speakTimer: { running: false, seconds: 0, interval: null } },
     audio: { playing: false, utter: null, paragraphIndex: 0 }
@@ -111,6 +111,7 @@
     if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
     if (name === 'curriculum' && window.IELTS_CURRICULUM) window.IELTS_CURRICULUM.render();
     if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
+    if (name === 'band-calc' && window.IELTS_BAND_SCORE) window.IELTS_BAND_SCORE.render();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -365,6 +366,7 @@
   }
 
   function renderListening() {
+    renderStrictUI('listening');
     renderListeningSectionTabs();
     renderListeningQuestions();
   }
@@ -433,10 +435,12 @@
 
     const pct = Math.round((correct / total) * 100);
     const msg = pct >= 80 ? 'Excellent! Band 8+ territory.' : pct >= 60 ? 'Good effort — review the explanations.' : pct >= 40 ? 'Keep practising — focus on the audio details.' : 'Don\'t worry — replay the audio and try again.';
+    const band = window.IELTS_BAND_SCORE ? window.IELTS_BAND_SCORE.listening(correct) : null;
 
     $('#listening-result').innerHTML = `
       <div class="result-banner ${pct >= 60 ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}">
         <p class="text-lg font-extrabold text-slate-900">You scored ${correct} out of ${total} (${pct}%)</p>
+        ${band ? '<p class="text-sm font-bold text-brand-600 mt-0.5">🎖 Estimated IELTS Band: ' + band + '</p>' : ''}
         <p class="text-sm text-slate-600 mt-1">${msg}</p>
         <div class="mt-3 space-y-1.5">${resultHtml.join('')}</div>
         <button class="btn-secondary mt-4" onclick="resetListening()">Try again</button>
@@ -594,6 +598,7 @@
     }).join('');
 
     $('#reading-timer').textContent = formatTime(state.reading.timer.seconds);
+    renderStrictUI('reading');
   }
 
   window.submitReading = function (passageIndex) {
@@ -607,10 +612,12 @@
 
     const pct = Math.round((correct / total) * 100);
     const msg = pct >= 80 ? 'Excellent! Band 8+ territory.' : pct >= 60 ? 'Good effort — review the explanations.' : 'Keep practising — scan the passage for key words.';
+    const band = window.IELTS_BAND_SCORE ? window.IELTS_BAND_SCORE.academicReading(correct) : null;
 
     $('#reading-result-' + passage.id).innerHTML = `
       <div class="result-banner ${pct >= 60 ? 'bg-emerald-50 border border-emerald-200' : 'bg-amber-50 border border-amber-200'}">
         <p class="text-lg font-extrabold text-slate-900">You scored ${correct} out of ${total} (${pct}%)</p>
+        ${band ? '<p class="text-sm font-bold text-brand-600 mt-0.5">🎖 Estimated IELTS Band: ' + band + '</p>' : ''}
         <p class="text-sm text-slate-600 mt-1">${msg}</p>
       </div>`;
 
@@ -663,6 +670,59 @@
     t.running = false;
     clearInterval(t.interval);
     $('#reading-timer-btn').textContent = 'Start timer';
+  }
+
+  /* ---------------- Strict Exam Mode (timed auto-submit) ---------------- */
+  function renderStrictUI(skill) {
+    const s = state[skill].strict;
+    const timeEl = $('#' + skill + '-strict-time');
+    const startBtn = $('#' + skill + '-strict-start');
+    const cancelBtn = $('#' + skill + '-strict-cancel');
+    const msg = $('#' + skill + '-strict-msg');
+    if (timeEl) timeEl.textContent = formatTime(s.running ? s.seconds : s.length);
+    if (startBtn) startBtn.classList.toggle('hidden', s.running);
+    if (cancelBtn) cancelBtn.classList.toggle('hidden', !s.running);
+    if (msg) msg.textContent = s.running ? 'Running — answers auto-submit at 00:00' : '';
+  }
+
+  window.startStrictExam = function (skill) {
+    const s = state[skill].strict;
+    if (s.running) { toast('⏱ Strict exam already running'); return; }
+    if (skill === 'reading' && state.reading.timer.running) stopReadingTimer();
+    const names = { listening: 'Listening', reading: 'Reading' };
+    s.running = true;
+    s.seconds = s.length;
+    renderStrictUI(skill);
+    s.interval = setInterval(() => {
+      s.seconds--;
+      if (s.seconds <= 0) {
+        s.seconds = 0;
+        clearInterval(s.interval);
+        s.running = false;
+        renderStrictUI(skill);
+        autoSubmitStrict(skill);
+        return;
+      }
+      renderStrictUI(skill);
+    }, 1000);
+    toast('🎯 Strict ' + names[skill] + ' exam started — auto-submits when time runs out');
+  };
+
+  window.cancelStrictExam = function (skill) {
+    const s = state[skill].strict;
+    clearInterval(s.interval);
+    s.running = false;
+    s.seconds = s.length;
+    renderStrictUI(skill);
+    toast('Strict exam cancelled');
+  };
+
+  function autoSubmitStrict(skill) {
+    toast('⏰ Time is up — auto-submitting your answers');
+    if (skill === 'listening') { submitListening(); return; }
+    READING_TEST.forEach((passage, pi) => {
+      if (unlocked('reading', pi)) submitReading(pi);
+    });
   }
 
   /* ---------------- Writing ---------------- */

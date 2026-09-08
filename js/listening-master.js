@@ -8,7 +8,7 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const state = { view: 'home', pt: null, qi: 0, answers: {}, speed: 1 };
+  const state = { view: 'home', pt: null, qi: 0, answers: {}, speed: 1, timer: { remaining: 0, interval: null } };
 
   const SECTIONS = [
     {
@@ -128,11 +128,35 @@
   function start(title) {
     const p = SECTIONS.find((x) => x.title === title);
     if (!p) return;
+    clearExamTimer();
     state.pt = p;
     state.qi = 0;
     state.answers = {};
     state.view = 'taking';
+    state.timer.remaining = (p.timerMin || 10) * 60;
+    state.timer.interval = setInterval(examTick, 1000);
     render();
+  }
+
+  function clearExamTimer() {
+    clearInterval(state.timer.interval);
+    state.timer.interval = null;
+    state.timer.remaining = 0;
+  }
+
+  function examTick() {
+    if (state.view !== 'taking') { clearExamTimer(); return; }
+    state.timer.remaining--;
+    const el = $('#lm-time');
+    if (el) {
+      el.textContent = fmtTime(Math.max(0, state.timer.remaining));
+      if (state.timer.remaining <= 60 && state.timer.remaining > 0) el.classList.add('text-[#ff6b6b]');
+    }
+    if (state.timer.remaining <= 0) {
+      clearExamTimer();
+      window.toast && window.toast('⏰ Time is up — auto-submitting your answers');
+      finish();
+    }
   }
   function answer(i, val) {
     state.answers[i] = val;
@@ -152,6 +176,7 @@
   }
 
   function finish() {
+    clearExamTimer();
     const p = state.pt;
     let correct = 0;
     p.questions.forEach((q, i) => { if (isCorrect(q, state.answers[i])) correct++; });
@@ -245,6 +270,7 @@
             <h3 class="text-lg font-extrabold text-[#f5f0e6]">${esc(p.title)}</h3>
             <p class="text-xs text-[#f5f0e6]/60">Q${state.qi + 1} / ${total} · Band ${esc(p.band)} · Speed ${state.speed}x</p>
           </div>
+          <span id="lm-time" class="font-mono text-sm font-bold text-[#d4af37] bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.3)] px-4 py-2 rounded-lg">${fmtTime(Math.max(0, state.timer.remaining))}</span>
         </div>
         <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.1)] rounded-xl p-4 mb-5 max-h-64 overflow-y-auto">
           <p class="text-xs font-semibold text-[#d4af37]/70 mb-1">Transcript (simulated audio):</p>
@@ -291,7 +317,7 @@
       </div>`;
   }
 
-  function back() { state.view = 'home'; render(); }
+  function back() { clearExamTimer(); state.view = 'home'; render(); }
 
   window.IELTS_LISTMASTER = { render, speed: setSpeed, start, answer, next, prev, back };
 })();

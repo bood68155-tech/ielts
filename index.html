@@ -234,6 +234,7 @@
           <button data-section="reading-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('reading-hub')">📚 Reading Hub</button>
           <button data-section="quiz-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
           <button data-section="vocab-trainer" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
+          <button data-section="band-calc" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('band-calc')">🧮 Band Calc</button>
           <button data-section="wss" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('wss')">✍️🗣️ Studio</button>
           <button data-section="placement" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('placement')">📋 Placement</button>
           <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
@@ -267,6 +268,7 @@
       <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('reading-hub')">📚 Reading Hub</button>
       <button data-section="quiz-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('quiz-hub')">🧠 Quiz Hub</button>
       <button data-section="vocab-trainer" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vocab-trainer')">💬 Vocab Trainer</button>
+      <button data-section="band-calc" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('band-calc')">🧮 Band Calc</button>
       <button data-section="wss" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('wss')">✍️🗣️ Studio</button>
       <button data-section="placement" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('placement')">📋 Placement</button>
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
@@ -372,8 +374,8 @@
     </section>
 
     <section id="section-study-plan" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="study-plan-content"></div></div></section>
-    <section id="section-listening" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🎧 Listening</h2><p class="text-sm text-[#f5f0e6]/60">A full mock test: 4 sections · 40 questions · ~30 minutes</p></div><div class="flex gap-2" id="listening-tabs"></div></div><div id="listening-controls" class="mb-4"></div><div id="listening-sections"></div><div id="listening-content"></div></section>
-    <section id="section-reading" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📖 Reading</h2><p class="text-sm text-[#f5f0e6]/60">3 academic passages · 40 questions · 60-minute timer</p></div><div class="flex gap-2" id="reading-tabs"></div></div><div id="reading-content"></div></section>
+    <section id="section-listening" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🎧 Listening</h2><p class="text-sm text-[#f5f0e6]/60">A full mock test: 4 sections · 40 questions · ~30 minutes</p></div><div class="flex gap-2" id="listening-tabs"></div></div><div id="listening-controls" class="mb-4"><div class="flex flex-wrap items-center gap-3 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Strict exam</span><span id="listening-strict-time" class="font-mono text-sm font-bold text-[#d4af37]">30:00</span><button id="listening-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('listening')">🎯 Start (30 min)</button><button id="listening-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('listening')">✕ Cancel</button><span id="listening-strict-msg" class="text-xs text-[#d4af37]/80"></span></div></div><div id="listening-sections"></div><div id="listening-content"></div></section>
+    <section id="section-reading" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">📖 Reading</h2><p class="text-sm text-[#f5f0e6]/60">3 academic passages · 40 questions · 60-minute timer</p></div><div class="flex gap-2" id="reading-tabs"></div></div><div class="flex flex-wrap items-center gap-3 mb-4 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Timer</span><span id="reading-timer" class="font-mono text-sm font-bold text-[#d4af37]">00:00</span><button id="reading-timer-btn" class="btn-secondary !py-1.5 !px-3 text-xs" onclick="toggleReadingTimer()">Start timer</button><span class="text-xs text-[#f5f0e6]/30 mx-1">|</span><button id="reading-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('reading')">🎯 Strict exam (60 min)</button><span id="reading-strict-time" class="font-mono text-sm font-bold text-[#f5f0e6]"></span><button id="reading-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('reading')">✕ Cancel</button><span id="reading-strict-msg" class="text-xs text-[#d4af37]/80"></span></div><div id="reading-content"></div></section>
     <section id="section-writing" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">✍️ Writing</h2><p class="text-sm text-[#f5f0e6]/60">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p></div><div class="flex gap-2" id="writing-tabs"></div></div><div id="writing-content"></div></section>
     <section id="section-speaking" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]">🗣️ Speaking</h2><p class="text-sm text-[#f5f0e6]/60">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p></div><div class="flex gap-2" id="speaking-tabs"></div></div><div id="speaking-content"></div></section>
     <section id="section-levels" class="section-view hidden"><h2 class="text-2xl font-extrabold text-[#f5f0e6] mb-4">📈 CEFR Levels</h2><div id="levels-content"></div></section>
@@ -395,6 +397,7 @@
     <section id="section-wss" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="wss-content"></div></div></section>
     <section id="section-placement" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="placement-content"></div></div></section>
     <section id="section-band" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="bandsys-content"></div></div></section>
+    <section id="section-band-calc" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="band-calc-content"></div></div></section>
     <section id="section-awl" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="awl-content"></div></div></section>
     <section id="section-reading-master" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="readmaster-content"></div></div></section>
     <section id="section-listening-master" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="listmaster-content"></div></div></section>
@@ -453,6 +456,7 @@
   <script src="js/writing-coach.js"></script>
   <script src="js/speaking-sim.js"></script>
   <script src="js/curriculum.js"></script>
+  <script src="js/band-score.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

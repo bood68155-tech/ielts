@@ -8,7 +8,54 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const state = { view: 'home', task: 1, model: null, draft: '', checklist: [false, false, false, false, false], submitted: 0 };
+  /* Official IELTS Writing band descriptors distilled into a
+     self-assessment checklist: 4 criteria x 5 items (Band 9). */
+  const CRITERIA = [
+    {
+      name: 'Task Response',
+      items: [
+        'I fully address every part of the question, not just part of it.',
+        'My position / thesis is clear and I maintain it throughout.',
+        'Every main idea is developed with specific, relevant support (reasons, data, examples).',
+        'No off-topic or irrelevant material appears in any paragraph.',
+        'My conclusion summarises my position without introducing new ideas.'
+      ]
+    },
+    {
+      name: 'Coherence & Cohesion',
+      items: [
+        'Paragraphs are logically ordered, each with a clear central topic.',
+        'I use a range of linking devices accurately (however, moreover, consequently).',
+        'I use referencing (it, this, such, they) to tie sentences together naturally.',
+        'I avoid stiff fillers — my connectors never feel forced or repetitive.',
+        'The essay has a balanced shape: introduction, developed body, conclusion.'
+      ]
+    },
+    {
+      name: 'Lexical Resource',
+      items: [
+        'I use less-common and topic-specific words accurately (not just basic vocabulary).',
+        'I use natural collocations and set phrases.',
+        'I paraphrase the prompt instead of copying wording from it.',
+        'I vary my vocabulary to avoid repetition and wordiness.',
+        'Spelling and word formation are accurate throughout.'
+      ]
+    },
+    {
+      name: 'Grammatical Range & Accuracy',
+      items: [
+        'I use complex structures (relative, conditional, subordinate clauses).',
+        'I vary sentence openings and lengths for rhythm.',
+        'Comma placement and punctuation are correct.',
+        'Tenses and subject–verb agreement are consistent.',
+        'I can re-read my draft and find no errors that impair meaning.'
+      ]
+    }
+  ];
+
+  const CHECK_TOTAL = CRITERIA.reduce((n, c) => n + c.items.length, 0);
+
+  const state = { view: 'home', task: 1, model: null, draft: '', checklist: new Array(CHECK_TOTAL).fill(false), submitted: 0 };
 
   const TASK1_TYPES = [
     { key: 'line', name: 'Line Graph', frames: ['The line graph illustrates ____ over a ___-year period.', 'Overall, the trend in X contrasts with Y.', 'In detail, watching X rise steadily from A to B, while Y fluctuates between C and D.'] },
@@ -126,6 +173,26 @@
 
   function setCheck(i, v) { state.checklist[i] = v; render(); }
 
+  function criterionCount(ci) {
+    const cr = CRITERIA[ci];
+    let n = 0;
+    for (let k = 0; k < cr.items.length; k++) {
+      const idx = ci * cr.items.length + k;
+      if (state.checklist[idx]) n++;
+    }
+    return n;
+  }
+
+  function estimateBand() {
+    if (!state.checklist.some(Boolean)) return null;
+    let acc = 0;
+    CRITERIA.forEach((cr, ci) => {
+      acc += 1 + (criterionCount(ci) / cr.items.length) * 8;
+    });
+    const avg = acc / CRITERIA.length;
+    return String(Math.max(1, Math.min(9, Math.round(avg * 2) / 2)).toFixed(1));
+  }
+
   function feedback(len) {
     if (len < 100) return { band: 'Marks prompt', tip: 'Minimum 150 (Task 1) / 250 (Task 2) words.' };
     if (len >= 250) return { band: 'Approx. 5.5-6.5', tip: 'Good length. Now tighten the paragraph structure.' };
@@ -136,16 +203,18 @@
     const w = state.draft.trim().length;
     if (w < 40) { window.toast && window.toast('Write a draft first to self-assess.'); return; }
     const c = cache();
-    c.submitted.push({ task: state.task, w, at: Date.now() });
-    c.ratings[state.task] = state.checklist.filter(Boolean).length;
+    const checked = state.checklist.filter(Boolean).length;
+    const band = estimateBand() || feedback(w).band;
+    c.submitted.push({ task: state.task, w, band, at: Date.now() });
+    c.ratings[state.task] = band;
     save(c);
     state.submitted++;
-    window.IELTS_AUTH.addActivity('writing', 'Writing Task ' + state.task + ' draft (' + w + ' words)', 5);
-    if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('writing', state.checklist.filter(Boolean).length * 20);
+    window.IELTS_AUTH.addActivity('writing', 'Writing Task ' + state.task + ' draft (' + w + ' words) · Band ' + band, 5);
+    if (window.IELTS_BAND && window.IELTS_BAND.recordMastery) window.IELTS_BAND.recordMastery('writing', Math.max(5, Math.round((checked / CHECK_TOTAL) * 100)));
     if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
-      const checked = state.checklist.filter(Boolean).length;
-      window.IELTS_DIAG.record('writing', 'Writing Task ' + state.task + ' self-assessment', checked, state.checklist.length, { correct: checked, total: state.checklist.length });
+      window.IELTS_DIAG.record('writing', 'Writing Task ' + state.task + ' self-assessment', checked, CHECK_TOTAL, { correct: checked, total: CHECK_TOTAL, band });
     }
+    window.toast && window.toast('Draft submitted · Estimated Band ' + band);
     render();
   }
 
@@ -167,7 +236,7 @@
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
         <h2 class="text-2xl font-extrabold text-[#f5f0e6]">✍️ Writing AI Coach & Studio</h2>
         <p class="text-sm text-[#f5f0e6]/60 mt-1">Task 1 &amp; 2 with Band 9 model answers, structure generators and vocabulary boosters.</p>
-        ${subs ? '<p class="text-xs text-[#d4af37] mt-2">Drafts submitted: ' + subs + ' · Last self-ratings: Task 1 ' + (c.ratings[1] || 0) + '/5, Task 2 ' + (c.ratings[2] || 0) + '/5</p>' : ''}
+        ${subs ? '<p class="text-xs text-[#d4af37] mt-2">Drafts submitted: ' + subs + ' · Last self-ratings: Task 1 Band ' + (c.ratings[1] || '—') + ', Task 2 Band ' + (c.ratings[2] || '—') + '</p>' : ''}
       </div>
       <div class="grid md:grid-cols-2 gap-4 md:mb-4">
         <button class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] hover:border-[rgba(212,175,55,0.5)] rounded-xl p-6 text-left transition-all" onclick="IELTS_WRITING_COACH.open(1)">
@@ -267,6 +336,24 @@
     const nb = is1 ? 150 : 250;
     const f = feedback(state.draft.trim().length);
     const count = state.draft.length || 0;
+    const est = estimateBand();
+    const checkedTotal = state.checklist.filter(Boolean).length;
+    const checklistHtml = CRITERIA.map((cr, ci) => `
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-[11px] font-bold text-[#f5f0e6]/90 uppercase tracking-wide">${ci + 1}. ${esc(cr.name)}</p>
+          <span class="text-[10px] font-bold text-[#d4af37]">${criterionCount(ci)}/${cr.items.length}</span>
+        </div>
+        <div class="space-y-1.5">
+          ${cr.items.map((it, k) => {
+            const idx = ci * cr.items.length + k;
+            return `<label class="flex items-start gap-3 cursor-pointer rounded-lg p-2 transition ${state.checklist[idx] ? 'bg-[rgba(212,175,55,0.08)]' : 'hover:bg-[rgba(212,175,55,0.05)]'}">
+              <input type="checkbox" ${state.checklist[idx] ? 'checked' : ''} onchange="IELTS_WRITING_COACH.check(${idx}, this.checked)" class="mt-0.5 accent-[#d4af37]" />
+              <span class="text-sm text-[#f5f0e6]/80">${esc(it)}</span>
+            </label>`;
+          }).join('')}
+        </div>
+      </div>`).join('');
     $('#writing-coach-content').innerHTML = `
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
         <div class="flex items-center justify-between gap-3 flex-wrap">
@@ -279,14 +366,13 @@
       </div>
       <textarea id="wt-draft" rows="12" placeholder="Paste your question above, then write your response here…" oninput="IELTS_WRITING_COACH.onDraft(this.value)" class="w-full bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-3 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none">${esc(state.draft)}</textarea>
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 mt-4">
-        <p class="text-xs font-bold text-[#d4af37] mb-3">PLAN-DO-REVIEW CHECKLIST</p>
-        ${['I answered the question directly (task response).', 'My paragraphs each have a clear topic sentence (cohesion).', 'I used topic-specific vocabulary from the booster (lexical resource).', 'I varied sentence structures and used linking words (grammar & range).', 'I checked spelling and articles before submitting (accuracy).'].map((x, i) => `
-          <label class="flex items-center gap-3 mb-2 cursor-pointer">
-            <input type="checkbox" ${state.checklist[i] ? 'checked' : ''} onchange="IELTS_WRITING_COACH.check(${i}, this.checked)" class="accent-[#d4af37]" />
-            <span class="text-sm text-[#f5f0e6]/80">${esc(x)}</span>
-          </label>`).join('')}
-        <div class="flex items-center justify-between mt-4 flex-wrap gap-3">
-          <p class="text-sm text-[#f5f0e6]">Self-assessed band: <span class="font-bold text-[#d4af37]">${esc(f.band)}</span></p>
+        <p class="text-xs font-bold text-[#d4af37] mb-4">📊 BAND 9 SELF-ASSESSMENT CHECKLIST · ${checkedTotal}/${CHECK_TOTAL} checked</p>
+        ${checklistHtml}
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[rgba(212,175,55,0.15)]">
+          <div>
+            <p class="text-sm text-[#f5f0e6]">Estimated band: <span class="font-bold text-[#d4af37]">${est ? 'Band ' + esc(est) : esc(f.band)}</span></p>
+            <p class="text-xs text-[#f5f0e6]/50 mt-0.5">Based on the official Writing descriptors (Task Response · Cohesion · Lexical · Grammar).</p>
+          </div>
           <button class="btn-primary text-sm" onclick="IELTS_WRITING_COACH.submit()">✅ Mark Draft Submitted</button>
         </div>
       </div>

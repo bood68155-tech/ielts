@@ -14,6 +14,7 @@
   const AWL_XP = 3;        // per flashcard mastered
   const QUIZ_XP = 2;       // per correct daily quiz answer
   const QUIZ_SIZE = 5;     // questions per daily quiz
+  const DAY = 86400000;    // ms in one day (spaced repetition)
 
   /* Academic Word List (sample of the most useful AWL headwords) */
   const AWL = [
@@ -60,9 +61,13 @@
   function cache() {
     const user = window.IELTS_AUTH.getCurrentUser();
     if (!user) return null;
-    const c = window.IELTS_AUTH.getScoped('vocab', null);
+    let c = window.IELTS_AUTH.getScoped('vocab', null);
     if (!c || !Array.isArray(c.mastered)) {
-      window.IELTS_AUTH.setScoped('vocab', { mastered: {}, quizHistory: {}, best: {} });
+      c = { mastered: {}, quizHistory: {}, best: {}, srs: {} };
+      window.IELTS_AUTH.setScoped('vocab', c);
+    } else if (!c.srs) {
+      c.srs = {};
+      save(c);
     }
     return window.IELTS_AUTH.getScoped('vocab', null);
   }
@@ -101,6 +106,58 @@
     return h[k] || 0;
   }
 
+  /* ---------- spaced repetition (SM-2 style) ---------- */
+  function srsGet(c, word) {
+    if (c.srs[word]) return c.srs[word];
+    c.srs[word] = { ease: 2.5, interval: 0, reps: 0, lapses: 0, due: Date.now() };
+    return c.srs[word];
+  }
+
+  function schedule(c, word, grade) {
+    const e = srsGet(c, word);
+    if (grade < 3) {
+      // Again / lapse: re-surface today, cut ease
+      e.reps = 0;
+      e.interval = 0;
+      e.lapses = (e.lapses || 0) + 1;
+      e.ease = Math.max(1.3, (e.ease || 2.5) - 0.2);
+      e.due = Date.now();
+    } else {
+      // Good / easy: grow the interval
+      e.reps = (e.reps || 0) + 1;
+      e.ease = Math.min(2.8, (e.ease || 2.5) + (grade >= 5 ? 0.1 : 0));
+      e.interval = e.reps === 1 ? 1 : e.reps === 2 ? 3 : Math.round(((e.interval || 1) * (e.ease || 2.5)));
+      e.due = Date.now() + e.interval * DAY;
+    }
+    return e;
+  }
+
+  /* Words to review: overdue, recently failed (hard), or brand-new learning words. */
+  function dueWords(c) {
+    const now = Date.now();
+    return AWL
+      .filter((w) => {
+        const e = c.srs[w.word];
+        if (e) return e.due <= now;
+        return !c.mastered[w.word];
+      })
+      .sort((a, b) => {
+        const ea = c.srs[a.word] || { due: 0 };
+        const eb = c.srs[b.word] || { due: 0 };
+        const hardBonus = (e) => (e && e.reps === 0 && e.lapses > 0 ? -3 * DAY : 0);
+        return (ea.due + hardBonus(ea)) - (eb.due + hardBonus(eb));
+      });
+  }
+
+  function srsBadge(c, w) {
+    const e = c.srs[w.word];
+    if (!e) return '';
+    if ((e.lapses || 0) > 0 && e.reps === 0) return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">⚠ Weak</span>';
+    if (e.due <= Date.now() && !c.mastered[w.word]) return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Due now</span>';
+    if ((e.interval || 0) > 0) return '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">Next in ' + e.interval + 'd</span>';
+    return '';
+  }
+
   /* ---------- render ---------- */
   function render() {
     const user = window.IELTS_AUTH.getCurrentUser();
@@ -114,6 +171,7 @@
     const mastered = Object.keys(c.mastered || {}).length;
     const learning = AWL.length - mastered;
     const today = dailyKey();
+    const dueCount = dueWords(c).length;
 
     const awlRows = AWL
       .filter((w) => !state.search || w.word.toLowerCase().includes(state.search.toLowerCase()))
@@ -125,6 +183,7 @@
               <p class="font-extrabold text-slate-900">${esc(w.word)}</p>
               <span class="text-[10px] text-slate-400 uppercase tracking-wide">${esc(w.pos)}</span>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${c.mastered[w.word] ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${c.mastered[w.word] ? '✓ Mastered' : 'Learning'}</span>
+              ${srsBadge(c, w)}
             </div>
             <p class="text-sm text-slate-600 mt-1">${esc(w.meaning)}</p>
             <p class="text-sm text-emerald-700 font-semibold mt-0.5" dir="rtl">${esc(w.ar)}</p>
@@ -136,14 +195,15 @@
     $('#vocab-trainer-content').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <h2 class="text-2xl font-extrabold text-slate-900">📚 Interactive Vocabulary Trainer</h2>
-        <p class="text-sm text-slate-500 mt-1">Master the Academic Word List with flashcards, daily quizzes and score tracking.</p>
-        <div class="grid grid-cols-3 gap-4 mt-5">
+        <p class="text-sm text-slate-500 mt-1">Master the Academic Word List with flashcards, daily quizzes and spaced-repetition review.</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
           <div class="bg-slate-50 rounded-xl p-4 text-center"><p class="text-2xl font-extrabold text-slate-900">${AWL.length}</p><p class="text-xs text-slate-500">AWL words</p></div>
           <div class="bg-emerald-50 rounded-xl p-4 text-center"><p class="text-2xl font-extrabold text-emerald-600">${mastered}</p><p class="text-xs text-emerald-600">Mastered</p></div>
           <div class="bg-amber-50 rounded-xl p-4 text-center"><p class="text-2xl font-extrabold text-amber-600">${learning}</p><p class="text-xs text-amber-600">Learning</p></div>
+          <div class="bg-rose-50 rounded-xl p-4 text-center"><p class="text-2xl font-extrabold ${dueCount ? 'text-rose-600' : 'text-slate-400'}">${dueCount}</p><p class="text-xs ${dueCount ? 'text-rose-600' : 'text-slate-400'}">Due today</p></div>
         </div>
         <div class="flex flex-wrap gap-3 mt-6">
-          <button class="btn-primary" onclick="IELTS_VOCAB_TRAINER.startFlashcards()">🎴 Start Flashcards</button>
+          <button class="btn-primary" onclick="IELTS_VOCAB_TRAINER.startFlashcards()">🎴 ${dueCount ? 'Review due words (' + dueCount + ')' : 'Start Flashcards'}</button>
           <button class="btn-secondary" onclick="IELTS_VOCAB_TRAINER.startDailyQuiz()">📅 Daily Quiz (${today})</button>
           <span class="text-sm text-slate-500 self-center">Today's quiz score: <b class="text-brand-600">${quizScore(c)} / ${QUIZ_SIZE}</b></span>
         </div>
@@ -153,7 +213,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 class="text-lg font-bold text-slate-900">Academic Word List</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Master each word to earn +${AWL_XP} XP.</p>
+            <p class="text-xs text-slate-500 mt-0.5">Master each word to earn +${AWL_XP} XP. Wrong answers and hard words are re-surfaced automatically.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <input id="vocab-trainer-search" type="text" placeholder="Search words…" value="${esc(state.search)}" class="px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" oninput="IELTS_VOCAB_TRAINER.setSearch(this.value)" />
@@ -169,12 +229,12 @@
     const c = cache();
     if (!c) return;
     state.view = 'flashcards';
-    const queue = AWL.filter((w) => !c.mastered[w.word]).slice();
+    let queue = dueWords(c);
+    if (!queue.length) queue = AWL.filter((w) => !c.mastered[w.word]).slice();
     if (!queue.length) {
       window.toast && window.toast('All words mastered — reflash everything 🎉');
       queue.push.apply(queue, AWL.slice());
     }
-    queue.sort(() => Math.random() - 0.5);
     state.flashcards = { queue, index: 0 };
     render();
   }
@@ -230,6 +290,7 @@
     if (!c || !state.flashcards) return;
     const w = state.flashcards.queue[state.flashcards.index];
     const firstTime = !c.mastered[w.word];
+    schedule(c, w.word, 5);
     if (firstTime) c.mastered[w.word] = true;
     save(c);
     if (firstTime && window.IELTS_AUTH.completeClaim('vocab-awl-' + w.word)) {
@@ -243,6 +304,9 @@
   function cardAgain() {
     const c = cache();
     if (!c || !state.flashcards) return;
+    const w = state.flashcards.queue[state.flashcards.index];
+    schedule(c, w.word, 1);
+    save(c);
     const q = state.flashcards.queue;
     q.push(q.splice(state.flashcards.index, 1)[0]);
     render();
@@ -328,7 +392,10 @@
     if (qq.guess === qq.word.word) {
       window.toast && window.toast('Correct! ✅');
     } else {
-      window.toast && window.toast('Not quite — the answer is “' + qq.word.word + '”');
+      // wrong answer → re-surface the word in SRS review
+      const c = cache();
+      if (c) { schedule(c, qq.word.word, 1); save(c); }
+      window.toast && window.toast('Not quite — the answer is “' + qq.word.word + '” (added to review)');
     }
     render();
   }
@@ -337,8 +404,13 @@
   function toggleMaster(word) {
     const c = cache();
     if (!c) return;
-    if (c.mastered[word]) delete c.mastered[word];
-    else c.mastered[word] = true;
+    if (c.mastered[word]) {
+      delete c.mastered[word];
+      delete c.srs[word]; // reset SRS history too
+    } else {
+      c.mastered[word] = true;
+      schedule(c, word, 5);
+    }
     save(c);
     render();
   }

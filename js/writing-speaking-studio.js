@@ -15,7 +15,7 @@
   const state = {
     view: 'home',
     tab: 'writing',
-    writing: { taskId: 0, timer: { running: false, seconds: 0, interval: null } },
+    writing: { taskId: 0, checks: [], timer: { running: false, seconds: 0, interval: null } },
     speaking: { part: 1, prepTimer: { running: false, seconds: 0, interval: null }, speakTimer: { running: false, seconds: 0, interval: null }, recording: false, mediaRecorder: null, chunks: [], audioUrl: null }
   };
 
@@ -225,6 +225,9 @@
   function renderWritingPractice() {
     const p = WRITING_PROMPTS.find((x) => x.id === state.writing.taskId);
     if (!p) return;
+    if (state.writing.checks.length !== p.bands.length) {
+      state.writing.checks = new Array(p.bands.length).fill(false);
+    }
     const t = state.writing.timer;
     const draft = localStorage.getItem('ielts-wss-draft-' + p.id) || '';
 
@@ -260,13 +263,14 @@
 
         <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 mb-5">
           <p class="text-sm font-semibold text-[#d4af37] mb-3">📊 Band self-assessment checklist</p>
-          <div class="space-y-2">
-            ${p.bands.map((b) => `
+          <div class="space-y-2 band-checklist">
+            ${p.bands.map((b, i) => `
               <label class="flex items-start gap-2 cursor-pointer">
-                <input type="checkbox" class="mt-1 accent-[#d4af37]">
+                <input type="checkbox" class="mt-1 accent-[#d4af37]" onchange="IELTS_WSS.checkBand(${i})" ${state.writing.checks[i] ? 'checked' : ''}>
                 <span class="text-xs text-[#f5f0e6]/80"><strong>${esc(b.label)}:</strong> ${esc(b.desc)}</span>
               </label>`).join('')}
           </div>
+          <p class="text-xs text-[#f5f0e6]/60 mt-3">Estimated band: <span id="wss-band-est" class="font-bold text-[#d4af37]">${state.writing.checks.length ? 'Band ' + esc(wssBandEstimate()) : 'Band —'}</span> · based on the official Writing descriptors (Task Response · Cohesion · Lexical · Grammar).</p>
         </div>
 
         <textarea id="wss-textarea" class="writing-area mt-4" placeholder="Write your answer here…">${esc(draft)}</textarea>
@@ -314,12 +318,29 @@
     if (btn) btn.textContent = 'Start timer';
   }
 
+  function checkBand(i) {
+    state.writing.checks[i] = !state.writing.checks[i];
+    const el = $('#wss-band-est');
+    if (el) el.textContent = state.writing.checks.some(Boolean) ? 'Band ' + wssBandEstimate() : 'Band —';
+  }
+
+  function wssBandEstimate() {
+    const p = WRITING_PROMPTS.find((x) => x.id === state.writing.taskId);
+    if (!p || !p.bands.length) return '—';
+    const n = state.writing.checks.filter(Boolean).length;
+    if (!n) return '—';
+    const b = Math.round((1 + (n / p.bands.length) * 8) * 2) / 2;
+    return Math.max(1, Math.min(9, b)).toFixed(1);
+  }
+
   function checkWriting() {
     const p = WRITING_PROMPTS.find((x) => x.id === state.writing.taskId);
     if (!p) return;
     const text = $('#wss-textarea').value;
     const count = countWords(text);
     const ok = count >= p.wordLimit;
+    const checked = state.writing.checks.filter(Boolean).length;
+    const band = wssBandEstimate();
     const fb = [];
     if (count === 0) fb.push('You haven\'t written anything yet.');
     else if (count < p.wordLimit * 0.8) fb.push('Under target — aim for at least ' + p.wordLimit + ' words.');
@@ -328,13 +349,17 @@
     $('#wss-feedback').innerHTML = `
       <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border ${ok ? 'border-emerald-500/30' : 'border-[#d4af37]/30'} rounded-xl p-5">
         <p class="font-extrabold text-[#f5f0e6]">Word count: <span class="${ok ? 'text-emerald-400' : 'text-[#d4af37]'}">${count}</span> / ${p.wordLimit}+</p>
+        ${band !== '—' ? '<p class="text-sm font-bold text-[#d4af37] mt-1">🎖 Estimated IELTS Band: ' + band + ' <span class="text-[10px] font-bold text-[#f5f0e6]/50 uppercase">(' + checked + '/' + p.bands.length + ' checklist)</span></p>' : '<p class="text-xs text-[#f5f0e6]/50 mt-1">Tick the Band 9 checklist to see your estimated band.</p>'}
         ${fb.length ? '<ul class="text-sm text-[#f5f0e6]/60 mt-2 space-y-1">' + fb.map((f) => '<li>• ' + esc(f) + '</li>').join('') + '</ul>' : ''}
       </div>`;
 
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('wss-writing-' + p.id)) {
       window.IELTS_AUTH.addXp(WRITING_XP);
-      window.IELTS_AUTH.addActivity('writing', 'Wrote ' + count + ' words for ' + p.type, WRITING_XP);
+      window.IELTS_AUTH.addActivity('writing', 'Wrote ' + count + ' words for ' + p.type + (band !== '—' ? ' · Band ' + band : ''), WRITING_XP);
       window.toast && window.toast('+' + WRITING_XP + ' XP!');
+    }
+    if (window.IELTS_DIAG && window.IELTS_DIAG.record) {
+      window.IELTS_DIAG.record('writing', 'WSS ' + p.type + ' self-assessment', checked, p.bands.length, { correct: checked, total: p.bands.length, band: band === '—' ? null : parseFloat(band) });
     }
   }
 

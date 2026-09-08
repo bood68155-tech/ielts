@@ -301,8 +301,11 @@
     if (!u) return null;
     let c = window.IELTS_AUTH.getScoped('awl', null);
     if (!c) {
-      c = { mastered: {}, attempts: {}, lastReviewed: {}, dailyDone: {} };
+      c = { mastered: {}, attempts: {}, lastReviewed: {}, dailyDone: {}, srs: {} };
       window.IELTS_AUTH.setScoped('awl', c);
+    } else if (!c.srs) {
+      c.srs = {};
+      save(c);
     }
     return window.IELTS_AUTH.getScoped('awl', null);
   }
@@ -317,17 +320,50 @@
     return AWL_WORDS;
   }
 
-  /* Spaced repetition: due words = not mastered, or due for review */
+  /* Spaced repetition (SM-2 style): due words = never scheduled,
+     overdue, or recently failed (hard) words. */
+  function sched(c, word, known) {
+    const s = c.srs[word] || (c.srs[word] = { ease: 2.5, interval: 0, reps: 0, due: 0 });
+    if (known) {
+      s.reps = (s.reps || 0) + 1;
+      s.interval = s.reps === 1 ? 1 : s.reps === 2 ? 3 : Math.round(((s.interval || 1) * (s.ease || 2.5)));
+      s.ease = Math.min(2.8, (s.ease || 2.5) + 0.1);
+      s.due = Date.now() + s.interval * 86400000;
+    } else {
+      s.reps = 0;
+      s.interval = 0;
+      s.ease = Math.max(1.3, (s.ease || 2.5) - 0.2);
+      s.due = Date.now();
+    }
+    return s;
+  }
+
   function dueWords(limit) {
     const c = cache();
     const now = Date.now();
     const base = AWL_WORDS.filter((w) => {
-      const last = c.lastReviewed[w[0]] || 0;
-      const interval = c.mastered[w[0]] ? 3 * 24 * 3600 * 1000 : 24 * 3600 * 1000;
-      return now - last > interval;
+      const s = c.srs && c.srs[w[0]];
+      if (!s) return true;
+      return s.due <= now;
+    });
+    base.sort((a, b) => {
+      const sa = (c.srs && c.srs[a[0]]) || { due: 0 };
+      const sb = (c.srs && c.srs[b[0]]) || { due: 0 };
+      const hard = (s) => (s.reps === 0 && s.interval === 0 && s.due <= now ? -86400000 : 0);
+      return (sa.due + hard(sa)) - (sb.due + hard(sb));
     });
     if (base.length === 0) return AWL_WORDS.slice(0, limit);
     return base.slice(0, limit || 10);
+  }
+
+  function dueCount() {
+    const c = cache();
+    const now = Date.now();
+    return AWL_WORDS.filter((w) => {
+      const s = c.srs && c.srs[w[0]];
+      if (!s) return true;
+      return s.due <= now;
+    }).length;
   }
 
   function startFlash(mode) {
@@ -348,9 +384,10 @@
     const word = AWL_WORDS.find((w) => w[0] === state.set[state.current]);
     if (word) {
       c.lastReviewed[word[0]] = Date.now();
+      sched(c, word[0], known);
       if (known) {
         c.mastered[word[0]] = true;
-        window.toast && window.toast('✓ ' + word[0] + ' mastered');
+        window.toast && window.toast('✓ ' + word[0] + ' mastered · next review in ' + c.srs[word[0]].interval + 'd');
       } else {
         c.attempts[word[0]] = (c.attempts[word[0]] || 0) + 1;
       }
@@ -411,7 +448,15 @@
     });
     state.score = correct;
     state.done = true;
-    const pct = Math.round((correct / state.quizList.length) * 100);
+    // resurface wrongly-answered words in spaced repetition
+    const qc = cache();
+    state.quizList.forEach((q) => {
+      const letterIdx = q.answered ? q.answered.charCodeAt(0) - 65 : -1;
+      if (letterIdx !== q.correct) sched(qc, q.word[0], false);
+    });
+    save(qc);
+    const ql = state.quizList.length;
+    const pct = Math.round((correct / ql) * 100);
     if (pct >= 60 && window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('awl-quiz')) {
       window.IELTS_AUTH.addXp(15);
       window.IELTS_AUTH.addActivity('vocabulary', 'AWL vocabulary quiz (' + pct + '%)', 15);
@@ -455,7 +500,7 @@
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-5">
           <p class="text-3xl mb-2">🔁</p>
           <h3 class="font-bold text-[#f5f0e6] mb-1">Spaced-Repetition Flashcards</h3>
-          <p class="text-xs text-[#f5f0e6]/60 mb-4">Deep learning with word, collocation, context & band tag.</p>
+          <p class="text-xs text-[#f5f0e6]/60 mb-4">Deep learning with word, collocation, context & band tag. <span class="text-[#d4af37] font-bold">${dueCount()} due now</span>.</p>
           <button class="btn-primary text-sm" onclick="IELTS_AWL.startFlash()">Start Daily Set</button>
         </div>
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-5">
