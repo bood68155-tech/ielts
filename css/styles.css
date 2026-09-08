@@ -4,6 +4,30 @@
    Colors: Dark background #14120f, Gold #d4af37, Cream #f5f0e6, White #ffffff
    ================================================================ */
 
+/* ============ PALESTINIAN HERITAGE BACKGROUND — FULLY VISIBLE ============ */
+
+body {
+  background-color: transparent !important;
+  opacity: 1 !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+body::before,
+body::after {
+  content: none !important;
+  background: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  display: none !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
+
+body > * {
+  background-blend-mode: normal !important;
+}
+
 /* ============================================================
    AUTH SCREEN - PALESTINIAN HERITAGE GLASSMORPHISM THEME
    ============================================================
