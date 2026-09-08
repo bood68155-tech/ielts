@@ -8,12 +8,24 @@
 
 body {
   background-image: url('palestine-bg.jpg') !important;
-  background-position: center !important;
   background-size: cover !important;
+  background-position: center !important;
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
+  background-color: transparent !important;
   opacity: 1 !important;
   filter: none !important;
+}
+
+/* Ensure Tailwind's body bg classes never cover the heritage image */
+body.bg-slate-50,
+html,
+html body {
+  background-color: transparent !important;
+}
+
+html {
+  background-color: transparent !important;
 }
 
 body::before, body::after {
