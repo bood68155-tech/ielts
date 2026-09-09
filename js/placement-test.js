@@ -91,6 +91,11 @@
     ...LISTENING.map((q) => ({ ...q, section: 'listening' }))
   ];
 
+  /* Teacher Rami generates a fresh random test on every attempt when AI is live;
+     the static bank above is the guaranteed offline fallback. */
+  let ACTIVE = ALL_QUESTIONS;
+  let ACTIVE_AI = false;
+
   /* ---------- helpers ---------- */
   function fmtTime(s) { return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
 
@@ -136,49 +141,46 @@
     const c = cache();
 
     $('#placement-content').innerHTML = `
-      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
-        <h2 class="text-2xl font-extrabold text-[#f5f0e6]">📋 Level Placement Test</h2>
-        <p class="text-sm text-[#f5f0e6]/60 mt-1">Find your CEFR level with a comprehensive diagnostic test across Grammar, Reading, and Listening.</p>
+      <div class="bg-gradient-to-r from-[rgba(124,58,237,0.18)] to-[rgba(217,70,239,0.08)] border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
+        <h2 class="text-2xl font-extrabold text-[#f5f0e6]">Level Placement Test</h2>
+        <p class="text-sm text-[#f5f0e6]/60 mt-1">Teacher Rami (الأستاذ رامي) generates a fresh random test, marks your answers, confirms your exact CEFR level and issues your personalised 4-week roadmap.</p>
       </div>
 
       ${c.completed ? `
         <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 mb-5">
           <p class="text-sm text-[#f5f0e6]/70 mb-1">Your current level:</p>
           <p class="text-xl font-extrabold text-[#d4af37]">${esc(c.lastLevel ? c.lastLevel.name : 'A1 Beginner')}</p>
-          <p class="text-xs text-[#f5f0e6]/50 mt-1">Last score: ${c.lastScore != null ? (c.lastScore) + '/' + ALL_QUESTIONS.length : '—'}</p>
+          <p class="text-xs text-[#f5f0e6]/50 mt-1">Last score: ${c.lastScore != null ? (c.lastScore) + '/' + (c.lastTotal || ALL_QUESTIONS.length) : '—'}${c.aiTest ? ' · AI-generated test' : ''}</p>
         </div>` : ''}
 
       <div class="grid md:grid-cols-3 gap-4 mb-6">
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-5">
-          <p class="text-2xl mb-2">📝</p>
-          <h3 class="text-sm font-bold text-[#f5f0e6]">Grammar</h3>
-          <p class="text-xs text-[#f5f0e6]/60 mt-1">${GRAMMAR.length} questions — A1 to C1 difficulty</p>
+          <p class="text-xs font-bold text-[#d4af37] uppercase tracking-widest">Grammar</p>
+          <p class="text-xs text-[#f5f0e6]/60 mt-2">${GRAMMAR.length} questions · A1 to C1</p>
         </div>
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-5">
-          <p class="text-2xl mb-2">📖</p>
-          <h3 class="text-sm font-bold text-[#f5f0e6]">Reading</h3>
-          <p class="text-xs text-[#f5f0e6]/60 mt-1">${READING.length} passages — A1 to C1 difficulty</p>
+          <p class="text-xs font-bold text-[#d4af37] uppercase tracking-widest">Reading</p>
+          <p class="text-xs text-[#f5f0e6]/60 mt-2">${READING.length} passages · A1 to C1</p>
         </div>
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-xl p-5">
-          <p class="text-2xl mb-2">🎧</p>
-          <h3 class="text-sm font-bold text-[#f5f0e6]">Listening</h3>
-          <p class="text-xs text-[#f5f0e6]/60 mt-1">${LISTENING.length} scripts — A1 to C1 difficulty</p>
+          <p class="text-xs font-bold text-[#d4af37] uppercase tracking-widest">Listening</p>
+          <p class="text-xs text-[#f5f0e6]/60 mt-2">${LISTENING.length} scripts · A1 to C1</p>
         </div>
       </div>
 
       <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 mb-6">
         <p class="text-sm font-semibold text-[#f5f0e6] mb-2">How it works</p>
         <ul class="text-xs text-[#f5f0e6]/70 space-y-1">
-          <li>• ${ALL_QUESTIONS.length} questions total · ~15–20 minutes</li>
+          <li>• Teacher Rami generates a random test every attempt — no two tests are the same</li>
           <li>• Questions increase in difficulty within each section</li>
           <li>• Your score maps to a CEFR level (A1 → C2)</li>
-          <li>• Your profile level and XP will be updated automatically</li>
-          <li>• You earn +${PLACEMENT_XP} XP for completing the test</li>
+          <li>• Teacher Rami assesses your sections and builds your 4-week roadmap</li>
+          <li>• Your profile level and XP will be updated automatically · +${PLACEMENT_XP} XP when finished</li>
         </ul>
       </div>
 
       <div class="text-center">
-        <button class="btn-primary text-lg px-8 py-3" onclick="IELTS_PLACEMENT.start()">${c.completed ? '🔁 Retake Test' : '🚀 Start Placement Test'}</button>
+        <button class="btn-primary text-lg px-8 py-3" onclick="IELTS_PLACEMENT.start()">${c.completed ? 'Retake Test' : 'Start Placement Test'}</button>
       </div>`;
   }
 
@@ -188,16 +190,39 @@
     state.score = 0;
     state.section = 'grammar';
     state.result = null;
+    state.aiTest = false;
     state.view = 'taking';
-    startTimer();
-    render();
+    const content = $('#placement-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="text-center py-16 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl">
+          <div class="mx-auto w-10 h-10 rounded-full border-2 border-[rgba(212,175,55,0.3)] border-t-[#d4af37] animate-spin"></div>
+          <p class="text-sm text-[#f5f0e6]/70 mt-4">Teacher Rami (الأستاذ رامي) is building your random placement test…</p>
+        </div>`;
+    }
+    fetchPlacement().then(function (qs) {
+      if (qs) { ACTIVE = qs; ACTIVE_AI = true; state.aiTest = true; }
+      else { ACTIVE = ALL_QUESTIONS; ACTIVE_AI = false; }
+      startTimer();
+      render();
+    });
+  }
+
+  function fetchPlacement() {
+    if (window.IELTS_AI && window.IELTS_AI.generatePlacementTest) {
+      return window.IELTS_AI.generatePlacementTest().then(function (r) {
+        if (r && Array.isArray(r.questions) && r.questions.length >= 12) return r.questions;
+        return null;
+      }).catch(function () { return null; });
+    }
+    return Promise.resolve(null);
   }
 
   function renderTaking() {
-    const q = ALL_QUESTIONS[state.qi];
+    const q = ACTIVE[state.qi];
     if (!q) { finish(); return; }
-    const total = ALL_QUESTIONS.length;
-    const sectionLabel = q.section === 'grammar' ? '📝 Grammar' : q.section === 'reading' ? '📖 Reading' : '🎧 Listening';
+    const total = ACTIVE.length;
+    const sectionLabel = q.section === 'grammar' ? 'Grammar' : q.section === 'reading' ? 'Reading' : 'Listening';
     const progressPct = ((state.qi) / total) * 100;
 
     const passageHtml = q.passage
@@ -249,19 +274,19 @@
 
   function answer(letter) { state.answers[state.qi] = letter; renderTaking(); }
   function prev() { if (state.qi > 0) { state.qi--; renderTaking(); } }
-  function next() { if (state.qi < ALL_QUESTIONS.length - 1) { state.qi++; renderTaking(); } else { finish(); } }
+  function next() { if (state.qi < ACTIVE.length - 1) { state.qi++; renderTaking(); } else { finish(); } }
 
   function finish() {
     stopTimer();
     let correct = 0;
-    const details = ALL_QUESTIONS.map((q, i) => {
+    const details = ACTIVE.map((q, i) => {
       const ua = state.answers[i];
       const isCorrect = ua && ua.toLowerCase() === q.ans.toLowerCase();
       if (isCorrect) correct++;
       return { question: q.q, userAnswer: ua || '—', correctAnswer: q.ans, isCorrect, tip: q.tip, section: q.section, level: q.level };
     });
 
-    const total = ALL_QUESTIONS.length;
+    const total = ACTIVE.length;
     const detectedLevel = getLevel(correct, total);
 
     const bySection = { grammar: { c: 0, t: 0 }, reading: { c: 0, t: 0 }, listening: { c: 0, t: 0 } };
@@ -307,12 +332,24 @@
     c.lastLevel = detectedLevel;
     c.completed = true;
     c.sections = bySection;
+    c.aiTest = ACTIVE_AI;
     c.savedAt = Date.now();
     save(c);
 
     window.toast && window.toast('+' + PLACEMENT_XP + ' XP! Your level: ' + detectedLevel.name);
 
-    /* ask the AI English Mentor to build a personalised 4-week roadmap from these results */
+    /* Teacher Rami: ask the AI English teacher to assess this exact performance */
+    if (window.IELTS_AI && window.IELTS_AI.analyzePlacement) {
+      try {
+        window.IELTS_AI.analyzePlacement(c).then(function (a) {
+          if (!a) return;
+          try { const cc = cache(); cc.analysis = a; save(cc); } catch (e2) { /* ignore */ }
+          if (state.view === 'result') render();
+        }).catch(function () {});
+      } catch (e) { /* AI engine optional */ }
+    }
+
+    /* Teacher Rami: ask the AI English teacher to build a personalised 4-week roadmap from these results */
     if (window.IELTS_AI && window.IELTS_AI.buildRoadmapFromPlacement) {
       try { window.IELTS_AI.buildRoadmapFromPlacement(c); } catch (e) { /* AI engine optional */ }
     }
@@ -329,12 +366,12 @@
     const bySection = { grammar: { c: 0, t: 0 }, reading: { c: 0, t: 0 }, listening: { c: 0, t: 0 } };
     r.details.forEach((d) => { bySection[d.section].t++; if (d.isCorrect) bySection[d.section].c++; });
 
-    const sectionBar = (label, icon, sec) => {
+    const sectionBar = (label, sec) => {
       const secPct = sec.t ? Math.round((sec.c / sec.t) * 100) : 0;
       return `
         <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-lg p-4">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-sm font-bold text-[#f5f0e6]">${icon} ${label}</span>
+            <span class="text-sm font-bold text-[#f5f0e6]">${label}</span>
             <span class="text-sm font-bold ${secPct >= 60 ? 'text-emerald-400' : 'text-[#d4af37]'}">${sec.c}/${sec.t}</span>
           </div>
           <div class="h-2 bg-[rgba(245,240,230,0.1)] rounded-full overflow-hidden">
@@ -342,6 +379,18 @@
           </div>
         </div>`;
     };
+
+    let analysis = null;
+    try { analysis = ((window.IELTS_AUTH && window.IELTS_AUTH.getScoped('placement', null)) || {}).analysis || null; } catch (e) { /* ignore */ }
+    const analysisPanel = analysis
+      ? `<div class="mb-6 rounded-2xl bg-gradient-to-r from-[rgba(124,58,237,0.14)] to-[rgba(217,70,239,0.08)] border border-[rgba(124,58,237,0.3)] p-5">
+        <p class="text-sm font-bold text-[#f5f0e6] mb-2">أستاذ رامي · Teacher Rami's assessment</p>
+        <p class="text-sm text-[#f5f0e6]/80 leading-relaxed">${esc(analysis.analysis || '')}</p>
+        ${(analysis.strengths && analysis.strengths.length) ? '<div class="mt-3"><p class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">Strengths</p><ul class="space-y-1">' + analysis.strengths.map((s) => '<li class="text-xs text-[#f5f0e6]/70 flex gap-2"><span>•</span><span>' + esc(s) + '</span></li>').join('') + '</ul></div>' : ''}
+        ${(analysis.focus && analysis.focus.length) ? '<div class="flex flex-wrap gap-1.5 mt-2">' + analysis.focus.map((f) => '<span class="text-[10px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.4)] px-2 py-0.5 rounded-full capitalize">Focus: ' + esc(f) + '</span>').join('') + '</div>' : ''}
+        ${analysis.nextStep ? '<p class="text-xs text-[#f5f0e6]/60 mt-2">' + esc(analysis.nextStep) + '</p>' : ''}
+      </div>`
+      : '';
 
     const reviewRows = r.details.map((d, i) => `
       <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.1)] rounded-lg p-3">
@@ -365,23 +414,25 @@
       </div>
 
       <div class="grid md:grid-cols-3 gap-4 mb-6">
-        ${sectionBar('Grammar', '📝', bySection.grammar)}
-        ${sectionBar('Reading', '📖', bySection.reading)}
-        ${sectionBar('Listening', '🎧', bySection.listening)}
+        ${sectionBar('Grammar', bySection.grammar)}
+        ${sectionBar('Reading', bySection.reading)}
+        ${sectionBar('Listening', bySection.listening)}
       </div>
+
+      ${analysisPanel}
 
       <h3 class="text-lg font-bold text-[#f5f0e6] mb-4">Detailed Review</h3>
       <div class="space-y-2 mb-6">${reviewRows}</div>
 
       <div class="mb-6 rounded-2xl bg-gradient-to-r from-[rgba(212,175,55,0.15)] to-[rgba(232,121,249,0.1)] border border-[rgba(212,175,55,0.3)] p-4 text-left">
-        <p class="text-sm font-bold text-[#f5f0e6]">Master Rami has built your personalised 4-week roadmap</p>
+        <p class="text-sm font-bold text-[#f5f0e6]">Teacher Rami has built your personalised 4-week roadmap</p>
         <p class="text-xs text-[#f5f0e6]/55 mt-1">Daily tasks target your weakest skills — writing days open the Writing Lab.</p>
         <button class="mt-3 w-full py-3 bg-[#d4af37] hover:bg-[#b8962e] text-[#14120f] font-bold rounded-xl transition" onclick="IELTS_PLACEMENT.continueToRoadmap()">Continue to your roadmap →</button>
       </div>
 
       <div class="flex gap-3">
         <button class="btn-secondary text-sm" onclick="IELTS_PLACEMENT.back()">← Back</button>
-        <button class="btn-primary text-sm" onclick="IELTS_PLACEMENT.start()">🔁 Retake</button>
+        <button class="btn-primary text-sm" onclick="IELTS_PLACEMENT.start()">Retake</button>
       </div>`;
   }
 
@@ -415,10 +466,10 @@
         <div class="text-center mb-5">
           <span class="text-5xl">📋</span>
           <h3 class="text-xl font-extrabold text-[#f5f0e6] mt-2">Find your level first</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mt-1 leading-relaxed">Take the 5-minute Placement Test so IELTS PA can build a study path, unlock content, and track your band — all matched to your real English level.</p>
+          <p class="text-sm text-[#f5f0e6]/60 mt-1 leading-relaxed">Teacher Rami (الأستاذ رامي) will generate your test, confirm your exact level, and build your personalised 4-week study roadmap.</p>
         </div>
         <div class="space-y-2">
-          <button type="button" class="w-full py-3 bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold rounded-xl hover:bg-[#b8962e] transition" onclick="IELTS_PLACEMENT.startFromPrompt()">🚀 Take the Placement Test</button>
+          <button type="button" class="w-full py-3 bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold rounded-xl hover:bg-[#b8962e] transition" onclick="IELTS_PLACEMENT.startFromPrompt()">Take the Placement Test</button>
           <button type="button" class="w-full py-3 border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 font-semibold rounded-xl hover:bg-[rgba(212,175,55,0.1)] transition" onclick="IELTS_PLACEMENT.dismissPrompt()">Browse for now</button>
         </div>
       </div>`;

@@ -171,7 +171,7 @@
     var overallCard = '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">' +
       '<div class="flex flex-wrap items-center justify-between gap-4">' +
       '<div>' +
-      '<p class="text-sm text-slate-500 font-medium">Master Rami · 4-Week IELTS Roadmap</p>' +
+      '<p class="text-sm text-slate-500 font-medium">Teacher Rami · 4-Week IELTS Roadmap</p>' +
       '<p class="text-2xl font-extrabold text-slate-900 mt-1">' + completedDays + ' / ' + totalDays + ' days completed</p>' +
       '<p class="text-sm text-slate-500 mt-1">You are on <strong class="text-brand-600">' + WEEKS[currentWeekIdx].name + ': ' + WEEKS[currentWeekIdx].subtitle + '</strong></p>' +
       '</div>' +
@@ -281,7 +281,10 @@
       '</div>' +
       '</div>' +
       '<div class="p-6">' +
-      '<p class="text-slate-600 leading-relaxed mb-6">' + esc(day.desc) + '</p>' +
+      '<p class="text-slate-600 leading-relaxed mb-4">' + esc(day.desc) + '</p>' +
+      (window.IELTS_AI && window.IELTS_AI.mentorTipFor
+        ? '<div class="mb-5 bg-violet-50 border border-violet-200 rounded-xl p-3"><p class="text-xs font-bold text-violet-700 uppercase tracking-widest mb-1">Teacher Rami (أستاذ رامي) · coaching tip</p><p class="text-sm text-slate-700">' + esc((window.IELTS_AI.mentorTipFor(day.skill)) || '') + '</p></div>'
+        : '') +
       (done ? '<div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-center"><p class="text-emerald-700 font-semibold">✅ This task is completed!</p></div>' : '') +
       '<div class="flex gap-3">' +
       '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">' + (action === 'writing' ? 'Open the ' + esc(window.IELTS_AI && window.IELTS_AI.openWritingLab ? 'Writing Lab' : 'Writing Tool') : 'Open ' + esc(day.title.split(' ')[0]) + ' Tool') + '</button>' +

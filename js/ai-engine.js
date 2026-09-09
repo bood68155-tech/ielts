@@ -22,11 +22,11 @@
   const DEFAULT_MODEL = 'gemini-2.0-flash';
   const FALLBACK_MODELS = [DEFAULT_MODEL, 'gemini-1.5-flash'];
 
-  /* The permanent identity of the AI English Mentor */
-  const MENTOR = { ar: 'أستاذ رامي', name: 'Master Rami' };
+  /* The permanent identity of the AI English teacher — Teacher Rami (أستاذ رامي) */
+  const MENTOR = { ar: 'أستاذ رامي', name: 'Teacher Rami' };
   const mentorName = () => MENTOR.name;
   const mentorLabel = () => MENTOR.name + ' · ' + MENTOR.ar;
-  const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your personal English mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think and phrase like a native professional.';
+  const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your expert English teacher and mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think, write and phrase like a native professional.';
   const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
 
   /* ================= scoped storage ================= */
@@ -825,7 +825,7 @@
   }
 
   /* ============================================================
-     PRESENTATION — Writing Lab (Master Rami)
+     PRESENTATION — Writing Lab (Teacher Rami)
      ============================================================ */
   const WRITING_PROMPTS = [
     { level: 'A2', type: 'Task 2', prompt: 'Some people think school children should be given more free time to play and relax. Do you agree? Give reasons and examples.', hint: 'Give your opinion in the first sentence, then two short paragraphs of support.' },
@@ -944,7 +944,7 @@
     else if (val) prompt = val.split('||')[0];
     const title = $('#ielts-ai-modal-title');
     if (title) title.textContent = 'Grading your essay with the official band descriptors…';
-    body.innerHTML = loader('Master Rami is applying the official IELTS band descriptors to your essay…');
+    body.innerHTML = loader(mentorName() + ' is applying the official IELTS band descriptors to your essay…');
     const res = await evaluateWriting({ text, kind: 'writing', prompt });
     renderEvaluation(res);
   }
@@ -1034,7 +1034,7 @@
   }
 
   /* ============================================================
-     FULL-SPECTRUM HOLISTIC STUDY PLAN — "AI English Mentor"
+     FULL-SPECTRUM HOLISTIC STUDY PLAN — Teacher Rami (أستاذ رامي)
      Generates a tailored 4-week (28-day) roadmap that blends
      IELTS-specific tasks with core English mastery: Advanced
      Vocabulary SRS, Grammar correction, Natural phrasing and
@@ -1055,6 +1055,96 @@
     idioms: 'Idioms impress only when they carry meaning — use one idiom per idea, and double-check the register so it never sounds forced.',
     exam: 'Review every mistake in three columns: what went wrong, why, and the fix. This single habit raises bands faster than any course.'
   };
+
+  function mentorTipFor(skill) {
+    return MENTOR_TIPS[skill] || MENTOR_TIPS.vocab;
+  }
+
+  /* ============================================================
+     Teacher Rami — dynamic placement test + assessment
+     ============================================================ */
+  const PLACEMENT_SECTION_COUNTS = { grammar: 12, reading: 8, listening: 6 };
+
+  function sanitizePlacement(questions) {
+    const levels = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
+    const out = [];
+    questions.forEach((qq, i) => {
+      const raw = (typeof qq === 'object' && qq) ? qq : {};
+      const opts = Array.isArray(raw.opts) ? raw.opts.map(String).map((o) => o.replace(/^[A-D][.)]\s*/, '').trim()).filter(Boolean).slice(0, 4) : [];
+      if (opts.length < 2) return;
+      const secRaw = String(raw.section || 'grammar').toLowerCase();
+      const sec = secRaw.indexOf('read') >= 0 ? 'reading' : secRaw.indexOf('listen') >= 0 ? 'listening' : 'grammar';
+      const ansRaw = String(raw.ans || raw.answer || '').toUpperCase().trim();
+      let ans = ansRaw.indexOf(')') >= 0 ? (ansRaw.replace(/[^A-D]/g, '').slice(0, 1)) : ansRaw.slice(0, 1);
+      if (!/^[A-D]$/.test(ans)) {
+        const idx = opts.indexOf(String(raw.correct || ''));
+        if (idx >= 0) ans = String.fromCharCode(65 + idx);
+        else return;
+      }
+      const label = String(raw.q || raw.question || '').trim();
+      if (!label) return;
+      out.push({
+        id: 'ai' + (i + 1) + sec.charAt(0),
+        section: sec,
+        level: levels.indexOf(String(raw.level || 'b1').toLowerCase()) >= 0 ? String(raw.level).toLowerCase() : 'b1',
+        q: label.slice(0, 200),
+        opts,
+        ans,
+        tip: String(raw.tip || 'Teacher Rami’s note: reread the passage and listen for exact wording.').trim().slice(0, 160),
+        passage: raw.passage ? String(raw.passage).trim().slice(0, 700) : undefined,
+        script: raw.script ? String(raw.script).trim().slice(0, 900) : undefined
+      });
+    });
+    return out.slice(0, 26);
+  }
+
+  async function generatePlacementTest(opts) {
+    opts = opts || {};
+    const c = cfg();
+    if (!c.key && !useProxy()) return null;
+    const counts = opts.counts || PLACEMENT_SECTION_COUNTS;
+    const sys = 'You are ' + mentorName() + ' (أستاذ رامي), an expert IELTS English teacher. Generate a completely fresh, RANDOM placement test. Every call must produce new questions — never repeat a standard textbook question. Questions must climb in difficulty within each section.';
+    const usr = 'Output ONLY strict JSON, no commentary:\n{"questions":[{"section":"grammar","level":"a1","q":"...","opts":["...","...","...","..."],"ans":"B","tip":"one-line teaching explanation"}, ...]} — exactly ' + counts.grammar + ' grammar items, ' + counts.reading + ' reading items (each with a 3-6 sentence "passage" and one detail/inference question), and ' + counts.listening + ' listening items (each with a short simulated dialogue "script" and one question). Use levels only from: a1,a2,b1,b2,c1. "ans" must be the CORRECT option letter; tips are short explanations that teach the learner.';
+    const raw = await gemini(sys, usr, true);
+    const data = raw ? parseJson(raw) : null;
+    const qs = (data && Array.isArray(data.questions)) ? data.questions : ((Array.isArray(data) && data) ? data : null);
+    if (!qs) return null;
+    const questions = sanitizePlacement(qs);
+    if (questions.length < 12) return null;
+    return { demo: false, questions, generatedAt: Date.now() };
+  }
+
+  function fallbackPlacementAnalysis(info) {
+    const bySection = info.sections || {};
+    const rows = Object.keys(bySection).map((k) => ({ key: k, c: (bySection[k] && bySection[k].c) || 0, t: (bySection[k] && bySection[k].t) || 1, pct: bySection[k] && bySection[k].t ? (bySection[k].c / bySection[k].t) : 0 }));
+    rows.sort((a, b) => a.pct - b.pct);
+    const focus = rows.filter((w) => w.pct < 0.65).slice(0, 3).map((w) => w.key);
+    const levelName = (info.lastLevel && info.lastLevel.name) || 'B1 Intermediate';
+    return {
+      level: levelName,
+      analysis: 'Demo assessment: with ' + (info.lastScore || 0) + '/' + (info.lastTotal || 0) + ' correct, your results point to ' + levelName + '. In live mode I weigh every section, confirm your exact level and hand you a personalised study plan.',
+      strengths: rows.length ? ['Your best section was ' + rows[rows.length - 1].key + ' (' + Math.round(rows[rows.length - 1].pct * 100) + '%).'] : ['Great first attempt!'],
+      focus: focus.length ? focus : ['grammar'],
+      nextStep: 'Open your roadmap below — I have built 28 daily tasks around the areas that matter most for you.'
+    };
+  }
+
+  async function analyzePlacement(info) {
+    const c = cfg();
+    if (!c.key && !useProxy()) return fallbackPlacementAnalysis(info);
+    const sys = 'You are ' + mentorName() + ' (أستاذ رامي), an expert IELTS English teacher. Analyse this learner\'s placement test: confirm the exact CEFR level, be honest about section scores, and give pointed, warm, professional coaching.';
+    const usr = 'Result: ' + (info.lastScore || 0) + '/' + (info.lastTotal || 0) + ' correct. Sections: ' + JSON.stringify(info.sections || {}) + '. Current level: ' + (info.lastLevel ? info.lastLevel.name : 'none') + '.\nOutput ONLY strict JSON:\n{"level":"B1 Intermediate","analysis":"2-3 sentences of coaching","strengths":["..."],"focus":["grammar","listening"],"nextStep":"one motivating sentence"}';
+    const raw = await gemini(sys, usr, true);
+    const data = raw ? parseJson(raw) : null;
+    if (!data || !data.analysis) return fallbackPlacementAnalysis(info);
+    return {
+      level: String(data.level || (info.lastLevel && info.lastLevel.name) || '').trim(),
+      analysis: String(data.analysis).trim().slice(0, 500),
+      strengths: Array.isArray(data.strengths) ? data.strengths.map(String).slice(0, 3) : [],
+      focus: Array.isArray(data.focus) ? data.focus.map(String).filter((f) => ['grammar', 'reading', 'listening', 'writing', 'speaking'].indexOf(f) >= 0).slice(0, 4) : [],
+      nextStep: String(data.nextStep || '').trim().slice(0, 200)
+    };
+  }
 
   /* 28-day blended curriculum: IELTS tasks + core English mastery */
   const PLAN_TEMPLATE = [
@@ -1336,6 +1426,7 @@
     renderPassagePractice, practiceCheck,
     listByKind, removeFromLibrary,
     generateStudyPlan, getStudyPlan, saveStudyPlan, buildRoadmapFromPlacement,
-    mountRoadmap, regenerateRoadmap, openRoadmapModal, launchPlanDay
+    mountRoadmap, regenerateRoadmap, openRoadmapModal, launchPlanDay,
+    mentorTipFor, generatePlacementTest, analyzePlacement
   };
 })();

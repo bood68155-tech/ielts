@@ -200,17 +200,17 @@
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
-            <button class="btn-primary text-sm" onclick="showSection('feed')">💬 Community</button>
-            <button class="btn-primary text-sm" onclick="showSection('training')">🎓 Training</button>
-            <button class="btn-secondary text-sm" onclick="showSection('levels')">📈 My levels</button>
-            <button class="btn-primary text-sm" onclick="showSection('exam')">📅 Weekly exam</button>
-            <button class="btn-secondary text-sm" onclick="showSection('profile')">👤 Profile</button>
+            <button class="btn-primary text-sm" onclick="showSection('feed')">Community</button>
+            <button class="btn-primary text-sm" onclick="showSection('training')">Training</button>
+            <button class="btn-secondary text-sm" onclick="showSection('levels')">My levels</button>
+            <button class="btn-primary text-sm" onclick="showSection('exam')">Weekly exam</button>
+            <button class="btn-secondary text-sm" onclick="showSection('profile')">Profile</button>
           </div>
         </div>`
       : `
         <div class="bg-gradient-to-r from-palestine-green to-palestine-black rounded-2xl shadow-md p-6 mb-6 text-white flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p class="text-lg font-extrabold">Sign in to start your learning journey 🚀</p>
+            <p class="text-lg font-extrabold">Sign in to start your learning journey</p>
             <p class="text-sm text-brand-100 mt-0.5">Create a free account, take a placement test to find your level, then earn XP and track your weekly exam scores.</p>
           </div>
           <button onclick="IELTS_AUTH.showScreen()" class="bg-white text-brand-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-50 transition">Sign in / Register</button>
@@ -248,10 +248,10 @@
             <span class="text-4xl">🧭</span>
             <div>
               <h2 class="text-xl font-extrabold text-[#f5f0e6]">Start with your Roadmap</h2>
-              <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">Take the 5-minute Placement Test and IELTS PA will map a personalised study path, unlock the right content for your band, and give you a live band estimate to improve on.</p>
+              <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">Teacher Rami (الأستاذ رامي) will generate your random placement test, confirm your exact level, and map a personalised 4-week study path with a live band estimate.</p>
             </div>
           </div>
-          <button onclick="showSection('placement')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#b8962e] transition shadow-md">🚀 Take Placement Test</button>
+          <button onclick="showSection('placement')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#b8962e] transition shadow-md">Take Placement Test</button>
         </div>`;
       return;
     }
@@ -290,11 +290,11 @@
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-8">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p class="text-[10px] font-bold text-[#d4af37] uppercase tracking-widest">Next Steps Roadmap · ${band.id.toUpperCase()}</p>
-            <h2 class="text-xl font-extrabold text-[#f5f0e6]">🧭 Personalised path from ${esc(band.name)}</h2>
-            <p class="text-sm text-[#f5f0e6]/60 mt-1">${band.icon} ${esc(band.name)}${pctTxt ? ' · ' + pctTxt : ''}${nextLevel ? ' · ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
+            <p class="text-[10px] font-bold text-[#d4af37] uppercase tracking-widest">Teacher Rami Roadmap · ${band.id.toUpperCase()}</p>
+            <h2 class="text-xl font-extrabold text-[#f5f0e6]">Personalised path from ${esc(band.name)}</h2>
+            <p class="text-sm text-[#f5f0e6]/60 mt-1">${esc(band.name)}${pctTxt ? ' · ' + pctTxt : ''}${nextLevel ? ' · ' + (nextLevel.minXp - user.xp) + ' XP to ' + nextLevel.name : ''}</p>
           </div>
-          <button class="btn-secondary text-sm" onclick="showSection('placement')">🔁 Re-test level</button>
+          <button class="btn-secondary text-sm" onclick="showSection('placement')">Re-test level</button>
         </div>
         <div class="mt-4 h-1.5 bg-[rgba(212,175,55,0.15)] rounded-full overflow-hidden">
           <div class="h-full bg-gradient-to-r from-[#d4af37] to-[#f5f0e6] rounded-full transition-all" style="width:${xpPct}%"></div>
@@ -310,10 +310,10 @@
           </div>`).join('')}
       </div>
       <div class="flex flex-wrap gap-2 mb-8">
-        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('diagnostics')">📊 Live band report</button>
-        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('curriculum')">📘 Academic curriculum</button>
-        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('study-plan')">🗓️ 4-week plan</button>
-        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('training')">🎓 Training</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('diagnostics')">Live band report</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('curriculum')">Academic curriculum</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('study-plan')">4-week plan</button>
+        <button class="text-xs font-bold px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] text-[#f5f0e6]/80 hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection('training')">Training</button>
       </div>`;
   }
 
