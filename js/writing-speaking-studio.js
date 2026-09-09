@@ -277,6 +277,7 @@
 
         <div class="flex flex-wrap gap-3 mt-4">
           <button class="btn-primary text-sm" onclick="IELTS_WSS.checkWriting()">Check word count</button>
+          <button class="btn-primary text-sm !bg-gradient-to-r !from-violet-600 !to-fuchsia-600 !border-violet-500 hover:!from-violet-500 hover:!to-fuchsia-500" onclick="IELTS_WSS.aiEvalWriting()">✨ AI Evaluate</button>
           <button class="btn-secondary text-sm" onclick="IELTS_WSS.toggleSample()">Show sample answer</button>
           <button class="btn-secondary text-sm" onclick="IELTS_WSS.clearDraft()">Clear draft</button>
           <button class="btn-secondary text-sm" onclick="IELTS_WSS.back()">← Back</button>
@@ -364,6 +365,23 @@
   }
 
   function toggleSample() { $('#wss-sample').classList.toggle('hidden'); }
+
+  function aiEvalWriting() {
+    const ta = $('#wss-textarea');
+    if (window.IELTS_AI && window.IELTS_AI.openEvaluationModal) {
+      window.IELTS_AI.openEvaluationModal(ta ? ta.value : '', 'writing');
+    } else {
+      window.toast && window.toast('AI evaluator failed to load');
+    }
+  }
+
+  function aiEvalSpeaking() {
+    if (window.IELTS_AI && window.IELTS_AI.openEvaluationModal) {
+      window.IELTS_AI.openEvaluationModal('', 'speaking');
+    } else {
+      window.toast && window.toast('AI evaluator failed to load');
+    }
+  }
   function clearDraft() {
     const p = WRITING_PROMPTS.find((x) => x.id === state.writing.taskId);
     if (p) localStorage.removeItem('ielts-wss-draft-' + p.id);
@@ -452,6 +470,7 @@
             <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-1 accent-[#d4af37]"><span class="text-xs text-[#f5f0e6]/80">I used complex grammar structures</span></label>
             <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" class="mt-1 accent-[#d4af37]"><span class="text-xs text-[#f5f0e6]/80">I spoke fluently without long pauses</span></label>
           </div>
+          <button class="btn-primary text-sm mt-4 !bg-gradient-to-r !from-violet-600 !to-fuchsia-600 !border-violet-500 hover:!from-violet-500 hover:!to-fuchsia-500" onclick="IELTS_WSS.aiEvalSpeaking()">✨ AI Evaluate my answer</button>
         </div>
       </div>`;
   }
@@ -537,5 +556,5 @@
     render();
   }
 
-  window.IELTS_WSS = { render, switchTab, startWriting, toggleWritingTimer, checkWriting, toggleSample, clearDraft, startSpeaking, startPrepTimer, startSpeakTimer, toggleRecording, back };
+  window.IELTS_WSS = { render, switchTab, startWriting, toggleWritingTimer, checkWriting, toggleSample, clearDraft, startSpeaking, startPrepTimer, startSpeakTimer, toggleRecording, aiEvalWriting, aiEvalSpeaking, back };
 })();

@@ -198,10 +198,21 @@
     if (state.view === 'taking') { renderTaking(); return; }
     if (state.view === 'review') { renderReview(); return; }
     const c = cache();
+    const aiPassageCount = (window.IELTS_AI && window.IELTS_AI.listByKind) ? window.IELTS_AI.listByKind('passage').length : 0;
     $('#readmaster-content').innerHTML = `
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
         <h2 class="text-2xl font-extrabold text-[#f5f0e6]">📖 Reading Master Suite</h2>
         <p class="text-sm text-[#f5f0e6]/60 mt-1">Band-graded passages from Band 3 to 9 with timed exams and detailed analysis.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-[rgba(124,58,237,0.28)] to-[rgba(217,70,239,0.18)] border border-[rgba(167,139,250,0.45)] rounded-2xl p-5 mb-6">
+        <div>
+          <p class="font-bold text-[#f5f0e6]">✨ AI Passage Builder</p>
+          <p class="text-xs text-[#f5f0e6]/65 mt-0.5">Generate a Cambridge-style passage on any topic — then save it to your library and practise here.</p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition" onclick="window.IELTS_AI.openPassageModal()">🧠 Build a passage</button>
+          <button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(167,139,250,0.5)] hover:bg-[rgba(167,139,250,0.12)] transition" onclick="window.IELTS_AI.openLibraryModal('passage')">📚 My AI passages (${aiPassageCount})</button>
+        </div>
       </div>
       <div class="grid md:grid-cols-2 gap-4">
         ${PASSAGES.map((p) => {
