@@ -27,7 +27,8 @@
     let c = null;
     if (window.IELTS_AUTH) c = window.IELTS_AUTH.getScoped('aikey', null);
     if (!c || typeof c !== 'object') c = {};
-    return { key: c.key || '', model: c.model || DEFAULT_MODEL, demo: !c.key };
+    const key = c.key || window.__IELTS_AI_KEY__ || '';
+    return { key, model: c.model || DEFAULT_MODEL, demo: !key };
   }
 
   function store() {
