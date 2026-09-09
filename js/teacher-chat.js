@@ -236,9 +236,11 @@
   /* ---------------- Floating companion ---------------- */
   function companionHtml() {
     return '<div id="tc-fab-wrap">' +
-      '<button id="tc-fab" class="tc-fab" onclick="window.IELTS_RAMI_CHAT.togglePanel()" aria-label="Chat with Teacher Rami">' +
+      '<button id="tc-fab" class="tc-fab" onclick="window.IELTS_RAMI_CHAT.togglePanel()" aria-label="Talk with Teacher Rami">' +
+        '<span class="tc-fab-dot" aria-hidden="true"></span>' +
         '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.845L3 20l1.154-3.145C3.41 15.43 3 13.77 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>' +
-        '<span class="tc-fab-label">Talk to Rami</span>' +
+        '<span class="tc-fab-label">Talk with Teacher Rami</span>' +
+        '<span class="tc-fab-chevron">▲</span>' +
       '</button>' +
       '<div id="tc-panel" class="tc-panel hidden">' +
         '<div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-[rgba(212,175,55,0.2)] bg-[rgba(20,18,15,0.8)]">' +
@@ -246,7 +248,7 @@
             '<div class="w-9 h-9 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-xs font-extrabold">ر</div>' +
             '<div><p class="font-bold text-[#f5f0e6] text-sm leading-tight">Teacher Rami</p><p class="text-[10px] text-emerald-400">online — replies instantly</p></div>' +
           '</div>' +
-          '<button class="text-[#f5f0e6]/50 hover:text-[#f5f0e6] text-lg leading-none px-1" onclick="window.IELTS_RAMI_CHAT.togglePanel()">×</button>' +
+          '<button class="text-[#f5f0e6]/50 hover:text-[#f5f0e6] text-lg leading-none px-1" onclick="window.IELTS_RAMI_CHAT.togglePanel()" aria-label="Close chat">×</button>' +
         '</div>' +
         '<div id="tc-panel-messages" class="h-64 overflow-y-auto px-3 py-3 space-y-3 tc-messages"></div>' +
         '<div class="px-3 pb-3">' + composerHtml('tc-panel') + '</div>' +
@@ -257,17 +259,15 @@
   function togglePanel() {
     const panel = $('#tc-panel');
     if (!panel) return;
-    state.panelOpen = !panel.classList.contains('hidden');
-    panel.classList.toggle('hidden', !state.panelOpen);
-    if (state.panelOpen) {
-      const fab = $('#tc-fab');
-      if (fab) fab.classList.add('open');
+    const willOpen = panel.classList.contains('hidden');
+    panel.classList.toggle('hidden', !willOpen);
+    state.panelOpen = willOpen;
+    const fab = $('#tc-fab');
+    if (fab) fab.classList.toggle('open', willOpen);
+    if (willOpen) {
       renderInto($('#tc-panel-messages'));
       const inp = $('#tc-panel-input');
       if (inp) inp.focus();
-    } else {
-      const fab = $('#tc-fab');
-      if (fab) fab.classList.remove('open');
     }
   }
 
@@ -303,6 +303,7 @@
     if (inp) inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.IELTS_RAMI_CHAT.sendFrom('tc'); });
     const pinp = $('#tc-panel-input');
     if (pinp) pinp.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.IELTS_RAMI_CHAT.sendFrom('tc-panel'); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') window.IELTS_RAMI_CHAT.closePanel(); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

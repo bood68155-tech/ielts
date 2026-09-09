@@ -2781,7 +2781,7 @@ header > div > div {
 }
 
 /* ============================================================
-   Teacher Rami — Chat & Speak Lab
+   Teacher Rami ï¿½ Chat & Speak Lab
    ============================================================ */
 .tc-fab {
   position: fixed;
@@ -2790,33 +2790,60 @@ header > div > div {
   z-index: 80;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 14px;
-  background: rgba(20, 18, 15, 0.97);
-  border: 1px solid rgba(212, 175, 55, 0.5);
+  gap: 10px;
+  padding: 14px 20px 14px 16px;
+  background: linear-gradient(135deg, rgba(20, 18, 15, 0.98), rgba(26, 24, 20, 0.98));
+  border: 1px solid rgba(212, 175, 55, 0.6);
   color: #d4af37;
   border-radius: 999px;
   font-weight: 800;
-  font-size: 13px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(212, 175, 55, 0.1);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s ease;
 }
 .tc-fab::before {
   content: "";
   position: absolute;
   inset: -6px;
   border-radius: 999px;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(212, 175, 55, 0.4);
   animation: tc-pulse 2.4s ease-out infinite;
   pointer-events: none;
 }
-.tc-fab:hover { background: rgba(212, 175, 55, 0.12); }
-.tc-fab.open { opacity: 0; pointer-events: none; }
+.tc-fab:hover {
+  background: rgba(33, 30, 25, 0.98);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+.tc-fab-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+  flex-shrink: 0;
+}
+.tc-fab-chevron {
+  font-size: 9px;
+  color: rgba(212, 175, 55, 0.6);
+  margin-left: 2px;
+  transition: transform 0.22s ease;
+}
+.tc-fab.open {
+  opacity: 0;
+  pointer-events: none;
+}
+.tc-fab.open .tc-fab-chevron { transform: rotate(180deg); }
 @keyframes tc-pulse {
   0% { transform: scale(0.98); opacity: 0.9; }
-  70% { transform: scale(1.18); opacity: 0; }
-  100% { transform: scale(1.18); opacity: 0; }
+  70% { transform: scale(1.16); opacity: 0; }
+  100% { transform: scale(1.16); opacity: 0; }
+}
+@media (max-width: 560px) {
+  .tc-fab { right: 12px; bottom: 12px; padding: 12px 14px; gap: 8px; }
+  .tc-fab-label { font-size: 12px; }
 }
 .tc-panel {
   position: fixed;
@@ -2824,6 +2851,9 @@ header > div > div {
   bottom: 84px;
   z-index: 85;
   width: min(420px, calc(100vw - 32px));
+  max-height: min(620px, calc(100vh - 120px));
+  display: flex;
+  flex-direction: column;
   border-radius: 18px;
   background: rgba(15, 23, 42, 0.97);
   border: 1px solid rgba(212, 175, 55, 0.3);
