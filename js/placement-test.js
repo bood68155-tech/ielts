@@ -312,6 +312,11 @@
 
     window.toast && window.toast('+' + PLACEMENT_XP + ' XP! Your level: ' + detectedLevel.name);
 
+    /* ask the AI English Mentor to build a personalised 4-week roadmap from these results */
+    if (window.IELTS_AI && window.IELTS_AI.buildRoadmapFromPlacement) {
+      try { window.IELTS_AI.buildRoadmapFromPlacement(c); } catch (e) { /* AI engine optional */ }
+    }
+
     state.view = 'result';
     state.result = { correct, total, detectedLevel, details };
     render();

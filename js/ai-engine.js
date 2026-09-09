@@ -263,6 +263,14 @@
     { word: 'pervasive', pos: 'adjective', definition: 'spreading widely throughout an area or group', collocation: 'a pervasive influence / pervasive inequality', example: 'The pervasive influence of social media complicates adolescent identity formation.' }
   ];
 
+  const MENTOR_WORD_TIPS = [
+    'Native professionals do not hop between registers — own this word and it will lift the whole sentence around it.',
+    'Push this word into your next answer on purpose; a word is only yours after the third active use.',
+    'Pair it: native fluency is built on collocations, so always recall this word with its partner.',
+    'Say it out loud in a full sentence before writing it — your ear catches what your eye forgives.',
+    'Teach it to a friend for one minute and it moves from passive to active vocabulary.'
+  ];
+
   function fallbackWords(topic, count, band) {
     const h = hashStr(topic);
     const out = [];
@@ -274,7 +282,8 @@
         definition: base.definition,
         collocation: base.collocation.replace(/\b(society|health|environment|policy|attitudes|families|learners|growth|access|debate|standards|decision-making|governments|cities|education)\b/gi, topic || 'society'),
         example: base.example.replace(/\b(societies|governments|organisations|society|learners|cities|communities|health|policy)\b/gi, topic || 'society'),
-        band: band || 'Band 8-9'
+        band: band || 'Band 8-9',
+        tip: MENTOR_WORD_TIPS[(h + i) % MENTOR_WORD_TIPS.length]
       });
     }
     return out;
@@ -342,7 +351,20 @@
       errors: fallbackErrors(text),
       criteria,
       rewrite: null,
-      demoNote: 'Add a Gemini API key in AI Settings to generate a full Band 9 rewrite and precise grammar corrections.'
+      demoNote: 'Add a Gemini API key in AI Settings to generate a full Band 9 rewrite and precise grammar corrections.',
+      coaching: kind === 'speaking'
+        ? [
+            'Think in ideas, not grammar: before you speak, hold three beats in your mind — opinion, reason, example — and let the words follow.',
+            'Answer like a native professional: open with a direct claim, then one illustration from your own life; long answers signal confidence only when they stay on point.',
+            'Buy fluency with fill-phrases natives use, such as "What I mean is…" or "The point I am making is…" — never with dead air.',
+            'Record yourself, then replay once: count hesitations and replace each with a linking phrase your next take.'
+          ]
+        : [
+            'Think before you type: 5 minutes of planning beats any amount of polishing. One idea per paragraph, ordered strongest first.',
+            'Native professionals open with the claim, not a ritual like "Nowadays…": lead each paragraph with your point, then explain, example, and link.',
+            'Say what you mean in plain words first, then upgrade only the key nouns and verbs with precise vocabulary — precision over decoration.',
+            'Build a 60-second self-review routine: re-read once for ideas, once for grammar slips, once aloud to catch unnatural phrasing — then submit.'
+          ]
     };
   }
 
@@ -369,7 +391,7 @@
     const c = cfg();
     if (!c.key && !useProxy()) return { demo: true, topic, band, words: fallbackWords(topic, count, band) };
     const sys = 'You are an expert IELTS academic vocabulary lexicographer. Generate a precise, error-free word bank of Band ' + band + ' academic vocabulary for the IELTS exam. Every field must be exam-appropriate: precise definitions, natural native collocations (word + partner words), and an IELTS-style example sentence in the specified topic. No invented words, no duplicate words.';
-    const usr = 'Topic: ' + topic + '\nCount: ' + count + '\nOutput ONLY strict JSON with no commentary:\n{"words":[{"word":"...","pos":"noun/verb/adjective...","definition":"...","collocation":"..." ,"example":"..." ,"band":"Band 8-9"}...]}';
+    const usr = 'Topic: ' + topic + '\nCount: ' + count + '\nOutput ONLY strict JSON with no commentary:\n{"words":[{"word":"...","pos":"noun/verb/adjective...","definition":"...","collocation":"..." ,"example":"..." ,"band":"Band 8-9","tip":"one-sentence native-professional usage tip (how to activate this word)"}...]}';
     const raw = await gemini(sys, usr, true);
     const data = raw ? parseJson(raw) : null;
     if (!data || !Array.isArray(data.words) || !data.words.length) return { demo: true, topic, band, words: fallbackWords(topic, count, band) };
@@ -379,7 +401,8 @@
       definition: String(w.definition || '').trim(),
       collocation: String(w.collocation || '').trim(),
       example: String(w.example || '').trim(),
-      band: String(w.band || band)
+      band: String(w.band || band),
+      tip: String(w.tip || '').trim().slice(0, 220)
     })).filter((w) => w.word);
     return { demo: false, topic, band, words: words.length ? words : fallbackWords(topic, count, band) };
   }
@@ -415,8 +438,8 @@
     }
     const c = cfg();
     if (!c.key && !useProxy()) return { demo: true, kind, ...fallbackEvaluate(text, kind) };
-    const sys = 'You are a strict, experienced IELTS examiner with deep knowledge of the official band descriptors. Evaluate the learner text. Give a precise half-band score (e.g. 6.5), a 2-3 sentence summary, 3 strengths, 3 weaknesses, a list of concrete grammatical/lexical errors with exact corrections and explanations, sub-scores for each official criterion out of 9, and a full Band 9 rewrite of the entire text that preserves the learner\'s ideas.';
-    const usr = 'Register: ' + (kind === 'speaking' ? 'IELTS Speaking (Part 2 transcript)' : 'IELTS Writing Task 2 essay') + '\n\n"Here is the text:\n' + text.slice(0, 6000) + '"\n\nOutput ONLY strict JSON:\n{"band":6.5,"summary":"...","strengths":["..."],"weaknesses":["..."],"errors":[{"type":"grammar","original":"...","correction":"...","explanation":"..."}],"criteria":{"Task Response":6.5,"Coherence and Cohesion":6.5,"Lexical Resource":6.5,"Grammatical Range and Accuracy":6.5},"rewrite":"..."}';
+    const sys = 'You are a strict, experienced IELTS examiner and a native-professional English mentor. Evaluate the learner text. Give a precise half-band score (e.g. 6.5), a 2-3 sentence summary, 3 strengths, 3 weaknesses, a list of concrete grammatical/lexical errors with exact corrections and explanations, sub-scores for each official criterion out of 9, a full Band 9 rewrite of the entire text that preserves the learner\'s ideas, and 4 coaching steps that teach the student HOW to think and speak like a native professional (mindset, structure, phrasing habits, self-review routine).';
+    const usr = 'Register: ' + (kind === 'speaking' ? 'IELTS Speaking (Part 2 transcript)' : 'IELTS Writing Task 2 essay') + '\n\n"Here is the text:\n' + text.slice(0, 6000) + '"\n\nOutput ONLY strict JSON:\n{"band":6.5,"summary":"...","strengths":["..."],"weaknesses":["..."],"errors":[{"type":"grammar","original":"...","correction":"...","explanation":"..."}],"criteria":{"Task Response":6.5,"Coherence and Cohesion":6.5,"Lexical Resource":6.5,"Grammatical Range and Accuracy":6.5},"rewrite":"...","coaching":["native-professional thinking/structuring/speaking step 1","step 2","step 3","step 4"]}';
     const raw = await gemini(sys, usr, true);
     const data = raw ? parseJson(raw) : null;
     if (!data || typeof data.band === 'undefined') return { demo: true, kind, ...fallbackEvaluate(text, kind) };
@@ -429,7 +452,8 @@
       weaknesses: Array.isArray(data.weaknesses) ? data.weaknesses.map(String) : [],
       errors: Array.isArray(data.errors) ? data.errors.slice(0, 8).map((e) => ({ type: String(e.type || 'grammar'), original: String(e.original || ''), correction: String(e.correction || ''), explanation: String(e.explanation || '') })) : [],
       criteria: data.criteria || {},
-      rewrite: String(data.rewrite || '').trim()
+      rewrite: String(data.rewrite || '').trim(),
+      coaching: Array.isArray(data.coaching) ? data.coaching.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6) : []
     };
   }
 
@@ -483,6 +507,7 @@
               <p class="text-sm text-[#f5f0e6]/75 mt-1">${esc(w.definition)}</p>
               <p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ${esc(w.collocation)}</p>
               <p class="text-xs text-[#f5f0e6]/55 italic mt-1">“${esc(w.example)}”</p>
+              ${w.tip ? `<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">🧠 Mentor:</b> ${esc(w.tip)}</p>` : ''}
             </div>
             <button id="aiwb-add-${i}" class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-[rgba(212,175,55,0.4)] text-[#d4af37] hover:bg-[rgba(212,175,55,0.12)] transition" onclick="window.IELTS_AI.wordBankAddOne(${i})">＋ Save</button>
           </div>
@@ -717,6 +742,9 @@
     if (res.weaknesses && res.weaknesses.length) {
       body += '<div class="mb-4"><p class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2">⚠ To improve</p><ul class="space-y-1">' + res.weaknesses.map((s) => '<li class="text-sm text-[#f5f0e6]/75 flex gap-2"><span>•</span><span>' + esc(s) + '</span></li>').join('') + '</ul></div>';
     }
+    if (res.coaching && res.coaching.length) {
+      body += '<div class="mb-4 bg-gradient-to-br from-[rgba(124,58,237,0.12)] to-[rgba(217,70,239,0.08)] border border-[rgba(124,58,237,0.3)] rounded-xl p-4"><p class="text-xs font-bold text-[#e879f9] uppercase tracking-widest mb-2">🧠 Mentor coaching · think &amp; speak like a native professional</p><ol class="space-y-2">' + res.coaching.map((s, i) => '<li class="text-sm text-[#f5f0e6]/85 flex gap-3"><span class="shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">' + (i + 1) + '</span><span>' + esc(s) + '</span></li>').join('') + '</ol></div>';
+    }
     if (res.errors && res.errors.length) {
       body += '<div class="mb-4"><p class="text-xs font-bold text-rose-400 uppercase tracking-widest mb-2">✎ Grammar &amp; accuracy fixes</p><div class="space-y-2">' + res.errors.map((e) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(248,113,113,0.2)] rounded-lg p-3"><p class="text-xs text-[#f5f0e6]/40 uppercase tracking-wide">' + esc(e.type) + '</p><p class="text-sm text-[#f5f0e6]/85 mt-1">✗ <span class="text-rose-300 line-through">' + esc(e.original || '…') + '</span> → <span class="text-emerald-300 font-semibold">' + esc(e.correction || '…') + '</span></p><p class="text-xs text-[#f5f0e6]/50 mt-1">' + esc(e.explanation || '') + '</p></div>').join('') + '</div></div>';
     }
@@ -734,7 +762,7 @@
   function evalSaveLib() {
     const r = window.__AIEVAL;
     if (!r) return;
-    const id = addToLibrary('evaluation', '🤖 AI Evaluation · Band ' + r.band, { kind: r.kind || 'writing', band: r.band, summary: r.summary, strengths: r.strengths, weaknesses: r.weaknesses, errors: r.errors, criteria: r.criteria, rewrite: r.rewrite });
+    const id = addToLibrary('evaluation', '🤖 AI Evaluation · Band ' + r.band, { kind: r.kind || 'writing', band: r.band, summary: r.summary, strengths: r.strengths, weaknesses: r.weaknesses, errors: r.errors, criteria: r.criteria, rewrite: r.rewrite, coaching: r.coaching });
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('ai-eval-' + id)) {
       window.IELTS_AUTH.addXp(10);
       window.IELTS_AUTH.addActivity('writing', 'AI evaluation · Band ' + r.band, 10);
@@ -796,7 +824,7 @@
     const it = c.myLibrary.find((x) => x.id === id);
     if (!it) return;
     if (it.kind === 'wordbank') {
-      openModal('✦ AI Word Bank', '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p></div>').join('') + '</div>');
+      openModal('✦ AI Word Bank', '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p>' + (w.tip ? '<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">🧠 Mentor:</b> ' + esc(w.tip) + '</p>' : '') + '</div>').join('') + '</div>');
     } else if (it.kind === 'passage') {
       window.__AIP = it.payload;
       openModal('📖 ' + esc(it.payload.title), '<div id="ai-library-practice"></div>');
@@ -846,6 +874,276 @@
   }
 
   /* ============================================================
+     FULL-SPECTRUM HOLISTIC STUDY PLAN — "AI English Mentor"
+     Generates a tailored 4-week (28-day) roadmap that blends
+     IELTS-specific tasks with core English mastery: Advanced
+     Vocabulary SRS, Grammar correction, Natural phrasing and
+     Idioms. Every day carries a mentor coaching tip.
+     ============================================================ */
+  const PLAN_ACTIONS = ['listening', 'reading', 'readings', 'writing', 'speaking', 'catlango', 'training', 'reading-hub', 'learning-path', 'translator', 'exam'];
+  const PLAN_SKILLS = ['listening', 'reading', 'writing', 'speaking', 'vocab', 'grammar', 'idioms', 'exam'];
+
+  function sanitizeAction(a) { return PLAN_ACTIONS.indexOf(a) >= 0 ? a : 'reading-hub'; }
+
+  const MENTOR_TIPS = {
+    listening: 'Train yourself to predict answers from question words (who / what / when / how) before the audio starts — top scorers do this instinctively.',
+    reading: 'Never read every word. Skim for the main idea, then scan for keywords and their synonyms — examiners reward controlled speed, not slow reading.',
+    writing: 'Point → Explain → Example → Link. One idea per paragraph. Native professionals open with the strongest claim, not a cliché like “nowadays”.',
+    speaking: 'Think in ideas, not grammar. Answer in three beats: opinion → reason → example. It buys fluency and instantly sounds more confident.',
+    vocab: 'Learn words in pairs (word + collocation), then force yourself to use each one in a sentence about your own life — that is what makes it stick.',
+    grammar: 'Find the ONE pattern you keep breaking and drill it with five corrections a day, rather than memorising fifty rules you never apply.',
+    idioms: 'Idioms impress only when they carry meaning — use one idiom per idea, and double-check the register so it never sounds forced.',
+    exam: 'Review every mistake in three columns: what went wrong, why, and the fix. This single habit raises bands faster than any course.'
+  };
+
+  /* 28-day blended curriculum: IELTS tasks + core English mastery */
+  const PLAN_TEMPLATE = [
+    { title: 'Advanced Vocabulary SRS',           skill: 'vocab',    icon: '📚', section: 'training',     action: 'training',     desc: 'Start your AI SRS deck — learn 10 Band 8-9 words with collocations and review them in a daily spacing cycle.' },
+    { title: 'Listening Fundamentals',             skill: 'listening', icon: '🎧', section: 'listening-master', action: 'listening', desc: 'Learn the Section 1 format and train yourself to predict answers from question words.' },
+    { title: 'Reading Basics',                     skill: 'reading',  icon: '📖', section: 'readings',       action: 'readings',     desc: 'Practice skimming and scanning on a graded passage — time each attempt under exam pressure.' },
+    { title: 'Grammar Correction Lab',             skill: 'grammar',  icon: '✍️', section: 'training',       action: 'training',     desc: 'Write five sentences, find your repeated grammar slip, and correct it out loud three times.' },
+    { title: 'Natural Phrasing',                   skill: 'grammar',  icon: '🗣️', section: 'speaking-sim',   action: 'speaking',     desc: 'Re-record common answers until they sound like a native professional — short phrases, linked ideas.' },
+    { title: 'Idioms & Collocations',              skill: 'idioms',   icon: '💬', section: 'training',       action: 'training',     desc: 'Learn five exam-safe idioms and place each one in a sentence about your daily routine.' },
+    { title: 'Weekly Review + Exam',               skill: 'exam',     icon: '📅', section: 'exam',           action: 'exam',         desc: 'Re-test the week’s words, idioms and grammar, then take the Weekly Exam.' },
+    { title: 'SRS Vocab: Education & Work',        skill: 'vocab',    icon: '📚', section: 'training',       action: 'training',     desc: 'New AI word bank on education and career topics; add the words to your SRS deck before reviewing.' },
+    { title: 'Listening Section 2',                skill: 'listening', icon: '🎧', section: 'listening-master', action: 'listening', desc: 'Master monologues and note-taking — predict the answer type before you listen.' },
+    { title: 'Reading Passages',                   skill: 'reading',  icon: '📖', section: 'reading-hub',    action: 'reading-hub',  desc: 'Work through an academic passage and time each question type with a strict stopwatch.' },
+    { title: 'Writing Task 2 Essay',               skill: 'writing',  icon: '✍️', section: 'writing',        action: 'writing',      desc: 'Plan an opinion essay in 5 minutes, then write it with one clear idea per paragraph.' },
+    { title: 'Speaking Part 2 Cue Card',           skill: 'speaking', icon: '🗣️', section: 'speaking-sim',  action: 'speaking',     desc: 'Speak for two minutes on a cue card; structure the long turn with a mini story arc.' },
+    { title: 'Grammar: Conditionals & Inversion',  skill: 'grammar',  icon: '✍️', section: 'training',       action: 'training',     desc: 'Drill second/third conditionals and “Not only… / Had I…” inversions with five self-corrections.' },
+    { title: 'Weekly Review + Exam',               skill: 'exam',     icon: '📅', section: 'exam',           action: 'exam',         desc: 'Consolidate the week and sit the Weekly Exam under real timing.' },
+    { title: 'SRS Vocab: Science & Environment',   skill: 'vocab',    icon: '📚', section: 'training',       action: 'training',     desc: 'Generate a science-themed AI word bank and attach each word to a mental image.' },
+    { title: 'Listening Academic Monologue',       skill: 'listening', icon: '🎧', section: 'listening-master', action: 'listening', desc: 'Follow an academic talk and capture the gist first — detail only comes after gist.' },
+    { title: 'Reading True/False/Not Given',       skill: 'reading',  icon: '📖', section: 'reading-hub',    action: 'reading-hub',  desc: 'Attack T/F/NG systematically: synonym = True, contradiction = False, unknown = Not Given.' },
+    { title: 'Writing Task 1',                     skill: 'writing',  icon: '✍️', section: 'writing',        action: 'writing',      desc: 'Describe a chart with an overview sentence first — the examiner looks for it within 30 seconds.' },
+    { title: 'Speaking Part 3 Abstract Ideas',     skill: 'speaking', icon: '🗣️', section: 'speaking-sim',  action: 'speaking',     desc: 'Discuss abstract questions with a claim-justify-example structure to sound like a trained professional.' },
+    { title: 'Idioms in Context',                  skill: 'idioms',   icon: '💬', section: 'training',       action: 'training',     desc: 'Deploy today’s idioms inside a mini speech — meaning first, decoration second.' },
+    { title: 'Weekly Review + Exam',               skill: 'exam',     icon: '📅', section: 'exam',           action: 'exam',         desc: 'Full review of the week and the Weekly Exam under timed conditions.' },
+    { title: 'Full Listening Test',                skill: 'listening', icon: '🎧', section: 'listening-master', action: 'listening', desc: 'All four sections in one timed sitting — no pausing, then mark yourself honestly.' },
+    { title: 'Full Reading Test',                  skill: 'reading',  icon: '📖', section: 'reading-master', action: 'reading',     desc: 'Three passages in 60 minutes with a strict answer-transfer habit.' },
+    { title: 'Full Writing Test',                  skill: 'writing',  icon: '✍️', section: 'writing-coach',  action: 'writing',      desc: 'Task 1 + Task 2 in 60 minutes; budget 20 + 40 and leave five minutes to proofread.' },
+    { title: 'Full Speaking Test',                 skill: 'speaking', icon: '🗣️', section: 'speaking-sim',  action: 'speaking',     desc: 'All three parts back to back; record yourself and listen once for hesitation patterns.' },
+    { title: 'SRS Vocab Review + Spelling',        skill: 'vocab',    icon: '📚', section: 'training',       action: 'training',     desc: 'Review the whole deck; spell every word out loud — spelling is an exam earner.' },
+    { title: 'Grammar Deep Review',                skill: 'grammar',  icon: '✍️', section: 'training',       action: 'training',     desc: 'Re-sit your placement grammar section and correct every slip from memory.' },
+    { title: 'Final Exam + Celebration',           skill: 'exam',     icon: '🎉', section: 'exam',           action: 'exam',         desc: 'Take the Final Exam — then celebrate: you have built a complete English-mentor system.' }
+  ];
+
+  function weakSkills(profile) {
+    const out = [];
+    const s = (profile && profile.sections) || {};
+    ['grammar', 'reading', 'listening'].forEach((k) => {
+      const sec = s[k] || {};
+      const pct = sec.t ? (sec.c / sec.t) : null;
+      if (pct !== null && pct < 0.65) out.push(k);
+    });
+    return out;
+  }
+
+  function buildPlanDays(profile, focus) {
+    const weight = {};
+    PLAN_SKILLS.forEach((k) => { weight[k] = 0; });
+    (focus || []).forEach((k) => { weight[k] = 1; });
+    // weak skills get scheduled earlier inside each week so they are trained first
+    const ordered = PLAN_TEMPLATE.map((t, i) => ({ t, i, w: weight[t.skill] || 0 }))
+      .sort((a, b) => {
+        const weekOf = (idx) => Math.floor(idx / 7);
+        if (weekOf(a.i) !== weekOf(b.i)) return weekOf(a.i) - weekOf(b.i);
+        if (b.w !== a.w) return b.w - a.w;
+        return a.i - b.i;
+      });
+    return ordered.map(({ t }, dayIndex) => ({
+      day: dayIndex + 1,
+      title: t.title,
+      skill: t.skill,
+      icon: t.icon,
+      section: t.section,
+      action: sanitizeAction(t.action),
+      desc: t.desc,
+      mentor: MENTOR_TIPS[t.skill] || MENTOR_TIPS.vocab
+    }));
+  }
+
+  function fallbackStudyPlan(profile) {
+    const focus = weakSkills(profile);
+    const levelName = (profile && profile.levelName) || 'A1 Beginner';
+    const total = (profile && profile.total) || 26;
+    const correct = (profile && profile.correct) || (total / 2);
+    const focusTxt = focus.length
+      ? 'Your weakest areas are ' + focus.map((f) => ({ grammar: 'Grammar', reading: 'Reading', listening: 'Listening' }[f])).join(', ') + ' — so this roadmap trains them first every week, interleaved with core English mastery.'
+      : 'Your placement shows a balanced profile — this roadmap keeps every skill sharp with daily core-English mastery alongside IELTS tasks.';
+    const pct = Math.round((correct / Math.max(1, total)) * 100);
+    return {
+      demo: true,
+      summary: levelName + ' · ' + correct + '/' + total + ' on placement (' + pct + '%). ' + focusTxt,
+      focus,
+      level: levelName,
+      days: buildPlanDays(profile, focus),
+      generatedAt: Date.now()
+    };
+  }
+
+  async function generateStudyPlan(opts) {
+    opts = opts || {};
+    const profile = opts.profile || {};
+    const c = cfg();
+    if (!c.key && !useProxy()) return fallbackStudyPlan(profile);
+    const sys = 'You are a world-class IELTS mentor and native-English coach. Design a personalised 4-week (exactly 28 days) study roadmap that targets the student\'s weakest areas while blending IELTS skills (Academic Writing, Reading, Listening, Speaking) with core English mastery (Advanced Vocabulary SRS, Grammar correction, Natural phrasing, Idioms). Every day needs a concrete task and a one-sentence mentor tip that teaches the student HOW to think and speak like a native professional.';
+    const usr = 'Profile: level=' + (profile.levelName || 'unknown') + ', correct=' + (profile.correct || 0) + '/' + (profile.total || 0) + ', section results=' + JSON.stringify(profile.sections || {}).slice(0, 300) + '.\nOutput ONLY strict JSON with 28 days:\n{"summary":"...","focus":["grammar","reading","listening"],"days":[{"day":1,"title":"...","skill":"listening|reading|writing|speaking|vocab|grammar|idioms|exam","icon":"🔥","section":"...","action":"listening|reading|readings|writing|speaking|catlango|training|reading-hub|learning-path|translator|exam","desc":"concrete task","mentor":"native-professional coaching tip"}...]}';
+    const raw = await gemini(sys, usr, true);
+    const data = raw ? parseJson(raw) : null;
+    if (!data || !Array.isArray(data.days) || !data.days.length) return fallbackStudyPlan(profile);
+    const days = data.days.slice(0, 28).map((d, i) => ({
+      day: i + 1,
+      title: String(d.title || ('Day ' + (i + 1))).trim().slice(0, 80),
+      skill: PLAN_SKILLS.indexOf(String(d.skill)) >= 0 ? String(d.skill) : 'vocab',
+      icon: String(d.icon || '📘').trim().slice(0, 4),
+      section: String(d.section || 'training').trim().slice(0, 30),
+      action: sanitizeAction(String(d.action)),
+      desc: String(d.desc || '').trim().slice(0, 220),
+      mentor: String(d.mentor || '').trim().slice(0, 220)
+    }));
+    return {
+      demo: false,
+      summary: String(data.summary || '').trim().slice(0, 400),
+      focus: Array.isArray(data.focus) ? data.focus.map(String).filter((f) => ['grammar', 'reading', 'listening', 'writing', 'speaking'].indexOf(f) >= 0).slice(0, 4) : weakSkills(profile),
+      level: profile.levelName,
+      days,
+      generatedAt: Date.now()
+    };
+  }
+
+  /* ---------- roadmap storage (scoped 'studyplan') ---------- */
+  function planStore() {
+    let c = null;
+    if (window.IELTS_AUTH) c = window.IELTS_AUTH.getScoped('studyplan', null);
+    if (!c || typeof c !== 'object') c = {};
+    return c;
+  }
+  function getStudyPlan() { return planStore().plan || null; }
+  function saveStudyPlan(plan) {
+    if (!window.IELTS_AUTH) return;
+    const c = planStore();
+    c.plan = plan;
+    window.IELTS_AUTH.setScoped('studyplan', c);
+  }
+
+  function buildRoadmapFromPlacement(placementCache) {
+    if (!placementCache || placementCache.completed !== true) return null;
+    const profile = {
+      levelName: (placementCache.lastLevel && placementCache.lastLevel.name) || 'Learner',
+      correct: placementCache.lastScore,
+      total: placementCache.lastTotal,
+      sections: placementCache.sections
+    };
+    return generateStudyPlan({ profile }).then((plan) => {
+      saveStudyPlan(plan);
+      if (window.IELTS_AUTH) {
+        try {
+          if (window.IELTS_AUTH.completeClaim('ai-roadmap-' + plan.generatedAt)) {
+            window.IELTS_AUTH.addXp(15);
+            window.IELTS_AUTH.addActivity('study', 'AI mentor generated a personalised 4-week roadmap (' + plan.days.length + ' days)', 15);
+          }
+        } catch (e) { /* ignore */ }
+      }
+      window.toast && window.toast('🧠 Your AI mentor roadmap is ready — open Study Plan');
+      return plan;
+    }).catch(() => null);
+  }
+
+  function launchPlanDay(action) {
+    try {
+      if (window.STUDY_PLAN && window.STUDY_PLAN.launchTask) window.STUDY_PLAN.launchTask(action);
+      else window.showSection && window.showSection(['listening-master', 'reading-master', 'readings', 'writing-coach', 'speaking-sim', 'catlango', 'training', 'reading-hub', 'learning-path', 'translator', 'exam'].indexOf(action) >= 0 ? action : 'training');
+    } catch (e) { /* ignore */ }
+  }
+
+  /* ---------- roadmap UI ---------- */
+  function roadmapCTA() {
+    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-5 shadow-lg"><div class="flex flex-wrap items-center justify-between gap-3"><div><p class="font-extrabold text-white text-lg">🧠 Your AI Mentor Roadmap</p><p class="text-white/80 text-sm mt-0.5">Your placement results unlock a tailor-made 4-week day-by-day plan blending IELTS tasks with core English mastery.</p></div><button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">⚡ Generate my roadmap</button></div></div>';
+  }
+
+  function roadmapCardHtml(plan) {
+    const first = (plan.days || []).slice(0, 4);
+    const badge = plan.demo
+      ? '<span class="text-[10px] font-bold text-[#e879f9] bg-white/15 border border-white/30 px-1.5 py-0.5 rounded">demo</span>'
+      : '<span class="text-[10px] font-bold text-emerald-300 bg-black/20 border border-white/30 px-1.5 py-0.5 rounded">AI live</span>';
+    const focusChips = (plan.focus || []).length
+      ? '<div class="flex flex-wrap gap-1.5 mt-2">' + plan.focus.map((f) => '<span class="text-[10px] font-bold text-white bg-[rgba(255,255,255,0.18)] border border-white/25 px-2 py-0.5 rounded-full capitalize">Focus: ' + esc(f) + '</span>').join('') + '</div>'
+      : '';
+    const dayCards = first.map((d) => '<div class="bg-black/15 border border-white/20 rounded-lg px-3 py-2 flex items-center gap-2"><span class="text-base">' + esc(d.icon) + '</span><div class="min-w-0"><p class="text-xs font-bold text-white truncate">Day ' + d.day + ': ' + esc(d.title) + '</p><p class="text-[11px] text-white/70 truncate">' + esc(d.mentor || d.desc) + '</p></div></div>').join('');
+    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-5 shadow-lg">'
+      + '<div class="flex flex-wrap items-start justify-between gap-3">'
+      + '<div class="min-w-0 flex-1">'
+      + '<div class="flex flex-wrap items-center gap-2 mb-1"><p class="font-extrabold text-white text-lg">🧠 AI Mentor Roadmap</p>' + badge + '</div>'
+      + '<p class="text-white/85 text-sm leading-relaxed">' + esc(plan.summary || '') + '</p>'
+      + focusChips
+      + '<div class="grid sm:grid-cols-2 gap-1.5 mt-3">' + dayCards + '</div>'
+      + '</div>'
+      + '<div class="flex flex-col gap-2 shrink-0">'
+      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">🗺️ Open full roadmap</button>'
+      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-white border border-white/40 hover:bg-white/10 transition" onclick="window.IELTS_AI && window.IELTS_AI.regenerateRoadmap()">↺ Regenerate</button>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function mountRoadmap() {
+    const root = $('#ai-roadmap-root');
+    if (!root) return;
+    const plan = getStudyPlan();
+    root.innerHTML = plan ? roadmapCardHtml(plan) : roadmapCTA();
+  }
+
+  async function regenerateRoadmap() {
+    const root = $('#ai-roadmap-root');
+    if (root) root.innerHTML = '<div class="text-center py-8 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl"><div class="mx-auto w-10 h-10 rounded-full border-2 border-white/30 border-t-white animate-spin"></div><p class="text-sm text-white/90 mt-3">Your AI mentor is designing your 4-week roadmap…</p></div>';
+    let profile = null;
+    try {
+      const pc = window.IELTS_AUTH && window.IELTS_AUTH.getScoped ? window.IELTS_AUTH.getScoped('placement', null) : null;
+      if (pc && pc.completed) profile = { levelName: (pc.lastLevel && pc.lastLevel.name) || 'Learner', correct: pc.lastScore, total: pc.lastTotal, sections: pc.sections };
+    } catch (e) { /* ignore */ }
+    const plan = await generateStudyPlan({ profile });
+    saveStudyPlan(plan);
+    mountRoadmap();
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('ai-roadmap-' + plan.generatedAt)) {
+      window.IELTS_AUTH.addXp(15);
+      window.IELTS_AUTH.addActivity('study', 'Regenerated AI mentor roadmap', 15);
+    }
+    window.toast && window.toast(plan.demo ? 'Roadmap generated (demo)' : 'Your AI mentor roadmap is ready 🧠');
+  }
+
+  function openRoadmapModal() {
+    let plan = getStudyPlan();
+    if (plan && openModal) {
+      renderRoadmapModal(plan);
+      return;
+    }
+    regenerateRoadmap().then(() => { const p = getStudyPlan(); if (p) renderRoadmapModal(p); });
+  }
+
+  function renderRoadmapModal(plan) {
+    if (!plan) return;
+    const weeks = [[], [], [], []];
+    (plan.days || []).forEach((d) => { weeks[Math.floor((d.day - 1) / 7)] && weeks[Math.floor((d.day - 1) / 7)].push(d); });
+    const weekHtml = weeks.map((wdays, wi) => {
+      if (!wdays.length) return '';
+      return '<div class="mb-4"><div class="flex items-center justify-between mb-2"><p class="text-sm font-extrabold text-[#d4af37]">Week ' + (wi + 1) + '</p><p class="text-[10px] text-[#f5f0e6]/50 uppercase tracking-widest">Days ' + (wi * 7 + 1) + '–' + (wi * 7 + wdays.length) + '</p></div><div class="space-y-2">' + wdays.map((d) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-3"><div class="flex items-start gap-3"><span class="text-xl shrink-0">' + esc(d.icon) + '</span><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><p class="text-sm font-bold text-[#f5f0e6]">Day ' + d.day + ': ' + esc(d.title) + '</p><span class="text-[10px] uppercase text-[#e879f9] border border-[rgba(232,121,249,0.35)] px-1.5 py-0.5 rounded capitalize">' + esc(d.skill) + '</span></div><p class="text-xs text-[#f5f0e6]/65 mt-1 leading-relaxed">' + esc(d.desc) + '</p><p class="text-xs text-[#e879f9]/70 mt-1.5"><b class="text-[#e879f9]">Mentor:</b> ' + esc(d.mentor || '—') + '</p></div><button class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.launchPlanDay(\'' + d.action + '\')">Start</button></div></div>').join('') + '</div></div>';
+    }).join('');
+    const skills = plan.demo ? '<p class="text-[11px] text-[#f5f0e6]/50 italic mb-3">Heuristic demo roadmap — with an AI key (or on the live deployment) mentor tips become fully personalised.</p>' : '';
+    openModal('🧠 AI Mentor · 4-Week Roadmap', `
+      <div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
+        <p class="text-sm text-[#f5f0e6]/85 leading-relaxed">${esc(plan.summary || '')}</p>
+        ${(plan.focus || []).length ? '<div class="flex flex-wrap gap-1.5 mt-2">' + plan.focus.map((f) => '<span class="text-[10px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.4)] px-2 py-0.5 rounded-full capitalize">Weak focus: ' + esc(f) + '</span>').join('') + '</div>' : ''}
+      </div>
+      ${skills}
+      ${weekHtml}
+      <div class="flex items-center justify-between gap-3 flex-wrap pt-2">
+        <p class="text-xs text-[#f5f0e6]/50">Every day blends an IELTS task with core English mastery and a native-professional mentor tip.</p>
+        <button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI && window.IELTS_AI.regenerateRoadmap()">↺ Regenerate</button>
+      </div>`);
+  }
+
+  /* ============================================================
      Convenience entry points used by hub modules
      ============================================================ */
   async function evaluateBook(text, kind) {
@@ -871,6 +1169,8 @@
     passageLive, passageSaveLib,
     evalLive, evalSaveLib, copyRewrite,
     renderPassagePractice, practiceCheck,
-    listByKind, removeFromLibrary
+    listByKind, removeFromLibrary,
+    generateStudyPlan, getStudyPlan, saveStudyPlan, buildRoadmapFromPlacement,
+    mountRoadmap, regenerateRoadmap, openRoadmapModal, launchPlanDay
   };
 })();

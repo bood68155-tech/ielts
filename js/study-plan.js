@@ -236,7 +236,10 @@
 
     var el = $('#study-plan-content');
     if (!el) return;
-    el.innerHTML = overallCard + '<div class="space-y-6">' + weekCards + '</div>';
+    el.innerHTML = overallCard + '<div id="ai-roadmap-root" class="mb-6"></div>' + '<div class="space-y-6">' + weekCards + '</div>';
+    if (window.IELTS_AI && window.IELTS_AI.mountRoadmap) {
+      try { window.IELTS_AI.mountRoadmap(); } catch (e) { /* AI engine optional */ }
+    }
   }
 
   /* ===================== TASK DETAIL MODAL ===================== */
