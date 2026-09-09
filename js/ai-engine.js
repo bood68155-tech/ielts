@@ -22,6 +22,13 @@
   const DEFAULT_MODEL = 'gemini-2.0-flash';
   const FALLBACK_MODELS = [DEFAULT_MODEL, 'gemini-1.5-flash'];
 
+  /* The permanent identity of the AI English Mentor */
+  const MENTOR = { ar: 'أستاذ رامي', name: 'Master Rami' };
+  const mentorName = () => MENTOR.name;
+  const mentorLabel = () => MENTOR.name + ' · ' + MENTOR.ar;
+  const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your personal English mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think and phrase like a native professional.';
+  const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
+
   /* ================= scoped storage ================= */
   function cfg() {
     let c = null;
@@ -349,6 +356,7 @@
         'Re-read and correct minor slips (articles, prepositions, verb forms) before submitting.'
       ],
       errors: fallbackErrors(text),
+      vocab: fallbackVocabUpgrades(text),
       criteria,
       rewrite: null,
       demoNote: 'Add a Gemini API key in AI Settings to generate a full Band 9 rewrite and precise grammar corrections.',
@@ -377,6 +385,29 @@
     if (repeated) out.push({ type: 'Repetition', original: '(repeated word)', correction: 'Remove or rephrase the duplicate', explanation: 'Repetition of a word within one sentence weakens lexical range.' });
     if (!out.length) out.push({ type: 'Fluency', original: '(sample)', correction: 'Vary sentence length and add topic-specific collocations', explanation: 'No automated slips detected by the demo engine — a live AI evaluation catches deeper grammar and cohesion issues.' });
     return out;
+  }
+
+  const BASIC_TO_UPGRADED = [
+    { re: /\bgood\b/gi, original: 'good', upgraded: 'substantial / commendable', why: 'Precision beats praise: name the exact quality your work delivers.' },
+    { re: /\bbad\b/gi, original: 'bad', upgraded: 'detrimental / substandard', why: 'A Band 8 essay quantifies the downside instead of labelling it.' },
+    { re: /\bbig\b/gi, original: 'big', upgraded: 'considerable / substantial', why: 'Formal registers prefer measurable size over playground vocabulary.' },
+    { re: /\bsmall\b/gi, original: 'small', upgraded: 'marginal / modest', why: 'Academic writing signals degree — marginal says how small, not just small.' },
+    { re: /\bmany\b/gi, original: 'many', upgraded: 'a considerable number of / a significant proportion of', why: 'Countable precision reads as native-professional analysis rather than lists.' },
+    { re: /\bpeople\b/gi, original: 'people', upgraded: 'individuals / the general public', why: 'Demographic words make your argument sound researched, not casual.' },
+    { re: /\bthings?\b/gi, original: 'things', upgraded: 'aspects / factors / elements', why: '"Things" is vague; name the factors driving your argument.' },
+    { re: /\bimportant\b/gi, original: 'important', upgraded: 'crucial / pivotal / paramount', why: 'Intensify once with one precise word — it reads more forceful than "very important".' },
+    { re: /\bthink\b/gi, original: 'think', upgraded: 'contend / maintain / argue', why: 'Verbs of assertion frame an opinion that an examiner can weigh.' },
+    { re: /\bsay\b/gi, original: 'say', upgraded: 'assert / state / illustrate', why: 'Report and support claims with verbs that define your role as analyst.' }
+  ];
+
+  function fallbackVocabUpgrades(text) {
+    const upgrades = [];
+    BASIC_TO_UPGRADED.forEach((item) => {
+      if (upgrades.length >= 4) return;
+      if (item.re.test(text)) upgrades.push({ original: item.original, upgraded: item.upgraded, why: item.why });
+    });
+    if (!upgrades.length) upgrades.push({ original: '(topic nouns)', upgraded: 'domain-specific collocations', why: 'Replace neutral nouns with the exact terms of the subject (e.g. sustainable, emissions, infrastructure) to unlock Band 8 lexical resource.' });
+    return upgrades;
   }
 
   /* ============================================================
@@ -438,8 +469,8 @@
     }
     const c = cfg();
     if (!c.key && !useProxy()) return { demo: true, kind, ...fallbackEvaluate(text, kind) };
-    const sys = 'You are a strict, experienced IELTS examiner and a native-professional English mentor. Evaluate the learner text. Give a precise half-band score (e.g. 6.5), a 2-3 sentence summary, 3 strengths, 3 weaknesses, a list of concrete grammatical/lexical errors with exact corrections and explanations, sub-scores for each official criterion out of 9, a full Band 9 rewrite of the entire text that preserves the learner\'s ideas, and 4 coaching steps that teach the student HOW to think and speak like a native professional (mindset, structure, phrasing habits, self-review routine).';
-    const usr = 'Register: ' + (kind === 'speaking' ? 'IELTS Speaking (Part 2 transcript)' : 'IELTS Writing Task 2 essay') + '\n\n"Here is the text:\n' + text.slice(0, 6000) + '"\n\nOutput ONLY strict JSON:\n{"band":6.5,"summary":"...","strengths":["..."],"weaknesses":["..."],"errors":[{"type":"grammar","original":"...","correction":"...","explanation":"..."}],"criteria":{"Task Response":6.5,"Coherence and Cohesion":6.5,"Lexical Resource":6.5,"Grammatical Range and Accuracy":6.5},"rewrite":"...","coaching":["native-professional thinking/structuring/speaking step 1","step 2","step 3","step 4"]}';
+    const sys = 'You are a strict, experienced IELTS examiner and a native-professional English mentor. Evaluate the learner text. Give a precise half-band score (e.g. 6.5), a 2-3 sentence summary, 3 strengths, 3 weaknesses, a list of 3-6 concrete vocabulary upgrades (basic word/phrase → a precise Band 8+ alternative, each with a one-line reason), a list of concrete grammatical errors with exact corrections and explanations, sub-scores for each official criterion out of 9, a full Band 9 rewrite of the entire text that preserves the learner\'s ideas, and 4 coaching steps that teach the student HOW to think and speak like a native professional (mindset, structure, phrasing habits, self-review routine).';
+    const usr = 'Register: ' + (kind === 'speaking' ? 'IELTS Speaking (Part 2 transcript)' : 'IELTS Writing Task 2 essay') + (opts.prompt ? '\nExam task prompt: "' + opts.prompt + '"' : '') + '\n\n"Here is the text:\n' + text.slice(0, 6000) + '"\n\nOutput ONLY strict JSON:\n{"band":6.5,"summary":"...","strengths":["..."],"weaknesses":["..."],"vocab":[{"original":"basic word/phrase","upgraded":"precise Band 8+ alternative","why":"why it lifts the band"}],"errors":[{"type":"grammar","original":"...","correction":"...","explanation":"..."}],"criteria":{"Task Response":6.5,"Coherence and Cohesion":6.5,"Lexical Resource":6.5,"Grammatical Range and Accuracy":6.5},"rewrite":"...","coaching":["native-professional thinking/structuring/speaking step 1","step 2","step 3","step 4"]}';
     const raw = await gemini(sys, usr, true);
     const data = raw ? parseJson(raw) : null;
     if (!data || typeof data.band === 'undefined') return { demo: true, kind, ...fallbackEvaluate(text, kind) };
@@ -453,7 +484,8 @@
       errors: Array.isArray(data.errors) ? data.errors.slice(0, 8).map((e) => ({ type: String(e.type || 'grammar'), original: String(e.original || ''), correction: String(e.correction || ''), explanation: String(e.explanation || '') })) : [],
       criteria: data.criteria || {},
       rewrite: String(data.rewrite || '').trim(),
-      coaching: Array.isArray(data.coaching) ? data.coaching.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6) : []
+      coaching: Array.isArray(data.coaching) ? data.coaching.map(String).map((s) => s.trim()).filter(Boolean).slice(0, 6) : [],
+      vocab: Array.isArray(data.vocab) ? data.vocab.slice(0, 6).map((v) => ({ original: String(v.original || ''), upgraded: String(v.upgraded || ''), why: String(v.why || '') })) : []
     };
   }
 
@@ -507,7 +539,7 @@
               <p class="text-sm text-[#f5f0e6]/75 mt-1">${esc(w.definition)}</p>
               <p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ${esc(w.collocation)}</p>
               <p class="text-xs text-[#f5f0e6]/55 italic mt-1">“${esc(w.example)}”</p>
-              ${w.tip ? `<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">🧠 Mentor:</b> ${esc(w.tip)}</p>` : ''}
+              ${w.tip ? `<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">${esc(mentorName())}:</b> ${esc(w.tip)}</p>` : ''}
             </div>
             <button id="aiwb-add-${i}" class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-[rgba(212,175,55,0.4)] text-[#d4af37] hover:bg-[rgba(212,175,55,0.12)] transition" onclick="window.IELTS_AI.wordBankAddOne(${i})">＋ Save</button>
           </div>
@@ -724,7 +756,7 @@
   function renderEvaluation(res) {
     if (res.error) { openModal('📝 Evaluator', '<p class="text-sm text-rose-300">' + esc(res.message) + '</p>'); return; }
     const title = $('#ielts-ai-modal-title');
-    if (title) title.textContent = res.demo ? '📝 AI Evaluation (demo)' : '📝 AI Evaluation';
+    if (title) title.textContent = (res.demo ? '📝 AI Evaluation (demo)' : '📝 AI Evaluation') + ' · ' + mentorName();
     let body = '';
     body += '<div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-5 mb-4">';
     body += '<div class="flex flex-wrap items-center gap-5">';
@@ -743,7 +775,10 @@
       body += '<div class="mb-4"><p class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2">⚠ To improve</p><ul class="space-y-1">' + res.weaknesses.map((s) => '<li class="text-sm text-[#f5f0e6]/75 flex gap-2"><span>•</span><span>' + esc(s) + '</span></li>').join('') + '</ul></div>';
     }
     if (res.coaching && res.coaching.length) {
-      body += '<div class="mb-4 bg-gradient-to-br from-[rgba(124,58,237,0.12)] to-[rgba(217,70,239,0.08)] border border-[rgba(124,58,237,0.3)] rounded-xl p-4"><p class="text-xs font-bold text-[#e879f9] uppercase tracking-widest mb-2">🧠 Mentor coaching · think &amp; speak like a native professional</p><ol class="space-y-2">' + res.coaching.map((s, i) => '<li class="text-sm text-[#f5f0e6]/85 flex gap-3"><span class="shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">' + (i + 1) + '</span><span>' + esc(s) + '</span></li>').join('') + '</ol></div>';
+      body += '<div class="mb-4 bg-gradient-to-br from-[rgba(124,58,237,0.12)] to-[rgba(217,70,239,0.08)] border border-[rgba(124,58,237,0.3)] rounded-xl p-4"><p class="text-xs font-bold text-[#e879f9] uppercase tracking-widest mb-2">' + esc(mentorName()) + '’s coaching · think &amp; speak like a native professional</p><ol class="space-y-2">' + res.coaching.map((s, i) => '<li class="text-sm text-[#f5f0e6]/85 flex gap-3"><span class="shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">' + (i + 1) + '</span><span>' + esc(s) + '</span></li>').join('') + '</ol></div>';
+    }
+    if (res.vocab && res.vocab.length) {
+      body += '<div class="mb-4"><p class="text-xs font-bold text-sky-300 uppercase tracking-widest mb-2">↑ Vocabulary upgrades · lexical precision</p><div class="space-y-2">' + res.vocab.map((v) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(56,189,248,0.25)] rounded-lg p-3"><p class="text-sm"><span class="text-[#f5f0e6]/60 line-through">' + esc(v.original || '…') + '</span> → <span class="text-sky-300 font-semibold">' + esc(v.upgraded || '…') + '</span></p><p class="text-xs text-[#f5f0e6]/50 mt-1">' + esc(v.why || '') + '</p></div>').join('') + '</div></div>';
     }
     if (res.errors && res.errors.length) {
       body += '<div class="mb-4"><p class="text-xs font-bold text-rose-400 uppercase tracking-widest mb-2">✎ Grammar &amp; accuracy fixes</p><div class="space-y-2">' + res.errors.map((e) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(248,113,113,0.2)] rounded-lg p-3"><p class="text-xs text-[#f5f0e6]/40 uppercase tracking-wide">' + esc(e.type) + '</p><p class="text-sm text-[#f5f0e6]/85 mt-1">✗ <span class="text-rose-300 line-through">' + esc(e.original || '…') + '</span> → <span class="text-emerald-300 font-semibold">' + esc(e.correction || '…') + '</span></p><p class="text-xs text-[#f5f0e6]/50 mt-1">' + esc(e.explanation || '') + '</p></div>').join('') + '</div></div>';
@@ -762,7 +797,7 @@
   function evalSaveLib() {
     const r = window.__AIEVAL;
     if (!r) return;
-    const id = addToLibrary('evaluation', '🤖 AI Evaluation · Band ' + r.band, { kind: r.kind || 'writing', band: r.band, summary: r.summary, strengths: r.strengths, weaknesses: r.weaknesses, errors: r.errors, criteria: r.criteria, rewrite: r.rewrite, coaching: r.coaching });
+    const id = addToLibrary('evaluation', '🤖 AI Evaluation · Band ' + r.band, { kind: r.kind || 'writing', band: r.band, summary: r.summary, strengths: r.strengths, weaknesses: r.weaknesses, errors: r.errors, criteria: r.criteria, rewrite: r.rewrite, coaching: r.coaching, vocab: r.vocab });
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('ai-eval-' + id)) {
       window.IELTS_AUTH.addXp(10);
       window.IELTS_AUTH.addActivity('writing', 'AI evaluation · Band ' + r.band, 10);
@@ -787,6 +822,131 @@
     ta.select();
     try { document.execCommand('copy'); window.toast && window.toast('Band 9 rewrite copied 📋'); } catch (e2) {}
     document.body.removeChild(ta);
+  }
+
+  /* ============================================================
+     PRESENTATION — Writing Lab (Master Rami)
+     ============================================================ */
+  const WRITING_PROMPTS = [
+    { level: 'A2', type: 'Task 2', prompt: 'Some people think school children should be given more free time to play and relax. Do you agree? Give reasons and examples.', hint: 'Give your opinion in the first sentence, then two short paragraphs of support.' },
+    { level: 'A2', type: 'Task 2', prompt: 'Many students prefer to study at home rather than in a classroom. What do you think about this?', hint: 'Answer directly — do not open with "Nowadays…".' },
+    { level: 'A2', type: 'Task 1', prompt: 'The chart shows how a family from your city spends its monthly money. Write a short report of the main features.', hint: 'Start with an overview sentence: "Overall, most of the budget goes to food and housing."' },
+    { level: 'B1', type: 'Task 2', prompt: 'Advertising influences what people buy. To what extent do you agree or disagree?', hint: 'Take one clear position and test a counter-argument in the middle paragraph.' },
+    { level: 'B1', type: 'Task 2', prompt: 'Many people move to big cities for work. Discuss the advantages and disadvantages of living in a large city.', hint: 'Discuss both sides fairly, then give your own judgment in the conclusion.' },
+    { level: 'B1', type: 'Task 1', prompt: 'The table shows the number of tourists visiting four countries between 2015 and 2020. Write a short report.', hint: 'Report numbers precisely: "nearly doubled", "a slight fall of 12%" — never give your opinion.' },
+    { level: 'B2', type: 'Task 2', prompt: 'Some people believe that university education should be free for everyone, while others think students should pay. Discuss both views and give your own opinion.', hint: 'Cost-benefit logic: contrast public good with funding reality, then give your stance.' },
+    { level: 'B2', type: 'Task 2', prompt: 'Technology makes teenagers less able to communicate face to face. To what extent do you agree?', hint: 'Avoid extremes — a balanced extent ("largely but not entirely") reads more Band 7.' },
+    { level: 'B2', type: 'Task 1', prompt: 'The graph shows the percentage of people working from home in three countries over ten years. Write a report.', hint: 'Compare trends ("in contrast, Denmark climbed steadily") before quoting data.' },
+    { level: 'C1', type: 'Task 2', prompt: 'Economic growth is often prioritised over environmental protection. Discuss the implications of this priority and argue for a more sustainable balance.', hint: 'Abstract nouns carry the argument: sustainability, trade-offs, long-term viability.' },
+    { level: 'C1', type: 'Task 2', prompt: 'In many societies the gap between rich and poor is widening. What are the causes, and what measures could governments take?', hint: 'Separate causes from solutions strictly — two clean movements, not mixed paragraphs.' },
+    { level: 'C1', type: 'Task 1', prompt: 'The charts compare expenditure on healthcare in four European countries. Write a detailed report highlighting the most significant differences.', hint: 'Managerial tone: "the most striking difference is…" — then select, not list everything.' }
+  ];
+
+  function learnerLevel() {
+    try {
+      const pc = window.IELTS_AUTH && window.IELTS_AUTH.getScoped ? window.IELTS_AUTH.getScoped('placement', null) : null;
+      if (pc && pc.lastLevel && pc.lastLevel.name) return pc.lastLevel.name;
+    } catch (e) { /* ignore */ }
+    return 'B1';
+  }
+
+  function promptPool(level, type) {
+    return WRITING_PROMPTS.filter((p) => p.level === level && p.type === type);
+  }
+
+  function writingLabHtml(level, type) {
+    const pool = promptPool(level, type);
+    const options = pool.length
+      ? pool.map((p) => '<option value="' + esc(p.prompt + '||' + p.hint) + '">' + esc(p.prompt.length > 70 ? p.prompt.slice(0, 70) + '…' : p.prompt) + '</option>').join('')
+      : '<option value="free">No prompt for this level yet — use a free topic</option>';
+    const box = pool.length
+      ? '<p class="text-sm text-[#f5f0e6]/75 bg-[rgba(20,18,15,0.7)] border border-[rgba(212,175,55,0.2)] rounded-lg px-4 py-3 italic">' + esc(pool[0].prompt) + '</p>' + (pool[0].hint ? '<p class="text-[11px] text-[#e879f9]/70 mt-1.5">' + esc(pool[0].hint) + ' — stick to the word goal: 250+ words for Task 2, 150+ for Task 1.</p>' : '')
+      : '<p class="text-xs text-[#f5f0e6]/50 italic">Choose a free topic below and type your own question in the box that appears.</p>';
+    return `
+      <div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
+        <p class="text-sm text-[#f5f0e6]/85 leading-relaxed">${esc(mentorGreeting())}</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        ${field('wl-level', 'Your level', '', level, { select: true, options: ['A2', 'B1', 'B2', 'C1'] })}
+        ${field('wl-type', 'Task type', '', type, { select: true, options: ['Task 2', 'Task 1'] })}
+      </div>
+      <label class="block mb-3">
+        <span class="text-xs font-bold text-[#f5f0e6]/70 uppercase tracking-wide mb-1 block">Choose a prompt</span>
+        <select id="wl-prompt" class="w-full bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-2.5 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none">${options}<option value="free">✏️ Free topic (write your own question in the box below)</option></select>
+      </label>
+      <div id="wl-prompt-box" class="mb-3">${box}</div>
+      <label class="block mb-3">
+        <span class="text-xs font-bold text-[#f5f0e6]/70 uppercase tracking-wide mb-1 block">Your essay</span>
+        <textarea id="wl-text" rows="9" class="w-full bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-3 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none" placeholder="Write your answer here — ${esc(mentorName())} will grade it against the official band descriptors, fix your grammar, upgrade your vocabulary and coach your thinking."></textarea>
+      </label>
+      <div class="flex items-center gap-3 mt-4">
+        ${gradientBtn('⚡ Evaluate with ' + esc(mentorName()), 'window.IELTS_AI.writingLabLive()')}
+        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">🔐 AI Settings</button>
+      </div>`;
+  }
+
+  function openWritingLab(opts) {
+    opts = opts || {};
+    const lvl = (opts.level && ['A2', 'B1', 'B2', 'C1'].indexOf(opts.level) >= 0) ? opts.level : learnerLevel();
+    const type = opts.type === 'Task 1' ? 'Task 1' : 'Task 2';
+    openModal('✍️ ' + esc(mentorShort()) + ' Writing Lab', writingLabHtml(lvl, type));
+    bindWritingLab();
+  }
+
+  function bindWritingLab() {
+    const body = $('#ielts-ai-modal-body');
+    if (!body) return;
+    const syncPrompt = () => {
+      const sel = body.querySelector('#wl-prompt');
+      const box = body.querySelector('#wl-prompt-box');
+      if (!sel || !box) return;
+      const val = sel.value || '';
+      if (val === 'free') {
+        box.innerHTML = '<label class="block"><span class="text-xs font-bold text-[#f5f0e6]/70 uppercase tracking-wide mb-1 block">Your own task</span><input id="wl-prompt-text" type="text" placeholder="e.g. Do the benefits of social media outweigh the drawbacks?" class="w-full bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-2.5 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none" /></label>';
+        return;
+      }
+      const parts = val.split('||');
+      box.innerHTML = '<p class="text-sm text-[#f5f0e6]/75 bg-[rgba(20,18,15,0.7)] border border-[rgba(212,175,55,0.2)] rounded-lg px-4 py-3 italic">' + esc(parts[0] || '') + '</p>' + (parts[1] ? '<p class="text-[11px] text-[#e879f9]/70 mt-1.5">' + esc(parts[1]) + ' — stick to the word goal: 250+ words for Task 2, 150+ for Task 1.</p>' : '');
+    };
+    const reOpt = () => {
+      const level = (body.querySelector('#wl-level') || {}).value || 'B1';
+      const type = (body.querySelector('#wl-type') || {}).value || 'Task 2';
+      const sel = body.querySelector('#wl-prompt');
+      if (!sel) return;
+      const prev = sel.value;
+      const pool = promptPool(level, type);
+      sel.innerHTML = (pool.length ? pool.map((p) => '<option value="' + esc(p.prompt + '||' + p.hint) + '">' + esc(p.prompt.length > 70 ? p.prompt.slice(0, 70) + '…' : p.prompt) + '</option>').join('') : '<option value="free">No prompt for this level yet — use a free topic</option>') + '<option value="free">✏️ Free topic (write your own question in the box below)</option>';
+      if (prev && prev !== 'free') {
+        let ok = false;
+        for (let i = 0; i < sel.options.length; i++) if (sel.options[i].value === prev) ok = true;
+        if (ok) sel.value = prev;
+      }
+      syncPrompt();
+    };
+    const levelSel = body.querySelector('#wl-level');
+    const typeSel = body.querySelector('#wl-type');
+    const promptSel = body.querySelector('#wl-prompt');
+    if (levelSel) levelSel.onchange = reOpt;
+    if (typeSel) typeSel.onchange = reOpt;
+    if (promptSel) promptSel.onchange = syncPrompt;
+    syncPrompt();
+  }
+
+  async function writingLabLive() {
+    const body = $('#ielts-ai-modal-body');
+    if (!body) return;
+    const text = (body.querySelector('#wl-text') || {}).value || '';
+    if (text.trim().split(/\s+/).filter(Boolean).length < 40) { window.toast && window.toast('Write at least 40 words first ✍️'); return; }
+    const sel = body.querySelector('#wl-prompt');
+    const val = sel ? sel.value : '';
+    let prompt = '';
+    if (val === 'free') prompt = (body.querySelector('#wl-prompt-text') || {}).value || '';
+    else if (val) prompt = val.split('||')[0];
+    const title = $('#ielts-ai-modal-title');
+    if (title) title.textContent = 'Grading your essay with the official band descriptors…';
+    body.innerHTML = loader('Master Rami is applying the official IELTS band descriptors to your essay…');
+    const res = await evaluateWriting({ text, kind: 'writing', prompt });
+    renderEvaluation(res);
   }
 
   /* ============================================================
@@ -824,7 +984,7 @@
     const it = c.myLibrary.find((x) => x.id === id);
     if (!it) return;
     if (it.kind === 'wordbank') {
-      openModal('✦ AI Word Bank', '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p>' + (w.tip ? '<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">🧠 Mentor:</b> ' + esc(w.tip) + '</p>' : '') + '</div>').join('') + '</div>');
+      openModal('✦ AI Word Bank', '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p>' + (w.tip ? '<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">' + esc(mentorName()) + ':</b> ' + esc(w.tip) + '</p>' : '') + '</div>').join('') + '</div>');
     } else if (it.kind === 'passage') {
       window.__AIP = it.payload;
       openModal('📖 ' + esc(it.payload.title), '<div id="ai-library-practice"></div>');
@@ -1041,11 +1201,11 @@
         try {
           if (window.IELTS_AUTH.completeClaim('ai-roadmap-' + plan.generatedAt)) {
             window.IELTS_AUTH.addXp(15);
-            window.IELTS_AUTH.addActivity('study', 'AI mentor generated a personalised 4-week roadmap (' + plan.days.length + ' days)', 15);
+            window.IELTS_AUTH.addActivity('study', mentorName() + ' generated a personalised 4-week roadmap (' + plan.days.length + ' days)', 15);
           }
         } catch (e) { /* ignore */ }
       }
-      window.toast && window.toast('🧠 Your AI mentor roadmap is ready — open Study Plan');
+      window.toast && window.toast(mentorName() + ' has built your roadmap — open Study Plan ✦');
       return plan;
     }).catch(() => null);
   }
@@ -1059,29 +1219,27 @@
 
   /* ---------- roadmap UI ---------- */
   function roadmapCTA() {
-    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-5 shadow-lg"><div class="flex flex-wrap items-center justify-between gap-3"><div><p class="font-extrabold text-white text-lg">🧠 Your AI Mentor Roadmap</p><p class="text-white/80 text-sm mt-0.5">Your placement results unlock a tailor-made 4-week day-by-day plan blending IELTS tasks with core English mastery.</p></div><button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">⚡ Generate my roadmap</button></div></div>';
+    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-6 shadow-lg"><div class="flex flex-wrap items-center justify-between gap-4"><div><p class="font-extrabold text-white text-lg">' + esc(mentorLabel()) + '</p><p class="text-[15px] font-bold text-white/90 mt-0.5">Your personalised 4-week roadmap</p><p class="text-white/75 text-sm mt-1 max-w-md">Complete the placement test and I will build your day-by-day plan — IELTS tasks blended with core English mastery, every day coached.</p></div><button class="px-6 py-2.5 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">Generate my roadmap</button></div></div>';
   }
 
   function roadmapCardHtml(plan) {
-    const first = (plan.days || []).slice(0, 4);
     const badge = plan.demo
       ? '<span class="text-[10px] font-bold text-[#e879f9] bg-white/15 border border-white/30 px-1.5 py-0.5 rounded">demo</span>'
       : '<span class="text-[10px] font-bold text-emerald-300 bg-black/20 border border-white/30 px-1.5 py-0.5 rounded">AI live</span>';
     const focusChips = (plan.focus || []).length
-      ? '<div class="flex flex-wrap gap-1.5 mt-2">' + plan.focus.map((f) => '<span class="text-[10px] font-bold text-white bg-[rgba(255,255,255,0.18)] border border-white/25 px-2 py-0.5 rounded-full capitalize">Focus: ' + esc(f) + '</span>').join('') + '</div>'
+      ? '<div class="flex flex-wrap gap-1.5 mt-2">' + plan.focus.map((f) => '<span class="text-[10px] font-bold text-white bg-[rgba(255,255,255,0.18)] border border-white/25 px-2 py-0.5 rounded-full capitalize">' + esc(f) + '</span>').join('') + '</div>'
       : '';
-    const dayCards = first.map((d) => '<div class="bg-black/15 border border-white/20 rounded-lg px-3 py-2 flex items-center gap-2"><span class="text-base">' + esc(d.icon) + '</span><div class="min-w-0"><p class="text-xs font-bold text-white truncate">Day ' + d.day + ': ' + esc(d.title) + '</p><p class="text-[11px] text-white/70 truncate">' + esc(d.mentor || d.desc) + '</p></div></div>').join('');
-    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-5 shadow-lg">'
-      + '<div class="flex flex-wrap items-start justify-between gap-3">'
+    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-6 shadow-lg">'
+      + '<div class="flex flex-wrap items-start justify-between gap-4">'
       + '<div class="min-w-0 flex-1">'
-      + '<div class="flex flex-wrap items-center gap-2 mb-1"><p class="font-extrabold text-white text-lg">🧠 AI Mentor Roadmap</p>' + badge + '</div>'
-      + '<p class="text-white/85 text-sm leading-relaxed">' + esc(plan.summary || '') + '</p>'
+      + '<div class="flex flex-wrap items-center gap-2 mb-1"><p class="font-extrabold text-white text-lg">' + esc(mentorLabel()) + ' · 4-Week Roadmap</p>' + badge + '</div>'
+      + '<p class="text-white/85 text-sm leading-relaxed max-w-2xl">' + esc(plan.summary || '') + '</p>'
       + focusChips
-      + '<div class="grid sm:grid-cols-2 gap-1.5 mt-3">' + dayCards + '</div>'
+      + '<p class="text-[11px] text-white/70 mt-3">' + (plan.days || []).length + ' daily tasks · writing sessions open in the ' + esc(mentorName()) + ' Writing Lab</p>'
       + '</div>'
       + '<div class="flex flex-col gap-2 shrink-0">'
-      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">🗺️ Open full roadmap</button>'
-      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-white border border-white/40 hover:bg-white/10 transition" onclick="window.IELTS_AI && window.IELTS_AI.regenerateRoadmap()">↺ Regenerate</button>'
+      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">Open full roadmap</button>'
+      + '<button class="px-4 py-2 rounded-lg text-sm font-bold text-white border border-white/40 hover:bg-white/10 transition" onclick="window.IELTS_AI && window.IELTS_AI.regenerateRoadmap()">Regenerate</button>'
       + '</div>'
       + '</div>'
       + '</div>';
@@ -1096,7 +1254,7 @@
 
   async function regenerateRoadmap() {
     const root = $('#ai-roadmap-root');
-    if (root) root.innerHTML = '<div class="text-center py-8 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl"><div class="mx-auto w-10 h-10 rounded-full border-2 border-white/30 border-t-white animate-spin"></div><p class="text-sm text-white/90 mt-3">Your AI mentor is designing your 4-week roadmap…</p></div>';
+    if (root) root.innerHTML = '<div class="text-center py-8 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl"><div class="mx-auto w-10 h-10 rounded-full border-2 border-white/30 border-t-white animate-spin"></div><p class="text-sm text-white/90 mt-3">' + esc(mentorName()) + ' is designing your 4-week roadmap…</p></div>';
     let profile = null;
     try {
       const pc = window.IELTS_AUTH && window.IELTS_AUTH.getScoped ? window.IELTS_AUTH.getScoped('placement', null) : null;
@@ -1107,9 +1265,9 @@
     mountRoadmap();
     if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim('ai-roadmap-' + plan.generatedAt)) {
       window.IELTS_AUTH.addXp(15);
-      window.IELTS_AUTH.addActivity('study', 'Regenerated AI mentor roadmap', 15);
+      window.IELTS_AUTH.addActivity('study', 'Regenerated ' + mentorName() + ' roadmap', 15);
     }
-    window.toast && window.toast(plan.demo ? 'Roadmap generated (demo)' : 'Your AI mentor roadmap is ready 🧠');
+    window.toast && window.toast(plan.demo ? 'Roadmap generated (demo)' : mentorName() + ' has built your roadmap ✦');
   }
 
   function openRoadmapModal() {
@@ -1127,18 +1285,24 @@
     (plan.days || []).forEach((d) => { weeks[Math.floor((d.day - 1) / 7)] && weeks[Math.floor((d.day - 1) / 7)].push(d); });
     const weekHtml = weeks.map((wdays, wi) => {
       if (!wdays.length) return '';
-      return '<div class="mb-4"><div class="flex items-center justify-between mb-2"><p class="text-sm font-extrabold text-[#d4af37]">Week ' + (wi + 1) + '</p><p class="text-[10px] text-[#f5f0e6]/50 uppercase tracking-widest">Days ' + (wi * 7 + 1) + '–' + (wi * 7 + wdays.length) + '</p></div><div class="space-y-2">' + wdays.map((d) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-3"><div class="flex items-start gap-3"><span class="text-xl shrink-0">' + esc(d.icon) + '</span><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><p class="text-sm font-bold text-[#f5f0e6]">Day ' + d.day + ': ' + esc(d.title) + '</p><span class="text-[10px] uppercase text-[#e879f9] border border-[rgba(232,121,249,0.35)] px-1.5 py-0.5 rounded capitalize">' + esc(d.skill) + '</span></div><p class="text-xs text-[#f5f0e6]/65 mt-1 leading-relaxed">' + esc(d.desc) + '</p><p class="text-xs text-[#e879f9]/70 mt-1.5"><b class="text-[#e879f9]">Mentor:</b> ' + esc(d.mentor || '—') + '</p></div><button class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.launchPlanDay(\'' + d.action + '\')">Start</button></div></div>').join('') + '</div></div>';
+      return '<div class="mb-4"><div class="flex items-center justify-between mb-2"><p class="text-sm font-extrabold text-[#d4af37]">Week ' + (wi + 1) + '</p><p class="text-[10px] text-[#f5f0e6]/50 uppercase tracking-widest">Days ' + (wi * 7 + 1) + '–' + (wi * 7 + wdays.length) + '</p></div><div class="space-y-2">' + wdays.map((d) => {
+      const labBtn = (d.skill === 'writing' || d.action === 'writing')
+        ? '<button class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-[rgba(212,175,55,0.4)] hover:bg-[rgba(212,175,55,0.12)] transition" onclick="window.IELTS_AI && window.IELTS_AI.openWritingLab()">✍️ Lab</button>'
+        : '';
+      return '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl px-4 py-3"><div class="flex items-center gap-3"><span class="text-lg shrink-0">' + esc(d.icon) + '</span><div class="min-w-0 flex-1"><p class="text-sm font-bold text-[#f5f0e6]">Day ' + d.day + ': ' + esc(d.title) + '</p><p class="text-xs text-[#f5f0e6]/65 mt-0.5">' + esc(d.desc) + '</p><p class="text-xs text-[#e879f9]/70 mt-1"><b class="text-[#e879f9]">' + esc(mentorName()) + ':</b> ' + esc(d.mentor || '—') + '</p></div><div class="flex flex-col gap-2 shrink-0">' + labBtn + '<button class="px-3 py-1.5 rounded-lg text-xs font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.launchPlanDay(\'' + d.action + '\')">Start</button></div></div></div>';
+    }).join('') + '</div></div>';
     }).join('');
     const skills = plan.demo ? '<p class="text-[11px] text-[#f5f0e6]/50 italic mb-3">Heuristic demo roadmap — with an AI key (or on the live deployment) mentor tips become fully personalised.</p>' : '';
-    openModal('🧠 AI Mentor · 4-Week Roadmap', `
+    openModal(mentorLabel() + ' · 4-Week Roadmap', `
       <div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
-        <p class="text-sm text-[#f5f0e6]/85 leading-relaxed">${esc(plan.summary || '')}</p>
+        <p class="text-sm text-[#f5f0e6]/90 font-semibold mb-2">${esc(mentorGreeting())}</p>
+        <p class="text-sm text-[#f5f0e6]/75 leading-relaxed">${esc(plan.summary || '')}</p>
         ${(plan.focus || []).length ? '<div class="flex flex-wrap gap-1.5 mt-2">' + plan.focus.map((f) => '<span class="text-[10px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.4)] px-2 py-0.5 rounded-full capitalize">Weak focus: ' + esc(f) + '</span>').join('') + '</div>' : ''}
       </div>
       ${skills}
       ${weekHtml}
       <div class="flex items-center justify-between gap-3 flex-wrap pt-2">
-        <p class="text-xs text-[#f5f0e6]/50">Every day blends an IELTS task with core English mastery and a native-professional mentor tip.</p>
+        <p class="text-xs text-[#f5f0e6]/50">Every day blends an IELTS task with core English mastery — writing days open ${esc(mentorName())}’s Writing Lab.</p>
         <button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI && window.IELTS_AI.regenerateRoadmap()">↺ Regenerate</button>
       </div>`);
   }
@@ -1168,6 +1332,7 @@
     wordBankLive, wordBankAddOne, wordBankAddAll, wordBankSaveLib,
     passageLive, passageSaveLib,
     evalLive, evalSaveLib, copyRewrite,
+    openWritingLab, writingLabLive,
     renderPassagePractice, practiceCheck,
     listByKind, removeFromLibrary,
     generateStudyPlan, getStudyPlan, saveStudyPlan, buildRoadmapFromPlacement,

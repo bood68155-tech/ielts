@@ -373,6 +373,12 @@
       <h3 class="text-lg font-bold text-[#f5f0e6] mb-4">Detailed Review</h3>
       <div class="space-y-2 mb-6">${reviewRows}</div>
 
+      <div class="mb-6 rounded-2xl bg-gradient-to-r from-[rgba(212,175,55,0.15)] to-[rgba(232,121,249,0.1)] border border-[rgba(212,175,55,0.3)] p-4 text-left">
+        <p class="text-sm font-bold text-[#f5f0e6]">Master Rami has built your personalised 4-week roadmap</p>
+        <p class="text-xs text-[#f5f0e6]/55 mt-1">Daily tasks target your weakest skills — writing days open the Writing Lab.</p>
+        <button class="mt-3 w-full py-3 bg-[#d4af37] hover:bg-[#b8962e] text-[#14120f] font-bold rounded-xl transition" onclick="IELTS_PLACEMENT.continueToRoadmap()">Continue to your roadmap →</button>
+      </div>
+
       <div class="flex gap-3">
         <button class="btn-secondary text-sm" onclick="IELTS_PLACEMENT.back()">← Back</button>
         <button class="btn-primary text-sm" onclick="IELTS_PLACEMENT.start()">🔁 Retake</button>
@@ -380,6 +386,13 @@
   }
 
   function back() { stopTimer(); state.view = 'home'; render(); }
+
+  function continueToRoadmap() {
+    if (window.showSection) window.showSection('study-plan');
+    if (window.IELTS_AI && window.IELTS_AI.openRoadmapModal) {
+      setTimeout(function () { try { window.IELTS_AI.openRoadmapModal(); } catch (e) { /* ignore */ } }, 250);
+    }
+  }
 
   /* ---------- onboarding prompt ---------- */
   /* After sign-in, a brand-new user who has never placed is offered the
@@ -430,5 +443,5 @@
 
   if (window.IELTS_AUTH && window.IELTS_AUTH.onUserChange) window.IELTS_AUTH.onUserChange(maybePrompt);
 
-  window.IELTS_PLACEMENT = { render, start, answer, prev, next, back, maybePrompt, dismissPrompt, startFromPrompt };
+  window.IELTS_PLACEMENT = { render, start, answer, prev, next, back, continueToRoadmap, maybePrompt, dismissPrompt, startFromPrompt };
 })();

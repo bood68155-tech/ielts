@@ -114,7 +114,8 @@
         window.showSection('readings');
         break;
       case 'writing':
-        window.showSection('writing-coach');
+        if (window.IELTS_AI && window.IELTS_AI.openWritingLab) window.IELTS_AI.openWritingLab();
+        else window.showSection('writing-coach');
         break;
       case 'speaking':
         window.showSection('speaking-sim');
@@ -170,7 +171,7 @@
     var overallCard = '<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">' +
       '<div class="flex flex-wrap items-center justify-between gap-4">' +
       '<div>' +
-      '<p class="text-sm text-slate-500 font-medium">🍉 4-Week IELTS Study Plan</p>' +
+      '<p class="text-sm text-slate-500 font-medium">Master Rami · 4-Week IELTS Roadmap</p>' +
       '<p class="text-2xl font-extrabold text-slate-900 mt-1">' + completedDays + ' / ' + totalDays + ' days completed</p>' +
       '<p class="text-sm text-slate-500 mt-1">You are on <strong class="text-brand-600">' + WEEKS[currentWeekIdx].name + ': ' + WEEKS[currentWeekIdx].subtitle + '</strong></p>' +
       '</div>' +
@@ -184,7 +185,7 @@
       '<div class="mt-4 h-2 bg-slate-100 rounded-full overflow-hidden">' +
       '<div class="h-full bg-gradient-to-r from-palestine-green to-palestine-green/70 rounded-full transition-all duration-500" style="width:' + overallPct + '%"></div>' +
       '</div>' +
-      '<p class="text-xs text-slate-400 mt-2">Complete all 28 daily tasks to finish your IELTS preparation journey.</p>' +
+      '<p class="text-xs text-slate-400 mt-2">Complete all 28 daily tasks to finish your IELTS preparation journey. <button class="underline text-brand-600 font-semibold" onclick="window.IELTS_AI && window.IELTS_AI.openWritingLab && window.IELTS_AI.openWritingLab()">✍️ Open the Writing Lab</button></p>' +
       '</div>';
 
     /* ---- Weekly cards ---- */
@@ -283,7 +284,7 @@
       '<p class="text-slate-600 leading-relaxed mb-6">' + esc(day.desc) + '</p>' +
       (done ? '<div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-center"><p class="text-emerald-700 font-semibold">✅ This task is completed!</p></div>' : '') +
       '<div class="flex gap-3">' +
-      '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">Open ' + esc(day.title.split(' ')[0]) + ' Tool</button>' +
+      '<button onclick="window.STUDY_PLAN.launchFromModal(\'' + action + '\')" class="flex-1 py-3 ' + sc.btn + ' text-white rounded-xl font-bold transition">' + (action === 'writing' ? 'Open the ' + esc(window.IELTS_AI && window.IELTS_AI.openWritingLab ? 'Writing Lab' : 'Writing Tool') : 'Open ' + esc(day.title.split(' ')[0]) + ' Tool') + '</button>' +
       (!done
         ? '<button onclick="window.STUDY_PLAN.completeFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-palestine-green hover:bg-palestine-green/90 text-white rounded-xl font-bold transition">Mark Complete ✓</button>'
         : '<button onclick="window.STUDY_PLAN.uncompleteFromModal(\'' + dayId + '\')" class="flex-1 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition">Undo ✓</button>') +
