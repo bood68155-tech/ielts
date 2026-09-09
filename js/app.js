@@ -103,6 +103,7 @@
     if (name === 'vocab-trainer' && window.IELTS_VOCAB_TRAINER) window.IELTS_VOCAB_TRAINER.render();
     if (name === 'wss' && window.IELTS_WSS) window.IELTS_WSS.render();
     if (name === 'placement' && window.IELTS_PLACEMENT) window.IELTS_PLACEMENT.render();
+    if (name === 'teacher-chat' && window.IELTS_RAMI_CHAT) window.IELTS_RAMI_CHAT.render();
     if (name === 'band' && window.IELTS_BAND) window.IELTS_BAND.render();
     if (name === 'awl' && window.IELTS_AWL) window.IELTS_AWL.render();
     if (name === 'reading-master' && window.IELTS_READMASTER) window.IELTS_READMASTER.render();
@@ -224,9 +225,9 @@
     ];
     $('#dashboard-stats').innerHTML = stats.map((s) => `
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-2xl p-4 shadow-sm">
-        <div class="text-2xl mb-1">${s.icon}</div>
-        <div class="text-xl font-extrabold text-[#d4af37]">${s.value}</div>
-        <div class="text-xs text-[#f5f0e6]/60 font-medium">${s.label} · ${s.sub}</div>
+        <div class="text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1">${s.label}</div>
+        <div class="text-2xl font-extrabold text-[#d4af37]">${s.value}</div>
+        <div class="text-[11px] text-[#f5f0e6]/50 mt-0.5">${s.sub}</div>
       </div>`).join('');
 
     if (user) renderNextStepsRoadmap(user);
@@ -245,7 +246,6 @@
       el.innerHTML = `
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-8 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-start gap-4">
-            <span class="text-4xl">🧭</span>
             <div>
               <h2 class="text-xl font-extrabold text-[#f5f0e6]">Start with your Roadmap</h2>
               <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">Teacher Rami (الأستاذ رامي) will generate your random placement test, confirm your exact level, and map a personalised 4-week study path with a live band estimate.</p>

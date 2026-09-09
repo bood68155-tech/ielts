@@ -237,6 +237,7 @@
           <button data-section="band-calc" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('band-calc')">🧮 Band Calc</button>
           <button data-section="wss" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('wss')">✍️🗣️ Studio</button>
           <button data-section="placement" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('placement')">📋 Placement</button>
+          <button data-section="teacher-chat" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('teacher-chat')">🗨️ Chat &amp; Speak</button>
           <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')">👤 Profile</button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
@@ -271,6 +272,7 @@
       <button data-section="band-calc" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('band-calc')">🧮 Band Calc</button>
       <button data-section="wss" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('wss')">✍️🗣️ Studio</button>
       <button data-section="placement" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('placement')">📋 Placement</button>
+      <button data-section="teacher-chat" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('teacher-chat')">🗨️ Chat &amp; Speak</button>
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')">👤 Profile</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 text-sm font-medium text-[#ff6b6b]">Sign out</button>
     </nav>
@@ -332,8 +334,9 @@
             </div>
             <p class="text-[#f5f0e6]/70 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
             <div class="flex flex-wrap gap-3">
-              <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]">📋 Open Study Plan</button>
-              <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]">🎓 Training</button>
+              <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]">Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]">Training</button>
+              <button onclick="showSection('teacher-chat')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)]">🗨️ Chat &amp; Speak</button>
             </div>
           </div>
         </div>
@@ -344,7 +347,7 @@
       <div id="dashboard-auth-banner"></div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
       <div id="dashboard-roadmap"></div>
-      <h2 class="text-xl font-bold text-[#f5f0e6] mb-4">⚡ Quick Practice</h2>
+      <h2 class="text-xl font-bold text-[#f5f0e6] mb-4">Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening-master')">
           <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]">🎧</div>
@@ -396,6 +399,7 @@
     <section id="section-vocab-trainer" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vocab-trainer-content"></div></div></section>
     <section id="section-wss" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="wss-content"></div></div></section>
     <section id="section-placement" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="placement-content"></div></div></section>
+    <section id="section-teacher-chat" class="section-view hidden"><div class="max-w-3xl mx-auto px-4 py-8"><div id="teacher-chat-content"></div></div></section>
     <section id="section-band" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="bandsys-content"></div></div></section>
     <section id="section-band-calc" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="band-calc-content"></div></div></section>
     <section id="section-awl" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="awl-content"></div></div></section>
@@ -459,6 +463,7 @@
   <script src="js/band-score.js"></script>
   <script src="js/ai-key.js" onerror="this.remove&&this.remove()"></script>
   <script src="js/ai-engine.js"></script>
+  <script src="js/teacher-chat.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

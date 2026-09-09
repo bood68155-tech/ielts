@@ -2779,3 +2779,87 @@ header > div > div {
 #auth-screen .text-green-700 {
   color: #15803d !important;
 }
+
+/* ============================================================
+   Teacher Rami — Chat & Speak Lab
+   ============================================================ */
+.tc-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(20, 18, 15, 0.97);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #d4af37;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tc-fab::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  animation: tc-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+.tc-fab:hover { background: rgba(212, 175, 55, 0.12); }
+.tc-fab.open { opacity: 0; pointer-events: none; }
+@keyframes tc-pulse {
+  0% { transform: scale(0.98); opacity: 0.9; }
+  70% { transform: scale(1.18); opacity: 0; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+.tc-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 84px;
+  z-index: 85;
+  width: min(420px, calc(100vw - 32px));
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.97);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.tc-messages { scrollbar-width: thin; scrollbar-color: rgba(212, 175, 55, 0.4) transparent; }
+.tc-messages::-webkit-scrollbar { width: 6px; }
+.tc-messages::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.35); border-radius: 99px; }
+.tc-messages::-webkit-scrollbar-track { background: transparent; }
+.tc-chips { scrollbar-width: none; }
+.tc-chips::-webkit-scrollbar { display: none; }
+.tc-chip {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(212, 175, 55, 0.95);
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.tc-chip:hover { background: rgba(212, 175, 55, 0.16); }
+.tc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.8);
+  display: inline-block;
+  animation: tc-bounce 1.2s ease-in-out infinite;
+}
+.tc-dot:nth-child(2) { animation-delay: 0.15s; }
+.tc-dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes tc-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}

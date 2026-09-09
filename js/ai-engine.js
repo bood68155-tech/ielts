@@ -86,7 +86,7 @@
   }
 
   function demoBanner() {
-    return '<p class="text-[11px] text-[#f5f0e6]/50 mb-4 bg-[rgba(217,70,239,0.08)] border border-[rgba(217,70,239,0.25)] rounded-lg px-3 py-2">⚡ <b class="text-[#e879f9]">Demo mode</b> — no AI key configured. Add a Gemini API key to get live AI-generated content. <button class="underline text-[#d4af37] hover:text-[#f5f0e6]" onclick="window.IELTS_AI.openSettings()">AI Settings</button></p>';
+    return '<p class="text-[11px] text-[#f5f0e6]/50 mb-4 bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.25)] rounded-lg px-3 py-2"><b class="text-[#d4af37]">' + esc(mentorName()) + ' (' + MENTOR.ar + ')</b> is coaching you from his built-in knowledge pack. Add a model key in <button class="underline text-[#d4af37] hover:text-[#f5f0e6]" onclick="window.IELTS_AI.openSettings()">' + esc(mentorName()) + '’s studio settings</button> to unlock fully live, personal tutoring.</p>';
   }
 
   function loader(msg) {
@@ -493,7 +493,7 @@
      PRESENTATION — Word bank modal
      ============================================================ */
   function openWordBankModal() {
-    openModal('✨ AI Word Bank Generator', `
+    openModal("✧ " + mentorName() + "'s Word Bank", `
       ${demoBanner()}
       ${field('aiwb-topic', 'Topic', 'e.g. Climate change, Urbanisation, Artificial intelligence…', 'Climate change')}
       <div class="grid grid-cols-2 gap-3">
@@ -501,8 +501,8 @@
         ${field('aiwb-band', 'Band goal', '', 'Band 8-9', { select: true, options: ['Band 8-9', 'Band 7', 'Band 7-8', 'Band 6-7'] })}
       </div>
       <div class="flex items-center gap-3 mt-4">
-        ${gradientBtn('⚡ Generate word bank', 'window.IELTS_AI.wordBankLive()')}
-        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">🔐 AI Settings</button>
+        ${gradientBtn('Generate word bank', 'window.IELTS_AI.wordBankLive()')}
+        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">${esc(mentorName())}’s settings</button>
       </div>`);
     const body = $('#ielts-ai-modal-body');
     const cnt = body.querySelector('#aiwb-count');
@@ -519,7 +519,7 @@
     if (title) title.textContent = 'Generating word bank…';
     body.innerHTML = loader('Building your ' + count + '-word ' + band + ' bank for “' + topic + '”…');
     const res = await generateWordBank({ topic, count, band });
-    if (title) title.textContent = res.demo ? '✨ AI Word Bank (demo)' : '✨ AI Word Bank';
+    if (title) title.textContent = res.demo ? "✧ " + mentorName() + "'s Word Bank (built-in)" : "✧ " + mentorName() + "'s Word Bank";
     const saved = [];
     body.innerHTML = `
       <div class="mb-4 flex items-center justify-between flex-wrap gap-3">
@@ -601,7 +601,7 @@
      PRESENTATION — Passage builder modal
      ============================================================ */
   function openPassageModal(topic, kind) {
-    openModal('🧠 AI Passage Builder', `
+    openModal("✧ " + mentorName() + "'s Reading Studio", `
       ${demoBanner()}
       <div class="grid grid-cols-2 gap-3">
         ${field('aipb-type', 'Type', '', kind === 'listening' ? 'Listening' : 'Reading', { select: true, options: ['Reading', 'Listening'] })}
@@ -610,8 +610,8 @@
       ${field('aipb-topic', 'Topic', 'e.g. renewable energy, remote work, space exploration…', topic || 'renewable energy')}
       ${field('aipb-questions', 'Questions (3-6)', '', '5', { type: 'number' })}
       <div class="flex items-center gap-3 mt-4">
-        ${gradientBtn('⚡ Build my passage', 'window.IELTS_AI.passageLive()')}
-        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">🔐 AI Settings</button>
+        ${gradientBtn('Build my passage', 'window.IELTS_AI.passageLive()')}
+        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">${esc(mentorName())}’s settings</button>
       </div>`);
     const body = $('#ielts-ai-modal-body');
     const el = body.querySelector('#aipb-questions');
@@ -630,7 +630,7 @@
     body.innerHTML = loader('Writing a Cambridge-style ' + kind + ' passage about “' + topic + '”…');
     const res = await generatePassage({ topic, kind, band, questions });
     if (!res.id) res.id = 'ai-live-' + Date.now().toString(36);
-    if (title) title.textContent = res.demo ? '🧠 AI Passage (demo)' : '🧠 AI Passage';
+    if (title) title.textContent = res.demo ? "✧ " + mentorName() + "'s Reading Studio (built-in)" : "✧ " + mentorName() + "'s Reading Studio";
     window.__AIP = res;
     body.innerHTML = `
       <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -727,7 +727,7 @@
      PRESENTATION — Evaluator modal
      ============================================================ */
   function openEvaluationModal(text, kind) {
-    openModal('📝 AI Writing & Speech Evaluator', `
+    openModal("✧ " + mentorName() + "'s Writing & Speech Evaluator", `
       ${demoBanner()}
       ${field('aieval-kind', 'Register', '', kind === 'speaking' ? 'Speaking transcript' : 'Writing (Task 2)', { select: true, options: ['Writing (Task 2)', 'Writing (Task 1)', 'Speaking transcript'] })}
       <label class="block mb-3">
@@ -735,8 +735,8 @@
         <textarea id="aieval-text" rows="8" class="w-full bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-3 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none" placeholder="Paste your essay or speaking answer here…">${esc(text || '')}</textarea>
       </label>
       <div class="flex items-center gap-3 mt-4">
-        ${gradientBtn('⚡ Evaluate with AI', 'window.IELTS_AI.evalLive()')}
-        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">🔐 AI Settings</button>
+        ${gradientBtn('Evaluate my work', 'window.IELTS_AI.evalLive()')}
+        <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">${esc(mentorName())}’s settings</button>
       </div>`);
   }
 
@@ -756,7 +756,7 @@
   function renderEvaluation(res) {
     if (res.error) { openModal('📝 Evaluator', '<p class="text-sm text-rose-300">' + esc(res.message) + '</p>'); return; }
     const title = $('#ielts-ai-modal-title');
-    if (title) title.textContent = (res.demo ? '📝 AI Evaluation (demo)' : '📝 AI Evaluation') + ' · ' + mentorName();
+    if (title) title.textContent = (res.demo ? '📝 Evaluation (built-in)' : '📝 Evaluation') + ' · ' + mentorName();
     let body = '';
     body += '<div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-5 mb-4">';
     body += '<div class="flex flex-wrap items-center gap-5">';
@@ -880,7 +880,7 @@
         <textarea id="wl-text" rows="9" class="w-full bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-lg px-4 py-3 text-sm text-[#f5f0e6] focus:border-[rgba(212,175,55,0.6)] outline-none" placeholder="Write your answer here — ${esc(mentorName())} will grade it against the official band descriptors, fix your grammar, upgrade your vocabulary and coach your thinking."></textarea>
       </label>
       <div class="flex items-center gap-3 mt-4">
-        ${gradientBtn('⚡ Evaluate with ' + esc(mentorName()), 'window.IELTS_AI.writingLabLive()')}
+        ${gradientBtn('Evaluate with ' + esc(mentorName()), 'window.IELTS_AI.writingLabLive()')}
         <button class="px-5 py-2.5 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="window.IELTS_AI.openSettings()">🔐 AI Settings</button>
       </div>`;
   }
@@ -984,7 +984,7 @@
     const it = c.myLibrary.find((x) => x.id === id);
     if (!it) return;
     if (it.kind === 'wordbank') {
-      openModal('✦ AI Word Bank', '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p>' + (w.tip ? '<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">' + esc(mentorName()) + ':</b> ' + esc(w.tip) + '</p>' : '') + '</div>').join('') + '</div>');
+      openModal("✧ " + mentorName() + "'s Word Bank", '<div class="grid gap-3">' + (it.payload.words || []).map((w) => '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl p-4"><div class="flex items-center gap-2"><p class="font-extrabold text-[#f5f0e6]">' + esc(w.word) + '</p><span class="text-[10px] text-[#f5f0e6]/40 uppercase">' + esc(w.pos) + '</span></div><p class="text-sm text-[#f5f0e6]/75 mt-1">' + esc(w.definition) + '</p><p class="text-xs text-[#e879f9] mt-1"><b>Collocation:</b> ' + esc(w.collocation) + '</p><p class="text-xs text-[#f5f0e6]/55 italic mt-1">"' + esc(w.example) + '"</p>' + (w.tip ? '<p class="text-xs text-[#f5f0e6]/70 mt-1.5 bg-[rgba(124,58,237,0.1)] border border-[rgba(124,58,237,0.3)] rounded-md px-2 py-1.5"><b class="text-[#e879f9]">' + esc(mentorName()) + ':</b> ' + esc(w.tip) + '</p>' : '') + '</div>').join('') + '</div>');
     } else if (it.kind === 'passage') {
       window.__AIP = it.payload;
       openModal('📖 ' + esc(it.payload.title), '<div id="ai-library-practice"></div>');
@@ -1006,12 +1006,12 @@
 
   function openSettings() {
     const c = cfg();
-    openModal('🔐 AI Settings', `
-      <p class="text-sm text-[#f5f0e6]/70 mb-4 leading-relaxed">The AI Engine uses the <b class="text-[#d4af37]">Google Gemini API</b> directly from the browser. Get a free key at <span class="text-[#d4af37]">aistudio.google.com/apikey</span> and paste it below. Without a key, everything runs in <b class="text-[#e879f9]">Demo mode</b>.</p>
-      ${field('ai-key', 'Gemini API key', 'Paste your API key', c.key, { type: 'password' })}
+    openModal('✧ ' + mentorName() + ' (أستاذ رامي) — Studio Settings', `
+      <p class="text-sm text-[#f5f0e6]/70 mb-4 leading-relaxed">These keys power <b class="text-[#d4af37]">${mentorName()} (أستاذ رامي)</b>’s live coaching. Get a free model key at <span class="text-[#d4af37]">aistudio.google.com/apikey</span> and paste it below. Without a key, everything still works — he coaches from his built-in knowledge pack.</p>
+      ${field('ai-key', 'Model API key', 'Paste your API key', c.key, { type: 'password' })}
       ${field('ai-model', 'Model', '', c.model, { select: true, options: ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash'] })}
       <div class="flex items-center gap-3 mt-4">
-        ${gradientBtn('💾 Save settings', 'window.IELTS_AI.saveSettings()')}
+        ${gradientBtn('Save settings', 'window.IELTS_AI.saveSettings()')}
         ${c.key ? '<button class="px-5 py-2.5 rounded-lg text-sm font-bold text-rose-300 border border-[rgba(248,113,113,0.3)] hover:bg-[rgba(248,113,113,0.1)] transition" onclick="window.IELTS_AI.clearSettings()">Remove key</button>' : ''}
       </div>
       <p id="ai-key-msg" class="text-xs text-[#f5f0e6]/50 mt-3"></p>`);
@@ -1023,8 +1023,8 @@
     const model = (body.querySelector('#ai-model') || {}).value || DEFAULT_MODEL;
     if (window.IELTS_AUTH) window.IELTS_AUTH.setScoped('aikey', { key, model });
     const msg = $('#ai-key-msg');
-    if (msg) msg.textContent = key ? 'Saved — live AI generation is enabled. 🎉' : 'Key removed — running in demo mode.';
-    window.toast && window.toast(key ? 'AI key saved — live mode on 🚀' : 'No key — demo mode');
+    if (msg) msg.textContent = key ? 'Saved — ' + mentorName() + '’s live coaching is enabled.' : 'Key removed — ' + mentorName() + ' will use his built-in coaching pack.';
+    window.toast && window.toast(key ? 'Key saved — live coaching on' : 'No key — built-in coaching');
   }
 
   function clearSettings() {
@@ -1143,6 +1143,84 @@
       strengths: Array.isArray(data.strengths) ? data.strengths.map(String).slice(0, 3) : [],
       focus: Array.isArray(data.focus) ? data.focus.map(String).filter((f) => ['grammar', 'reading', 'listening', 'writing', 'speaking'].indexOf(f) >= 0).slice(0, 4) : [],
       nextStep: String(data.nextStep || '').trim().slice(0, 200)
+    };
+  }
+
+  /* ============================================================
+     Teacher Rami — Chat & Speak Lab
+     Daily live conversation coaching: Rami answers, corrects the
+     learner's English gently (with the "why"), and keeps the
+     conversation moving with one follow-up question.
+     ============================================================ */
+  const CHAT_THIRD_S = { go: 'goes', do: 'does', have: 'has', study: 'studies', try: 'tries', say: 'says', play: 'plays', work: 'works', live: 'lives', like: 'likes', want: 'wants', need: 'needs', know: 'knows', think: 'thinks', write: 'writes', read: 'reads', make: 'makes', take: 'takes', speak: 'speaks', talk: 'talks', eat: 'eats', watch: 'watches', teach: 'teaches' };
+  const CHAT_GERUND = (w) => {
+    const g = String(w).toLowerCase();
+    if (g.endsWith('ie')) return g.slice(0, -2) + 'ying';
+    if (g.endsWith('e')) return g.slice(0, -1) + 'ing';
+    return g + 'ing';
+  };
+
+  function fallbackTeacherReply(text) {
+    const corrections = [];
+    const t = String(text || '').trim();
+    const low = t.toLowerCase();
+
+    if (/\bi\b/.test(low) && !/\bI\b/.test(t)) {
+      corrections.push({ original: 'i', corrected: 'I', why: 'The pronoun “I” is always written with a capital letter in English, even mid-sentence.' });
+    }
+    const tps = low.match(/\b(he|she|it)\s+(go|do|have|study|try|say|play|work|live|like|want|need|know|think|write|read|make|take|speak|talk|eat|watch|teach)\b/);
+    if (tps && CHAT_THIRD_S[tps[2]]) {
+      corrections.push({ original: tps[1] + ' ' + tps[2], corrected: tps[1] + ' ' + CHAT_THIRD_S[tps[2]], why: 'With he / she / it in the present simple, the verb takes “s” (or “es”).' });
+    }
+    const yPron = low.match(/\b(you|they)\s+(is|was)\b/);
+    if (yPron) {
+      corrections.push({ original: yPron[1] + ' ' + yPron[2], corrected: yPron[1] + ' ' + (yPron[2] === 'is' ? 'are' : 'were'), why: 'Use “are / were” with you and they — “is / was” belongs with he, she and it.' });
+    }
+    const ger = low.match(/\b(enjoy|finish|avoid|consider|suggest|mind)\s+to\s+([a-z]+)\b/);
+    if (ger) {
+      corrections.push({ original: ger[1] + ' to ' + ger[2], corrected: ger[1] + ' ' + CHAT_GERUND(ger[2]), why: 'These verbs take the “-ing” form, not “to + verb”.' });
+    }
+
+    let reply;
+    if (/^(hi|hii+|hello|hey|salam|marhab[a-z]*|مرحبا|أهلا|اهلا|هلا)\b/i.test(t)) {
+      reply = 'Marhaba! I’m ' + MENTOR.name + ' (' + MENTOR.ar + '), your personal English coach. Tell me one thing: is speaking, writing, or exam strategy the biggest worry for you right now?';
+    } else if (/\b(how are you|كيف حالك|كيفك|شلونك|كيف الحال)\b/i.test(low)) {
+      reply = 'I am genuinely excellent — thank you for asking. Now I care more about you: on a scale of 1 to 10, how confident do you feel speaking English today?';
+    } else if (/\b(thank|شكرا|شكراً|تسلم)\b/i.test(low)) {
+      reply = 'You are most welcome. Small professional upgrade: “my pleasure” lands warmer than a plain “ok”. Now tell me — which phrase did you learn today that you actually used?';
+    } else if (!t) {
+      reply = 'Just write one or two sentences — anything. I will correct them the way a private tutor would, and we will build from there.';
+    } else {
+      reply = corrections.length
+        ? 'Nice — you wrote in English, and that is exactly how band scores climb. I fixed the small slips above; read each fix twice, out loud. Now push yourself: rewrite your sentence using the corrections.'
+        : 'That reads well — clear and natural. To make it shine even brighter, tell me the same idea again with one fresh word or a stronger linker like “on top of that”. What is the next thing you want to say?';
+    }
+    return { reply, corrections: corrections.slice(0, 4), demo: true };
+  }
+
+  async function teacherChat(opts) {
+    opts = opts || {};
+    const user = String(opts.user || '').trim().slice(0, 600);
+    const level = String(opts.level || 'B1 Intermediate');
+    const history = Array.isArray(opts.history) ? opts.history.slice(-12) : [];
+    const c = cfg();
+    if (!user) return { reply: 'Write something and I’ll respond — one honest sentence is all it takes.', corrections: [], demo: true };
+    if (!c.key && !useProxy()) return fallbackTeacherReply(user);
+    const sys = 'You are ' + MENTOR.name + ' (' + MENTOR.ar + '), the learner\'s personal IELTS English teacher — warm, sharp and encouraging, like a real tutor texting a student. Match the learner\'s language but always reply in English (unless they write in Arabic, then answer briefly in Arabic and switch back). Correct their English gently: for each mistake say what was wrong, why it is wrong, and the natural way a professional would say it. ALWAYS end your reply with ONE short follow-up question to keep the conversation alive. Keep the whole reply brief and human — never robotic, never a list of rules.';
+    const usr = 'Learner level: ' + level + '.\nRecent conversation:\n' + history.map((m) => (String(m.role) === 'user' ? 'Learner: ' : MENTOR.name + ': ') + String(m.text || '')).join('\n') + '\n\nNow respond to the learner\'s LATEST message: "' + user + '"\nOutput ONLY strict JSON:\n{"reply":"your warm reply ending in one question","corrections":[{"original":"mistaken phrase","corrected":"natural fix","why":"one-line reason"}]}';
+    const raw = await gemini(sys, usr, true);
+    const data = raw ? parseJson(raw) : null;
+    if (!data || !String(data.reply || '').trim()) return fallbackTeacherReply(user);
+    return {
+      reply: String(data.reply).trim().slice(0, 900),
+      corrections: Array.isArray(data.corrections)
+        ? data.corrections.map((cc) => ({
+            original: String((cc && cc.original) || '').trim().slice(0, 120),
+            corrected: String((cc && cc.corrected) || '').trim().slice(0, 120),
+            why: String((cc && cc.why) || '').trim().slice(0, 200)
+          })).filter((cc) => cc.original || cc.corrected).slice(0, 6)
+        : [],
+      demo: false
     };
   }
 
@@ -1382,7 +1460,7 @@
       return '<div class="bg-[rgba(20,18,15,0.85)] border border-[rgba(212,175,55,0.15)] rounded-xl px-4 py-3"><div class="flex items-center gap-3"><span class="text-lg shrink-0">' + esc(d.icon) + '</span><div class="min-w-0 flex-1"><p class="text-sm font-bold text-[#f5f0e6]">Day ' + d.day + ': ' + esc(d.title) + '</p><p class="text-xs text-[#f5f0e6]/65 mt-0.5">' + esc(d.desc) + '</p><p class="text-xs text-[#e879f9]/70 mt-1"><b class="text-[#e879f9]">' + esc(mentorName()) + ':</b> ' + esc(d.mentor || '—') + '</p></div><div class="flex flex-col gap-2 shrink-0">' + labBtn + '<button class="px-3 py-1.5 rounded-lg text-xs font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.launchPlanDay(\'' + d.action + '\')">Start</button></div></div></div>';
     }).join('') + '</div></div>';
     }).join('');
-    const skills = plan.demo ? '<p class="text-[11px] text-[#f5f0e6]/50 italic mb-3">Heuristic demo roadmap — with an AI key (or on the live deployment) mentor tips become fully personalised.</p>' : '';
+    const skills = plan.demo ? '<p class="text-[11px] text-[#f5f0e6]/50 italic mb-3">Built-in coaching roadmap — when live, mentor tips become fully personalised.</p>' : '';
     openModal(mentorLabel() + ' · 4-Week Roadmap', `
       <div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
         <p class="text-sm text-[#f5f0e6]/90 font-semibold mb-2">${esc(mentorGreeting())}</p>
@@ -1427,6 +1505,7 @@
     listByKind, removeFromLibrary,
     generateStudyPlan, getStudyPlan, saveStudyPlan, buildRoadmapFromPlacement,
     mountRoadmap, regenerateRoadmap, openRoadmapModal, launchPlanDay,
-    mentorTipFor, generatePlacementTest, analyzePlacement
+    mentorTipFor, generatePlacementTest, analyzePlacement,
+    teacherChat
   };
 })();
