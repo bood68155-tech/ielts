@@ -104,25 +104,52 @@
   }
 
   /* ================= Gemini client ================= */
+  const GEMINI_URL = (model) => 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
+
+  // Use the Vercel serverless proxy (reads GEMINI_API_KEY server-side)
+  // whenever we are on a deployed domain and no client-side key is set.
+  function useProxy() {
+    try {
+      if (typeof window === 'undefined' || typeof window.location === 'undefined') return false;
+      if (window.location.protocol === 'file:') return false;
+      const host = String(window.location.hostname || '').toLowerCase();
+      if (!host || host === 'localhost' || host === '127.0.0.1') return false;
+      return true;
+    } catch (e) { return false; }
+  }
+
   async function gemini(systemPrompt, userPrompt, jsonOut) {
     const c = cfg();
-    if (!c.key) return null;
+    if (!c.key && !useProxy()) return null;
     const models = [c.model || DEFAULT_MODEL].concat(FALLBACK_MODELS.filter((m) => m !== (c.model || DEFAULT_MODEL)));
     let lastErr = null;
     for (const model of models) {
       try {
-        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent?key=' + encodeURIComponent(c.key), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }],
-            generationConfig: Object.assign({ temperature: 0.85, maxOutputTokens: 4096 }, jsonOut ? { responseMimeType: 'application/json' } : {})
-          })
-        });
-        if (!res.ok) { lastErr = new Error('HTTP ' + res.status); if (res.status === 404) continue; throw lastErr; }
-        const data = await res.json();
-        const text = (((data.candidates || [])[0] || {}).content || {}).parts;
-        const out = Array.isArray(text) ? text.map((p) => p.text || '').join('') : '';
+        let out = '';
+        if (c.key) {
+          const res = await fetch(GEMINI_URL(model) + '?key=' + encodeURIComponent(c.key), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }],
+              generationConfig: Object.assign({ temperature: 0.85, maxOutputTokens: 4096 }, jsonOut ? { responseMimeType: 'application/json' } : {})
+            })
+          });
+          if (!res.ok) { lastErr = new Error('HTTP ' + res.status); if (res.status === 404) continue; throw lastErr; }
+          const data = await res.json();
+          const text = (((data.candidates || [])[0] || {}).content || {}).parts;
+          out = Array.isArray(text) ? text.map((p) => p.text || '').join('') : '';
+        } else {
+          const res = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model, system: systemPrompt, user: userPrompt, json: !!jsonOut })
+          });
+          if (!res.ok) return null;
+          const data = await res.json().catch(() => null);
+          if (!data || typeof data.text !== 'string' || !data.text.trim()) return null;
+          out = data.text;
+        }
         if (out.trim()) return out.trim();
         lastErr = new Error('Empty AI response');
       } catch (e) { lastErr = e; }
@@ -340,7 +367,7 @@
     const count = Math.min(12, Math.max(3, parseInt(opts.count, 10) || 6));
     const band = opts.band || 'Band 8-9';
     const c = cfg();
-    if (!c.key) return { demo: true, topic, band, words: fallbackWords(topic, count, band) };
+    if (!c.key && !useProxy()) return { demo: true, topic, band, words: fallbackWords(topic, count, band) };
     const sys = 'You are an expert IELTS academic vocabulary lexicographer. Generate a precise, error-free word bank of Band ' + band + ' academic vocabulary for the IELTS exam. Every field must be exam-appropriate: precise definitions, natural native collocations (word + partner words), and an IELTS-style example sentence in the specified topic. No invented words, no duplicate words.';
     const usr = 'Topic: ' + topic + '\nCount: ' + count + '\nOutput ONLY strict JSON with no commentary:\n{"words":[{"word":"...","pos":"noun/verb/adjective...","definition":"...","collocation":"..." ,"example":"..." ,"band":"Band 8-9"}...]}';
     const raw = await gemini(sys, usr, true);
@@ -364,7 +391,7 @@
     const band = opts.band || 'Band 7';
     const n = Math.min(6, Math.max(3, parseInt(opts.questions, 10) || 5));
     const c = cfg();
-    if (!c.key) return { demo: true, kind, topic, band, ...fallbackPassage(topic, kind, band, n) };
+    if (!c.key && !useProxy()) return { demo: true, kind, topic, band, ...fallbackPassage(topic, kind, band, n) };
     const sys = 'You are a Cambridge-exam IELTS passage writer. Write a ' + band + ' ' + (kind === 'listening' ? 'monologue transcript' : 'academic reading passage') + ' about the topic given. The passage must be cohesive, academic, roughly 250-300 words, with exactly N exam-style multiple-choice questions testing detail, vocabulary meaning, and global understanding. Answer keys and one-line explanations must quote or paraphrase the passage accurately.';
     const usr = 'Topic: ' + topic + '\nQuestions: ' + n + '\nOutput ONLY strict JSON:\n{"title":"...","text":"...","questions":[{"q":"...","opts":["A: ...","B: ...","C: ...","D: ..."],"a":"A","exp":"..."}...]}';
     const raw = await gemini(sys, usr, true);
@@ -387,7 +414,7 @@
       return { error: true, message: 'Please provide at least 40 words of text to evaluate.' };
     }
     const c = cfg();
-    if (!c.key) return { demo: true, kind, ...fallbackEvaluate(text, kind) };
+    if (!c.key && !useProxy()) return { demo: true, kind, ...fallbackEvaluate(text, kind) };
     const sys = 'You are a strict, experienced IELTS examiner with deep knowledge of the official band descriptors. Evaluate the learner text. Give a precise half-band score (e.g. 6.5), a 2-3 sentence summary, 3 strengths, 3 weaknesses, a list of concrete grammatical/lexical errors with exact corrections and explanations, sub-scores for each official criterion out of 9, and a full Band 9 rewrite of the entire text that preserves the learner\'s ideas.';
     const usr = 'Register: ' + (kind === 'speaking' ? 'IELTS Speaking (Part 2 transcript)' : 'IELTS Writing Task 2 essay') + '\n\n"Here is the text:\n' + text.slice(0, 6000) + '"\n\nOutput ONLY strict JSON:\n{"band":6.5,"summary":"...","strengths":["..."],"weaknesses":["..."],"errors":[{"type":"grammar","original":"...","correction":"...","explanation":"..."}],"criteria":{"Task Response":6.5,"Coherence and Cohesion":6.5,"Lexical Resource":6.5,"Grammatical Range and Accuracy":6.5},"rewrite":"..."}';
     const raw = await gemini(sys, usr, true);
