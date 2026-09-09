@@ -29,6 +29,23 @@
   const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your expert English teacher and mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think, write and phrase like a native professional.';
   const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
 
+  /* Teacher Rami's avatar — a sleek, gold-trimmed cartoon robot wearing a
+     traditional Palestinian keffiyeh (checked headwrap + shoulder drapes). */
+  const MENTOR_AVATAR =
+    '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">' +
+      '<defs><linearGradient id="ramFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4d4438"/><stop offset="1" stop-color="#151210"/></linearGradient></defs>' +
+      '<path d="M48 12 L48 6" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round"/><circle cx="48" cy="4.5" r="3" fill="#ffd766"/>' +
+      '<g fill="#1c1813" stroke="#d4af37" stroke-width="2"><rect x="24" y="45" width="9" height="15" rx="4"/><rect x="63" y="45" width="9" height="15" rx="4"/></g>' +
+      '<path d="M22 40 Q14 44 12 56 L10 76 Q20 82 26 70 L30 48 Z" fill="#efe9d9"/>' +
+      '<path d="M74 40 Q82 44 84 56 L86 76 Q76 82 70 70 L66 48 Z" fill="#efe9d9"/>' +
+      '<rect x="32" y="42" width="32" height="30" rx="10" fill="url(#ramFace)" stroke="#d4af37" stroke-width="2"/>' +
+      '<circle cx="42" cy="53" r="5" fill="#ffd766"/><circle cx="54" cy="53" r="5" fill="#ffd766"/>' +
+      '<path d="M40 63 Q48 68 56 63" fill="none" stroke="#ffd766" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<path d="M22 42 Q22 14 48 14 Q74 14 74 42 L68 48 Q48 40 28 48 Z" fill="#efe9d9"/>' +
+      '<g fill="#1c1a17"><rect x="34" y="22" width="4" height="4"/><rect x="42" y="20" width="4" height="4"/><rect x="50" y="22" width="4" height="4"/><rect x="58" y="20" width="4" height="4"/><rect x="66" y="22" width="4" height="4"/><rect x="38" y="30" width="4" height="4"/><rect x="46" y="28" width="4" height="4"/><rect x="54" y="30" width="4" height="4"/><rect x="62" y="28" width="4" height="4"/><rect x="14" y="52" width="4" height="4"/><rect x="18" y="60" width="4" height="4"/><rect x="74" y="52" width="4" height="4"/><rect x="78" y="60" width="4" height="4"/></g>' +
+      '<rect x="48" y="36" width="4" height="4" fill="#7a1116"/><rect x="16" y="56" width="4" height="4" fill="#7a1116"/><rect x="80" y="56" width="4" height="4" fill="#7a1116"/>' +
+    '</svg>';
+
   /* ================= scoped storage ================= */
   function cfg() {
     let c = null;
@@ -728,6 +745,13 @@
      ============================================================ */
   function openEvaluationModal(text, kind) {
     openModal("✧ " + mentorName() + "'s Writing & Speech Evaluator", `
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)] shrink-0">${MENTOR_AVATAR}</div>
+        <div>
+          <p class="font-extrabold text-[#f5f0e6]">${esc(mentorLabel())} <span class="text-[10px] font-bold uppercase tracking-widest bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] text-[#d4af37] rounded-full px-2 py-0.5 align-middle">Master Control</span></p>
+          <p class="text-[11px] text-[#f5f0e6]/55">Grades against the official band descriptors · grammar fixes · vocabulary upgrades · native coaching</p>
+        </div>
+      </div>
       ${demoBanner()}
       ${field('aieval-kind', 'Register', '', kind === 'speaking' ? 'Speaking transcript' : 'Writing (Task 2)', { select: true, options: ['Writing (Task 2)', 'Writing (Task 1)', 'Speaking transcript'] })}
       <label class="block mb-3">
@@ -863,7 +887,8 @@
       ? '<p class="text-sm text-[#f5f0e6]/75 bg-[rgba(20,18,15,0.7)] border border-[rgba(212,175,55,0.2)] rounded-lg px-4 py-3 italic">' + esc(pool[0].prompt) + '</p>' + (pool[0].hint ? '<p class="text-[11px] text-[#e879f9]/70 mt-1.5">' + esc(pool[0].hint) + ' — stick to the word goal: 250+ words for Task 2, 150+ for Task 1.</p>' : '')
       : '<p class="text-xs text-[#f5f0e6]/50 italic">Choose a free topic below and type your own question in the box that appears.</p>';
     return `
-      <div class="bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
+      <div class="flex items-start gap-3 bg-gradient-to-r from-[rgba(212,175,55,0.12)] to-transparent border border-[rgba(212,175,55,0.25)] rounded-xl p-4 mb-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)] shrink-0">${MENTOR_AVATAR}</div>
         <p class="text-sm text-[#f5f0e6]/85 leading-relaxed">${esc(mentorGreeting())}</p>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -1387,7 +1412,7 @@
 
   /* ---------- roadmap UI ---------- */
   function roadmapCTA() {
-    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-6 shadow-lg"><div class="flex flex-wrap items-center justify-between gap-4"><div><p class="font-extrabold text-white text-lg">' + esc(mentorLabel()) + '</p><p class="text-[15px] font-bold text-white/90 mt-0.5">Your personalised 4-week roadmap</p><p class="text-white/75 text-sm mt-1 max-w-md">Complete the placement test and I will build your day-by-day plan — IELTS tasks blended with core English mastery, every day coached.</p></div><button class="px-6 py-2.5 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">Generate my roadmap</button></div></div>';
+    return '<div class="bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl p-6 shadow-lg"><div class="flex flex-wrap items-center justify-between gap-4"><div class="flex items-center gap-3"><div class="w-14 h-14 rounded-full overflow-hidden bg-[#14120f] border-2 border-white/30 shadow-lg shrink-0">' + MENTOR_AVATAR + '</div><div><p class="font-extrabold text-white text-lg">' + esc(mentorLabel()) + ' <span class="text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white border border-white/30 rounded-full px-2 py-0.5 align-middle">Master Control</span></p><p class="text-[15px] font-bold text-white/90 mt-0.5">Your personalised 4-week roadmap</p><p class="text-white/75 text-sm mt-1 max-w-md">Complete the placement test and I will build your day-by-day plan — IELTS tasks blended with core English mastery, every day coached.</p></div></div><button class="px-6 py-2.5 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_AI && window.IELTS_AI.openRoadmapModal()">Generate my roadmap</button></div></div>';
   }
 
   function roadmapCardHtml(plan) {
@@ -1506,6 +1531,7 @@
     generateStudyPlan, getStudyPlan, saveStudyPlan, buildRoadmapFromPlacement,
     mountRoadmap, regenerateRoadmap, openRoadmapModal, launchPlanDay,
     mentorTipFor, generatePlacementTest, analyzePlacement,
-    teacherChat
+    teacherChat,
+    MENTOR_AVATAR
   };
 })();

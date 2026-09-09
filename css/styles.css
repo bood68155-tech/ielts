@@ -2825,6 +2825,12 @@ header > div > div {
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
   flex-shrink: 0;
 }
+.tc-fab-avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .tc-fab-chevron {
   font-size: 9px;
   color: rgba(212, 175, 55, 0.6);

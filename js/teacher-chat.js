@@ -33,6 +33,15 @@
     return String(s == null ? '' : s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
   }
 
+  /* Teacher Rami portrait — cartoon robot in a Palestinian keffiyeh */
+  const MENTOR_AVATAR = (window.IELTS_AI && window.IELTS_AI.MENTOR_AVATAR) ? window.IELTS_AI.MENTOR_AVATAR : '';
+  function ravi(sz, txtCls) {
+    if (MENTOR_AVATAR) {
+      return '<div class="' + sz + ' shrink-0 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)]">' + MENTOR_AVATAR + '</div>';
+    }
+    return '<div class="' + sz + ' shrink-0 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center ' + (txtCls || 'text-[11px]') + ' font-extrabold">ر</div>';
+  }
+
   function learnerLevel() {
     try {
       const u = window.IELTS_AUTH && window.IELTS_AUTH.getCurrentUser && window.IELTS_AUTH.getCurrentUser();
@@ -111,7 +120,7 @@
         '</div>';
     }
     return '<div class="flex items-start gap-2.5">' +
-      '<div class="w-7 h-7 shrink-0 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-[11px] font-extrabold">ر</div>' +
+      ravi('w-7 h-7', 'text-[11px]') +
       '<div class="max-w-[85%] bg-[rgba(245,240,230,0.07)] border border-[rgba(245,240,230,0.12)] text-[#f5f0e6] text-sm rounded-2xl rounded-tl-md px-4 py-2.5">' +
         '<p class="whitespace-pre-wrap">' + esc(m.text) + '</p>' +
         correctionHtml(m.corrections) +
@@ -122,7 +131,7 @@
 
   function typingHtml() {
     return '<div class="flex items-start gap-2.5">' +
-      '<div class="w-7 h-7 shrink-0 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-[11px] font-extrabold">ر</div>' +
+      ravi('w-7 h-7', 'text-[11px]') +
       '<div class="bg-[rgba(245,240,230,0.07)] border border-[rgba(245,240,230,0.12)] rounded-2xl rounded-tl-md px-4 py-3 flex items-center gap-1.5">' +
         '<span class="tc-dot"></span><span class="tc-dot"></span><span class="tc-dot"></span>' +
       '</div>' +
@@ -211,7 +220,7 @@
       '<div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl overflow-hidden shadow-xl">' +
         '<div class="flex items-center justify-between gap-3 px-5 py-4 border-b border-[rgba(212,175,55,0.2)] bg-[rgba(20,18,15,0.6)]">' +
           '<div class="flex items-center gap-3">' +
-            '<div class="w-11 h-11 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-sm font-extrabold">ر</div>' +
+            ravi('w-11 h-11', 'text-sm') +
             '<div>' +
               '<p class="font-extrabold text-[#f5f0e6]">Teacher Rami (الأستاذ رامي)</p>' +
               '<p class="text-[11px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>online — visits every message</p>' +
@@ -238,14 +247,14 @@
     return '<div id="tc-fab-wrap">' +
       '<button id="tc-fab" class="tc-fab" onclick="window.IELTS_RAMI_CHAT.togglePanel()" aria-label="Talk with Teacher Rami">' +
         '<span class="tc-fab-dot" aria-hidden="true"></span>' +
-        '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.845L3 20l1.154-3.145C3.41 15.43 3 13.77 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>' +
+        '<span class="tc-fab-avatar" aria-hidden="true">' + ravi('w-7 h-7', 'text-[11px]') + '</span>' +
         '<span class="tc-fab-label">Talk with Teacher Rami</span>' +
         '<span class="tc-fab-chevron">▲</span>' +
       '</button>' +
       '<div id="tc-panel" class="tc-panel hidden">' +
         '<div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-[rgba(212,175,55,0.2)] bg-[rgba(20,18,15,0.8)]">' +
           '<div class="flex items-center gap-2.5">' +
-            '<div class="w-9 h-9 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-xs font-extrabold">ر</div>' +
+            ravi('w-9 h-9', 'text-xs') +
             '<div><p class="font-bold text-[#f5f0e6] text-sm leading-tight">Teacher Rami</p><p class="text-[10px] text-emerald-400">online — replies instantly</p></div>' +
           '</div>' +
           '<button class="text-[#f5f0e6]/50 hover:text-[#f5f0e6] text-lg leading-none px-1" onclick="window.IELTS_RAMI_CHAT.togglePanel()" aria-label="Close chat">×</button>' +

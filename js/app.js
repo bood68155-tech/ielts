@@ -246,9 +246,10 @@
       el.innerHTML = `
         <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-8 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-start gap-4">
+            ${window.IELTS_AI && window.IELTS_AI.MENTOR_AVATAR ? '<div class="w-12 h-12 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)] shrink-0">' + window.IELTS_AI.MENTOR_AVATAR + '</div>' : ''}
             <div>
-              <h2 class="text-xl font-extrabold text-[#f5f0e6]">Start with your Roadmap</h2>
-              <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">Teacher Rami (الأستاذ رامي) will generate your random placement test, confirm your exact level, and map a personalised 4-week study path with a live band estimate.</p>
+              <h2 class="text-xl font-extrabold text-[#f5f0e6]">Start with your Roadmap <span class="text-[10px] font-bold uppercase tracking-widest bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] text-[#d4af37] rounded-full px-2 py-0.5 align-middle">Master Control</span></h2>
+              <p class="text-sm text-[#f5f0e6]/60 mt-1 max-w-lg leading-relaxed">الأستاذ رامي (Teacher Rami) is your master control: he generates a random placement test, confirms your exact level, and maps a personalised 4-week study path with a live band estimate.</p>
             </div>
           </div>
           <button onclick="showSection('placement')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] text-sm font-bold px-6 py-3 rounded-xl hover:bg-[#b8962e] transition shadow-md">Take Placement Test</button>

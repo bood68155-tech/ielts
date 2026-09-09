@@ -142,8 +142,13 @@
 
     $('#placement-content').innerHTML = `
       <div class="bg-gradient-to-r from-[rgba(124,58,237,0.18)] to-[rgba(217,70,239,0.08)] border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 mb-6">
-        <h2 class="text-2xl font-extrabold text-[#f5f0e6]">Level Placement Test</h2>
-        <p class="text-sm text-[#f5f0e6]/60 mt-1">Teacher Rami (الأستاذ رامي) generates a fresh random test, marks your answers, confirms your exact CEFR level and issues your personalised 4-week roadmap.</p>
+        <div class="flex items-center gap-4">
+          ${window.IELTS_AI && window.IELTS_AI.MENTOR_AVATAR ? '<div class="w-14 h-14 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)] shrink-0">' + window.IELTS_AI.MENTOR_AVATAR + '</div>' : ''}
+          <div>
+            <h2 class="text-2xl font-extrabold text-[#f5f0e6]">Level Placement Test <span class="text-[10px] font-bold uppercase tracking-widest bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] text-[#d4af37] rounded-full px-2 py-0.5 align-middle">Master Control</span></h2>
+            <p class="text-sm text-[#f5f0e6]/60 mt-1">الأستاذ رامي (Teacher Rami) generates a fresh random test, marks your answers, confirms your exact CEFR level and issues your personalised 4-week roadmap.</p>
+          </div>
+        </div>
       </div>
 
       ${c.completed ? `
