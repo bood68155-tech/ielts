@@ -6,26 +6,20 @@
   <title>IELTS PA - Band 1.0 to 9.0 Mastery System</title>
   <meta name="description" content="Free interactive IELTS practice: Listening, Reading, Writing and Speaking with timers, scoring and model answers." />
   <style>
+    /* Heritage background is composited via body::before (see css/styles.css).
+       The body itself stays flat so the full-viewport image is never repainted
+       on scroll — this keeps scrolling smooth on all devices. */
     body {
-      background-image: url("./assets/palestine-bg.jpg") !important;
-      background-size: cover !important;
-      background-position: center center !important;
-      background-attachment: fixed !important;
-      background-repeat: no-repeat !important;
-      background-color: transparent !important;
+      background-color: #0f172a;
       opacity: 1 !important;
       filter: none !important;
     }
-    
-    /* Ensure no dark overlays on body */
+
     body::before,
     body::after {
       content: none !important;
-      background: none !important;
-      opacity: 1 !important;
     }
-    
-    /* Ensure background images are fully visible */
+
     body > * {
       background-blend-mode: normal !important;
     }
@@ -242,7 +236,7 @@
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
           <button onclick="showSection('teacher-chat')" class="w-9 h-9 rounded-full overflow-hidden border-2 border-[rgba(212,175,55,0.6)] shadow-[0_0_12px_rgba(212,175,55,0.3)] shrink-0 cursor-pointer p-0 hover:scale-110 transition" title="Mentor Hub — Talk with Mr. Rami" aria-label="Mentor Hub — Talk with Mr. Rami">
-            <img src="rami-avatar.jpg" alt="Mr. Rami" class="w-full h-full object-cover block" />
+            <img src="rami-avatar.jpg" alt="Mr. Rami" class="w-full h-full object-cover block" decoding="async" />
           </button>
           <div id="user-chip" class="hidden items-center gap-2 bg-[rgba(245,240,230,0.1)] border border-[rgba(212,175,55,0.3)] pl-1 pr-3 py-1 backdrop-blur">
             <span id="user-avatar" class="w-7 h-7 bg-[rgba(20,18,15,0.95)] text-[#d4af37] flex items-center justify-center text-xs font-bold border border-[rgba(212,175,55,0.3)]">U</span>
@@ -423,7 +417,7 @@
         <div class="inline-flex flex-col items-center gap-3">
           <div class="relative">
             <div class="w-24 h-24 rounded-full overflow-hidden bg-[#14120f] ring-4 ring-[rgba(212,175,55,0.3)] shadow-lg">
-              <img src="rami-avatar.jpg" alt="Mr. Rami (أستاذ رامي)" class="w-full h-full object-cover block" />
+              <img src="rami-avatar.jpg" alt="Mr. Rami (أستاذ رامي)" class="w-full h-full object-cover block" loading="lazy" decoding="async" />
             </div>
           </div>
           <p class="font-bold text-[#f5f0e6]">Abdelrahman Osama</p>

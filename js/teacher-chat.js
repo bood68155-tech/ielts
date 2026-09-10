@@ -146,6 +146,7 @@
   function renderInto(root) {
     if (!root) return;
     root.innerHTML = messagesHtml(state.busy);
+    try { root.dataset.rendered = String(state.messages.length); } catch (e) { /* ignore */ }
     root.scrollTop = root.scrollHeight;
   }
 
@@ -162,12 +163,43 @@
     if (state.panelOpen) renderInto($('#tc-panel-messages'));
   }
 
+  /* Live, incremental rendering — appends only the newly arrived bubbles to the
+     shared message roots instead of rebuilding the entire HTML list on every
+     send, keeping typing, scrolling and long conversations smooth. */
+  function liveRoots() {
+    const roots = [];
+    const sec = $('#tc-messages'); if (sec) roots.push(sec);
+    if (state.panelOpen) { const p = $('#tc-panel-messages'); if (p && p !== sec) roots.push(p); }
+    return roots;
+  }
+
+  function appendBubbles(root) {
+    if (!root) return;
+    try {
+      const from = Math.max(0, parseInt(root.dataset.rendered || '0', 10));
+      root.dataset.rendered = String(state.messages.length);
+      const typingRow = (root.lastElementChild && root.lastElementChild.querySelector) ? root.lastElementChild : null;
+      if (typingRow && typingRow.querySelector('.tc-dot') && typingRow.parentNode === root) root.removeChild(typingRow);
+      let html = '';
+      for (let i = from; i < state.messages.length; i++) html += bubbleHtml(state.messages[i]);
+      if (state.busy) html += typingHtml();
+      if (html) {
+        if (root.insertAdjacentHTML) root.insertAdjacentHTML('beforeend', html);
+        else root.innerHTML += html;
+      }
+      while (root.children && root.children.length > 42) root.removeChild(root.firstElementChild);
+      root.scrollTop = root.scrollHeight;
+    } catch (e) { /* keep the chat resilient */ }
+  }
+
+  function updateLive() { liveRoots().forEach(appendBubbles); }
+
   async function send(text) {
     text = String(text || '').trim();
     if (!text || state.busy) return;
     push({ role: 'user', text });
     state.busy = true;
-    rerenderAll();
+    updateLive();
     try {
       const res = await (window.IELTS_AI && window.IELTS_AI.teacherChat
         ? window.IELTS_AI.teacherChat({
@@ -182,7 +214,7 @@
       push({ role: 'assistant', text: 'Something interrupted me — try that again, one sentence is fine.', corrections: [], demo: true });
     }
     state.busy = false;
-    rerenderAll();
+    updateLive();
   }
 
   function composerHtml(targetId) {

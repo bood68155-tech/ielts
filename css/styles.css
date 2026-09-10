@@ -7,28 +7,28 @@
 /* ============ PALESTINIAN HERITAGE BACKGROUND — FULLY VISIBLE ============ */
 
 html, body {
-  background-image: url('../assets/palestine-bg.jpg') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
   background-color: #0f172a !important;
   opacity: 1 !important;
   filter: none !important;
 }
 
-/* Ensure no full-width wrapper containers (if present) block the heritage image */
-#app,
-#main-wrapper,
-#root,
-body.bg-slate-50,
-body.bg-white,
-body.bg-gray-900 {
-  background-color: transparent !important;
-  background-image: none !important;
+/* Composited fixed heritage background — painted once and GPU-composited on
+   scroll, instead of repainting a full-viewport photo every frame. */
+body::before {
+  content: "" !important;
+  display: block !important;
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: url('../assets/palestine-bg.jpg') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  will-change: transform;
 }
 
-body::before, body::after {
+body::after {
   display: none !important;
 }
 
@@ -2875,7 +2875,8 @@ header > div > div {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
   overflow: hidden;
 }
-.tc-messages { scrollbar-width: thin; scrollbar-color: rgba(212, 175, 55, 0.4) transparent; }
+.tc-messages { scrollbar-width: thin; scroll-behavior: auto; scrollbar-color: rgba(212, 175, 55, 0.4) transparent; }
+.tc-messages > * { contain: layout style; }
 .tc-messages::-webkit-scrollbar { width: 6px; }
 .tc-messages::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.35); border-radius: 99px; }
 .tc-messages::-webkit-scrollbar-track { background: transparent; }

@@ -30,7 +30,7 @@
   const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
 
   /* Mr. Rami's official avatar — rami-avatar.jpg (kuffiyeh-robot portrait). */
-  const MENTOR_AVATAR = '<img class="rami-avatar" src="rami-avatar.jpg" alt="Mr. Rami (الأستاذ رامي)" loading="lazy" />';
+  const MENTOR_AVATAR = '<img class="rami-avatar" src="rami-avatar.jpg" alt="Mr. Rami (الأستاذ رامي)" loading="lazy" decoding="async" />';
 
   /* ================= scoped storage ================= */
   function cfg() {
