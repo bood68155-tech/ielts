@@ -34,8 +34,8 @@
   const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your expert English teacher and mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think, write and phrase like a native professional.';
   const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
 
-  /* Mr. Rami's official avatar — rami-avatar.jpg (kuffiyeh-robot portrait). */
-  const MENTOR_AVATAR = '<img class="rami-avatar" src="rami-avatar.jpg" alt="Mr. Rami (الأستاذ رامي)" loading="lazy" decoding="async" />';
+  /* Teacher Rami's official avatar — rami-avatar.jpg (kuffiyeh-robot portrait). */
+  const MENTOR_AVATAR = '<img class="rami-avatar" src="rami-avatar.jpg" alt="Teacher Rami (الأستاذ رامي)" loading="lazy" decoding="async" />';
 
   /* ================= scoped storage ================= */
   function cfg() {

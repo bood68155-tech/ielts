@@ -15,6 +15,10 @@
   let speakingRatings = {};   // current speaking stage ratings
   let audioUnavailable = false;
 
+  /* heritage icon tone per module colour */
+  const ICON_COLOR = { amber: 'text-amber-500', sky: 'text-sky-500', emerald: 'text-emerald-500', rose: 'text-rose-500', fuchsia: 'text-fuchsia-500', violet: 'text-violet-500' };
+  const iconColor = (m) => ICON_COLOR[m.color] || 'text-brand-600';
+
   /* ---------- text-to-speech (same approach as the main app) ---------- */
   function speak(text, onDone) {
     if (audioUnavailable || !('speechSynthesis' in window)) {
@@ -143,9 +147,9 @@
     if (active) { renderModule(); return; }
     $('#training-content').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
-        <p class="text-sm text-slate-500">Zero-to-hero skill training</p>
-        <p class="text-lg font-extrabold text-slate-900">🎓 Pick a path and level up, step by step</p>
-        <p class="text-sm text-slate-600 mt-1">Each module has 5 progressive stages. Complete a stage to earn XP and unlock the next one — finish all 5 to become a hero. 🦸</p>
+        <p class="text-sm text-slate-500">Zero-to-hero skill training · full-spectrum English</p>
+        <p class="text-lg font-extrabold text-slate-900"><span data-imi-icon="roadmap" data-imi-size="w-6 h-6" class="imi-icon-head"></span>Pick a path and level up, step by step</p>
+        <p class="text-sm text-slate-600 mt-1">Six progressive paths — from absolute-beginner Foundation to Grammar, Listening, Reading and band-9 Speaking. Complete a stage to earn XP and unlock the next; finish a module to become a hero.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
         ${TRAINING_MODULES.map(moduleCard).join('')}
@@ -159,8 +163,9 @@
     const label = allDone ? 'Completed 🦸' : done > 0 ? 'Continue training' : 'Start training';
     return `
       <div class="bg-white rounded-2xl border ${allDone ? 'border-emerald-200 ring-2 ring-emerald-100' : 'border-slate-200'} shadow-sm p-6 flex flex-col">
-        <div class="text-4xl mb-3">${m.icon}</div>
+        <span class="mb-3 inline-block ${iconColor(m)}" data-imi-icon="${m.icon}" data-imi-size="w-11 h-11"></span>
         <h3 class="text-lg font-extrabold text-slate-900">${m.name}</h3>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">${m.stages.length} stages · ${m.xpPerStage} XP each</span>
         <p class="text-sm text-slate-500 mt-1 leading-relaxed flex-1">${esc(m.desc)}</p>
         <div class="mt-4">
           <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
@@ -219,13 +224,15 @@
     $('#training-content').innerHTML = `
       <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
         <button class="text-sm text-slate-500 hover:text-slate-800 border border-slate-300 px-4 py-2 rounded-lg transition" onclick="IELTS_TRAINING.backToModules()">← All modules</button>
-        <span class="text-xs font-bold level-badge-sky px-3 py-1.5 rounded-full">${m.icon} ${m.name} · ${m.xpPerStage} XP per stage</span>
+        <span class="text-xs font-bold level-badge-sky px-3 py-1.5 rounded-full flex items-center"><span data-imi-icon="${m.icon}" data-imi-size="w-4 h-4" class="imi-nav-mini"></span>${m.name} · ${m.xpPerStage} XP per stage</span>
       </div>
       <div class="flex gap-2 mb-6">${steps}</div>
       <div id="train-stage"></div>`;
 
-    if (m.id === 'vocabulary') renderVocabStage(m, stage);
-    else if (m.id === 'listening') renderListeningStage(m, stage);
+    const kind = m.kind || m.id;
+    if (kind === 'vocab') renderVocabStage(m, stage);
+    else if (kind === 'listening') renderListeningStage(m, stage);
+    else if (kind === 'reading') renderReadingStage(m, stage);
     else renderSpeakingStage(m, stage);
   }
 
@@ -270,19 +277,20 @@
         </div>
       </div>`).join('');
 
+    const unit = m.id === 'grammar' ? 'rules' : 'words';
     $('#train-stage').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h3 class="text-xl font-extrabold text-slate-900">${m.icon} ${esc(stage.title)}</h3>
+            <h3 class="text-xl font-extrabold text-slate-900"><span data-imi-icon="${m.icon}" data-imi-size="w-5 h-5" class="imi-icon-head"></span>${esc(stage.title)}</h3>
             <p class="text-sm text-slate-500 mt-0.5">${esc(stage.focus)}</p>
           </div>
-          <span class="text-xs font-bold bg-brand-100 text-brand-700 px-3 py-1.5 rounded-full">Learn ${stage.words.length} words · ${stage.quiz.length} quiz questions</span>
+          <span class="text-xs font-bold bg-brand-100 text-brand-700 px-3 py-1.5 rounded-full">Learn ${stage.words.length} ${unit} · ${stage.quiz.length} quiz questions</span>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-5">${cards}</div>
       </div>
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h4 class="font-bold text-slate-900 mb-1">📝 Quick quiz</h4>
+        <h4 class="font-bold text-slate-900 mb-1"><span data-imi-icon="exam" data-imi-size="w-5 h-5" class="imi-icon-head"></span>Quick quiz</h4>
         <p class="text-sm text-slate-500 mb-5">Check you remember the words — score ${Math.round(stage.quiz.length / 2)}/5 or more to pass.</p>
         <div class="space-y-4">${quiz}</div>
         <div class="flex gap-3 mt-6">
@@ -325,7 +333,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h3 class="text-xl font-extrabold text-slate-900">${m.icon} ${esc(stage.title)}</h3>
+            <h3 class="text-xl font-extrabold text-slate-900"><span data-imi-icon="${m.icon}" data-imi-size="w-5 h-5" class="imi-icon-head"></span>${esc(stage.title)}</h3>
             <p class="text-sm text-slate-500 mt-0.5">${esc(stage.focus)}</p>
           </div>
           <div class="flex gap-2">
@@ -334,10 +342,10 @@
           </div>
         </div>
         <div id="train-transcript" class="hidden mt-4 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-600 leading-relaxed whitespace-pre-line"></div>
-        <p class="text-xs text-slate-400 mt-4">🎧 Audio is read aloud by your browser (text-to-speech). Listen once, then answer — replay as often as you need.</p>
+        <p class="text-xs text-slate-400 mt-3">Audio is read aloud by your browser (text-to-speech). Listen once, then answer — replay as often as you need.</p>
       </div>
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h4 class="font-bold text-slate-900 mb-1">🎯 Comprehension check</h4>
+        <h4 class="font-bold text-slate-900 mb-1"><span data-imi-icon="evaluate" data-imi-size="w-5 h-5" class="imi-icon-head"></span>Comprehension check</h4>
         <p class="text-sm text-slate-500 mb-5">Score ${Math.ceil(stage.questions.length / 2)}/4 or more to pass.</p>
         <div class="space-y-4">${questions}</div>
         <div class="flex gap-3 mt-6">
@@ -350,12 +358,76 @@
     $('#train-transcript').textContent = stage.script.join('\n\n');
   }
 
+  /* ---------- reading stage ---------- */
+  function renderReadingStage(m, stage) {
+    const questions = stage.questions.map((q, qi) => {
+      let control = '';
+      if (q.type === 'fill') {
+        control = '<input type="text" class="fill-input mt-3" placeholder="Type your answer…" oninput="IELTS_TRAINING.saveFill(' + qi + ', this.value)" />';
+      } else {
+        control = `
+          <div class="grid gap-2 mt-3" data-options>
+            ${q.options.map((opt, oi) => {
+              const letter = String.fromCharCode(65 + oi);
+              return '<button type="button" class="opt" data-letter="' + letter + '" onclick="IELTS_TRAINING.selectAnswer(' + qi + ', ' + "'" + letter + "'" + ', this)"><span class="inline-block w-5 text-slate-400 font-semibold">' + letter + '</span> ' + esc(opt) + '</button>';
+            }).join('')}
+          </div>`;
+      }
+      return `
+        <div class="q-card">
+          <div class="flex items-start gap-3">
+            <span class="q-number shrink-0">${qi + 1}</span>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-slate-800">${esc(q.q || q.question)}</p>
+              ${control}
+              <div class="explanation-slot mt-2"></div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const words = !stage.words || !stage.words.length ? '' : (
+      '<div id="train-glossary" class="hidden mt-4 bg-violet-50 border border-violet-200 rounded-xl p-4">' +
+        '<p class="text-xs font-bold uppercase tracking-widest text-violet-700 mb-2">Glossary</p>' +
+        '<div class="grid sm:grid-cols-2 gap-2">' +
+          stage.words.map((w) => '<p class="text-sm text-slate-700"><span class="font-semibold text-violet-800">' + esc(w.word) + '</span> — ' + esc(w.meaning) + '</p>').join('') +
+        '</div>' +
+      '</div>');
+
+    $('#train-stage').innerHTML = `
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 class="text-xl font-extrabold text-slate-900"><span data-imi-icon="${m.icon}" data-imi-size="w-5 h-5" class="imi-icon-head"></span>${esc(stage.title)}</h3>
+            <p class="text-sm text-slate-500 mt-0.5">${esc(stage.focus)}</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn-primary !py-2 text-xs" onclick="IELTS_TRAINING.playScript()">🔊 Read aloud</button>
+            ${stage.words && stage.words.length ? '<button class="btn-secondary !py-2 text-xs" onclick="IELTS_TRAINING.showGlossary()">Glossary</button>' : ''}
+          </div>
+        </div>
+        ${stage.tip ? '<div class="cue-card mt-4"><p class="text-sm font-semibold text-amber-800 mb-1">Strategy tip</p><p class="text-sm text-slate-600">' + esc(stage.tip) + '</p></div>' : ''}
+        <div class="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm text-slate-700 leading-relaxed space-y-3">${stage.text.map((p) => '<p>' + esc(p) + '</p>').join('')}</div>
+        ${words || '<p class="text-xs text-slate-400 mt-3">Read the passage carefully, then answer the questions below.</p>'}
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h4 class="font-bold text-slate-900 mb-1"><span data-imi-icon="evaluate" data-imi-size="w-5 h-5" class="imi-icon-head"></span>Comprehension check</h4>
+        <p class="text-sm text-slate-500 mb-5">Score ${Math.ceil(stage.questions.length * 0.6)}/${stage.questions.length} or more to pass.</p>
+        <div class="space-y-4">${questions}</div>
+        <div class="flex gap-3 mt-6">
+          <button class="btn-primary" onclick="IELTS_TRAINING.checkStage()">Check answers</button>
+          <button class="btn-secondary" onclick="IELTS_TRAINING.retryStage()">Clear answers</button>
+        </div>
+        <div id="train-result" class="mt-5"></div>
+      </div>`;
+  }
+
   /* ---------- speaking stage ---------- */
   function renderSpeakingStage(m, stage) {
     const prompts = stage.prompts.map((p, pi) => `
       <div class="q-card">
-        <p class="font-semibold text-slate-800 mb-1">🎤 ${pi + 1}. ${esc(p.prompt)}</p>
-        <p class="text-xs text-slate-500 mb-3">💡 ${esc(p.tip)}</p>
+        <p class="font-semibold text-slate-800 mb-1"><span data-imi-icon="speak" data-imi-size="w-4 h-4" class="imi-nav-mini"></span>${pi + 1}. ${esc(p.prompt)}</p>
+        <p class="text-xs text-slate-500 mb-3"><span data-imi-icon="spark" data-imi-size="w-3.5 h-3.5" class="imi-nav-mini"></span>${esc(p.tip)}</p>
         <div class="flex flex-wrap items-center gap-3 mb-3">
           <button class="btn-secondary !py-1.5 !px-3 text-xs" onclick="IELTS_TRAINING.playPrompt(${pi})">🔊 Hear model answer</button>
           <span class="text-xs text-slate-400">Say your answer aloud, then rate your confidence:</span>
@@ -372,7 +444,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h3 class="text-xl font-extrabold text-slate-900">${m.icon} ${esc(stage.title)}</h3>
+            <h3 class="text-xl font-extrabold text-slate-900"><span data-imi-icon="${m.icon}" data-imi-size="w-5 h-5" class="imi-icon-head"></span>${esc(stage.title)}</h3>
             <p class="text-sm text-slate-500 mt-0.5">${esc(stage.focus)}</p>
           </div>
           <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full">${stage.prompts.length} prompts to practise</span>
@@ -381,7 +453,7 @@
           <p class="text-sm font-semibold text-amber-800 mb-1">Topic: ${esc(stage.topic)}</p>
           <p class="text-sm text-slate-600">${esc(stage.tip)}</p>
         </div>
-        <p class="text-xs text-slate-400 mt-3">🗣️ Answer each prompt aloud for about 30 seconds. Compare with the model answer, then rate how confidently you spoke.</p>
+        <p class="text-xs text-slate-400 mt-3"><span data-imi-icon="speak" data-imi-size="w-4 h-4" class="imi-nav-mini"></span>Answer each prompt aloud for about 30 seconds. Compare with the model answer, then rate how confidently you spoke.</p>
       </div>
       <div class="space-y-4">${prompts}</div>
       <div class="mt-6 flex gap-3">
@@ -448,12 +520,18 @@
   function playScript() {
     const m = getModule(active.moduleId);
     const stage = m.stages[active.stageIdx];
-    window.toast && window.toast('🔊 Playing audio…');
-    speakLines(stage.script, 0);
+    const lines = stage.text || stage.script;
+    window.toast && window.toast('🔊 Playing…');
+    speakLines(lines, 0);
   }
 
   function showTranscript() {
     const el = $('#train-transcript');
+    if (el) el.classList.toggle('hidden');
+  }
+
+  function showGlossary() {
+    const el = $('#train-glossary');
     if (el) el.classList.toggle('hidden');
   }
 
@@ -510,6 +588,6 @@
   window.IELTS_TRAINING = {
     render, openModule, openStage, backToModules, goToStage,
     toggleCard, selectAnswer, saveFill, checkStage, continueStage, retryStage,
-    playScript, showTranscript, playPrompt, ratePrompt, completeSpeaking
+    playScript, showTranscript, showGlossary, playPrompt, ratePrompt, completeSpeaking
   };
 })();

@@ -219,14 +219,14 @@
         </div>`;
 
     const stats = [
-      { icon: '🎧', label: 'Listening', value: countListeningScore() + '/40', sub: '40 questions' },
-      { icon: '📖', label: 'Reading', value: countReadingScore() + '/40', sub: '40 questions' },
-      { icon: '✍️', label: 'Writing', value: '2 tasks', sub: '60 min timer' },
-      { icon: '🗣️', label: 'Speaking', value: '3 parts', sub: 'Full test' }
+      { icon: 'listen', label: 'Listening', value: countListeningScore() + '/40', sub: '40 questions' },
+      { icon: 'read', label: 'Reading', value: countReadingScore() + '/40', sub: '40 questions' },
+      { icon: 'write', label: 'Writing', value: '2 tasks', sub: '60 min timer' },
+      { icon: 'speak', label: 'Speaking', value: '3 parts', sub: 'Full test' }
     ];
     $('#dashboard-stats').innerHTML = stats.map((s) => `
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-2xl p-4 shadow-sm">
-        <div class="text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1">${s.label}</div>
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1"><span data-imi-icon="${s.icon}" data-imi-size="w-3.5 h-3.5" class="imi-nav-mini"></span>${s.label}</div>
         <div class="text-2xl font-extrabold text-[#d4af37]">${s.value}</div>
         <div class="text-[11px] text-[#f5f0e6]/50 mt-0.5">${s.sub}</div>
       </div>`).join('');

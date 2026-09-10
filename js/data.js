@@ -449,13 +449,127 @@ const WEEKLY_EXAM_POOL = [
 ];
 
 /* ---------------- ZERO-TO-HERO TRAINING MODULES ---------------- */
-/* Structured skill training: Vocabulary, Listening and Speaking.
-   Each module has 5 progressive stages (zero-to-hero). */
+/* Full-spectrum English curriculum: Foundation → Vocabulary → Grammar
+   → Listening → Reading → Speaking. Each module has progressive
+   stages (zero-to-hero). Modules use heritage icon names from
+   RAMI_ICONS (vocab, grammar, listen, read, speak). */
 const TRAINING_MODULES = [
+  {
+    id: 'foundation',
+    name: 'Foundation',
+    kind: 'vocab',
+    icon: 'vocab',
+    color: 'rose',
+    xpPerStage: 10,
+    desc: 'Start from zero: letters, numbers, basic nouns and simple sentences — the absolute building blocks of English.',
+    stages: [
+      {
+        id: 'found-1',
+        title: 'Step 1 · Alphabet & Sounds',
+        focus: 'Master the 26 letters and the most common English sounds.',
+        words: [
+          { word: 'A a', meaning: 'the first letter — sound /eɪ/ as in "name"', example: 'A is for apple — the fruit I eat every morning.' },
+          { word: 'B b', meaning: 'sound /biː/ as in "book"', example: 'B is for book — I read a book before bed.' },
+          { word: 'C c', meaning: 'sound /siː/ — hard as in "cat", soft as in "city"', example: 'C can make two sounds: hard in "cake" and soft in "circle."' },
+          { word: 'SH sh', meaning: 'a digraph — sound /ʃ/ as in "she" and "shoe"', example: 'Put your finger to your lips and say "shh".' },
+          { word: 'TH th', meaning: 'a digraph — voiced as in "this", voiceless as in "think"', example: 'Touch your tongue to your teeth: "this" vs "think."' },
+          { word: 'CH ch', meaning: 'a digraph — sound /tʃ/ as in "chair" and "cheese"', example: 'CH sounds like a small sneeze: "cheese!"' }
+        ],
+        quiz: [
+          { q: 'How many letters are in the English alphabet?', options: ['24', '25', '26', '28'], answer: 'C', explanation: 'The English alphabet has 26 letters, from A to Z.' },
+          { q: 'Which is a "digraph" — two letters making one sound?', options: ['B-A', 'SH', 'C-D', 'E-F'], answer: 'B', explanation: 'SH is a digraph: S and H together make one sound /ʃ/.' },
+          { q: 'The letter C can sound like "K" or "S". In which word is it soft?', options: ['Cat', 'Cake', 'City', 'Car'], answer: 'C', explanation: 'In "city", C makes the soft /s/ sound.' },
+          { q: 'What sound does TH make in "think"?', options: ['Voiced /ð/ as in "this"', 'Voiceless /θ/ — tongue between teeth', '/t/ as in "top"', '/f/ as in "fun"'], answer: 'B', explanation: 'In "think", TH is voiceless: put your tongue between your teeth and blow gently.' },
+          { q: 'Which word starts with the CH sound?', options: ['Shop', 'Chair', 'Sheep', 'Cheese'], answer: 'B', explanation: 'Both "chair" and "cheese" start with CH, but "chair" is the first correct option here.' }
+        ]
+      },
+      {
+        id: 'found-2',
+        title: 'Step 2 · Numbers & Time',
+        focus: 'Count from 1 to 100, say the time, days and months.',
+        words: [
+          { word: 'one / two / three', meaning: '1, 2, 3 — the first three numbers', example: 'I have one brother and two sisters.' },
+          { word: 'ten / twenty / thirty', meaning: '10, 20, 30 — counting by tens', example: 'The bus arrives in twenty minutes.' },
+          { word: 'hundred', meaning: '100 — one hundred', example: 'There are about three hundred students.' },
+          { word: 'Monday – Sunday', meaning: 'the seven days of the week', example: 'I go to school Monday to Friday.' },
+          { word: 'January – December', meaning: 'the twelve months of the year', example: 'Ramadan is usually in March or April.' },
+          { word: "What time is it?", meaning: 'asking about the time', example: "What time is it? — It is half past three." }
+        ],
+        quiz: [
+          { q: 'What number comes after twenty-nine?', options: ['Twenty-ten', 'Thirty', 'Fourty', 'Twenty-eleven'], answer: 'B', explanation: 'After 29 comes 30 (thirty).' },
+          { q: 'How many months are in a year?', options: ['10', '11', '12', '13'], answer: 'C', explanation: 'There are 12 months: January through December.' },
+          { q: '"Half past two" means:', options: ['2:00', '2:30', '2:15', '1:30'], answer: 'B', explanation: '"Half past two" = 2:30 — thirty minutes after two.' },
+          { q: 'Which day comes after Friday?', options: ['Sunday', 'Thursday', 'Saturday', 'Monday'], answer: 'C', explanation: 'The order is … Friday, Saturday, Sunday …' },
+          { q: 'How do you say 100 in English?', options: ['Ten', 'Ten-ten', 'Hundred', 'One-hundred'], answer: 'C', explanation: '100 = "one hundred" or simply "hundred".' }
+        ]
+      },
+      {
+        id: 'found-3',
+        title: 'Step 3 · Essential Nouns',
+        focus: 'The most common words for family, food, home and school.',
+        words: [
+          { word: 'father / mother', meaning: 'your dad / your mum', example: 'My father is a doctor and my mother is a teacher.' },
+          { word: 'brother / sister', meaning: 'a male / female sibling', example: 'My brother is older than me.' },
+          { word: 'water / bread / rice', meaning: 'basic food and drink', example: 'Can I have some water, please?' },
+          { word: 'chair / table / door', meaning: 'things in a room', example: 'Please close the door.' },
+          { word: 'book / pen / paper', meaning: 'school things', example: 'I need a pen and some paper.' },
+          { word: 'cat / dog / bird', meaning: 'common animals', example: 'My neighbour has a cat and two birds.' }
+        ],
+        quiz: [
+          { q: 'Your mother\'s husband is your:', options: ['Brother', 'Father', 'Sister', 'Son'], answer: 'B', explanation: 'Your mother\'s husband is your father.' },
+          { q: 'Which word is a drink?', options: ['Bread', 'Rice', 'Water', 'Chair'], answer: 'C', explanation: 'Water is a drink; the others are food or furniture.' },
+          { q: 'Which is a school object?', options: ['Dog', 'Door', 'Pen', 'Cat'], answer: 'C', explanation: 'A pen is used for writing at school.' },
+          { q: 'A female sibling is your:', options: ['Brother', 'Father', 'Sister', 'Son'], answer: 'C', explanation: 'A sister is a female sibling.' },
+          { q: '"Can I have some ______, please?" Which word fits?', options: ['Chair', 'Bread', 'Door', 'Cat'], answer: 'B', explanation: '"Bread" is food — you can ask for some bread politely.' }
+        ]
+      },
+      {
+        id: 'found-4',
+        title: 'Step 4 · Simple Verbs & Sentences',
+        focus: 'Learn action verbs and build basic Subject + Verb + Object sentences.',
+        words: [
+          { word: 'eat', meaning: 'to put food in your mouth', example: 'I eat breakfast at seven o\'clock.' },
+          { word: 'drink', meaning: 'to take liquid into your mouth', example: 'She drinks tea every morning.' },
+          { word: 'go / come', meaning: 'to move away from / toward a place', example: 'I go to school by bus.' },
+          { word: 'like / want', meaning: 'to enjoy / to wish for something', example: 'I like music. I want a new phone.' },
+          { word: 'have / need', meaning: 'to possess / to require something', example: 'I have a book. I need a pen.' },
+          { word: 'Subject + Verb + Object', meaning: 'the basic English sentence pattern', example: 'I (S) eat (V) bread (O).' }
+        ],
+        quiz: [
+          { q: 'Which sentence follows the Subject + Verb + Object pattern?', options: ['Eat I bread', 'I eat bread', 'Bread I eat', 'I bread eat'], answer: 'B', explanation: 'English word order is Subject + Verb + Object: I eat bread.' },
+          { q: '"She ______ to school every day." Choose the verb.', options: ['eat', 'go', 'have', 'like'], answer: 'B', explanation: '"She goes to school" — go means to travel/move to a place.' },
+          { q: 'Which word means "to wish for something"?', options: ['Eat', 'Drink', 'Want', 'Come'], answer: 'C', explanation: 'Want = to wish for or desire something.' },
+          { q: '"I ______ a book and a pen." Which verb fits?', options: ['go', 'eat', 'have', 'drink'], answer: 'C', explanation: 'Have = to possess. "I have a book and a pen."' },
+          { q: 'Which is the SUBJECT in "Ali drinks water"?', options: ['drinks', 'water', 'Ali', 'Every day'], answer: 'C', explanation: 'Ali is the subject — the person doing the action.' }
+        ]
+      },
+      {
+        id: 'found-5',
+        title: 'Step 5 · Questions & Everyday Phrases',
+        focus: 'Ask basic questions and use common polite expressions.',
+        words: [
+          { word: 'Who?', meaning: 'asking about a person', example: 'Who is your teacher? — My teacher is Mr Ahmed.' },
+          { word: 'What?', meaning: 'asking about a thing or action', example: 'What is your name? — My name is Layla.' },
+          { word: 'Where?', meaning: 'asking about a place', example: 'Where do you live? — I live in Cairo.' },
+          { word: 'How?', meaning: 'asking about manner or condition', example: 'How are you? — I am fine, thank you.' },
+          { word: 'Please / Thank you / Sorry', meaning: 'essential polite phrases', example: 'Can I have some water, please? — Thank you!' },
+          { word: 'Yes / No / I don\'t know', meaning: 'basic short answers', example: 'Do you like coffee? — No, I prefer tea.' }
+        ],
+        quiz: [
+          { q: '"______ is your name?" The question word is:', options: ['Who', 'What', 'Where', 'How'], answer: 'B', explanation: '"What is your name?" — asking about a thing (your name).' },
+          { q: '"Where do you live?" You answer:', options: ['I am fine', 'My name is Ali', 'I live in Alexandria', 'Yes, I do'], answer: 'C', explanation: '"Where" asks about a place — "I live in Alexandria."' },
+          { q: 'Which is a polite phrase?', options: ['Go away', 'Please', 'I don\'t care', 'No way'], answer: 'B', explanation: '"Please" is a polite way to ask for something.' },
+          { q: '"How are you?" The best reply is:', options: ['I am Ali', 'I live in Cairo', 'I am fine, thank you', 'What is your name?'], answer: 'C', explanation: '"How" asks about condition — "I am fine, thank you."' },
+          { q: '"Do you like tea?" — "______, I prefer coffee."', options: ['Yes', 'No', 'Who', 'Where'], answer: 'B', explanation: '"No, I prefer coffee" — the answer is negative because the preference is for coffee, not tea.' }
+        ]
+      }
+    ]
+  },
   {
     id: 'vocabulary',
     name: 'Vocabulary',
-    icon: '📚',
+    kind: 'vocab',
+    icon: 'vocab',
     color: 'amber',
     xpPerStage: 15,
     desc: 'Build a strong academic word bank step by step — from everyday essentials to band-9 collocations.',
@@ -575,7 +689,8 @@ const TRAINING_MODULES = [
   {
     id: 'listening',
     name: 'Listening',
-    icon: '🎧',
+    kind: 'listening',
+    icon: 'listen',
     color: 'sky',
     xpPerStage: 20,
     desc: 'Hone your ear for numbers, directions, opinions, facts and inference — the core skills of the Listening test.',
@@ -673,7 +788,8 @@ const TRAINING_MODULES = [
   {
     id: 'speaking',
     name: 'Speaking',
-    icon: '🗣️',
+    kind: 'speaking',
+    icon: 'speak',
     color: 'emerald',
     xpPerStage: 15,
     desc: 'Train your fluency and structure — from single sentences to a full two-minute hero talk.',
@@ -736,6 +852,252 @@ const TRAINING_MODULES = [
           { prompt: 'Introduce the skill and why you wanted to learn it.', tip: 'Start with a clear sentence naming the skill and your motivation.', sample: 'The skill I would like to talk about is public speaking. I wanted to learn it because I used to freeze whenever I had to present in class, and I knew it would be essential for university and my future career.' },
           { prompt: 'Explain how you practised and what was difficult.', tip: 'Describe your method and one challenge you overcame.', sample: 'I practised by joining a speaking club where we delivered short talks every week. At first it was really difficult — I spoke too fast and forgot my points. To fix this, I recorded myself and watched the videos to spot my mistakes.' },
           { prompt: 'Describe the result and why the effort was worth it.', tip: 'Finish with the outcome and the lesson you learned.', sample: 'After six months, I gave a ten-minute presentation to over a hundred students without notes. It felt amazing. The effort was absolutely worth it because I gained confidence that now helps me in exams, interviews and everyday conversations.' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'grammar',
+    name: 'Grammar',
+    kind: 'vocab',
+    icon: 'grammar',
+    color: 'fuchsia',
+    xpPerStage: 20,
+    desc: 'Master the rules that hold every sentence together — from parts of speech to advanced conditionals.',
+    stages: [
+      {
+        id: 'gram-1',
+        title: 'Step 1 · Parts of Speech',
+        focus: 'Identify the eight building blocks of every sentence.',
+        words: [
+          { word: 'noun', meaning: 'a person, place, thing or idea', example: 'Layla · Cairo · book · happiness' },
+          { word: 'verb', meaning: 'an action or a state', example: 'She runs to school every morning.' },
+          { word: 'adjective', meaning: 'describes a noun', example: 'a tall building · a happy child' },
+          { word: 'adverb', meaning: 'describes a verb, adjective or another adverb', example: 'He speaks slowly and clearly.' },
+          { word: 'pronoun', meaning: 'replaces a noun', example: 'Ali is kind. He always helps his classmates.' },
+          { word: 'preposition', meaning: 'shows position, time or direction', example: 'The keys are on the table.' }
+        ],
+        quiz: [
+          { q: 'Which word is a noun?', options: ['run', 'quickly', 'library', 'under'], answer: 'C', explanation: 'A library is a place — a noun. "Run" and "quickly" are verb/adverb, "under" is a preposition.' },
+          { q: 'Which word is an adjective?', options: ['happily', 'happy', 'happiness', 'be happy'], answer: 'B', explanation: 'Happy describes a noun (a happy child); happily is an adverb.' },
+          { q: 'In "She walks slowly", the word "slowly" is an…', options: ['noun', 'adjective', 'adverb', 'preposition'], answer: 'C', explanation: '"Slowly" describes the verb "walks" — that is an adverb.' },
+          { q: 'Which sentence uses a pronoun?', options: ['Mary goes to school', 'She goes to school', 'Mary is at school', 'The school is big'], answer: 'B', explanation: '"She" replaces "Mary" — a pronoun names nobody and refers back to the person.' },
+          { q: 'The word "on" in "The keys are on the table" is a…', options: ['preposition', 'noun', 'verb', 'adjective'], answer: 'A', explanation: 'On shows position — a preposition.' }
+        ]
+      },
+      {
+        id: 'gram-2',
+        title: 'Step 2 · Present Simple & Continuous',
+        focus: 'Talk about facts, habits and things happening right now.',
+        words: [
+          { word: 'Present simple — use', meaning: 'facts, habits and routines', example: 'I wake up at six every day.' },
+          { word: 'Present simple — form', meaning: 'base verb, +s/es for he/she/it', example: 'He works at a bank. They work at a school.' },
+          { word: 'Present continuous — use', meaning: 'actions happening now, or planned soon', example: 'She is studying right now.' },
+          { word: 'Present continuous — form', meaning: 'am / is / are + verb-ing', example: 'They are watching television.' },
+          { word: 'Spelling with -ing', meaning: 'run → running (double the final consonant) · make → making (drop e)', example: 'He is running. She is making tea.' },
+          { word: 'Stative verbs', meaning: 'know, like, want, need — rarely used in continuous', example: 'I know the answer. (not "I am knowing")' }
+        ],
+        quiz: [
+          { q: 'Which sentence is present simple for a routine?', options: ['She is cooking now', 'She cooks every day', 'She cooked yesterday', 'She has cooked'], answer: 'B', explanation: '"Every day" signals a habit — present simple.' },
+          { q: 'Choose the correct form: "He ____ English at university."', options: ['study', 'studies', 'studying', 'studied'], answer: 'B', explanation: 'He/she/it take the -s form: he studies.' },
+          { q: 'Which sentence is present continuous?', options: ['Water boils at 100°C', 'I am boiling some water now', 'I boiled water', 'I have boiled water'], answer: 'B', explanation: '"Now" + am/is/are + -ing = present continuous.' },
+          { q: 'Complete: "They ____ football at the moment."', options: ['play', 'plays', 'are playing', 'played'], answer: 'C', explanation: '"At the moment" needs am/is/are + -ing.' },
+          { q: 'Which verb is NOT usually used in the continuous form?', options: ['run', 'eat', 'know', 'write'], answer: 'C', explanation: 'Know is a stative verb — feelings and states rarely use -ing.' }
+        ]
+      },
+      {
+        id: 'gram-3',
+        title: 'Step 3 · Past Simple & Present Perfect',
+        focus: 'Compare finished past events with experiences up to now.',
+        words: [
+          { word: 'Past simple — use', meaning: 'finished actions at a specific time in the past', example: 'We visited Dubai last year.' },
+          { word: 'Past simple — form', meaning: 'verb + -ed, or irregular past forms', example: 'walk → walked · go → went · see → saw' },
+          { word: 'Present perfect — use 1', meaning: 'life experience, no specific time', example: 'I have visited Dubai.' },
+          { word: 'Present perfect — use 2', meaning: 'a past action with a result now', example: 'She has lost her keys, so she cannot open the door.' },
+          { word: 'Present perfect — form', meaning: 'have / has + past participle', example: 'They have finished their homework.' },
+          { word: 'Time signals', meaning: 'yesterday / last / ago → past simple · ever / never / already → present perfect', example: 'I saw him yesterday. I have never met her.' }
+        ],
+        quiz: [
+          { q: 'Which sentence is past simple?', options: ['I have eaten', 'I ate lunch at noon', 'I am eating', 'I eat lunch at noon'], answer: 'B', explanation: '"At noon" is a specific time — past simple.' },
+          { q: 'The past simple of "go" is…', options: ['goed', 'gone', 'went', 'going'], answer: 'C', explanation: 'Go is irregular: go → went (past simple) → gone (past participle).' },
+          { q: 'Which sentence is correct?', options: ['I have visited Cairo last year', 'I visited Cairo last year', 'I have visited Cairo since last year', 'I am visiting Cairo last year'], answer: 'B', explanation: '"Last year" is a finished time — use past simple, never present perfect with last/ago/yesterday.' },
+          { q: 'Complete: "She ____ her keys, so she cannot open the door."', options: ['lost', 'has lost', 'loses', 'is losing'], answer: 'B', explanation: 'The result is visible now — present perfect: "has lost".' },
+          { q: 'Which time word belongs with present perfect?', options: ['yesterday', 'last week', 'already', 'ago'], answer: 'C', explanation: 'Already fits present perfect: "I have already finished."' }
+        ]
+      },
+      {
+        id: 'gram-4',
+        title: 'Step 4 · Articles, Prepositions & Pronouns',
+        focus: 'Choose a/an/the, place in/on/at correctly, and pick the right pronoun.',
+        words: [
+          { word: 'a / an', meaning: 'a before consonant sounds, an before vowel sounds', example: 'a book · an apple · an hour (silent h)' },
+          { word: 'the', meaning: 'a specific thing already known to both people', example: 'I bought a phone. The phone is expensive.' },
+          { word: 'in / on / at (time)', meaning: 'in + months/years · on + days/dates · at + clock times', example: 'in March · on Friday · at 6 o\'clock' },
+          { word: 'in / on / at (place)', meaning: 'in + city/room · on + surface · at + point', example: 'in Cairo · on the table · at the door' },
+          { word: 'Subject & object pronouns', meaning: 'I/you/he/she/it/we/they · me/you/him/her/it/us/them', example: 'Ali helped me. I thanked him.' },
+          { word: 'Possessive pronouns', meaning: 'mine, yours, his, hers, ours, theirs — stand alone', example: 'This book is mine. That one is yours.' }
+        ],
+        quiz: [
+          { q: 'Choose the article: "She is ____ university student."', options: ['a', 'an', 'the', 'no article'], answer: 'A', explanation: 'University starts with a "y" sound — a university.' },
+          { q: '"____ apple a day keeps the doctor away."', options: ['a', 'an', 'the', 'some'], answer: 'B', explanation: 'Apple begins with a vowel sound — an apple.' },
+          { q: 'Choose: "The meeting is ____ Friday ____ 9 o\'clock."', options: ['in / at', 'on / at', 'at / on', 'on / in'], answer: 'B', explanation: 'Days take "on"; clock times take "at".' },
+          { q: 'Choose: "____ lights in this room are too bright."', options: ['a', 'an', 'the', 'no article'], answer: 'C', explanation: 'Both people know which lights — specific → "the".' },
+          { q: 'Which sentence is correct?', options: ['She saw I', 'I saw she', 'I saw her', 'Her saw me'], answer: 'C', explanation: 'The object of the verb takes the object pronoun "her".' }
+        ]
+      },
+      {
+        id: 'gram-5',
+        title: 'Step 5 · Conditionals & Relative Clauses',
+        focus: 'Express real and unreal situations, then join sentences with who/which/that.',
+        words: [
+          { word: 'First conditional', meaning: 'real future possibility — if + present, will + verb', example: 'If it rains, we will stay home.' },
+          { word: 'Second conditional', meaning: 'hypothetical / unreal — if + past, would + verb', example: 'If I had more time, I would travel more.' },
+          { word: 'Third conditional', meaning: 'past regret — if + had + p.p., would have + p.p.', example: 'If I had studied, I would have passed.' },
+          { word: 'Zero conditional', meaning: 'general truths — if + present, present', example: 'If you heat ice, it melts.' },
+          { word: 'who / which', meaning: 'who for people, which for things', example: 'The student who won lives here. The book which I read was great.' },
+          { word: 'that', meaning: 'can replace who/which in defining clauses', example: 'The film that we watched was boring.' }
+        ],
+        quiz: [
+          { q: 'Complete the first conditional: "If it ____, we will cancel the trip."', options: ['rains', 'rained', 'has rained', 'would rain'], answer: 'A', explanation: 'First conditional: if + present simple + will.' },
+          { q: 'Which sentence is second conditional?', options: ['If I study, I will pass', 'If I studied, I would pass', 'If I had studied, I would have passed', 'If you freeze water, it becomes ice'], answer: 'B', explanation: 'If + past, would + verb = unreal situation.' },
+          { q: 'Complete the third conditional: "If I had known, I ____ him."', options: ['would call', 'would have called', 'will call', 'called'], answer: 'B', explanation: 'If + had + p.p., would have + past participle.' },
+          { q: 'Which relative clause is correct?', options: ['The man which came', 'The man who came', 'The man what came', 'The man whom came'], answer: 'B', explanation: 'Use "who" for people: "The man who came."' },
+          { q: 'Complete the zero conditional: "If you heat water to 100°C, it ____."', options: ['boils', 'would boil', 'will boil', 'boiled'], answer: 'A', explanation: 'Scientific facts use if + present, present.' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'reading',
+    name: 'Reading',
+    kind: 'reading',
+    icon: 'read',
+    color: 'violet',
+    xpPerStage: 20,
+    desc: 'Train the five core reading skills — skimming, main idea, detail, inference and True/False/Not Given.',
+    stages: [
+      {
+        id: 'read-1',
+        title: 'Step 1 · Skimming & Scanning',
+        focus: 'Find key information quickly without reading every word.',
+        tip: 'Skim = read the first and last sentence of each paragraph for the gist. Scan = hunt for specific key words: names, dates, numbers and capital letters.',
+        text: [
+          'For thousands of years, humans have tried to capture the shape of the world around them. The oldest known maps were drawn on clay tablets in Mesopotamia more than four thousand years ago. These early maps were not about geography alone: they marked ownership of land, trade routes and the homes of important people.',
+          'In 1569, the Flemish cartographer Gerardus Mercator created a map that would shape navigation for centuries. His projection drew the round Earth on a flat sheet so sailors could plot straight lines across the ocean. The cost was that sizes near the poles were exaggerated — Greenland appears far larger than Africa, even though Africa is roughly fourteen times bigger.',
+          'Today, digital maps are everywhere. When you open a navigation app, it calculates your route using satellite data and live traffic information in less than a second. Cartography has moved from clay and canvas to cloud servers, yet the purpose remains the same: to help people understand where they are and how to get where they want to go.'
+        ],
+        words: [
+          { word: 'cartographer', meaning: 'a person who draws maps', example: 'Mercator was a cartographer.' },
+          { word: 'projection', meaning: 'a way of drawing the round Earth on a flat surface', example: 'His projection changed navigation.' },
+          { word: 'exaggerated', meaning: 'made to look bigger than reality', example: 'Sizes near the poles were exaggerated.' },
+          { word: 'navigation', meaning: 'finding your way from place to place', example: 'Sailors used his map for navigation.' }
+        ],
+        questions: [
+          { id: 'TR1-1', type: 'mcq', question: 'Scan: where were the oldest known maps drawn?', options: ['On canvas', 'On clay tablets', 'On paper', 'On stone walls'], answer: 'B', explanation: 'Scan for "oldest known maps" → "drawn on clay tablets in Mesopotamia."' },
+          { id: 'TR1-2', type: 'fill', question: 'Scan for a date: in which year did Mercator create his projection? Write the number.', answer: ['1569'], explanation: 'Scan for a year near "Mercator" → 1569.' },
+          { id: 'TR1-3', type: 'mcq', question: 'The passage says Africa is roughly how many times larger than Greenland?', options: ['4', '10', '14', '40'], answer: 'C', explanation: 'Scan for "Greenland" → "Africa is roughly fourteen times bigger."' },
+          { id: 'TR1-4', type: 'mcq', question: 'What does a navigation app use to calculate a route?', options: ['Weather forecasts and maps', 'Satellite data and live traffic information', 'Printed road maps', 'Compasses and signals'], answer: 'B', explanation: 'Scan for "navigation app" → "satellite data and live traffic information."' },
+          { id: 'TR1-5', type: 'mcq', question: 'What is the main purpose of maps, according to the final paragraph?', options: ['To show land ownership', 'To help people understand where they are and how to get places', 'To record history', 'To decorate walls'], answer: 'B', explanation: 'Skim the last sentence: "to help people understand where they are and how to get where they want to go."' }
+        ]
+      },
+      {
+        id: 'read-2',
+        title: 'Step 2 · Main Idea & Summary',
+        focus: 'Find the central argument of each paragraph and of the whole passage.',
+        tip: 'Ask yourself: "what is this paragraph really about?" The main idea is often in the first or last sentence — the rest is supporting detail.',
+        text: [
+          'Cities around the world are facing a quiet crisis: the demand for water is growing faster than the supply. As populations expand and summers grow hotter, municipal planners are looking for ways to use every drop more wisely.',
+          'One approach is to reduce waste through better infrastructure. In many cities, a fifth of treated water is lost to leaking pipes before it ever reaches a tap. Repairing old networks is expensive, but the savings in water — and in the energy used to purify it — often pay for the work within a decade.',
+          'Another strategy focuses on changing behaviour. When authorities installed low-flow shower heads in tens of thousands of homes and made water bills clearly reflect true usage, consumption fell by about a quarter within two years. People, it turns out, save water when the cost of waste becomes visible.',
+          'The lesson of these examples is that there is no single miracle solution. The most successful cities combine clever engineering with honest pricing — and treat water not as an endless gift, but as the limited, precious resource that it is.'
+        ],
+        words: [
+          { word: 'demand', meaning: 'the amount that people want', example: 'Demand for water is growing.' },
+          { word: 'infrastructure', meaning: 'basic systems such as pipes and roads', example: 'Better infrastructure reduces waste.' },
+          { word: 'consumption', meaning: 'the amount used', example: 'Consumption fell by a quarter.' },
+          { word: 'pricing', meaning: 'the system of setting prices', example: 'Honest pricing encourages saving.' }
+        ],
+        questions: [
+          { id: 'TR2-1', type: 'mcq', question: 'What is the main idea of the whole passage?', options: ['Cities should build more pipes', 'Cities must combine engineering and honest pricing to protect a precious resource', 'Water is expensive in every city', 'Behaviour change never works'], answer: 'B', explanation: 'The passage argues that both infrastructure and pricing together conserve water.' },
+          { id: 'TR2-2', type: 'mcq', question: 'Which paragraph explains the behaviour-change strategy?', options: ['Paragraph 1', 'Paragraph 2', 'Paragraph 3', 'Paragraph 4'], answer: 'C', explanation: 'Paragraph 3 opens "Another strategy focuses on changing behaviour."' },
+          { id: 'TR2-3', type: 'fill', question: 'What fraction of treated water is lost to leaking pipes in many cities? Write "one ____" (fraction name).', answer: ['fifth', 'one fifth', 'a fifth', '1/5'], explanation: '"A fifth of treated water is lost to leaking pipes."' },
+          { id: 'TR2-4', type: 'mcq', question: 'By how much did consumption fall after the new shower heads and bills?', options: ['A tenth', 'A third', 'About a quarter', 'About half'], answer: 'C', explanation: '"Consumption fell by about a quarter within two years."' },
+          { id: 'TR2-5', type: 'mcq', question: 'Which sentence best summarises paragraph 2?', options: ['Fixing leaks saves both water and energy used to purify it', 'People dislike showers', 'Cities should stop treating water', 'New pipes are cheaper than repair'], answer: 'A', explanation: 'Paragraph 2: repairs save water and the energy used to purify it.' }
+        ]
+      },
+      {
+        id: 'read-3',
+        title: 'Step 3 · Detail & Evidence',
+        focus: 'Spot the exact facts, numbers and figures that prove an answer.',
+        tip: 'For every answer, underline the sentence that proves it. If you cannot find the proof, the answer is probably wrong.',
+        text: [
+          'In the desert belt that stretches across North Africa and the Middle East, the sun shines on average more than 3,000 hours every year. That is roughly double the sunshine received in northern Europe, and it makes the region one of the best places on Earth to generate solar power.',
+          'Solar electricity is now remarkably affordable. The cost of photovoltaic panels has fallen by more than eighty percent since 2010, and in sunny regions new solar farms can produce power more cheaply than new gas plants. This price collapse is the main reason for the recent wave of investment in the region.',
+          'Yet solar power alone cannot yet replace fossil fuels. The sun disappears at night and hides behind clouds, so utilities still need a mix of sources, along with large batteries that store energy for the hours of darkness. Analysts argue that combining solar farms with storage is the fastest route to a cleaner grid.',
+          'Supporters point to a striking example: a single solar complex in the region can power roughly a million homes. That figure helps explain why governments, from Morocco to the Gulf, are treating sunshine not as a curious blessing but as a strategic economic resource.'
+        ],
+        words: [
+          { word: 'photovoltaic', meaning: 'turning sunlight directly into electricity', example: 'Photovoltaic panels are now cheap.' },
+          { word: 'batteries', meaning: 'devices that store electricity', example: 'Batteries store energy for the night.' },
+          { word: 'grid', meaning: 'the network that carries electricity', example: 'Solar farms feed the national grid.' },
+          { word: 'strategic', meaning: 'important for long-term plans', example: 'Sunshine is a strategic economic resource.' }
+        ],
+        questions: [
+          { id: 'TR3-1', type: 'fill', question: 'How many hours of sunshine does the region average each year? Write the number.', answer: ['3000', '3,000', 'three thousand', 'over 3,000', 'more than 3,000'], explanation: 'Evidence: "more than 3,000 hours every year."' },
+          { id: 'TR3-2', type: 'mcq', question: 'By how much has the cost of panels fallen since 2010?', options: ['About 20%', 'About 40%', 'About 60%', 'More than 80%'], answer: 'D', explanation: 'Evidence: "fallen by more than eighty percent since 2010."' },
+          { id: 'TR3-3', type: 'mcq', question: 'What is the main reason for the recent investment in solar power in the region?', options: ['New government taxes', 'The fall in panel prices', 'Cheap gas', 'Extra sunlight in winter'], answer: 'B', explanation: 'Evidence: "This price collapse is the main reason for the recent wave of investment."' },
+          { id: 'TR3-4', type: 'mcq', question: 'Why cannot solar power alone replace fossil fuels yet?', options: ['Panels are too large', 'The sun disappears at night and hides behind clouds', 'Batteries are illegal', 'Solar farms are extremely rare'], answer: 'B', explanation: 'Evidence: "The sun disappears at night and hides behind clouds."' },
+          { id: 'TR3-5', type: 'mcq', question: 'What does the "striking example" in the final paragraph show?', options: ['A single solar complex can power roughly a million homes', 'Solar farms are unaffordable', 'The region receives little sunlight', 'Batteries are unnecessary'], answer: 'A', explanation: 'Evidence: "a single solar complex in the region can power roughly a million homes."' }
+        ]
+      },
+      {
+        id: 'read-4',
+        title: 'Step 4 · Inference & Implication',
+        focus: 'Read between the lines — understand what the writer implies but does not state directly.',
+        tip: 'Inference = an idea you can prove from the text even though it is not written word for word. Combine two facts to reach a logical conclusion.',
+        text: [
+          'A decade ago, researchers fitted sixty office workers with wristbands and followed them for eight weeks. Half of them took a fifteen-minute walk through a leafy park on their lunch break; the other half walked along busy city streets. By the end of the study, the park walkers reported lower stress levels, and their heart-rate readings told the same story: green space was doing something measurable to their bodies.',
+          'The results fit a wider pattern. A growing body of research links access to nature with better mood, sharper attention and even faster recovery after surgery. One explanation is that natural scenes require less effort to process than the cluttered urban environment, allowing the mind to rest — a state psychologists call "soft fascination".',
+          'What the studies suggest, rather than prove, is that the design of a city quietly shapes the wellbeing of its people. A bench under a tree is not decoration; it is a small piece of public health infrastructure. The same logic argues for public gardens, shaded walkways and street trees in every new housing development.'
+        ],
+        words: [
+          { word: 'wristband', meaning: 'a band worn on the arm that tracks activity', example: 'Workers wore wristbands for eight weeks.' },
+          { word: 'measurable', meaning: 'able to be measured', example: 'Green space had a measurable effect.' },
+          { word: 'cluttered', meaning: 'full of too many things', example: 'The city environment is cluttered.' },
+          { word: 'wellbeing', meaning: 'general health and happiness', example: 'City design shapes wellbeing.' }
+        ],
+        questions: [
+          { id: 'TR4-1', type: 'mcq', question: 'What does the wristband study imply about walking on busy city streets?', options: ['It is more relaxing than a park', 'It is less restful than walking in a park', 'It improves heart health', 'It is dangerous'], answer: 'B', explanation: 'Since park walkers showed lower stress, we can infer city walks were less restful — this is implied, not stated directly.' },
+          { id: 'TR4-2', type: 'mcq', question: '"Soft fascination" describes how the mind:', options: ['works hardest in the office', 'rests easily when looking at nature', 'calculates heart rate', 'becomes bored in parks'], answer: 'B', explanation: 'Natural scenes let the mind rest — "soft fascination" is that restful state.' },
+          { id: 'TR4-3', type: 'mcq', question: 'The writer implies that trees and benches in a city should be seen as:', options: ['luxury decoration', 'public health infrastructure', 'a waste of money', 'private property'], answer: 'B', explanation: '"A bench under a tree is not decoration; it is a small piece of public health infrastructure."' },
+          { id: 'TR4-4', type: 'mcq', question: 'Which statement is true, according to the passage?', options: ['The park walkers exercised more', 'Nature access is linked to better mood and attention', 'Only sixty people have ever studied this topic', 'City streets raise stress in every person'], answer: 'B', explanation: 'Paragraph 2 states research links nature with mood and attention.' },
+          { id: 'TR4-5', type: 'mcq', question: 'The final sentence "A bench under a tree is not decoration" mainly suggests that:', options: ['benches are expensive to build', 'city design affects wellbeing, so green features genuinely matter', 'trees are only for decoration', 'people should sit indoors'], answer: 'B', explanation: 'The sentence argues green features are practical infrastructure for health.' }
+        ]
+      },
+      {
+        id: 'read-5',
+        title: 'Step 5 · True / False / Not Given',
+        focus: 'Master the signature IELTS question: does the passage say, contradict, or stay silent?',
+        tip: 'True = passage says it. False = passage contradicts it. Not Given = the idea is not mentioned at all — never guess from your own knowledge.',
+        text: [
+          'Remote work has moved from an experiment to a fixture of modern professional life. Surveys in 2024 found that a substantial majority of office staff now work from home at least two days a week, and companies have rewritten their policies around hybrid patterns.',
+          'Managers initially feared that employees working from home would be less productive. The evidence from tracked employees tells a more balanced story: individual, focused tasks — writing reports, coding, analysing data — are often done more efficiently at home, where there are fewer interruptions. Collaborative work is a different matter. Ideas that used to emerge in corridors and cafeterias are harder to create through a screen, and many firms report that joint projects take longer to complete remotely.',
+          'There are also equity questions. Employees with children or small flats describe the struggle of separating work from home life, while younger staff say they miss the informal learning that happens when you overhear experienced colleagues solving problems. A few companies have responded with "office anchor days", when everyone is expected to attend for collaboration and mentoring.',
+          'No consensus has emerged on the ideal arrangement, and the debate shows no sign of settling. What seems clear is that the office will not disappear; it is being redesigned as a meeting place rather than a place of solitary focus.'
+        ],
+        words: [
+          { word: 'hybrid', meaning: 'mixing office and home work', example: 'Companies adopted hybrid patterns.' },
+          { word: 'collaborative', meaning: 'done together with others', example: 'Collaborative work suffers remotely.' },
+          { word: 'equity', meaning: 'fairness and justice', example: 'There are equity questions about remote work.' },
+          { word: 'consensus', meaning: 'general agreement', example: 'No consensus has emerged.' }
+        ],
+        questions: [
+          { id: 'TR5-1', type: 'tfng', question: 'A substantial majority of office staff now work from home at least two days a week.', options: ['True', 'False', 'Not Given'], answer: 'A', explanation: 'True — paragraph 1 states exactly this.' },
+          { id: 'TR5-2', type: 'tfng', question: 'Managers were confident from the start that remote work would be productive.', options: ['True', 'False', 'Not Given'], answer: 'B', explanation: 'False — managers "initially feared" it would be less productive.' },
+          { id: 'TR5-3', type: 'tfng', question: 'Individual, focused tasks are often done more efficiently at home.', options: ['True', 'False', 'Not Given'], answer: 'A', explanation: 'True — paragraph 2 says focused tasks are "often done more efficiently at home."' },
+          { id: 'TR5-4', type: 'tfng', question: 'Employees without children always prefer working from home.', options: ['True', 'False', 'Not Given'], answer: 'C', explanation: 'Not Given — the passage never states any group "always prefers" remote work.' },
+          { id: 'TR5-5', type: 'tfng', question: 'The office is being redesigned as a meeting place rather than a place of solitary focus.', options: ['True', 'False', 'Not Given'], answer: 'A', explanation: 'True — the final paragraph states this directly.' },
+          { id: 'TR5-6', type: 'mcq', question: 'Which statement best summarises the passage?', options: ['Remote work failed and was abandoned', 'Hybrid work has benefits and challenges, and the office is being redesigned', 'Offices are now obsolete', 'Remote work suits every task equally'], answer: 'B', explanation: 'The passage balances benefits (focused tasks) and challenges (collaboration, equity).' }
         ]
       }
     ]
