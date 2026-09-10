@@ -29,22 +29,8 @@
   const mentorGreeting = () => 'Salam! I am ' + MENTOR.name + ' (' + MENTOR.ar + '), your expert English teacher and mentor. Follow today’s task, do it out loud, and I will tell you exactly how to think, write and phrase like a native professional.';
   const mentorShort = () => '— ' + MENTOR.name + ' (' + MENTOR.ar + ')';
 
-  /* Teacher Rami's avatar — a sleek, gold-trimmed cartoon robot wearing a
-     traditional Palestinian keffiyeh (checked headwrap + shoulder drapes). */
-  const MENTOR_AVATAR =
-    '<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">' +
-      '<defs><linearGradient id="ramFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4d4438"/><stop offset="1" stop-color="#151210"/></linearGradient></defs>' +
-      '<path d="M48 12 L48 6" stroke="#d4af37" stroke-width="2.5" stroke-linecap="round"/><circle cx="48" cy="4.5" r="3" fill="#ffd766"/>' +
-      '<g fill="#1c1813" stroke="#d4af37" stroke-width="2"><rect x="24" y="45" width="9" height="15" rx="4"/><rect x="63" y="45" width="9" height="15" rx="4"/></g>' +
-      '<path d="M22 40 Q14 44 12 56 L10 76 Q20 82 26 70 L30 48 Z" fill="#efe9d9"/>' +
-      '<path d="M74 40 Q82 44 84 56 L86 76 Q76 82 70 70 L66 48 Z" fill="#efe9d9"/>' +
-      '<rect x="32" y="42" width="32" height="30" rx="10" fill="url(#ramFace)" stroke="#d4af37" stroke-width="2"/>' +
-      '<circle cx="42" cy="53" r="5" fill="#ffd766"/><circle cx="54" cy="53" r="5" fill="#ffd766"/>' +
-      '<path d="M40 63 Q48 68 56 63" fill="none" stroke="#ffd766" stroke-width="2.5" stroke-linecap="round"/>' +
-      '<path d="M22 42 Q22 14 48 14 Q74 14 74 42 L68 48 Q48 40 28 48 Z" fill="#efe9d9"/>' +
-      '<g fill="#1c1a17"><rect x="34" y="22" width="4" height="4"/><rect x="42" y="20" width="4" height="4"/><rect x="50" y="22" width="4" height="4"/><rect x="58" y="20" width="4" height="4"/><rect x="66" y="22" width="4" height="4"/><rect x="38" y="30" width="4" height="4"/><rect x="46" y="28" width="4" height="4"/><rect x="54" y="30" width="4" height="4"/><rect x="62" y="28" width="4" height="4"/><rect x="14" y="52" width="4" height="4"/><rect x="18" y="60" width="4" height="4"/><rect x="74" y="52" width="4" height="4"/><rect x="78" y="60" width="4" height="4"/></g>' +
-      '<rect x="48" y="36" width="4" height="4" fill="#7a1116"/><rect x="16" y="56" width="4" height="4" fill="#7a1116"/><rect x="80" y="56" width="4" height="4" fill="#7a1116"/>' +
-    '</svg>';
+  /* Mr. Rami's official avatar — rami-avatar.jpg (kuffiyeh-robot portrait). */
+  const MENTOR_AVATAR = '<img class="rami-avatar" src="rami-avatar.jpg" alt="Mr. Rami (الأستاذ رامي)" loading="lazy" />';
 
   /* ================= scoped storage ================= */
   function cfg() {
