@@ -634,12 +634,12 @@
       '</div>' +
       '<div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-[rgba(124,58,237,0.28)] to-[rgba(217,70,239,0.18)] border border-[rgba(167,139,250,0.45)] rounded-2xl p-5 mb-6">' +
         '<div>' +
-          '<p class="font-bold text-[#f5f0e6]">✨ AI Passage Builder</p>' +
+          '<p class="font-bold text-[#f5f0e6]"><span data-imi-icon="spark" data-imi-size="w-4 h-4" class="inline-block -mt-0.5 mr-1"></span>AI Passage Builder</p>' +
           '<p class="text-xs text-[#f5f0e6]/65 mt-0.5">Generate a Cambridge-style reading or listening passage on any topic in seconds, then practise it inline.</p>' +
         '</div>' +
         '<div class="flex gap-2 flex-wrap">' +
-          '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition" onclick="window.IELTS_AI && window.IELTS_AI.openPassageModal()">🧠 Build a passage</button>' +
-          '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(167,139,250,0.5)] hover:bg-[rgba(167,139,250,0.12)] transition" onclick="window.IELTS_AI && window.IELTS_AI.openLibraryModal()">📚 My AI content</button>' +
+          '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition" onclick="window.IELTS_AI && window.IELTS_AI.openPassageModal()"><span data-imi-icon="spark" data-imi-size="w-4 h-4" class="inline-block -mt-0.5 mr-1"></span>Build a passage</button>' +
+          '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(167,139,250,0.5)] hover:bg-[rgba(167,139,250,0.12)] transition" onclick="window.IELTS_AI && window.IELTS_AI.openLibraryModal()"><span data-imi-icon="library" data-imi-size="w-4 h-4" class="inline-block -mt-0.5 mr-1"></span>My AI content</button>' +
         '</div>' +
       '</div>' +
       '<div class="grid md:grid-cols-2 gap-4 mb-6">' +

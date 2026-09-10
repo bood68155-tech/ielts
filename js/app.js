@@ -104,6 +104,7 @@
     if (name === 'wss' && window.IELTS_WSS) window.IELTS_WSS.render();
     if (name === 'placement' && window.IELTS_PLACEMENT) window.IELTS_PLACEMENT.render();
     if (name === 'teacher-chat' && window.IELTS_RAMI_CHAT) window.IELTS_RAMI_CHAT.render();
+    if (name === 'masterclass' && window.IELTS_MASTERCLASS) window.IELTS_MASTERCLASS.render();
     if (name === 'band' && window.IELTS_BAND) window.IELTS_BAND.render();
     if (name === 'awl' && window.IELTS_AWL) window.IELTS_AWL.render();
     if (name === 'reading-master' && window.IELTS_READMASTER) window.IELTS_READMASTER.render();
@@ -269,21 +270,21 @@
     let steps = [];
     if (tier === 'foundation') {
       steps = [
-        { icon: '📚', title: 'Core AWL Vocabulary', desc: 'Build the 570 academic word families that appear in every IELTS paper.', section: 'awl', cta: 'Start drilling' },
-        { icon: '📖', title: 'Foundation Reading', desc: 'Short, clear passages with instant feedback plus skimming and scanning tips.', section: 'reading-master', cta: 'Practise reading' },
-        { icon: '🎧', title: 'Listening Basics', desc: 'Part 1 & 2 listening practice with full transcripts and speed control.', section: 'listening-master', cta: 'Practise listening' }
+        { icon: 'library', title: 'Core AWL Vocabulary', desc: 'Build the 570 academic word families that appear in every IELTS paper.', section: 'awl', cta: 'Start drilling' },
+        { icon: 'read', title: 'Foundation Reading', desc: 'Short, clear passages with instant feedback plus skimming and scanning tips.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: 'listen', title: 'Listening Basics', desc: 'Part 1 & 2 listening practice with full transcripts and speed control.', section: 'listening-master', cta: 'Practise listening' }
       ];
     } else if (tier === 'intermediate') {
       steps = [
-        { icon: '📖', title: 'Reading Mastery', desc: 'Push toward Band 6–7 on longer passages and inferred meaning.', section: 'reading-master', cta: 'Practise reading' },
-        { icon: '🎧', title: 'Listening Mastery', desc: 'Part 3 & 4 tutorials with paraphrase spotting and faster delivery.', section: 'listening-master', cta: 'Practise listening' },
-        { icon: '🎯', title: 'Focused Practice Sets', desc: 'Grammar, vocabulary and skill quizzes sized for your band.', section: 'quiz-hub', cta: 'Open quiz hub' }
+        { icon: 'read', title: 'Reading Mastery', desc: 'Push toward Band 6–7 on longer passages and inferred meaning.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: 'listen', title: 'Listening Mastery', desc: 'Part 3 & 4 tutorials with paraphrase spotting and faster delivery.', section: 'listening-master', cta: 'Practise listening' },
+        { icon: 'evaluate', title: 'Focused Practice Sets', desc: 'Grammar, vocabulary and skill quizzes sized for your band.', section: 'quiz-hub', cta: 'Open quiz hub' }
       ];
     } else {
       steps = [
-        { icon: '👑', title: 'Advanced Reading', desc: 'Band 8–9 passages: dense academic texts with implied meaning.', section: 'reading-master', cta: 'Practise reading' },
-        { icon: '✍️', title: 'Writing & Speaking Studio', desc: 'Timed tasks with band-descriptor feedback for Task 1 and Task 2.', section: 'wss', cta: 'Open studio' },
-        { icon: '📅', title: 'Weekly Exam', desc: 'Sit the exam under realistic conditions and watch your band trend.', section: 'exam', cta: 'Take exam' }
+        { icon: 'dome', title: 'Advanced Reading', desc: 'Band 8–9 passages: dense academic texts with implied meaning.', section: 'reading-master', cta: 'Practise reading' },
+        { icon: 'write', title: 'Writing & Speaking Studio', desc: 'Timed tasks with band-descriptor feedback for Task 1 and Task 2.', section: 'wss', cta: 'Open studio' },
+        { icon: 'clock', title: 'Weekly Exam', desc: 'Sit the exam under realistic conditions and watch your band trend.', section: 'exam', cta: 'Take exam' }
       ];
     }
 
@@ -304,7 +305,7 @@
       <div class="grid md:grid-cols-3 gap-4 mb-8">
         ${steps.map((s) => `
           <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 flex flex-col">
-            <span class="text-3xl mb-2">${s.icon}</span>
+            <span class="text-3xl mb-2 text-[#d4af37]" data-imi-icon="${s.icon}" data-imi-size="w-9 h-9"></span>
             <h3 class="text-sm font-extrabold text-[#f5f0e6]">${s.title}</h3>
             <p class="text-xs text-[#f5f0e6]/60 mt-1 flex-1 leading-relaxed">${s.desc}</p>
             <button type="button" class="mt-3 self-start text-xs font-bold text-[#14120f] bg-[rgba(212,175,55,0.9)] hover:bg-[#b8962e] px-4 py-2 rounded-lg transition" onclick="showSection('${s.section}')">${s.cta}</button>

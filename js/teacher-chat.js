@@ -169,7 +169,8 @@
   function liveRoots() {
     const roots = [];
     const sec = $('#tc-messages'); if (sec) roots.push(sec);
-    if (state.panelOpen) { const p = $('#tc-panel-messages'); if (p && p !== sec) roots.push(p); }
+    const emb = $('#tc-embed-msgs'); if (emb) roots.push(emb);
+    if (state.panelOpen) { const p = $('#tc-panel-messages'); if (p && p !== sec && p !== emb) roots.push(p); }
     return roots;
   }
 
@@ -241,6 +242,25 @@
 
   function quick(p) {
     send(String(p).replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
+  }
+
+  /* ---------------- Embedded classroom chat ---------------- */
+  function mountEmbed(id) {
+    const root = document.getElementById(id);
+    if (!root) return;
+    root.innerHTML =
+      '<div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-[rgba(212,175,55,0.2)] bg-[rgba(20,18,15,0.7)]">' +
+        '<div class="flex items-center gap-2.5">' +
+          ravi('w-9 h-9', 'text-xs') +
+          '<div><p class="font-bold text-[#f5f0e6] text-sm leading-tight">Teacher Rami · live coach</p><p class="text-[10px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>online — every message graded</p></div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="' + id + '-msgs" class="tc-messages h-64 overflow-y-auto px-3 py-3 space-y-3"></div>' +
+      '<div class="px-3 pb-3">' + composerHtml(id) + '</div>';
+    renderInto(document.getElementById(id + '-msgs'));
+    const inp = document.getElementById(id + '-input');
+    if (inp) inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.IELTS_RAMI_CHAT.sendFrom(id); });
+    return root;
   }
 
   /* ---------------- Full section page ---------------- */
@@ -327,7 +347,7 @@
     holder.id = 'tc-fab-wrap';
     holder.innerHTML = companionHtml();
     document.body.appendChild(holder);
-    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation };
+    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed };
     const sec = $('#section-teacher-chat');
     if (sec && 'MutationObserver' in window) {
       const ob = new MutationObserver(() => {

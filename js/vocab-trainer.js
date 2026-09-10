@@ -205,7 +205,7 @@
         <div class="flex flex-wrap gap-3 mt-6">
           <button class="btn-primary" onclick="IELTS_VOCAB_TRAINER.startFlashcards()">🎴 ${dueCount ? 'Review due words (' + dueCount + ')' : 'Start Flashcards'}</button>
           <button class="btn-secondary" onclick="IELTS_VOCAB_TRAINER.startDailyQuiz()">📅 Daily Quiz (${today})</button>
-          <button class="btn-primary !bg-gradient-to-r !from-violet-600 !to-fuchsia-600 !border-violet-500 hover:!from-violet-500 hover:!to-fuchsia-500" onclick="window.IELTS_AI && window.IELTS_AI.openWordBankModal()">✨ AI Word Bank</button>
+          <button class="btn-primary !bg-gradient-to-r !from-violet-600 !to-fuchsia-600 !border-violet-500 hover:!from-violet-500 hover:!to-fuchsia-500" onclick="window.IELTS_AI && window.IELTS_AI.openWordBankModal()"><span data-imi-icon="spark" data-imi-size="w-4 h-4" class="inline-block -mt-0.5 mr-1"></span>AI Word Bank</button>
           <span class="text-sm text-slate-500 self-center">Today's quiz score: <b class="text-brand-600">${quizScore(c)} / ${QUIZ_SIZE}</b></span>
         </div>
       </div>

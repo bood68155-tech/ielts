@@ -185,7 +185,7 @@
       '<div class="mt-4 h-2 bg-slate-100 rounded-full overflow-hidden">' +
       '<div class="h-full bg-gradient-to-r from-palestine-green to-palestine-green/70 rounded-full transition-all duration-500" style="width:' + overallPct + '%"></div>' +
       '</div>' +
-      '<p class="text-xs text-slate-400 mt-2">Complete all 28 daily tasks to finish your IELTS preparation journey. <button class="underline text-brand-600 font-semibold" onclick="window.IELTS_AI && window.IELTS_AI.openWritingLab && window.IELTS_AI.openWritingLab()">✍️ Open the Writing Lab</button></p>' +
+      '<p class="text-xs text-slate-400 mt-2">Complete all 28 daily tasks to finish your IELTS preparation journey. <button class="underline text-brand-600 font-semibold" onclick="window.IELTS_AI && window.IELTS_AI.openWritingLab && window.IELTS_AI.openWritingLab()"><span data-imi-icon="write" data-imi-size="w-3.5 h-3.5" class="inline-block -mt-0.5 mr-1"></span>Open the Writing Lab</button></p>' +
       '</div>';
 
     /* ---- Weekly cards ---- */
