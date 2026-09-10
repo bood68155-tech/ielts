@@ -6,25 +6,38 @@
 
 /* ============ PALESTINIAN HERITAGE BACKGROUND — FULLY VISIBLE ============ */
 
-html, body {
+/* Base canvas color lives on <html> only — it paints at the very bottom of the
+   root stacking context, so the heritage layer above it is never hidden. */
+html {
   background-color: #0f172a !important;
   opacity: 1 !important;
   filter: none !important;
 }
 
-/* Composited fixed heritage background — painted once and GPU-composited on
-   scroll, instead of repainting a full-viewport photo every frame. */
+/* <body> must stay fully transparent: an opaque body background would paint
+   ABOVE the fixed ::before layer (negative z-index renders behind the parent's
+   own background) and hide the heritage image entirely. */
+body {
+  background-color: transparent !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Composited fixed heritage background — painted once onto a GPU texture and
+   scrolled by the compositor (translateZ(0) + will-change) instead of repainting
+   a full-viewport photo every frame. */
 body::before {
   content: "" !important;
   display: block !important;
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -1;
   pointer-events: none;
   background-image: url('../assets/palestine-bg.jpg') !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
+  transform: translateZ(0);
   will-change: transform;
 }
 
@@ -52,7 +65,7 @@ body::after {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.35);
   transition: opacity 0.3s ease;
 }
 
