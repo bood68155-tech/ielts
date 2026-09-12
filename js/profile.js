@@ -365,7 +365,10 @@
     const activity = profileData().activity || [];
     $('#profile-activity').innerHTML = `
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-        <p class="font-bold text-slate-900 mb-4">🕒 Recent activity</p>
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-bold text-slate-900">🕒 Recent activity</p>
+          <button onclick="window.IELTS_PROFILE.exportCSV()" class="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 border border-brand-200 hover:bg-brand-100 transition">⬇ Export progress (CSV)</button>
+        </div>
         ${activity.length ? `
           <div class="space-y-3">
             ${activity.slice(0, 12).map((a) => `
@@ -386,5 +389,35 @@
       </div>`;
   }
 
-  window.IELTS_PROFILE = { render, startEdit, cancelEdit, saveProfile, pickAvatar, avatarOf };
+  /* ---------- progress export (CSV) ---------- */
+  const csvCell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+
+  function exportCSV() {
+    const user = window.IELTS_AUTH.getCurrentUser();
+    if (!user) { alert('Sign in to export your progress.'); return; }
+    const level = window.IELTS_AUTH.getLevel(user.xp);
+    const activity = profileData().activity || [];
+    const rows = [['IELTS PA — progress export', ''], [], ['Username', user.username], ['Name', user.fullName || ''],
+      ['Level', level ? level.name : ''], ['XP', user.xp], ['Target band (A1–C2)', user.targetBand || ''],
+      ['Exported', new Date().toISOString()], [],
+      ['date', 'type', 'activity', 'xp']];
+    (activity.slice().reverse()).forEach((a) => rows.push([new Date(a.date).toISOString(), a.type || '', a.text || '', a.xp || 0]));
+    const csv = rows.map((r) => r.map(csvCell).join(',')).join('\r\n');
+    try {
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ielts-pa-progress-' + user.username + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      if (window.toast) window.toast('Progress exported — open it in Excel or Numbers');
+    } catch (e) {
+      alert('Export failed in this browser');
+    }
+  }
+
+  window.IELTS_PROFILE = { render, startEdit, cancelEdit, saveProfile, pickAvatar, avatarOf, exportCSV };
 })();

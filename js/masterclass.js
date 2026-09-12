@@ -62,6 +62,23 @@
     iconify(document.body);
   }
 
+  /* Hydrate icons injected dynamically (sections, dashboards, live chat)
+     without rebuilding static markup — debounced full-body re-scan. */
+  if (typeof MutationObserver !== 'undefined' && document.body) {
+    new MutationObserver((muts) => {
+      let needsScan = false;
+      for (let i = 0; i < muts.length && !needsScan; i++) {
+        for (let j = 0; j < muts[i].addedNodes.length; j++) {
+          const n = muts[i].addedNodes[j];
+          if (n.nodeType !== 1) continue;
+          if (n.querySelector && n.querySelector('[data-imi-icon]')) { needsScan = true; break; }
+          if (n.getAttribute && n.getAttribute('data-imi-icon')) { needsScan = true; break; }
+        }
+      }
+      if (needsScan) scheduleIconify();
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
   /* ================= classroom state ================= */
   const MC_KEY = 'mc-classroom';
 

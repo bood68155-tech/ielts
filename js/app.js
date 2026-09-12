@@ -236,7 +236,42 @@
         <div class="text-[11px] text-[#f5f0e6]/50 mt-0.5">${s.sub}</div>
       </div>`).join('');
 
-    if (user) renderNextStepsRoadmap(user);
+    if (user) {
+      renderTodayMission();
+      renderNextStepsRoadmap(user);
+    }
+  }
+
+  /* ---------------- Today's study mission ---------------- */
+  function renderTodayMission() {
+    const el = $('#dashboard-mission');
+    if (!el) return;
+    if (!window.STUDY_PLAN || !window.STUDY_PLAN.WEEKS) { el.innerHTML = ''; return; }
+    const WEEKS = window.STUDY_PLAN.WEEKS;
+    let today = null;
+    for (let wi = 0; wi < WEEKS.length && !today; wi++) {
+      for (const d of WEEKS[wi].days) {
+        if (!window.STUDY_PLAN.isComplete(d.id)) { today = d; break; }
+      }
+    }
+    if (!today) {
+      el.innerHTML = '<div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-5 mb-6 flex items-center gap-3"><span class="text-2xl">🎉</span><div><p class="font-bold text-[#f5f0e6]">All study days complete!</p><p class="text-xs text-[#f5f0e6]/60">You finished the whole plan — now revise and take the weekly exam.</p></div></div>';
+      return;
+    }
+    const dayLabel = String(today.day) + '/' + today.title + (today.desc ? ' — ' + today.desc : '');
+    el.innerHTML = '<div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-3">' +
+      '<div class="flex items-center gap-3 min-w-0">' +
+        '<span class="w-10 h-10 shrink-0 rounded-xl bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.35)] flex items-center justify-center text-lg" data-imi-icon="dome" data-imi-size="w-5 h-5" data-imi-grad="1" data-imi-anim="1"></span>' +
+        '<div class="min-w-0">' +
+          '<p class="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]/80">🎯 Today’s study mission</p>' +
+          '<p class="font-bold text-[#f5f0e6] truncate">' + esc(dayLabel) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<button onclick="showSection(\'study-plan\')" class="shrink-0 px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] text-sm font-bold">Start now →</button>' +
+    '</div>';
+    if (window.IELTS_MASTERCLASS && window.IELTS_MASTERCLASS.iconify) {
+      try { window.IELTS_MASTERCLASS.iconify(el); } catch (e) { /* ignore */ }
+    }
   }
 
   /* ---------------- Next Steps Roadmap (adaptive, placement-driven) ---------------- */

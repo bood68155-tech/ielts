@@ -3013,6 +3013,17 @@ header > div > div {
   30% { transform: translateY(-4px); opacity: 1; }
 }
 
+.tc-mic.on {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.75);
+  background: rgba(239, 68, 68, 0.12);
+  animation: tc-pulse 1.2s ease-in-out infinite;
+}
+@keyframes tc-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.04); }
+}
+
 /* ============================================================
    MASTER CLASSROOM — Teacher Rami live teaching hub
    ============================================================ */

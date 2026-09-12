@@ -29,7 +29,9 @@
     messages: [],
     busy: false,
     panelOpen: false,
-    speaking: null
+    speaking: null,
+    micOn: false,
+    recognizer: null
   };
 
   function esc(s) {
@@ -37,6 +39,8 @@
   }
 
   const SPEAKER_ICON = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
+
+  const MIC_ICON = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><path d="M12 19v2M8 21h8"/></svg>';
 
   /* Hear Rami's reply out loud (Web Speech API, British voice preferred). */
   function say(text) {
@@ -53,6 +57,42 @@
     state.speaking = text;
     utter.onend = utter.onerror = function () { if (state.speaking === text) state.speaking = null; };
     speechSynthesis.speak(utter);
+  }
+
+  function setMic(on) {
+    state.micOn = !!on;
+    const setOn = (b) => b.classList.toggle('on', !!on);
+    document.querySelectorAll('.tc-mic').forEach((b) => setOn(b));
+    if (on) { window.toast && window.toast('Listening… speak now 🎤'); }
+  }
+
+  /* Talk to Rami with your voice — dictation in the composer. */
+  function startVoice(id) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { window.toast && window.toast('Voice input needs Chrome or Edge'); return; }
+    if (!state.recognizer) {
+      const rec = new SR();
+      rec.lang = 'en-GB';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+      rec.onresult = function (e) {
+        let t = '';
+        for (let i = 0; i < e.results.length; i++) if (e.results[i].isFinal) t += e.results[i][0].transcript + ' ';
+        t = t.trim();
+        const inp = document.getElementById(id + '-input');
+        if (inp && t) {
+          const hadText = String(inp.value).trim().length > 0;
+          inp.value = hadText ? inp.value + ' ' + t : t;
+          if (!hadText && !state.busy) sendFrom(id);
+        }
+      };
+      rec.onerror = function () { setMic(false); };
+      rec.onend = function () { setMic(false); };
+      state.recognizer = rec;
+    }
+    if (state.micOn) { try { state.recognizer.stop(); } catch (e) { /* noop */ } setMic(false); return; }
+    state.recognizer.lang = 'en-GB';
+    try { state.recognizer.start(); setMic(true); } catch (e) { setMic(false); }
   }
 
   /* Download the whole conversation as a Markdown study-note file. */
@@ -285,7 +325,8 @@
       }).join('') +
       '</div>' +
       '<div class="flex items-center gap-2">' +
-        '<input id="' + targetId + '-input" type="text" placeholder="Write in English… ' + (state.busy ? 'Rami is writing…' : 'Teacher Rami replies instantly') + '" class="flex-1 bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-xl px-4 py-2.5 text-sm text-[#f5f0e6] placeholder-[#f5f0e6]/40 focus:outline-none focus:border-[rgba(212,175,55,0.6)]" ' + (state.busy ? 'disabled' : '') + ' />' +
+        '<input id="' + targetId + '-input" type="text" placeholder="Write or speak in English… ' + (state.busy ? 'Rami is writing…' : 'Teacher Rami replies instantly') + '" class="flex-1 bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-xl px-4 py-2.5 text-sm text-[#f5f0e6] placeholder-[#f5f0e6]/40 focus:outline-none focus:border-[rgba(212,175,55,0.6)]" ' + (state.busy ? 'disabled' : '') + ' />' +
+        '<button class="shrink-0 w-10 h-10 rounded-xl border border-[rgba(212,175,55,0.4)] text-[#f5f0e6]/80 hover:text-[#d4af37] hover:border-[rgba(212,175,55,0.8)] flex items-center justify-center transition tc-mic" onclick="window.IELTS_RAMI_CHAT.startVoice(\'' + targetId + '\')" title="Talk to Rami with your voice" aria-label="Speak to Rami">' + MIC_ICON + '</button>' +
         '<button class="shrink-0 w-10 h-10 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] font-bold flex items-center justify-center" onclick="window.IELTS_RAMI_CHAT.sendFrom(\'' + targetId + '\')">' +
           '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14"/></svg>' +
         '</button>' +
@@ -409,7 +450,7 @@
     holder.id = 'tc-fab-wrap';
     holder.innerHTML = companionHtml();
     document.body.appendChild(holder);
-    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed, say, exportChat };
+    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed, say, exportChat, startVoice };
     const sec = $('#section-teacher-chat');
     if (sec && 'MutationObserver' in window) {
       const ob = new MutationObserver(() => {
