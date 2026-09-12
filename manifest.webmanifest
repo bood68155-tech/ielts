@@ -12,15 +12,21 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230f172a'/%3E%3Cpath d='M256 96l42 116 116 44-116 44-42 116-42-116-116-44 116-44z' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='64' fill='%23f9e9b4'/%3E%3C/svg%3E",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230f172a'/%3E%3Cpath d='M256 96l42 116 116 44-116 44-42 116-42-116-116-44 116-44z' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='64' fill='%23f9e9b4'/%3E%3C/svg%3E",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]

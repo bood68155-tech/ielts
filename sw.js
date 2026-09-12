@@ -5,11 +5,15 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v2';
+const CACHE = 'rami-star-v3';
 const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './icons/icon-180.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/favicon.png',
   './css/styles.css',
   './js/data.js',
   './js/study-plan.js',
