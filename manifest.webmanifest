@@ -1,0 +1,27 @@
+{
+  "name": "IELTS PA — Teacher Rami Mastery System",
+  "short_name": "IELTS PA",
+  "description": "Free interactive IELTS practice with Teacher Rami: Listening, Reading, Writing and Speaking, scoring, study plans and live coaching.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230f172a'/%3E%3Cpath d='M256 96l42 116 116 44-116 44-42 116-42-116-116-44 116-44z' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='64' fill='%23f9e9b4'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230f172a'/%3E%3Cpath d='M256 96l42 116 116 44-116 44-42 116-42-116-116-44 116-44z' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='64' fill='%23f9e9b4'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -121,8 +121,9 @@
   /* ================= Gemini client ================= */
   const GEMINI_URL = (model) => 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
 
-  // Use the Vercel serverless proxy (reads GEMINI_API_KEY server-side)
-  // whenever we are on a deployed domain and no client-side key is set.
+  // Use the Vercel serverless proxy (reads GEMINI_API_KEY server-side) first
+  // whenever we are on a deployed domain — the key must never ship to the
+  // browser. A client-side key is only used as a local/offline fallback.
   function useProxy() {
     try {
       if (typeof window === 'undefined' || typeof window.location === 'undefined') return false;
@@ -135,13 +136,24 @@
 
   async function gemini(systemPrompt, userPrompt, jsonOut) {
     const c = cfg();
-    if (!c.key && !useProxy()) return null;
+    const proxied = useProxy();
+    if (!c.key && !proxied) return null;
     const models = [c.model || DEFAULT_MODEL].concat(FALLBACK_MODELS.filter((m) => m !== (c.model || DEFAULT_MODEL)));
     let lastErr = null;
     for (const model of models) {
       try {
         let out = '';
-        if (c.key) {
+        if (proxied) {
+          const res = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model, system: systemPrompt, user: userPrompt, json: !!jsonOut })
+          });
+          if (!res.ok) return null;
+          const data = await res.json().catch(() => null);
+          if (!data || typeof data.text !== 'string' || !data.text.trim()) return null;
+          out = data.text;
+        } else if (c.key) {
           const res = await fetch(GEMINI_URL(model) + '?key=' + encodeURIComponent(c.key), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -155,15 +167,7 @@
           const text = (((data.candidates || [])[0] || {}).content || {}).parts;
           out = Array.isArray(text) ? text.map((p) => p.text || '').join('') : '';
         } else {
-          const res = await fetch('/api/gemini', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model, system: systemPrompt, user: userPrompt, json: !!jsonOut })
-          });
-          if (!res.ok) return null;
-          const data = await res.json().catch(() => null);
-          if (!data || typeof data.text !== 'string' || !data.text.trim()) return null;
-          out = data.text;
+          return null;
         }
         if (out.trim()) return out.trim();
         lastErr = new Error('Empty AI response');

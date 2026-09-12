@@ -139,6 +139,9 @@
       }
     }
     var currentWeek = WEEKS[currentWeekIdx];
+    var currentWeekDays = currentWeek ? currentWeek.days.length : 0;
+    var currentWeekDone = currentWeek ? currentWeek.days.filter(function (d) { return window.STUDY_PLAN.isComplete(d.id); }).length : 0;
+    var currentWeekPct = currentWeekDays ? Math.round((currentWeekDone / currentWeekDays) * 100) : 0;
 
     /* Show next 3 uncompleted tasks */
     var nextTasks = [];
@@ -161,7 +164,8 @@
       '<div>' +
       '<p class="text-sm text-white/80 font-medium">4-Week Study Plan</p>' +
       '<p class="text-xl font-extrabold mt-1">' + completedDays + ' / ' + totalDays + ' days completed</p>' +
-      '<p class="text-sm text-white/70 mt-1">Currently: ' + currentWeek.name + '</p>' +
+      '<p class="text-sm text-white/70 mt-1">Currently: ' + currentWeek.name + ' · this week ' + currentWeekDone + '/' + currentWeekDays + ' days</p>' +
+      '<div class="mt-2 w-44 h-1 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full" style="width:' + currentWeekPct + '%"></div></div>' +
       '</div>' +
       '<div class="text-center shrink-0">' +
       '<div class="relative w-20 h-20">' +

@@ -28,11 +28,54 @@
   const state = {
     messages: [],
     busy: false,
-    panelOpen: false
+    panelOpen: false,
+    speaking: null
   };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  const SPEAKER_ICON = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
+
+  /* Hear Rami's reply out loud (Web Speech API, British voice preferred). */
+  function say(text) {
+    if (!text || !('speechSynthesis' in window)) { window.toast && window.toast('Voice is not available in this browser'); return; }
+    if (state.speaking && state.speaking === text) { speechSynthesis.cancel(); state.speaking = null; return; }
+    speechSynthesis.cancel();
+    const clean = String(text).replace(/[*_`#]/g, '');
+    const utter = new SpeechSynthesisUtterance(clean);
+    const vs = speechSynthesis.getVoices();
+    const voice = vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
+    if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-US'; }
+    utter.rate = 0.95;
+    utter.pitch = 1.0;
+    state.speaking = text;
+    utter.onend = utter.onerror = function () { if (state.speaking === text) state.speaking = null; };
+    speechSynthesis.speak(utter);
+  }
+
+  /* Download the whole conversation as a Markdown study-note file. */
+  function exportChat() {
+    const out = ['# Conversation with Teacher Rami (الأستاذ رامي) · IELTS PA', ''];
+    state.messages.forEach((m) => {
+      out.push((m.role === 'user' ? '**You:** ' : '**Rami:** ') + String(m.text).trim());
+      out.push('');
+    });
+    try {
+      const blob = new Blob([out.join('\n')], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'teacher-rami-conversation.md';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      window.toast && window.toast('Conversation exported — keep it as a study note!');
+    } catch (e) {
+      window.toast && window.toast('Export failed in this browser');
+    }
   }
 
   /* safe encoding for a suggestion/quick chip's on-click payload */
@@ -140,6 +183,7 @@
         (m.suggestions && m.suggestions.length ? chipsHtml(m.suggestions) : '') +
         (m.demo ? '<p class="text-[10px] text-[#f5f0e6]/35 mt-2">coached from Rami’s built-in knowledge pack</p>' : '') +
       '</div>' +
+      '<button class="shrink-0 w-7 h-7 rounded-lg text-[#f5f0e6]/45 hover:text-[#d4af37] hover:bg-[rgba(212,175,55,0.12)] flex items-center justify-center transition mt-1" onclick="window.IELTS_RAMI_CHAT.say(\'' + chipSafe(m.text) + '\')" title="Hear Rami’s reply out loud" aria-label="Play Rami’s reply">' + SPEAKER_ICON + '</button>' +
       '</div>';
   }
 
@@ -297,6 +341,7 @@
           '</div>' +
           '<div class="flex items-center gap-2">' +
             '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition" onclick="window.IELTS_RAMI_CHAT.clearConversation()">Clear</button>' +
+            '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition" onclick="window.IELTS_RAMI_CHAT.exportChat()" title="Download this conversation as a study note">Export</button>' +
             '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection(\'speaking-sim\')">Speaking Lab →</button>' +
           '</div>' +
         '</div>' +
@@ -364,7 +409,7 @@
     holder.id = 'tc-fab-wrap';
     holder.innerHTML = companionHtml();
     document.body.appendChild(holder);
-    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed };
+    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed, say, exportChat };
     const sec = $('#section-teacher-chat');
     if (sec && 'MutationObserver' in window) {
       const ob = new MutationObserver(() => {
