@@ -15,13 +15,15 @@
   const CHAT_XP = 5;          // every 3rd practising message of the day
 
   const QUICK_PROMPTS = [
-    'How do I go from Band 6 to 7?',
-    'Correct this: "I am very excited to meeting you."',
-    '5 natural ways to say "very important"',
-    'How do I open Speaking Part 2?',
-    'Fix my sentence: "He don\'t like coffee anymore"',
-    'In, on or at — how do I choose?'
+    'My band is stuck at 6.5',
+    'Fix this: "I am agree"',
+    'Three-beat speaking method',
+    'Task 2 essay outline',
+    'Boost my vocabulary',
+    'I feel like giving up'
   ];
+
+  const QUICK_ICONS = { 'My band is stuck at 6.5': 'roadmap', 'Fix this: "I am agree"': 'grammar', 'Three-beat speaking method': 'speak', 'Task 2 essay outline': 'write', 'Boost my vocabulary': 'vocab', 'I feel like giving up': 'spark' };
 
   const state = {
     messages: [],
@@ -31,6 +33,17 @@
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  /* safe encoding for a suggestion/quick chip's on-click payload */
+  function chipSafe(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/'/g, '\\u0027');
+  }
+  function chipsHtml(list) {
+    if (!list || !list.length) return '';
+    return '<div class="mt-2.5 flex flex-wrap gap-1.5">' + list.map((s) =>
+      '<button class="tc-chip" onclick="window.IELTS_RAMI_CHAT.quick(\'' + chipSafe(s) + '\')">' + esc(s) + '</button>'
+    ).join('') + '</div>';
   }
 
   /* Teacher Rami portrait — cartoon robot in a Palestinian keffiyeh */
@@ -68,7 +81,7 @@
     const c = store();
     state.messages = c.messages || [];
     if (!state.messages.length) {
-      state.messages = [{ role: 'assistant', text: 'Salam! I’m Teacher Rami (أستاذ رامي). Write me one or two sentences of English — anything — and I’ll coach them the way a private tutor would: correction, the reason, and your next step.' }];
+      state.messages = [{ role: 'assistant', text: 'Salam! I’m Teacher Rami (أستاذ رامي). Write me one or two sentences of English — anything — and I’ll coach them the way a private tutor would: correction, the reason, and your next step. You can also ask me anything about IELTS: strategy, grammar, vocabulary, writing or speaking.', suggestions: ['My biggest IELTS worry', 'Fix this: "I am agree with that"', 'Plan a 4-week study schedule'] }];
       save({ messages: state.messages });
     }
   }
@@ -124,6 +137,7 @@
       '<div class="max-w-[85%] bg-[rgba(245,240,230,0.07)] border border-[rgba(245,240,230,0.12)] text-[#f5f0e6] text-sm rounded-2xl rounded-tl-md px-4 py-2.5">' +
         '<p class="whitespace-pre-wrap">' + esc(m.text) + '</p>' +
         correctionHtml(m.corrections) +
+        (m.suggestions && m.suggestions.length ? chipsHtml(m.suggestions) : '') +
         (m.demo ? '<p class="text-[10px] text-[#f5f0e6]/35 mt-2">coached from Rami’s built-in knowledge pack</p>' : '') +
       '</div>' +
       '</div>';
@@ -153,7 +167,7 @@
   /* ---------------- Actions ---------------- */
   function clearConversation() {
     state.messages = [];
-    push({ role: 'assistant', text: 'Fresh start — the slate is clean. Give me a sentence about your day and I’ll coach it.' });
+    push({ role: 'assistant', text: 'Fresh start — the slate is clean. Give me a sentence about your day and I’ll coach it, or pick a topic below.', suggestions: ['Fix this: "He don’t like coffee"', 'Boost my vocabulary', 'Speaking Part 2 tips'] });
     rerenderAll();
   }
 
@@ -209,7 +223,7 @@
             history: state.messages.slice(0, -1).map((m) => ({ role: m.role, text: m.text }))
           })
         : Promise.resolve({ reply: 'Salam! I’m Teacher Rami (أستاذ رامي). Ask me anything about IELTS — or send me a sentence to correct.', corrections: [], demo: true }));
-      push({ role: 'assistant', text: (res && res.reply) || 'Salam — write me a sentence and I’ll coach it.', corrections: (res && res.corrections) || [], demo: !!(res && res.demo) });
+      push({ role: 'assistant', text: (res && res.reply) || 'Salam — write me a sentence and I’ll coach it.', corrections: (res && res.corrections) || [], demo: !!(res && res.demo), suggestions: (res && res.suggestions) || [] });
       awardXp();
     } catch (e) {
       push({ role: 'assistant', text: 'Something interrupted me — try that again, one sentence is fine.', corrections: [], demo: true });
@@ -221,7 +235,10 @@
   function composerHtml(targetId) {
     return '<div class="tc-composer">' +
       '<div class="flex gap-1.5 overflow-x-auto pb-1.5 tc-chips">' +
-      QUICK_PROMPTS.slice(0, 4).map((p) => '<button class="tc-chip shrink-0" onclick="window.IELTS_RAMI_CHAT.quick(\'' + p.replace(/'/g, '\\u0027') + '\')">' + esc(p) + '</button>').join('') +
+      QUICK_PROMPTS.slice(0, 6).map((p) => {
+        const ico = (window.RAMI_ICONS && QUICK_ICONS[p]) ? window.RAMI_ICONS.icon(QUICK_ICONS[p], 'w-3 h-3 inline-block mr-1 -mt-0.5') : '';
+        return '<button class="tc-chip shrink-0" onclick="window.IELTS_RAMI_CHAT.quick(\'' + p.replace(/'/g, '\\u0027') + '\')">' + ico + esc(p) + '</button>';
+      }).join('') +
       '</div>' +
       '<div class="flex items-center gap-2">' +
         '<input id="' + targetId + '-input" type="text" placeholder="Write in English… ' + (state.busy ? 'Rami is writing…' : 'Teacher Rami replies instantly') + '" class="flex-1 bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-xl px-4 py-2.5 text-sm text-[#f5f0e6] placeholder-[#f5f0e6]/40 focus:outline-none focus:border-[rgba(212,175,55,0.6)]" ' + (state.busy ? 'disabled' : '') + ' />' +

@@ -1168,7 +1168,7 @@
      learner's English gently (with the "why"), and keeps the
      conversation moving with one follow-up question.
      ============================================================ */
-  const CHAT_THIRD_S = { go: 'goes', do: 'does', have: 'has', study: 'studies', try: 'tries', say: 'says', play: 'plays', work: 'works', live: 'lives', like: 'likes', want: 'wants', need: 'needs', know: 'knows', think: 'thinks', write: 'writes', read: 'reads', make: 'makes', take: 'takes', speak: 'speaks', talk: 'talks', eat: 'eats', watch: 'watches', teach: 'teaches' };
+  const CHAT_THIRD_S = { go: 'goes', do: 'does', have: 'has', study: 'studies', try: 'tries', say: 'says', play: 'plays', work: 'works', live: 'lives', like: 'likes', want: 'wants', need: 'needs', know: 'knows', think: 'thinks', write: 'writes', read: 'reads', make: 'makes', take: 'takes', speak: 'speaks', talk: 'talks', eat: 'eats', watch: 'watches', teach: 'teaches', come: 'comes', become: 'becomes', begin: 'begins', start: 'starts', finish: 'finishes', learn: 'learns', buy: 'buys', pay: 'pays', travel: 'travels', drive: 'drives', ride: 'rides', fly: 'flies', cook: 'cooks', clean: 'cleans', wash: 'washes', wear: 'wears', put: 'puts', open: 'opens', close: 'closes', call: 'calls', answer: 'answers', ask: 'asks', help: 'helps', love: 'loves', hate: 'hates', prefer: 'prefers', believe: 'believes', hope: 'hopes', wish: 'wishes', feel: 'feels', seem: 'seems', mean: 'means', mind: 'minds', matter: 'matters', remain: 'remains', stay: 'stays', depend: 'depends', include: 'includes', exist: 'exists' };
   const CHAT_GERUND = (w) => {
     const g = String(w).toLowerCase();
     if (g.endsWith('ie')) return g.slice(0, -2) + 'ying';
@@ -1176,42 +1176,266 @@
     return g + 'ing';
   };
 
-  function fallbackTeacherReply(text) {
-    const corrections = [];
-    const t = String(text || '').trim();
-    const low = t.toLowerCase();
+  /* ------------------------------------------------------------------
+     Teacher Rami — offline conversation brain (no API key needed).
+     An intent engine over a tutor knowledge pack: Rami detects what
+     the learner is asking about, teaches one clear idea, corrects
+     English gently with the why, ends with ONE follow-up question,
+     and suggests 2-3 tappable chips to keep the dialogue moving.
+     ------------------------------------------------------------------ */
+  function pushCorr(list, original, corrected, why) {
+    if (!original || !corrected || list.length >= 6) return;
+    if (list.some((c) => c.original === original && c.corrected === corrected)) return;
+    list.push({ original, corrected, why });
+  }
 
-    if (/\bi\b/.test(low) && !/\bI\b/.test(t)) {
-      corrections.push({ original: 'i', corrected: 'I', why: 'The pronoun “I” is always written with a capital letter in English, even mid-sentence.' });
-    }
-    const tps = low.match(/\b(he|she|it)\s+(go|do|have|study|try|say|play|work|live|like|want|need|know|think|write|read|make|take|speak|talk|eat|watch|teach)\b/);
-    if (tps && CHAT_THIRD_S[tps[2]]) {
-      corrections.push({ original: tps[1] + ' ' + tps[2], corrected: tps[1] + ' ' + CHAT_THIRD_S[tps[2]], why: 'With he / she / it in the present simple, the verb takes “s” (or “es”).' });
-    }
+  const IRREG_PAST = { goed: 'went', buyed: 'bought', eated: 'ate', runned: 'ran', writed: 'wrote', catched: 'caught', teached: 'taught', thinked: 'thought', keeped: 'kept', knowed: 'knew', seed: 'saw', maked: 'made', swimmed: 'swam', payed: 'paid', sayed: 'said', feeled: 'felt', leaved: 'left', telled: 'told' };
+  const IRREG_BASE = { went: 'go', ate: 'eat', saw: 'see', did: 'do', bought: 'buy', ran: 'run', wrote: 'write', took: 'take', came: 'come', left: 'leave', brought: 'bring', thought: 'think', made: 'make', told: 'tell', paid: 'pay', felt: 'feel', got: 'get' };
+  const UNCOUNT = { informations: 'information', advices: 'advice', furnitures: 'furniture', knowledges: 'knowledge', homeworks: 'homework', evidences: 'evidence', researches: 'research', staffs: 'staff', luggages: 'luggage', equipments: 'equipment', contents: 'content' };
+  const CONTRACT = { dont: "don't", doesnt: "doesn't", didnt: "didn't", isnt: "isn't", arent: "aren't", wasnt: "wasn't", werent: "weren't", havent: "haven't", hasnt: "hasn't", hadnt: "hadn't", wont: "won't", cant: "can't", couldnt: "couldn't", shouldnt: "shouldn't", wouldnt: "wouldn't", im: "I'm", ive: "I've", id: "I'd", youre: "you're", youve: "you've", whats: "what's", thats: "that's", theres: "there's" };
+  const COUNTABLE = ['people', 'things', 'cars', 'students', 'words', 'children', 'countries', 'days', 'problems', 'questions', 'mistakes', 'books', 'ideas', 'hours', 'kinds'];
+  const MASS_NOUNS = ['work', 'homework', 'information', 'knowledge', 'advice', 'money', 'time', 'water', 'traffic', 'furniture', 'research', 'evidence', 'stuff', 'news', 'progress'];
+
+  function runGrammarCoaching(t, low, c) {
+    /* pronoun I */
+    if (/\bi\b/.test(low) && !/\bI\b/.test(t)) pushCorr(c, 'i', 'I', 'Pronoun “I” is always capitalised in English — even mid-sentence.');
+    /* third-person -s */
+    const tps = low.match(/\b(he|she|it)\s+(go|do|have|study|try|say|come|become|begin|start|finish|learn|buy|pay|travel|drive|ride|fly|cook|clean|wash|wear|put|open|close|call|answer|ask|help|love|hate|prefer|believe|hope|wish|feel|seem|mean|mind|matter|remain|stay|play|work|live|like|want|need|know|think|write|read|make|take|speak|talk|eat|watch|teach)\b/);
+    if (tps && CHAT_THIRD_S[tps[2]]) pushCorr(c, tps[0], tps[1] + ' ' + CHAT_THIRD_S[tps[2]], 'With he / she / it, the present-simple verb takes “s” (or “es”).');
+    /* you/they + is/was */
     const yPron = low.match(/\b(you|they)\s+(is|was)\b/);
-    if (yPron) {
-      corrections.push({ original: yPron[1] + ' ' + yPron[2], corrected: yPron[1] + ' ' + (yPron[2] === 'is' ? 'are' : 'were'), why: 'Use “are / were” with you and they — “is / was” belongs with he, she and it.' });
+    if (yPron) pushCorr(c, yPron[0], yPron[1] + ' ' + (yPron[2] === 'is' ? 'are' : 'were'), '“Are / were” travel with you and they; “is / was” only with he, she, it.');
+    /* gerund after specific verbs */
+    const ger = low.match(/\b(enjoy|finish|avoid|consider|suggest|mind|deny|keep|imagine|practice|miss|admit|recommend|stop)\s+to\s+([a-z]+)\b/);
+    if (ger) pushCorr(c, ger[0], ger[1] + ' ' + CHAT_GERUND(ger[2]), 'These verbs take the “-ing” form, not “to + verb”.');
+    /* missing apostrophes */
+    const ct = CONTRACT;
+    const conRe = new RegExp('\\b(' + Object.keys(ct).join('|') + ')\\b', 'ig');
+    let conM;
+    while ((conM = conRe.exec(t))) {
+      const w = conM[0].toLowerCase();
+      pushCorr(c, conM[0], ct[w], 'Missing apostrophe — “' + ct[w] + '” is two words squeezed together.');
+      if (c.length >= 6) break;
     }
-    const ger = low.match(/\b(enjoy|finish|avoid|consider|suggest|mind)\s+to\s+([a-z]+)\b/);
-    if (ger) {
-      corrections.push({ original: ger[1] + ' to ' + ger[2], corrected: ger[1] + ' ' + CHAT_GERUND(ger[2]), why: 'These verbs take the “-ing” form, not “to + verb”.' });
+    /* irregular past */
+    let m;
+    const irrRe = new RegExp('\\b(' + Object.keys(IRREG_PAST).join('|') + ')\\b', 'ig');
+    while ((m = irrRe.exec(low))) pushCorr(c, m[0], IRREG_PAST[m[0]], '“' + IRREG_PAST[m[0]] + '” is the correct past form of this verb.');
+    /* uncountable nouns */
+    const unRe = new RegExp('\\b(' + Object.keys(UNCOUNT).join('|') + ')\\b', 'ig');
+    while ((m = unRe.exec(low))) pushCorr(c, m[0], UNCOUNT[m[0]], '“' + UNCOUNT[m[0]] + '” is uncountable in English — no “s”.');
+    /* would/could/should of */
+    m = low.match(/\b(would|could|should)\s+of\b/);
+    if (m) pushCorr(c, m[0], m[1] + ' have', '“' + m[1] + ' of” should be “' + m[1] + ' have” — of is never a verb helper.');
+    /* I am agree */
+    m = low.match(/\bi\s+am\s+agree\b/);
+    if (m) pushCorr(c, m[0], 'I agree', 'Agree is a verb, not an adjective — so there is no “am agree”.');
+    /* did + past verb */
+    m = low.match(/\bdid\s+(went|ate|saw|did|bought|ran|wrote|took|came|left|brought|thought|made|told|paid|felt|got)\b/);
+    if (m && IRREG_BASE[m[2]]) pushCorr(c, m[0], 'did ' + IRREG_BASE[m[2]], 'After “did”, the verb returns to the base form.');
+    /* more better */
+    m = low.match(/\bmore\s+better\b/);
+    if (m) pushCorr(c, m[0], 'much better', '“Better” is already comparative — “more better” is never correct.');
+    /* a/an before vowel-start words */
+    m = low.match(/\ba\s+([aeiou][a-z]+)\b/);
+    if (m) pushCorr(c, m[0], 'an ' + m[1], 'Before a vowel sound, “a” becomes “an”.');
+    m = low.match(/\ban\s+([bcdfgjklmnpqrstvwxz][a-z]+)\b/);
+    if (m) pushCorr(c, m[0], 'a ' + m[1], 'Before a consonant sound, “an” becomes “a”.');
+    /* its vs it's */
+    m = low.match(/\bits\s+(going|raining|hard|important|a|an|time|possible|difficult|easy|not|never|always|nice|great|my|your|the)\b/);
+    if (m) pushCorr(c, m[0], "it's " + m[1], '“It’s” = it is. “Its” is only the possessive (its colour).');
+    /* much / many */
+    m = low.match(new RegExp('\\bmuch\\s+(' + COUNTABLE.join('|') + ')\\b'));
+    if (m) pushCorr(c, m[0], 'many ' + m[1], '“Many” goes with countable plurals — “much” with uncountable ideas.');
+    m = low.match(new RegExp('\\bmany\\s+(' + MASS_NOUNS.join('|') + ')\\b'));
+    if (m) pushCorr(c, m[0], 'much ' + m[1], '“Much” goes with uncountable ideas like “' + m[1] + '”.');
+    m = low.match(/\bless\s+(people|things|cars|books|mistakes|students|words|children|days|hours)\b/);
+    if (m) pushCorr(c, m[0], 'fewer ' + m[1], 'For countable plurals, use “fewer”, not “less”.');
+  }
+
+  /* one-line tappable follow-ups used across intents */
+  const SYNONYM_EXTRA = { children: 'young people / the younger generation / minors', happy: 'content / pleased / delighted', sad: 'unhappy / dejected / disheartened', old: 'aged / long-standing / dated (context)', new: 'novel / emerging / unprecedented', fast: 'rapid / swift / accelerated', slow: 'gradual / sluggish / protracted', difficult: 'challenging / arduous / demanding', easy: 'straightforward / effortless / uncomplicated', tired: 'exhausted / fatigued / drained', interesting: 'compelling / captivating / thought-provoking', boring: 'tedious / monotonous / uninspiring' };
+  const SALAM = 'Marhaba! I’m ' + MENTOR.name + ' (' + MENTOR.ar + ') — your personal IELTS coach, and I love a long conversation. ';
+
+  function fallbackTeacherReply(text, level) {
+    const t = String(text || '').trim().slice(0, 600);
+    const low = t.toLowerCase();
+    const corrections = [];
+    runGrammarCoaching(t, low, corrections);
+    const cap = corrections.slice(0, 5);
+    const hasAr = /[\u0600-\u06FF]/.test(t);
+    const S = (a) => (Array.isArray(a) ? a.slice(0, 3) : []);
+
+    let out = null;
+
+    const greetTest = /^\s*(hi+|hello+|hey+|salam|marhab[a-z]*|selam)/i.test(t) || /(^|\s)(مرحبا|أهلا|اهلا|أهلاً|هلا|السلام عليكم)/.test(t);
+    if (greetTest && t.length < 40) {
+      out = hasAr
+        ? {
+            reply: 'مرحبا بك! أنا الأستاذ رامي، مدرّسك الخاص بالإنجليزي والـ IELTS. سؤال بسيط عشان نبدأ: أكثر مهارة قلقان عليها — سبيكينغ، رايترينغ، ريفدينغ، لسننغ، ولا كل الامتحان؟',
+            suggestions: ['السبيكينغ بيخوّفني', 'بدي خطة دراسة', 'صحح هالجملة: "He don\'t live here"']
+          }
+        : {
+            reply: SALAM + 'Tell me one thing straight: which skill scares you most right now — speaking, writing, reading, listening, or the whole exam?',
+            suggestions: ['Speaking makes me nervous', 'How do I start preparing?', 'Correct this: "I am agree with that"']
+          };
+    } else if (/\b(how are you|how is it going|كيف حالك|كيفك|شلونك|كيف الحال|عامل ايه)\b/i.test(low)) {
+      out = {
+        reply: 'I am genuinely excellent — a full day of teaching English is my idea of fun. Now, more importantly, you: on a scale of 1 to 10, how confident do you feel speaking English today?',
+        suggestions: ['Seven, but I freeze in Part 3', 'Honestly, a three', 'Help me increase my confidence']
+      };
+    } else if (/\b(thank|thx|شكرا|شكراً|تسلم|ممنون)\b/i.test(low)) {
+      out = {
+        reply: 'You are most welcome — and the professional upgrade is “my pleasure”, which lands warmer than a plain “ok”. Tell me: which phrase from today did you actually say out loud?',
+        suggestions: ['Give me five native phrases', 'I used "my pleasure"!', 'Coach my next sentence']
+      };
+    } else if (/\b(bye|goodbye|good night|goodnight|see you|مع السلامة|مع السلامه|باي)\b/i.test(low) && t.length < 30) {
+      out = {
+        reply: 'Goodbye — before you go, here is tonight’s drill: write one sentence describing your day, record it out loud once, then come back and I will coach it. Deal?',
+        suggestions: ['Deal — see you soon', 'Give me a writing task instead', 'one more question']
+      };
+    } else if (/\b(who are you|what are you|what can you do|help me|مين انت|مين انتي|وش بتعرف تعمل|شو بتحكي)\b/i.test(low)) {
+      out = {
+        reply: 'I am ' + MENTOR.name + ' (' + MENTOR.ar + '): your live English teacher inside this platform. I correct your sentences, teach grammar and exam strategy, grow your vocabulary, and keep you motivated — like a real private tutor. So, what shall we talk about first?',
+        suggestions: ['My biggest IELTS worry', 'Speaking Part 2 strategy', 'Name five common mistakes']
+      };
+    } else if (/\b(band|نسبة|المعيار)\b/i.test(low) && /\b(6|7|7\.5|8|8\.5|9|higher|raise|increase|improve|get to|reach|aim|target|score|علامة)\b/i.test(low)) {
+      out = {
+        reply: 'Bands are built from four engines working together: accurate grammar, precise vocabulary, fluent structure, and exam technique. To jump a band you do not need harder materials — you need to fix your five most repeated mistakes and practise them until automatic. Send me ONE sentence you wrote today and I will find your pattern for you.',
+        suggestions: ['Here is my sentence…', 'Improve my vocabulary', 'Plan a 4-week schedule']
+      };
+    } else if (/\b(start|schedule|plan|prepare|begin|roa[d]? ?m?ap|study plan|how many hours|منين أبدأ|أبدأ|ابدأ|خطة)\b/i.test(low)) {
+      out = {
+        reply: 'Perfect question — this is exactly where serious learners begin. The order: 1) Diagnose (take the placement test and let me find your level), 2) Build daily blocks of 30–60 minutes mixing one skill + one grammar/vocab drill, 3) Take a weekly full exam and re-plan. Consistency beats intensity every time. Where do you want to start the first week?',
+        suggestions: ['Give me a sample Week 1', 'I want to focus on speaking', 'Open the placement test']
+      };
+    } else if (/\b(motivat|stress|exhaust|burned ?out|nervous|scared|afraid|anxious|worried|cannot|can't do|give up|يأس|توتر|خوف|قلق|احباط|إحباط)\b/i.test(low)) {
+      out = {
+        reply: 'Sit with this for a second: language learning is not a talent, it is a habit. Every single expert English speaker was once exactly where you are — the difference is they did not stop. Shrink the goal: one sentence today, one correction, one win. That is how confidence is actually built. What is the smallest English win you can get today?',
+        suggestions: ['I will write one sentence', 'How do I stay consistent?', 'Give me encouragement for speaking']
+      };
+    } else if (/\b(reading|skim|scan|true false|tfng|not given|paragraph|قراءة)\b/i.test(low)) {
+      out = {
+        reply: 'Reading rewards a two-pass system: 1) Skim headings and the topic sentences of each paragraph (~60 seconds), 2) Scan for the exact keywords of each question before reading closely. And the band-decisive skill: for True / False / Not Given, a statement is TRUE only if the passage matches it word-for-word in meaning; False only if it directly contradicts; everything else is Not Given. Which question type trips you most?',
+        suggestions: ['Strategy for "Not Given"', 'Practice a reading passage', 'How to skim faster']
+      };
+    } else if (/\b(listen|listening|audio|speaker|استماع)\b/i.test(low)) {
+      out = {
+        reply: 'Listening is won before the audio starts. In the gap, read the questions and predict the ANSWER TYPE — is it a number, a name, a date, a place? Then listen for the words you predicted. One more habit: the examiner loves when you transfer answers during the provided pause, not at the end. Which section do you lose the most marks in?',
+        suggestions: ['Listening Part 4 is brutal', 'How to predict answer types', 'Practice a listening section']
+      };
+    } else if (/\b(task 2|task two|essay|argumentative|opinion essay|مقال)\b/i.test(low)) {
+      out = {
+        reply: 'Task 2 is won in the first 5 minutes of planning. Build every paragraph on the PEEL skeleton: Point → Explain → Example → Link back. A Band 7 essay never argues two ideas in one paragraph, and it always spends 5 minutes outlining before the first word. The examiner grades ideas, structure, vocabulary and grammar — not length beyond 250 words. Want to build a paragraph together?',
+        suggestions: ['Drill the PEEL skeleton', 'Give me a Task 2 question', 'Correct my essay sentence']
+      };
+    } else if (/\b(task 1|task one|report|graph|chart|diagram|map|خط بياني|رسم بياني)\b/i.test(low)) {
+      out = {
+        reply: 'Task 1 is a report, not a story. The winning shape: one sentence summarising what the data shows overall (the overview — your Band 7 lifeline), then two organised paragraphs comparing the biggest rises, falls, and contrasts. Use precise verbs — “rose sharply”, “levelled off”, “peaked at” — and keep it around 150 words written in the past tense for past data. What kind of graph are you practising?',
+        suggestions: ['Line graph trends', 'How to write the overview', 'Give me a sample report']
+      };
+    } else if (/\b(speaking|part 1|part 2|part 3|fluency|cue card|speak|تحدث|كلام|محادثة)\b/i.test(low) && !/\b(lab|simulator)\b/.test(low)) {
+      const p2 = /\bpart 2|part two|cue card\b/.test(low);
+      const p3 = /\bpart 3|part three\b/.test(low);
+      if (p2) {
+        out = {
+          reply: 'Cue cards punish memorisation. Instead, use four beats: What it is → When/Where → Why it matters to you → What happened next. Structure buys you the full 2 minutes without running dry, and examiners give fluency marks for organisation, not for fancy words. Try the opening: “I would like to talk about…” and then just follow your beats. Which cue card are you dreading?',
+          suggestions: ['Describe a place you love', 'Describe a person who inspires you', 'Three-beat method']
+        };
+      } else if (p3) {
+        out = {
+          reply: 'Part 3 is where Bands 7–9 are decided. The examiner wants OPINION → REASON → EXAMPLE in every answer, and they push you with extra questions on purpose — that is a gift, not a trap. Say your claim directly, defend it with a reason, then anchor it with a real example from your life or the news. Which part of Part 3 feels hardest?',
+          suggestions: ['I run out of things to say', 'Teach me the three-beat method', 'Give me a Part 3 question']
+        };
+      } else {
+        out = {
+          reply: 'Speaking fluency is structure, not speed. My three-beat rule: every answer holds Opinion → Reason → Example. Beat one buys you confidence, beat two buys you depth, beat three buys you a natural finish — and natives fill pauses with phrases like “What I mean is…”, never silence. Try it now: tell me your opinion about your hometown in three beats.',
+          suggestions: ['My three-beat answer…', 'Part 2 cue card tips', 'Fix my speaking sentence']
+        };
+      }
+    } else if ((low.match(/(?:synonym|another word|another way) (?:for|to say) ([a-zA-Z][a-zA-Z ]*)/) || [])[1]) {
+      const synWord = low.match(/(?:synonym|another word|another way) (?:for|to say) ([a-zA-Z][a-zA-Z ]*)/)[1].trim().toLowerCase();
+      const synHit = BASIC_TO_UPGRADED.find((e) => e.original.toLowerCase() === synWord);
+      const synExtra = SYNONYM_EXTRA[synWord];
+      if (synHit) {
+        out = {
+          reply: 'Good eye — “' + synWord + '” is clear and correct, but for a sharper tone reach for “' + synHit.upgraded + '”. ' + synHit.why + ' Now drop it into ONE sentence from your own life and send it to me.',
+          suggestions: ['My sentence using it…', 'Another synonym to upgrade', 'Build me a word bank']
+        };
+      } else if (synExtra) {
+        out = {
+          reply: 'For “' + synWord + '”, stronger options are “' + synExtra + '”. Choose the one that matches your exact idea, then use it in a sentence from your own life and send it to me — that is how a word becomes yours.',
+          suggestions: ['My sentence using it…', 'Another synonym to upgrade', 'Give me 5 exam-ready words']
+        };
+      } else {
+        out = {
+          reply: 'The best replacement for “' + synWord + '” depends on your exact context, so I do not want to guess and teach you a weak fit. Send me the full sentence you are writing and I will upgrade it precisely, with the reason for each choice.',
+          suggestions: ['Here is my sentence…', 'Boost my vocabulary', 'Give me 5 exam-ready words']
+        };
+      }
+    } else if (/\b(word|vocab|vocabulary|synonym|another word|phrase|يمعنى|يعني|كلمة|كلمات)\b/i.test(low) && !/\bsentence\b/.test(low)) {
+      const vow = (low.match(/\b(?:how (?:do|can) (?:i|we) say|how (?:do|can) (?:i|we) (?:say|translate)|what is the word|another word for)\s+([a-z\s?]+?)\s*[?.]?$/) || [])[1];
+      if (vow) {
+        out = {
+          reply: 'For the idea “' + vow.trim() + '”, the exact English word depends on the context, so give me the full Arabic sentence and I will correct it word-for-word — that is how we build real active vocabulary. Right now, capture it in English simply (even imperfectly) and we will polish it together.',
+          suggestions: ['The idea is "hard work"', 'Correct this Arabic sentence', 'Build me a word bank']
+        };
+      } else {
+        out = {
+          reply: 'Vocabulary only counts when it is used. My rule of three: you own a word after using it in three different sentences out loud. Skip the word-of-the-day lists — instead, when you meet a new word, record its exact meaning, its collocation (partner word), and one sentence from your own life. Send me a sentence containing a new word you want to own.',
+          suggestions: ['Give me 5 exam-ready words', 'Word: "resilient"', 'How to use collocations']
+        };
+      }
+    } else if (/\b(grammar|tense|preposition|article|plural|rules|قواعد|قاعدة)\b/i.test(low)) {
+      out = {
+        reply: 'Grammar is only worth studying in the exact error you make. The five patterns my students repeat most: third-person -s (“she go” → “she goes”), articles (a/an/the), the verb after “did”, uncountable nouns (information, advice), and apostrophes (don’t). Pick the one you know you break — or send me a sentence now and I will find it for you.',
+        suggestions: ['Check my sentence', 'Explain articles simply', 'Verb tenses — which matter?']
+      };
+    } else if (/\b(idioms?|expression)\b/i.test(low)) {
+      out = {
+        reply: 'Idioms only lift your band if they are natural and you can explain them. Five exam-safe ones: “a double-edged sword”, “hit the nail on the head”, “on the same page”, “a blessing in disguise”, “go the extra mile”. Use one per speaking answer max — an idiom you explain well beats three you cannot. Which context do you want an idiom for?',
+        suggestions: ['An idiom for success', 'An idiom for problems', 'Use one in a sentence']
+      };
+    } else if (/\b(correct|fix|check|right|wrong|mistake|صحح|صحّح|صلح|غلط|غلطت|هل الجملة)\b/i.test(low)) {
+      const target = (t.match(/["'“”]([^"'“”]+)["'“”]/) || [])[1] || (t.split(/[::]/).slice(1).join(':').trim());
+      if (target && target.length > 2 && target.length <= 200) {
+        const tc = [];
+        runGrammarCoaching(target, target.toLowerCase(), tc);
+        out = {
+          reply: tc.length
+            ? 'Good instinct — correcting your own sentences is how bands climb. I fixed the slips in “' + target + '” above; say each fix twice out loud, then rewrite the whole sentence clean and send it back.'
+            : 'That sentence already reads clean — nice work. To make it shine at Band 8, tighten the vocabulary: name the exact idea instead of the general one, and link it with a precise connector. What is the idea behind the sentence?',
+          suggestions: ['My rewrite…', 'Give me a harder sentence to fix']
+        };
+      }
+    } else if (hasAr) {
+      out = {
+        reply: 'سؤال حلو — حكيني بأي مجال بدك مساعدة: مهارة معينة (سبيكينغ/رايترينغ/ريفدينغ/لسننغ)، قواعد، مفردات، أو خطة دراسة. اقدر أحكي معك عربي وبرجع لكلّك بالإنجليزي لأنه هيك بنتعلم. وش أكثر شي بدك تبدأ فيه؟',
+        suggestions: ['أريد خطة دراسة', 'صحح جملة كتبتها', 'مفردات للرايترينغ']
+      };
     }
 
-    let reply;
-    if (/^(hi|hii+|hello|hey|salam|marhab[a-z]*|مرحبا|أهلا|اهلا|هلا)\b/i.test(t)) {
-      reply = 'Marhaba! I’m ' + MENTOR.name + ' (' + MENTOR.ar + '), your personal English coach. Tell me one thing: is speaking, writing, or exam strategy the biggest worry for you right now?';
-    } else if (/\b(how are you|كيف حالك|كيفك|شلونك|كيف الحال)\b/i.test(low)) {
-      reply = 'I am genuinely excellent — thank you for asking. Now I care more about you: on a scale of 1 to 10, how confident do you feel speaking English today?';
-    } else if (/\b(thank|شكرا|شكراً|تسلم)\b/i.test(low)) {
-      reply = 'You are most welcome. Small professional upgrade: “my pleasure” lands warmer than a plain “ok”. Now tell me — which phrase did you learn today that you actually used?';
-    } else if (!t) {
-      reply = 'Just write one or two sentences — anything. I will correct them the way a private tutor would, and we will build from there.';
-    } else {
-      reply = corrections.length
-        ? 'Nice — you wrote in English, and that is exactly how band scores climb. I fixed the small slips above; read each fix twice, out loud. Now push yourself: rewrite your sentence using the corrections.'
-        : 'That reads well — clear and natural. To make it shine even brighter, tell me the same idea again with one fresh word or a stronger linker like “on top of that”. What is the next thing you want to say?';
+    /* natural text: treat as a sentence to coach */
+    if (!out) {
+      if (cap.length) {
+        out = {
+          reply: 'Nice — you wrote in English, and that is exactly how band scores climb. I fixed the small slips above; read each fix twice, out loud, then send me the rewritten sentence — one clean version.',
+          suggestions: ['My rewritten sentence…', 'Explain the -s rule again', 'Give me a new topic']
+        };
+      } else if (/\?\s*$/.test(t)) {
+        out = {
+          reply: 'Great question — and honestly, I would rather teach you the thinking behind it than hand you a list. Tell me which area you are asking about (speaking, writing, reading, listening, grammar or vocabulary) and I will give you the exact strategy with a live example.',
+          suggestions: ['Speaking strategy', 'Writing strategy', 'Grammar question']
+        };
+      } else {
+        out = {
+          reply: 'That reads well — clear and natural. Push it one level: say the same idea again but swap a general word for a precise one, or open with a stronger connector like “on top of that”. What is the next idea you want to say?',
+          suggestions: ['My upgraded version…', 'How to link ideas better', 'Give me a sentence to fix']
+        };
+      }
     }
-    return { reply, corrections: corrections.slice(0, 4), demo: true };
+
+    return { reply: out.reply, corrections: cap, demo: true, suggestions: S(out.suggestions || []) };
   }
 
   async function teacherChat(opts) {
@@ -1221,12 +1445,15 @@
     const history = Array.isArray(opts.history) ? opts.history.slice(-12) : [];
     const c = cfg();
     if (!user) return { reply: 'Write something and I’ll respond — one honest sentence is all it takes.', corrections: [], demo: true };
-    if (!c.key && !useProxy()) return fallbackTeacherReply(user);
-    const sys = 'You are ' + MENTOR.name + ' (' + MENTOR.ar + '), the learner\'s personal IELTS English teacher — warm, sharp and encouraging, like a real tutor texting a student. Match the learner\'s language but always reply in English (unless they write in Arabic, then answer briefly in Arabic and switch back). Correct their English gently: for each mistake say what was wrong, why it is wrong, and the natural way a professional would say it. ALWAYS end your reply with ONE short follow-up question to keep the conversation alive. Keep the whole reply brief and human — never robotic, never a list of rules.';
-    const usr = 'Learner level: ' + level + '.\nRecent conversation:\n' + history.map((m) => (String(m.role) === 'user' ? 'Learner: ' : MENTOR.name + ': ') + String(m.text || '')).join('\n') + '\n\nNow respond to the learner\'s LATEST message: "' + user + '"\nOutput ONLY strict JSON:\n{"reply":"your warm reply ending in one question","corrections":[{"original":"mistaken phrase","corrected":"natural fix","why":"one-line reason"}]}';
+    if (!c.key && !useProxy()) return fallbackTeacherReply(user, level);
+    const sys = 'You are ' + MENTOR.name + ' (' + MENTOR.ar + '), the learner\'s personal IELTS English teacher — warm, sharp and encouraging, like a real private tutor texting a student. Match the learner\'s language but always reply in English (unless they write in Arabic, then answer warmly in Arabic first, then continue in English). Cover IELTS strategy, grammar, vocabulary, speaking and writing with concrete examples. Correct their English gently: for each mistake say what was wrong, why it is wrong, and the natural way a professional would say it. ALWAYS end your reply with ONE short follow-up question to keep the conversation alive. Keep the whole reply brief and human — never robotic, never a list of rules.';
+    const usr = 'Learner level: ' + level + '.\nRecent conversation:\n' + history.map((m) => (String(m.role) === 'user' ? 'Learner: ' : MENTOR.name + ': ') + String(m.text || '')).join('\n') + '\n\nNow respond to the learner\'s LATEST message: "' + user + '"\nOutput ONLY strict JSON:\n{"reply":"your warm reply ending in one question","corrections":[{"original":"mistaken phrase","corrected":"natural fix","why":"one-line reason"}],"suggestions":["2 or 3 short tappable follow-up messages, varied"]}';
     const raw = await gemini(sys, usr, true);
     const data = raw ? parseJson(raw) : null;
-    if (!data || !String(data.reply || '').trim()) return fallbackTeacherReply(user);
+    if (!data || !String(data.reply || '').trim()) return fallbackTeacherReply(user, level);
+    const suggestions = Array.isArray(data.suggestions)
+      ? data.suggestions.map((s) => String(s || '').trim()).filter((s) => s && s.length >= 3 && s.length <= 80).slice(0, 3)
+      : [];
     return {
       reply: String(data.reply).trim().slice(0, 900),
       corrections: Array.isArray(data.corrections)
@@ -1236,6 +1463,7 @@
             why: String((cc && cc.why) || '').trim().slice(0, 200)
           })).filter((cc) => cc.original || cc.corrected).slice(0, 6)
         : [],
+      suggestions,
       demo: false
     };
   }
