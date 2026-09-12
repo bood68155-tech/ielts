@@ -9,6 +9,7 @@ const CACHE = 'rami-star-v3';
 const CORE = [
   './',
   './index.html',
+  './download.html',
   './manifest.webmanifest',
   './icons/icon-180.png',
   './icons/icon-192.png',
