@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.bood68155tech.ielts",
+        "sha256_cert_fingerprints": ["B9:C9:E2:08:B8:88:C5:D4:74:84:F7:CD:D5:1B:CB:1F:70:B1:19:CC:A9:9B:9E:B8:40:9D:12:D8:E4:21:C2:93"]
+      }
+    }]
