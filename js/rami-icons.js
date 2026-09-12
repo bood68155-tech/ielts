@@ -1,16 +1,28 @@
 /* ============================================================
-   IELTS PA — Bespoke Heritage Iconography
+   IELTS PA — Bespoke Heritage Iconography · v2 "Ember & Orbit"
    ------------------------------------------------------------
    A handmade, minimalist line-icon system for Teacher Rami's
-   surfaces. Deliberately NOT generic "AI" iconography: each icon
-   is single-stroke line art rendered in the platform gold, with
-   subtle Palestinian heritage motifs interwoven (eight-pointed
-   Rub el Hizb star, olive branch, Dome silhouette, geometric
-   lozenge & weaves, stair-path roadmap). Exposed as:
-       window.RAMI_ICONS.icon(name, cls)
-       window.RAMI_ICONS.badge(label, iconName, cls)
-       window.RAMI_ICONS.divider()
-       window.RAMI_ICONS.skill(name, tone, size)
+   surfaces. Single-stroke line art on 24x24, rendered in the
+   platform gold, with Palestinian heritage motifs woven through
+   (eight-pointed Rub el Hizb star, olive branch, Dome silhouette,
+   geometric lozenge & weaves, stair-path roadmap).
+
+   v2 upgrades — "new, non-traditional" presentation:
+     • every mark floats in a faint orbital halo: a curved orbit
+       arc + a tiny Rub el Hizb diamond — modern/technical while
+       keeping the heritage soul.
+     • opt-in premium finishes via <span data-imi-* />:
+         data-imi-grad="1"  → molten-gold gradient stroke (url())
+         data-imi-anim="1"  → stroke draw-in micro-animation
+         data-imi-glow="1"  → soft ambient gold glow (drop-shadow)
+     • ~15 new geometric icon names added for the wider surface map.
+
+   Exposed as:
+        window.RAMI_ICONS.icon(name, cls, opts)
+        window.RAMI_ICONS.badge(label, iconName, cls)
+        window.RAMI_ICONS.divider()
+        window.RAMI_ICONS.skill(name, tone, size, opts)
+        window.RAMI_ICONS.names()
    ============================================================ */
 (function () {
   'use strict';
@@ -63,19 +75,73 @@
     /* Bookmark — study/session marker */
     bookmark: '<path d="M6 3h12v18l-6-4-6 4z"/>',
     /* Star marker */
-    marker: '<path d="M12 3.2l1.4 3.9 3.9 1.4-3.9 1.4-1.4 3.9-1.4-3.9-3.9-1.4 3.9-1.4z"/>'
+    marker: '<path d="M12 3.2l1.4 3.9 3.9 1.4-3.9 1.4-1.4 3.9-1.4-3.9-3.9-1.4 3.9-1.4z"/>',
+
+    /* ---- v2 additions: geometric "molecular C2" marks ---- */
+    /* Levels — ascending learning stack */
+    levels: '<path d="M5 19h14M7 19v-3h10v3M9 16v-3h6v3M11 13V8"/><path d="M11 8l.8 2.1 2.1.8-2.1.8L11 13.7l-.8-2-2.1-.8 2.1-.8z"/>',
+    /* Target — diagnostics ring */
+    target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2"/>',
+    /* Chart — data bars */
+    chart: '<path d="M4 20h16M7 20v-6M12 20V9M17 20v-10"/>',
+    /* Compass — navigation */
+    compass: '<circle cx="12" cy="12" r="8.5"/><path d="M15.7 8.3l-2.3 5.1-5.1 2.3 2.3-5.1z"/>',
+    /* Audio — headphones */
+    audio: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3.5" y="13" width="4" height="6" rx="1.5"/><rect x="16.5" y="13" width="4" height="6" rx="1.5"/>',
+    /* Mic — recording */
+    mic: '<rect x="9.5" y="3" width="5" height="11" rx="2.5"/><path d="M5.5 12v.5a6.5 6.5 0 0 0 13 0V12"/><path d="M12 18.5V21M8.5 21h7"/>',
+    /* Swap — translator arrows */
+    swap: '<path d="M8 9.5h10.5M16 6.5l3 3-3 3"/><path d="M16 14.5H5.5M8 11.5l-3 3 3 3"/>',
+    /* Users — community */
+    users: '<circle cx="9" cy="8.5" r="3.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M15.5 15.4a4.6 4.6 0 0 1 5 3.6"/>',
+    /* Streak — study tracker flame */
+    streak: '<path d="M12 21c-3.8 0-6.5-2.5-6.5-6C5.5 10 8.5 8 9.5 5.5c.9 2.2 2.6 3.5 4 4.1C12.9 7.8 12.2 5.8 12.4 3c2.2 1 4 3 4.7 5.5.7-.3 1.3-.8 1.9-1.4.7 1.6 1 3.2 1 4.7 0 4.2-3.2 6.2-6 6.2z"/>',
+    /* Shield — security grade */
+    shield: '<path d="M12 3l7 2.5V11c0 4.6-2.9 7.9-7.5 10-4.6-2.1-7.5-5.4-7.5-10V5.5z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.6"/>',
+    /* Bell — notice */
+    bell: '<path d="M18 15.5v-5a6 6 0 0 0-12 0v5l-1.5 2h15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    /* Globe — international/cultural */
+    globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.9 2.5 2.9 14.5 0 17M12 3.5C9.1 6 9.1 18 12 20.5"/>',
+    /* Crown — mastery */
+    crown: '<path d="M4 17.5h16"/><path d="M4.5 8.5l3.6 3.2 3.9-6 3.9 6 3.6-3.2v9h-15z"/>',
+    /* Search */
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L20 20"/>',
+    /* Layers — synthesis */
+    layers: '<path d="M12 3.5l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5L21 12"/><path d="M3 16.5L12 21l9-4.5"/>',
+    /* Lock — secure */
+    lock: '<rect x="6" y="10.5" width="12" height="9" rx="1.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'
   };
 
-  const RAW = function (name, cls) {
-    var body = I[name];
-    if (!body) body = I.spark;
-    return '<svg class="' + (cls || 'w-5 h-5') + ' imi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + body + '</svg>';
+  /* Faint orbital halo: a curved orbit arc + tiny Rub el Hizb diamond.
+     Shared by every mark — the "new, non-traditional" technical frame. */
+  const HALO = '<g data-imi-halo opacity="0.5" stroke-width="1.1">' +
+    '<path d="M19.3 12.8a7.7 7.7 0 1 1-2.2-5.6"/>' +
+    '<path d="M18.4 3.9l.62 1.74 1.74.62-1.74.62-.62 1.74-.62-1.74-1.74-.62 1.74-.62z"/>' +
+    '</g>';
+
+  let gSeq = 0;
+  const gradDef = (id) => '<defs><linearGradient id="' + id + '" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">' +
+    '<stop offset="0" stop-color="#f9e9b4"/><stop offset=".55" stop-color="#e0c35c"/><stop offset="1" stop-color="#9a7818"/></linearGradient></defs>';
+
+  const RAW = function (name, cls, opts) {
+    opts = opts || {};
+    const body = I[name] || I.spark;
+    let defs = '';
+    let bodyAttr = '';
+    if (opts.grad) {
+      const gid = 'imiG' + (++gSeq);
+      defs = gradDef(gid);
+      bodyAttr = ' stroke="url(#' + gid + ')"';
+    }
+    const extra = (opts.anim ? ' imi-anim' : '') + (opts.glow ? ' imi-glow' : '');
+    return '<svg class="' + (cls || 'w-5 h-5') + ' imi-icon' + extra + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      defs + HALO + '<g data-imi-body' + bodyAttr + '>' + body + '</g></svg>';
   };
 
-  const skill = function (name, tone, size) {
+  const skill = function (name, tone, size, opts) {
     tone = tone || '';
     size = size || 'w-11 h-11';
-    return '<span class="imi-skill ' + tone + ' ' + size + '" aria-hidden="true">' + RAW(name, 'w-6 h-6') + '</span>';
+    return '<span class="imi-skill ' + tone + ' ' + size + '" aria-hidden="true">' + RAW(name, 'w-6 h-6', opts) + '</span>';
   };
 
   const badge = function (label, iconName, cls) {

@@ -38,7 +38,12 @@
       const name = el.getAttribute('data-imi-icon');
       if (!name) continue;
       const size = el.getAttribute('data-imi-size') || 'w-5 h-5';
-      const svg = make(name, size);
+      const opts = {
+        grad: el.hasAttribute('data-imi-grad'),
+        anim: el.hasAttribute('data-imi-anim'),
+        glow: el.hasAttribute('data-imi-glow')
+      };
+      const svg = make(name, size, opts);
       if (!svg) continue;
       el.innerHTML = svg;
       el.dataset.imiDone = '1';

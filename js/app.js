@@ -112,6 +112,7 @@
     if (name === 'writing-coach' && window.IELTS_WRITING_COACH) window.IELTS_WRITING_COACH.render();
     if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
     if (name === 'curriculum' && window.IELTS_CURRICULUM) window.IELTS_CURRICULUM.render();
+    if (name === 'ramiacademy' && window.IELTS_ACADEMY) window.IELTS_ACADEMY.render();
     if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
     if (name === 'band-calc' && window.IELTS_BAND_SCORE) window.IELTS_BAND_SCORE.render();
 
@@ -226,7 +227,7 @@
     ];
     $('#dashboard-stats').innerHTML = stats.map((s) => `
       <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-2xl p-4 shadow-sm">
-        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1"><span data-imi-icon="${s.icon}" data-imi-size="w-3.5 h-3.5" class="imi-nav-mini"></span>${s.label}</div>
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1"><span data-imi-icon="${s.icon}" data-imi-size="w-3.5 h-3.5" data-imi-glow="1" class="imi-nav-mini"></span>${s.label}</div>
         <div class="text-2xl font-extrabold text-[#d4af37]">${s.value}</div>
         <div class="text-[11px] text-[#f5f0e6]/50 mt-0.5">${s.sub}</div>
       </div>`).join('');
@@ -305,7 +306,7 @@
       <div class="grid md:grid-cols-3 gap-4 mb-8">
         ${steps.map((s) => `
           <div class="bg-[rgba(20,18,15,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.15)] rounded-xl p-5 flex flex-col">
-            <span class="text-3xl mb-2 text-[#d4af37]" data-imi-icon="${s.icon}" data-imi-size="w-9 h-9"></span>
+            <span class="text-3xl mb-2 text-[#d4af37]" data-imi-icon="${s.icon}" data-imi-size="w-9 h-9" data-imi-grad="1" data-imi-anim="1"></span>
             <h3 class="text-sm font-extrabold text-[#f5f0e6]">${s.title}</h3>
             <p class="text-xs text-[#f5f0e6]/60 mt-1 flex-1 leading-relaxed">${s.desc}</p>
             <button type="button" class="mt-3 self-start text-xs font-bold text-[#14120f] bg-[rgba(212,175,55,0.9)] hover:bg-[#b8962e] px-4 py-2 rounded-lg transition" onclick="showSection('${s.section}')">${s.cta}</button>

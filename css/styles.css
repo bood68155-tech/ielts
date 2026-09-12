@@ -3021,6 +3021,22 @@ header > div > div {
 .imi-icon-head { display: inline-flex; vertical-align: -3px; margin-right: 8px; color: #d4af37; }
 .imi-nav-mini { display: inline-flex; vertical-align: -2px; margin-right: 6px; color: #d4af37; }
 
+/* v2 "Ember & Orbit" premium finishes — opt-in per icon */
+.imi-icon.imi-glow { filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.42)); }
+.imi-icon.imi-anim [data-imi-body] { opacity: 0; animation: imi-fade 0.45s ease forwards; }
+.imi-icon.imi-anim [data-imi-body] path {
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+  animation: imi-draw 0.7s cubic-bezier(0.45, 0.05, 0.25, 1) forwards 0.05s;
+}
+.imi-icon.imi-anim [data-imi-body] circle,
+.imi-icon.imi-anim [data-imi-body] rect {
+  opacity: 0;
+  animation: imi-fade 0.5s ease forwards 0.2s;
+}
+@keyframes imi-draw { to { stroke-dashoffset: 0; } }
+@keyframes imi-fade { to { opacity: 1; } }
+
 /* Pulsing "Rami is live" stage ring */
 .mc-ring::before,
 .mc-ring::after {
