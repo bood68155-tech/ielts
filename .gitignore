@@ -21,3 +21,5 @@ node_modules/
 
 # Local default API key (gitignored on purpose)
 js/ai-key.js
+
+/android-package/
