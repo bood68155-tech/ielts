@@ -32,12 +32,12 @@
   const I = {
     /* Open book (spine + two pages) */
     read: '<path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v17H5.5A2.5 2.5 0 0 1 3 17.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v17h5.5a2.5 2.5 0 0 0 2.5-2.5z"/><path d="M12 3v17"/>',
-    /* Listening — headband with sound-line accents */
-    listen: '<path d="M4 13a3 3 0 0 1 3-3h1v8H7a3 3 0 0 1-3-3z"/><path d="M20 13a3 3 0 0 0-3-3h-1v8h1a3 3 0 0 0 3-3z"/><path d="M4 12.6v.9a7 7 0 0 0 14 0v-.9"/><path d="M9.5 15.5a1.2 1.2 0 0 1 1.2-1.2 1.2 1.2 0 0 1 1.2 1.2"/>',
+    /* Listening — headphone band with hand-drawn echo arcs */
+    listen: '<path d="M4.2 10.4a7.8 7.8 0 0 0 15.6 0"/><path d="M3.6 11.6h3.2v7H5.2a1.8 1.8 0 0 1-1.6-1.8z"/><path d="M20.4 11.6h-3.2v7h1.6a1.8 1.8 0 0 0 1.6-1.8z"/><path d="M4.6 9.6a3 3 0 0 0 0 4.6M2.2 7.4a5.8 5.8 0 0 0 0 9"/>',
     /* Writing — pen nib kept in a seal */
     write: '<path d="M12 3l7.5 14.5-3.2 2.4-4.3-6.1-4.3 6.1-3.2-2.4z"/><path d="M9.6 13.5L6.5 9"/>',
-    /* Speaking — minaret with radiating voice arcs */
-    speak: '<path d="M8 19h8M12 19V5.5"/><path d="M15.5 8a4 4 0 0 1 0 8"/><path d="M18.2 10.6a1.2 1.2 0 0 1 0 2.8"/>',
+    /* Speaking — heritage arch (mihrab) over a broadcast dial */
+    speak: '<path d="M5 20.5C5 13.8 7.4 9.5 12 9.5s7 4.3 7 11"/><path d="M8 16.6v1.8M12 14.6v3.8M16 16.6v1.8"/>',
     /* Vocabulary — traditional geometric lozenge */
     vocab: '<path d="M12 3l8 9-8 9-8-9z"/><path d="M12 9.2l2.8 2.8-2.8 2.8-2.8-2.8z"/>',
     /* Grammar — weaving threads with a sparkle */
@@ -84,12 +84,8 @@
     target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2"/>',
     /* Chart — data bars */
     chart: '<path d="M4 20h16M7 20v-6M12 20V9M17 20v-10"/>',
-    /* Compass — navigation */
-    compass: '<circle cx="12" cy="12" r="8.5"/><path d="M15.7 8.3l-2.3 5.1-5.1 2.3 2.3-5.1z"/>',
     /* Audio — headphones */
     audio: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3.5" y="13" width="4" height="6" rx="1.5"/><rect x="16.5" y="13" width="4" height="6" rx="1.5"/>',
-    /* Mic — recording */
-    mic: '<rect x="9.5" y="3" width="5" height="11" rx="2.5"/><path d="M5.5 12v.5a6.5 6.5 0 0 0 13 0V12"/><path d="M12 18.5V21M8.5 21h7"/>',
     /* Swap — translator arrows */
     swap: '<path d="M8 9.5h10.5M16 6.5l3 3-3 3"/><path d="M16 14.5H5.5M8 11.5l-3 3 3 3"/>',
     /* Users — community */
@@ -98,18 +94,12 @@
     streak: '<path d="M12 21c-3.8 0-6.5-2.5-6.5-6C5.5 10 8.5 8 9.5 5.5c.9 2.2 2.6 3.5 4 4.1C12.9 7.8 12.2 5.8 12.4 3c2.2 1 4 3 4.7 5.5.7-.3 1.3-.8 1.9-1.4.7 1.6 1 3.2 1 4.7 0 4.2-3.2 6.2-6 6.2z"/>',
     /* Shield — security grade */
     shield: '<path d="M12 3l7 2.5V11c0 4.6-2.9 7.9-7.5 10-4.6-2.1-7.5-5.4-7.5-10V5.5z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.6"/>',
-    /* Bell — notice */
-    bell: '<path d="M18 15.5v-5a6 6 0 0 0-12 0v5l-1.5 2h15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
     /* Globe — international/cultural */
     globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.9 2.5 2.9 14.5 0 17M12 3.5C9.1 6 9.1 18 12 20.5"/>',
-    /* Crown — mastery */
-    crown: '<path d="M4 17.5h16"/><path d="M4.5 8.5l3.6 3.2 3.9-6 3.9 6 3.6-3.2v9h-15z"/>',
     /* Search */
     search: '<circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L20 20"/>',
     /* Layers — synthesis */
-    layers: '<path d="M12 3.5l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5L21 12"/><path d="M3 16.5L12 21l9-4.5"/>',
-    /* Lock — secure */
-    lock: '<rect x="6" y="10.5" width="12" height="9" rx="1.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'
+    layers: '<path d="M12 3.5l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5L21 12"/><path d="M3 16.5L12 21l9-4.5"/>'
   };
 
   /* Faint orbital halo: a curved orbit arc + tiny Rub el Hizb diamond.
