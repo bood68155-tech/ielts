@@ -118,6 +118,154 @@
   const ico = (name, cls, fallback) => (window.RAMI_ICONS && window.RAMI_ICONS.icon ? window.RAMI_ICONS.icon(name, cls || 'w-5 h-5') : (fallback || ''));
   const badge = (label, iconName) => (window.RAMI_ICONS && window.RAMI_ICONS.badge ? window.RAMI_ICONS.badge(label, iconName) : '<span class="imi-badge"><span>' + label + '</span></span>');
 
+  /* ================= live focus session ================= */
+  const FOCUS_TARGETS = [15, 25, 50];
+  const FOCUS_KEY = 'mc-focus';
+  const FOCUS_XP = 30;
+  let focusTick = null;
+
+  function focusStore() {
+    let s = null;
+    try { s = (window.IELTS_AUTH && window.IELTS_AUTH.getScoped) ? window.IELTS_AUTH.getScoped(FOCUS_KEY, null) : null; } catch (e) { /* ignore */ }
+    if (!s || typeof s !== 'object') s = { targetSec: 1500, remaining: 1500, running: false, endAt: 0 };
+    return s;
+  }
+  function focusSave(s) { try { if (window.IELTS_AUTH && window.IELTS_AUTH.setScoped) window.IELTS_AUTH.setScoped(FOCUS_KEY, s); } catch (e) { /* ignore */ } }
+
+  function focusLive() {
+    const s = focusStore();
+    if (s.running && s.endAt) {
+      s.remaining = Math.max(0, Math.round((s.endAt - Date.now()) / 1000));
+      if (s.remaining <= 0) { focusComplete(s); }
+      else { s.remaining = Math.max(0, Math.round((s.endAt - Date.now()) / 1000)); focusSave(s); }
+    }
+    return s;
+  }
+
+  function focusComplete(s) {
+    s.running = false;
+    s.remaining = s.targetSec || 1500;
+    s.endAt = 0;
+    focusSave(s);
+    const today = new Date().toISOString().slice(0, 10);
+    try {
+      const st = (window.IELTS_AUTH && window.IELTS_AUTH.getScoped) ? window.IELTS_AUTH.getScoped('study', null) : null;
+      if (st) { st.days = st.days || {}; st.days[today] = (st.days[today] || 0) + (s.targetSec || 1500); window.IELTS_AUTH.setScoped('study', st); }
+    } catch (e) { /* ignore */ }
+    if (window.IELTS_AUTH && window.IELTS_AUTH.completeClaim && window.IELTS_AUTH.completeClaim('mc-focus-' + today + '-' + Date.now())) {
+      if (window.IELTS_AUTH.addXp) window.IELTS_AUTH.addXp(FOCUS_XP);
+      if (window.IELTS_AUTH.addActivity) window.IELTS_AUTH.addActivity('masterclass', 'Completed a ' + (s.targetSec / 60) + '-minute focus session in Master Classroom', FOCUS_XP);
+    }
+    const c = mcStore();
+    c.feed.unshift({ v: 'strong', s: (s.targetSec / 60) + '-minute focus session complete', at: Date.now() });
+    if (c.feed.length > 12) c.feed.length = 12;
+    mcSave(c);
+    mcFeedReRender();
+    const card = document.getElementById('mc-focus-card');
+    if (card) card.innerHTML = renderFocusCard();
+    window.toast && window.toast('✅ Focus session done! +' + FOCUS_XP + ' XP');
+  }
+
+  function clockStr(totalSec) {
+    const m = Math.floor(totalSec / 60), sec = totalSec % 60;
+    return (m < 10 ? '0' + m : m) + ':' + (sec < 10 ? '0' + sec : sec);
+  }
+  function clockHtml(totalSec) {
+    const s = totalSec;
+    const m = Math.floor(s / 60), sec = s % 60;
+    return '<span id="mc-clock-mm">' + (m < 10 ? '0' + m : m) + '</span>:<span id="mc-clock-ss">' + (sec < 10 ? '0' + sec : sec) + '</span>';
+  }
+
+  function focusPct(s) {
+    const t = s.targetSec || 1500;
+    return Math.max(0, Math.min(100, Math.round(((t - (s.remaining || 0)) / t) * 100)));
+  }
+
+  function renderFocusCard() {
+    const s = focusLive();
+    const pct = focusPct(s);
+    const running = !!(s.running && (s.remaining || 0) > 0);
+    return '<div id="mc-focus-card">' +
+    '<div class="rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[rgba(15,23,42,0.85)] p-5 mb-6">' +
+      '<div class="flex flex-wrap items-center justify-between gap-3 mb-3">' +
+        '<div class="flex items-center gap-2">' + ico('roadmap', 'w-5 h-5 text-[#d4af37]', '') +
+          '<p class="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Live focus session</p>' +
+          '<span class="text-[10px] font-bold text-[#f5f0e6]/40">· recorded like a study day</span>' +
+        '</div>' +
+        '<div class="flex gap-1.5">' + FOCUS_TARGETS.map((m) =>
+          '<button class="px-2.5 py-1 rounded-lg text-[10px] font-bold border transition ' + ((s.targetSec || 1500) === m * 60 ? 'bg-[#d4af37] text-[#14120f] border-[#d4af37]' : 'text-[#f5f0e6]/60 border-[rgba(245,240,230,0.15)] hover:text-[#d4af37] hover:border-[rgba(212,175,55,0.5)]') + '" onclick="window.IELTS_MC && window.IELTS_MC.focusAction(\'set\',\'' + m + '\')">' + m + 'm</button>').join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="flex items-center justify-center gap-6 py-2">' +
+        '<div class="mc-clock ' + (running ? 'on' : '') + '" id="mc-clock">' + clockHtml(s.remaining || 0) + '</div>' +
+        '<div class="flex flex-col gap-2">' +
+          '<button class="px-5 py-2 rounded-lg text-sm font-bold ' + (running ? 'bg-[#b8962e] text-[#14120f]' : 'bg-[#d4af37] text-[#14120f]') + ' hover:bg-[#a88929] transition shadow" onclick="window.IELTS_MC && window.IELTS_MC.focusAction(\'' + (running ? 'pause' : (s.remaining > 0 ? 'resume' : 'start')) + '\')">' + (running ? 'Pause' : (s.remaining > 0 ? 'Resume' : 'Start session')) + '</button>' +
+          (s.remaining > 0 ? '<button class="px-5 py-1.5 rounded-lg text-xs font-bold text-[#f5f0e6]/55 border border-[rgba(245,240,230,0.15)] hover:text-[#ff6b6b] hover:border-[rgba(255,100,100,0.4)] transition" onclick="window.IELTS_MC && window.IELTS_MC.focusAction(\'reset\')">Reset</button>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="mt-3 h-1.5 bg-[rgba(212,175,55,0.1)] rounded-full overflow-hidden"><div id="mc-focus-progress" class="h-full bg-[#d4af37] transition-all" style="width:' + pct + '%"></div></div>' +
+      '<p class="text-center text-[10px] text-[#f5f0e6]/40 mt-2">Finish the clock and this session counts toward your streak, study goal and a +' + FOCUS_XP + ' XP reward.</p>' +
+    '</div>' +
+    '</div>';
+  }
+
+  function focusTickStart() {
+    if (focusTick) return;
+    focusTick = setInterval(() => {
+      const s = focusLive();
+      const clock = document.getElementById('mc-clock');
+      if (clock) clock.innerHTML = clockHtml(s.remaining || 0);
+      const prog = document.getElementById('mc-focus-progress');
+      if (prog) prog.style.width = focusPct(s) + '%';
+      const sBtn = document.getElementById('mc-focus-ctl');
+      if (sBtn) {
+        const running = !!(s.running && (s.remaining || 0) > 0);
+        sBtn.textContent = running ? 'Pause' : (s.remaining > 0 ? 'Resume' : 'Start session');
+        sBtn.className = 'px-5 py-2 rounded-lg text-sm font-bold ' + (running ? 'bg-[#b8962e] text-[#14120f]' : 'bg-[#d4af37] text-[#14120f]') + ' hover:bg-[#a88929] transition shadow';
+      }
+    }, 1000);
+  }
+  function focusTickStop() { if (focusTick) { clearInterval(focusTick); focusTick = null; } }
+
+  function focusAction(act, val) {
+    const s = focusStore();
+    if (act === 'set') {
+      const m = parseInt(String(val), 10) || 25;
+      s.targetSec = m * 60; s.remaining = m * 60; s.running = false; s.endAt = 0;
+    } else if (act === 'start' || act === 'resume') {
+      s.running = true; s.endAt = Date.now() + ((s.remaining || s.targetSec) * 1000);
+    } else if (act === 'pause') {
+      s.running = false;
+      if (s.endAt) s.remaining = Math.max(0, Math.round((s.endAt - Date.now()) / 1000));
+      s.endAt = 0;
+    } else if (act === 'reset') {
+      s.remaining = s.targetSec || 1500; s.running = false; s.endAt = 0;
+    }
+    focusSave(s);
+    const card = document.getElementById('mc-focus-card');
+    if (card) card.innerHTML = renderFocusCard();
+    focusTickStart();
+  }
+
+  /* ================= tune-your-session quick start ================= */
+  const TUNE = [
+    { icon: 'read', label: 'Reading · T/F/NG', lesson: 'reading-tfng' },
+    { icon: 'write', label: 'Writing · PEEL', lesson: 'writing-peel' },
+    { icon: 'listen', label: 'Listening · predict', lesson: 'listening-predict' },
+    { icon: 'speak', label: 'Speaking · three beats', lesson: 'speaking-three-beats' }
+  ];
+  function renderTune() {
+    return '<div class="rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[rgba(15,23,42,0.85)] p-5 mb-6">' +
+      '<div class="flex items-center gap-2 mb-3">' + ico('spark', 'w-5 h-5 text-[#d4af37]', '') +
+        '<p class="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Tune your session — one-click lesson</p>' +
+      '</div>' +
+      '<div class="flex flex-wrap gap-2">' + TUNE.map((t) =>
+        '<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.12)] hover:border-[rgba(212,175,55,0.6)] transition" onclick="window.IELTS_MC && window.IELTS_MC.beginLesson(\'' + t.lesson + '\')">' +
+          ico(t.icon, 'w-4 h-4 text-[#d4af37]', '') + '<span>' + esc(t.label) + '</span></button>').join('') +
+      '</div>' +
+    '</div>';
+  }
+
   /* ================= action ================= */
   function beginLesson(lessonId) {
     const c = mcStore();
@@ -155,6 +303,7 @@
         '</div>' +
         '<div class="flex flex-col gap-2 shrink-0">' +
           '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#14120f] bg-[#d4af37] hover:bg-[#b8962e] transition shadow" onclick="window.IELTS_MC && window.IELTS_MC.beginLesson()">' + ico('spark', 'w-3.5 h-3.5 inline-block mr-1 -mt-0.5', '') + 'Surprise lesson</button>' +
+          '<button class="px-4 py-2 rounded-lg text-sm font-bold text-emerald-400 border border-emerald-400/40 hover:bg-emerald-400/10 transition" onclick="window.IELTS_MC && window.IELTS_MC.callNow()">📞 Call Rami now</button>' +
           '<button class="px-4 py-2 rounded-lg text-sm font-bold text-[#f5f0e6] border border-[rgba(212,175,55,0.35)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection(\'teacher-chat\')">Open live chat</button>' +
         '</div>' +
       '</div>' +
@@ -363,16 +512,29 @@
     '</div>';
   }
 
+  function callNow() {
+    if (window.IELTS_RAMI_CHAT && window.IELTS_RAMI_CHAT.toggleCall) {
+      try {
+        window.IELTS_RAMI_CHAT.toggleCall('mc-embed');
+        const emb = document.getElementById('mc-embed');
+        if (emb) emb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (e) { /* keep classroom resilient */ }
+    } else {
+      window.toast && window.toast('Open the live chat to call Rami');
+    }
+  }
+
   function render() {
     const root = document.getElementById('masterclass-content');
     if (!root) return;
-    root.innerHTML = renderStage() + renderWhiteboard() + renderFeed() + renderModules() + renderChat();
+    root.innerHTML = renderStage() + renderWhiteboard() + renderFocusCard() + renderTune() + renderFeed() + renderModules() + renderChat();
     if (window.IELTS_RAMI_CHAT && window.IELTS_RAMI_CHAT.mountEmbed) {
       try { window.IELTS_RAMI_CHAT.mountEmbed('mc-embed'); } catch (e) { /* ignore */ }
     }
     mcSetIdle();
     mcFeedReRender();
     mcSync();
+    focusTickStart();
     window.scrollTo && window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -401,6 +563,6 @@
     mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
   }
 
-  window.IELTS_MASTERCLASS = { render };
-  window.IELTS_MC = { beginLesson };
+  window.IELTS_MASTERCLASS = { render, focusAction };
+  window.IELTS_MC = { beginLesson, focusAction, callNow };
 })();

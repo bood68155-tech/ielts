@@ -226,7 +226,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between h-16" style="background:rgba(15,15,15,0.95);border-bottom:1px solid rgba(212,175,55,0.15);border-radius:0px;">
         <button onclick="showSection('dashboard')" class="flex items-center gap-2 group" aria-label="Go to dashboard">
-          <span class="flex items-center justify-center w-9 h-9 bg-[rgba(20,18,15,0.95)] text-[#d4af37] font-extrabold shadow-md transition text-sm border border-[rgba(212,175,55,0.3)]">🇵🇸</span>
+          <span class="flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden shadow-md transition border border-[rgba(212,175,55,0.35)]"><img src="icons/icon-192.png?v=6" alt="IELTS PA" class="w-full h-full object-cover block" loading="eager" decoding="async" /></span>
           <span class="text-lg font-bold text-[#f5f0e6]">IELTS <span class="text-[#d4af37]">PA</span></span>
         </button>
         <nav class="hidden md:flex items-center gap-1" id="main-nav">
@@ -245,6 +245,7 @@
           <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')" data-i18n="profile">Profile</button>
           <button data-section="curriculum" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('curriculum')" data-i18n="curriculum">Curriculum</button>
           <button data-section="ramiacademy" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('ramiacademy')" data-i18n="ramiacademy"><span class="imi-nav-mini" data-imi-icon="library" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="ramiacademy">Rami Academy</span></button>
+          <button data-section="resources" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('resources')" data-i18n="resources">Resources</button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
           <button id="lang-toggle" class="w-9 h-9 font-extrabold border border-[rgba(212,175,55,0.3)] text-[#d4af37] hover:bg-[rgba(212,175,55,0.1)] transition" title="Language / اللغة" aria-label="Toggle language">EN</button>
@@ -289,6 +290,7 @@
       <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')" data-i18n="profile">Profile</button>
       <button data-section="curriculum" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('curriculum')" data-i18n="curriculum">Curriculum</button>
       <button data-section="ramiacademy" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('ramiacademy')" data-i18n="ramiacademy">Rami Academy</button>
+      <button data-section="resources" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('resources')" data-i18n="resources">Resources</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 text-sm font-medium text-[#ff6b6b]"><span data-i18n="signout">Sign out</span></button>
     </nav>
   </header>
@@ -352,6 +354,7 @@
               <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]">Open Study Plan</button>
               <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]">Training</button>
               <button onclick="showSection('masterclass')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="chat" data-imi-size="w-4 h-4"></span>Master Classroom</button>
+              <button onclick="showSection('resources')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="library" data-imi-size="w-4 h-4"></span>Resources</button>
             </div>
           </div>
         </div>
@@ -415,6 +418,7 @@
     <section id="section-wss" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="wss-content"></div></div></section>
     <section id="section-placement" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="placement-content"></div></div></section>
     <section id="section-teacher-chat" class="section-view hidden"><div class="max-w-3xl mx-auto px-4 py-8"><div id="teacher-chat-content"></div></div></section>
+    <section id="section-resources" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="resources-content"></div></div></section>
     <section id="section-masterclass" class="section-view hidden"><div id="masterclass-content"></div></section>
     <section id="section-band" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="bandsys-content"></div></div></section>
     <section id="section-band-calc" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="band-calc-content"></div></div></section>
@@ -492,10 +496,11 @@
   <script src="js/academy-data-c1.js?v=5"></script>
   <script src="js/academy-data-c2.js?v=5"></script>
   <script src="js/academy-data.js?v=5"></script>
-  <script src="js/ramiacademy.js?v=5"></script>
-  <script src="js/i18n.js?v=5"></script>
-  <script src="js/app.js?v=5"></script>
-  <script src="js/appshell.js?v=5"></script>
+  <script src="js/ramiacademy.js?v=6"></script>
+  <script src="js/resources.js?v=6"></script>
+  <script src="js/i18n.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
+  <script src="js/appshell.js?v=6"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {

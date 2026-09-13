@@ -456,7 +456,7 @@
   /* ============================================================
      6. NEW-VERSION UPDATER
      ============================================================ */
-  const APP_VERSION = 'v1.0.0';
+  const APP_VERSION = 'v1.1.0';
   const CHECK_KEY = 'ielts-skip-release';
   function checkForUpdate() {
     const skip = storeGet(CHECK_KEY, '');

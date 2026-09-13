@@ -66,7 +66,7 @@
   /* ---------------- Navigation ---------------- */
   window.showSection = function (name) {
     // Auth gate: dashboard is the only section available before sign-in
-    if (name !== 'dashboard' && window.IELTS_AUTH && !window.IELTS_AUTH.getCurrentUser()) {
+    if (name !== 'dashboard' && name !== 'resources' && window.IELTS_AUTH && !window.IELTS_AUTH.getCurrentUser()) {
       window.IELTS_AUTH.showScreen();
       return;
     }
@@ -113,6 +113,7 @@
     if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
     if (name === 'curriculum' && window.IELTS_CURRICULUM) window.IELTS_CURRICULUM.render();
     if (name === 'ramiacademy' && window.IELTS_ACADEMY) window.IELTS_ACADEMY.render();
+    if (name === 'resources' && window.IELTS_RESOURCES) window.IELTS_RESOURCES.render();
     if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
     if (name === 'band-calc' && window.IELTS_BAND_SCORE) window.IELTS_BAND_SCORE.render();
 

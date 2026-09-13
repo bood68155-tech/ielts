@@ -31,7 +31,13 @@
     panelOpen: false,
     speaking: null,
     micOn: false,
-    recognizer: null
+    recognizer: null,
+    autoVoice: false,
+    callOn: false,
+    callId: null,
+    callRec: null,
+    callTick: null,
+    callSecs: 0
   };
 
   function esc(s) {
@@ -42,7 +48,26 @@
 
   const MIC_ICON = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1"/><path d="M12 19v2M8 21h8"/></svg>';
 
-  /* Hear Rami's reply out loud (Web Speech API, British voice preferred). */
+  const CALL_ICON = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+
+  /* Speak a string and resolve the promise when speaking (or failing) has ended. */
+  function speakPromise(text) {
+    return new Promise((resolve) => {
+      if (!text || !('speechSynthesis' in window)) { resolve(); return; }
+      const clean = String(text).replace(/[*_`#]/g, '');
+      const utter = new SpeechSynthesisUtterance(clean);
+      const vs = speechSynthesis.getVoices();
+      const voice = vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
+      if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-US'; }
+      utter.rate = 0.95;
+      utter.pitch = 1.0;
+      let done = false;
+      const finish = () => { if (!done) { done = true; state.speaking = null; resolve(); } };
+      utter.onend = utter.onerror = finish;
+      state.speaking = text;
+      try { speechSynthesis.speak(utter); } catch (e) { finish(); }
+    });
+  }
   function say(text) {
     if (!text || !('speechSynthesis' in window)) { window.toast && window.toast('Voice is not available in this browser'); return; }
     if (state.speaking && state.speaking === text) { speechSynthesis.cancel(); state.speaking = null; return; }
@@ -308,9 +333,11 @@
           })
         : Promise.resolve({ reply: 'Salam! I’m Teacher Rami (أستاذ رامي). Ask me anything about IELTS — or send me a sentence to correct.', corrections: [], demo: true }));
       push({ role: 'assistant', text: (res && res.reply) || 'Salam — write me a sentence and I’ll coach it.', corrections: (res && res.corrections) || [], demo: !!(res && res.demo), suggestions: (res && res.suggestions) || [] });
+      if (state.autoVoice && !state.callOn) speakPromise(((res && res.reply) || ''));
       awardXp();
     } catch (e) {
       push({ role: 'assistant', text: 'Something interrupted me — try that again, one sentence is fine.', corrections: [], demo: true });
+      if (state.autoVoice && !state.callOn) speakPromise('Something interrupted me. Try that again, one sentence is fine.');
     }
     state.busy = false;
     updateLive();
@@ -318,6 +345,7 @@
 
   function composerHtml(targetId) {
     return '<div class="tc-composer">' +
+      '<div id="' + targetId + '-callbar" class="tc-callbar hidden"></div>' +
       '<div class="flex gap-1.5 overflow-x-auto pb-1.5 tc-chips">' +
       QUICK_PROMPTS.slice(0, 6).map((p) => {
         const ico = (window.RAMI_ICONS && QUICK_ICONS[p]) ? window.RAMI_ICONS.icon(QUICK_ICONS[p], 'w-3 h-3 inline-block mr-1 -mt-0.5') : '';
@@ -326,6 +354,7 @@
       '</div>' +
       '<div class="flex items-center gap-2">' +
         '<input id="' + targetId + '-input" type="text" placeholder="Write or speak in English… ' + (state.busy ? 'Rami is writing…' : 'Teacher Rami replies instantly') + '" class="flex-1 bg-[rgba(20,18,15,0.9)] border border-[rgba(212,175,55,0.3)] rounded-xl px-4 py-2.5 text-sm text-[#f5f0e6] placeholder-[#f5f0e6]/40 focus:outline-none focus:border-[rgba(212,175,55,0.6)]" ' + (state.busy ? 'disabled' : '') + ' />' +
+        '<button class="shrink-0 w-10 h-10 rounded-xl border border-[rgba(212,175,55,0.4)] text-[#f5f0e6]/80 hover:text-[#d4af37] hover:border-[rgba(212,175,55,0.8)] flex items-center justify-center transition tc-call-btn" onclick="window.IELTS_RAMI_CHAT.toggleCall(\'' + targetId + '\')" title="Call Teacher Rami — he listens and replies out loud" aria-label="Call Teacher Rami">' + CALL_ICON + '</button>' +
         '<button class="shrink-0 w-10 h-10 rounded-xl border border-[rgba(212,175,55,0.4)] text-[#f5f0e6]/80 hover:text-[#d4af37] hover:border-[rgba(212,175,55,0.8)] flex items-center justify-center transition tc-mic" onclick="window.IELTS_RAMI_CHAT.startVoice(\'' + targetId + '\')" title="Talk to Rami with your voice" aria-label="Speak to Rami">' + MIC_ICON + '</button>' +
         '<button class="shrink-0 w-10 h-10 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] font-bold flex items-center justify-center" onclick="window.IELTS_RAMI_CHAT.sendFrom(\'' + targetId + '\')">' +
           '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14"/></svg>' +
@@ -381,6 +410,7 @@
             '</div>' +
           '</div>' +
           '<div class="flex items-center gap-2">' +
+            '<button id="tc-autovoice-btn" class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition" onclick="window.IELTS_RAMI_CHAT.toggleAutoVoice()" title="Automatically hear every reply out loud">🔈 Voice replies</button>' +
             '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition" onclick="window.IELTS_RAMI_CHAT.clearConversation()">Clear</button>' +
             '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition" onclick="window.IELTS_RAMI_CHAT.exportChat()" title="Download this conversation as a study note">Export</button>' +
             '<button class="px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#d4af37] border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.1)] transition" onclick="showSection(\'speaking-sim\')">Speaking Lab →</button>' +
@@ -443,6 +473,139 @@
     if (fab) fab.classList.remove('open');
   }
 
+  /* ---------------- Live voice call with Rami ---------------- */
+  let callRacing = false;
+
+  function callTime(secs) {
+    const m = Math.floor(secs / 60), s = secs % 60;
+    return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+  }
+
+  function callStatus(id, label) {
+    const el = document.getElementById(id + '-call-live');
+    if (el) el.textContent = '● ' + label;
+  }
+
+  function showCallBar(id) {
+    const bar = document.getElementById(id + '-callbar');
+    if (!bar) return;
+    bar.innerHTML =
+      '<span class="tc-call-pulse" aria-hidden="true"></span>' +
+      '<span class="tc-call-live" id="' + id + '-call-live">● Connecting…</span>' +
+      '<span class="tc-call-time" id="' + id + '-calltime">00:00</span>' +
+      '<button class="tc-call-end" onclick="window.IELTS_RAMI_CHAT.endCall(\'' + id + '\')">End</button>';
+    bar.classList.remove('hidden');
+    bar.classList.add('on');
+    document.querySelectorAll('.tc-call-btn').forEach((b) => b.classList && b.classList.add('on'));
+  }
+
+  function retryListen(id) {
+    if (!state.callOn || !id || id !== state.callId) return;
+    callStatus(id, 'Listening… speak now');
+    const ok = callRecog(id);
+    if (!ok) endCall(id);
+  }
+
+  function callRecog(id) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return false;
+    let rec;
+    try { rec = new SR(); } catch (e) { return false; }
+    rec.lang = 'en-GB';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onresult = function (e) {
+      let t = '';
+      for (let i = 0; i < e.results.length; i++) if (e.results[i].isFinal) t += e.results[i][0].transcript + ' ';
+      t = t.trim();
+      if (t && state.callOn && id === state.callId) {
+        try { rec.stop(); } catch (err) { /* noop */ }
+        runCallTurn(t);
+      }
+    };
+    rec.onerror = function (ev) {
+      if (!state.callOn || id !== state.callId) return;
+      if (ev && ev.error === 'not-allowed') {
+        endCall(id);
+        window.toast && window.toast('Microphone blocked — allow it to call Rami');
+      } else if (ev && ev.error !== 'aborted' && ev.error !== 'no-speech') {
+        endCall(id);
+      }
+    };
+    rec.onend = function () {
+      if (!state.callOn || id !== state.callId || callRacing || state.busy || state.speaking) return;
+      retryListen(id);
+    };
+    state.callRec = rec;
+    try { rec.start(); return true; } catch (e) { return false; }
+  }
+
+  function runCallTurn(text) {
+    if (!state.callOn || callRacing || state.busy || !state.callId) return;
+    callRacing = true;
+    const id = state.callId;
+    callStatus(id, 'Rami is thinking…');
+    send(text).then(() => {
+      if (!state.callOn || id !== state.callId) { callRacing = false; return; }
+      const last = state.messages[state.messages.length - 1];
+      if (last && last.role === 'assistant') {
+        callStatus(id, 'Rami is speaking…');
+        speakPromise(last.text).then(() => { callRacing = false; if (state.callOn && id === state.callId) retryListen(id); });
+      } else {
+        callRacing = false;
+        if (state.callOn && id === state.callId) retryListen(id);
+      }
+    });
+  }
+
+  function toggleCall(id) {
+    if (state.callOn) {
+      if (state.callId === id) { endCall(id); return; }
+      endCall(state.callId);
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { window.toast && window.toast('Live voice call needs Chrome or Edge'); return; }
+    state.callOn = true;
+    state.callId = id;
+    state.callSecs = 0;
+    callRacing = false;
+    showCallBar(id);
+    state.callTick = setInterval(() => {
+      state.callSecs += 1;
+      const t = document.getElementById(id + '-calltime');
+      if (t) t.textContent = callTime(state.callSecs);
+    }, 1000);
+    window.toast && window.toast('Call connected — Rami listens and replies out loud. Speak in English! 📞');
+    retryListen(id);
+  }
+
+  function endCall(id) {
+    if (!state.callOn && !id) return;
+    state.callOn = false;
+    callRacing = false;
+    if (state.callTick) { clearInterval(state.callTick); state.callTick = null; }
+    if (state.callRec) { try { state.callRec.stop(); } catch (e) { /* noop */ } }
+    state.callRec = null;
+    try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { /* noop */ }
+    state.speaking = null;
+    const bar = document.getElementById((id || state.callId) + '-callbar');
+    if (bar) { bar.classList.add('hidden'); bar.classList.remove('on'); }
+    document.querySelectorAll('.tc-call-btn').forEach((b) => b.classList && b.classList.remove('on'));
+    window.toast && window.toast('Call ended — nice focus! 🔕');
+  }
+
+  function toggleAutoVoice() {
+    state.autoVoice = !state.autoVoice;
+    const btn = document.getElementById('tc-autovoice-btn');
+    if (btn) {
+      btn.className = state.autoVoice
+        ? 'px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#22c55e] border border-[rgba(34,197,94,0.5)] bg-[rgba(34,197,94,0.12)] transition'
+        : 'px-3 py-1.5 rounded-lg text-[11px] font-bold text-[#f5f0e6]/60 border border-[rgba(245,240,230,0.15)] hover:bg-[rgba(245,240,230,0.08)] transition';
+      btn.textContent = state.autoVoice ? '🔊 Voice replies on' : '🔈 Voice replies';
+    }
+    window.toast && window.toast(state.autoVoice ? 'Every reply is now read out loud' : 'Voice replies turned off');
+  }
+
   /* ---------------- Boot ---------------- */
   function boot() {
     load();
@@ -450,7 +613,7 @@
     holder.id = 'tc-fab-wrap';
     holder.innerHTML = companionHtml();
     document.body.appendChild(holder);
-    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed, say, exportChat, startVoice };
+    window.IELTS_RAMI_CHAT = { render, sendFrom, quick, togglePanel, closePanel, clearConversation, mountEmbed, say, exportChat, startVoice, toggleCall, endCall, toggleAutoVoice };
     const sec = $('#section-teacher-chat');
     if (sec && 'MutationObserver' in window) {
       const ob = new MutationObserver(() => {
