@@ -6,9 +6,9 @@
   <title>IELTS PA - Band 1.0 to 9.0 Mastery System</title>
   <meta name="description" content="Free interactive IELTS practice: Listening, Reading, Writing and Speaking with timers, scoring and model answers." />
   <meta name="theme-color" content="#0f172a" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icons/favicon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link rel="manifest" href="manifest.webmanifest?v=6" />
+  <link rel="icon" href="icons/favicon.png?v=6" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png?v=6" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -71,8 +71,8 @@
         <div class="flex justify-center mb-3">
           <span class="text-5xl sm:text-6xl">🇵🇸</span>
         </div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-white">Welcome to IELTS PA</h2>
-        <p class="text-green-200 text-xs sm:text-sm mt-1 opacity-90">Study with purpose. Every lesson builds a stronger you.</p>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white" data-i18n="auth_welcome">Welcome to IELTS PA</h2>
+        <p class="text-green-200 text-xs sm:text-sm mt-1 opacity-90" data-i18n="auth_subtitle">Study with purpose. Every lesson builds a stronger you.</p>
         
         <!-- Decorative watermark - subtle olive branch -->
         <svg class="absolute top-2 right-4 w-16 h-16 sm:w-20 sm:h-20 text-white/10 pointer-events-none" fill="none" viewBox="0 0 80 100">
@@ -89,10 +89,10 @@
       <div class="auth-content px-6 py-5 sm:px-8 sm:py-6">
         <!-- Tab buttons -->
         <div class="flex gap-2 mb-5 bg-slate-100/50 rounded-xl p-1">
-          <button id="auth-tab-login" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('login')">
+          <button id="auth-tab-login" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('login')" data-i18n="signin">
             Sign in
           </button>
-          <button id="auth-tab-register" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('register')">
+          <button id="auth-tab-register" class="auth-tab-btn flex-1 px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200" onclick="IELTS_AUTH.switchTab('register')" data-i18n="signup">
             Create account
           </button>
         </div>
@@ -120,19 +120,19 @@
         <!-- Login form -->
         <form id="auth-form-login" onsubmit="IELTS_AUTH.login(event)" class="space-y-4 auth-forms-container">
           <div class="form-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-username">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-username" data-i18n="auth_username_label">
               Username or Email
             </label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner or email" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900 focus ~ .auth-input-icon { color: #009736; }" required />
+              <input id="login-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner or email" data-i18n-placeholder="auth_username_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900 focus ~ .auth-input-icon { color: #009736; }" required />
             </div>
           </div>
           
           <div class="form-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-password">Password</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="login-password" data-i18n="auth_password_label">Password</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -142,68 +142,68 @@
           </div>
           
           <button type="submit" class="btn-primary w-full !py-3">
-            <span class="btn-text">Sign in</span>
+            <span class="btn-text" data-i18n="signin">Sign in</span>
           </button>
         </form>
 
         <!-- Register form -->
         <form id="auth-form-register" onsubmit="IELTS_AUTH.register(event)" class="space-y-4 hidden auth-forms-container">
           <div class="form-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-fullname">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-fullname" data-i18n="auth_fullname_label">
               Full Name (optional)
             </label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="reg-fullname" type="text" autocomplete="name" placeholder="Your full name" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" />
+              <input id="reg-fullname" type="text" autocomplete="name" placeholder="Your full name" data-i18n-placeholder="auth_fullname_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" />
             </div>
           </div>
           
           <div class="form-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-username">Username</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-username" data-i18n="auth_username2_label">Username</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
+              <input id="reg-username" type="text" autocomplete="username" placeholder="e.g. ielts_learner" data-i18n-placeholder="auth_username2_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
             </div>
           </div>
           
           <div class="form-group">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-email">Email</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-email" data-i18n="auth_email_label">Email</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
               </svg>
-              <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
+              <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" data-i18n-placeholder="auth_email_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
             </div>
           </div>
           
           <div class="grid grid-cols-2 gap-3">
             <div class="form-group">
-              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password">Password</label>
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password" data-i18n="auth_password_label">Password</label>
               <div class="relative">
                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
-                <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
+                <input id="reg-password" type="password" autocomplete="new-password" placeholder="6+ chars" data-i18n-placeholder="auth_password_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
               </div>
             </div>
             
             <div class="form-group">
-              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password2">Confirm</label>
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="reg-password2" data-i18n="auth_confirm_label">Confirm</label>
               <div class="relative">
                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
-                <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
+                <input id="reg-password2" type="password" autocomplete="new-password" placeholder="Repeat" data-i18n-placeholder="auth_confirm_ph" class="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm bg-white/80 transition-all duration-200 focus:border-palestine-green focus:ring-2 focus:ring-palestine-green/20 focus:bg-white focus:text-slate-900" required />
               </div>
             </div>
           </div>
           
           <button type="submit" class="btn-primary w-full !py-3">
-            <span class="btn-text">Create account</span>
+            <span class="btn-text" data-i18n="signup">Create account</span>
           </button>
         </form>
 
@@ -211,11 +211,11 @@
         <div id="verification-container" class="hidden"></div>
 
         <!-- Footer note -->
-        <p class="text-[11px] text-slate-400 text-center mt-5 leading-relaxed">
+        <p class="text-[11px] text-slate-400 text-center mt-5 leading-relaxed" dir="ltr">
           <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-green align-middle mr-1"></span>
-          Demo auth — Neon DB sync when configured, otherwise local storage.
+          <span data-i18n="auth_demo_note1">Demo auth — Neon DB sync when configured, otherwise local storage.</span>
           <span class="inline-block w-1.5 h-1.5 rounded-full bg-palestine-red align-middle ml-2 mr-1"></span>
-          Do not reuse a real password.
+          <span data-i18n="auth_demo_note2">Do not reuse a real password.</span>
         </p>
       </div>
     </div>
@@ -241,10 +241,10 @@
           <button data-section="wss" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('wss')" data-i18n="wss">Studio</button>
           <button data-section="band-calc" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('band-calc')" data-i18n="band-calc">Band Score</button>
           <button data-section="diagnostics" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('diagnostics')" data-i18n="diagnostics">Diagnostics</button>
-          <button data-section="masterclass" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('masterclass')" data-i18n="masterclass"><span class="imi-nav-mini" data-imi-icon="dome" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="masterclass">Master Classroom</span></button>
+          <button data-section="masterclass" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('masterclass')"><span class="imi-nav-mini" data-imi-icon="dome" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="masterclass">Master Classroom</span></button>
           <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')" data-i18n="profile">Profile</button>
           <button data-section="curriculum" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('curriculum')" data-i18n="curriculum">Curriculum</button>
-          <button data-section="ramiacademy" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('ramiacademy')" data-i18n="ramiacademy"><span class="imi-nav-mini" data-imi-icon="library" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="ramiacademy">Rami Academy</span></button>
+          <button data-section="ramiacademy" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('ramiacademy')"><span class="imi-nav-mini" data-imi-icon="library" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="ramiacademy">Rami Academy</span></button>
           <button data-section="resources" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('resources')" data-i18n="resources">Resources</button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
@@ -346,15 +346,15 @@
               </div>
               <div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight text-[#f5f0e6]">IELTS <span class="text-[#d4af37]">PA</span></h1>
-                <p class="text-sm text-[#d4af37]/55 font-medium">Study with Purpose · Rise with Knowledge</p>
+                <p class="text-sm text-[#d4af37]/55 font-medium" data-i18n="hero_tagline">Study with Purpose · Rise with Knowledge</p>
               </div>
             </div>
-            <p class="text-[#f5f0e6]/70 text-sm max-w-lg mb-5">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
+            <p class="text-[#f5f0e6]/70 text-sm max-w-lg mb-5" data-i18n="hero_desc">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
             <div class="flex flex-wrap gap-3">
-              <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]">Open Study Plan</button>
-              <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]">Training</button>
-              <button onclick="showSection('masterclass')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="chat" data-imi-size="w-4 h-4"></span>Master Classroom</button>
-              <button onclick="showSection('resources')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="library" data-imi-size="w-4 h-4"></span>Resources</button>
+              <button onclick="showSection('study-plan')" class="bg-[rgba(212,175,55,0.9)] text-[#14120f] font-bold px-6 py-3 hover:bg-[#b8962e] transition shadow-md text-sm border border-[rgba(212,175,55,0.5)]" data-i18n="hero_plan">Open Study Plan</button>
+              <button onclick="showSection('training')" class="bg-[rgba(180,50,50,0.9)] text-[#f5f0e6] font-bold px-6 py-3 hover:bg-[#8c1e1e] transition shadow-md text-sm border border-[rgba(255,100,100,0.3)]" data-i18n="training">Training</button>
+              <button onclick="showSection('masterclass')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="chat" data-imi-size="w-4 h-4"></span><span data-i18n="masterclass">Master Classroom</span></button>
+              <button onclick="showSection('resources')" class="bg-[rgba(20,18,15,0.9)] text-[#d4af37] font-bold px-6 py-3 hover:bg-[rgba(20,18,15,0.6)] transition shadow-md text-sm border border-[rgba(212,175,55,0.4)] inline-flex items-center gap-2"><span data-imi-icon="library" data-imi-size="w-4 h-4"></span><span data-i18n="resources">Resources</span></button>
             </div>
           </div>
         </div>
@@ -369,49 +369,49 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="skill-card" onclick="showSection('listening-master')">
           <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]"><span data-imi-icon="listen" data-imi-size="w-7 h-7" data-imi-grad="1" data-imi-anim="1"></span></div>
-          <h3 class="font-bold text-[#f5f0e6] mb-1">Listening</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–4 with transcripts, auto-grading and speed controls for Band 1–9.</p>
-          <span class="skill-link">Practice now →</span>
+          <h3 class="font-bold text-[#f5f0e6] mb-1" data-i18n="qp_listening">Listening</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4" data-i18n="qp_listening_desc">Parts 1–4 with transcripts, auto-grading and speed controls for Band 1–9.</p>
+          <span class="skill-link"><span data-i18n="practice">Practice now</span> →</span>
         </div>
         <div class="skill-card" onclick="showSection('reading-master')">
           <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]"><span data-imi-icon="read" data-imi-size="w-7 h-7" data-imi-grad="1" data-imi-anim="1"></span></div>
-          <h3 class="font-bold text-[#f5f0e6] mb-1">Reading</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Graded passages from Band 3.0 to 9.0 with timed exams and band analysis.</p>
-          <span class="skill-link">Practice now →</span>
+          <h3 class="font-bold text-[#f5f0e6] mb-1" data-i18n="qp_reading">Reading</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4" data-i18n="qp_reading_desc">Graded passages from Band 3.0 to 9.0 with timed exams and band analysis.</p>
+          <span class="skill-link"><span data-i18n="practice">Practice now</span> →</span>
         </div>
         <div class="skill-card" onclick="showSection('writing-coach')">
           <div class="skill-icon bg-[rgba(245,240,230,0.1)] text-[#f5f0e6]"><span data-imi-icon="write" data-imi-size="w-7 h-7" data-imi-grad="1" data-imi-anim="1"></span></div>
-          <h3 class="font-bold text-[#f5f0e6] mb-1">Writing</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Task 1 &amp; 2 with Band 9 models, structure generators and vocabulary boosters.</p>
-          <span class="skill-link">Practice now →</span>
+          <h3 class="font-bold text-[#f5f0e6] mb-1" data-i18n="qp_writing">Writing</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4" data-i18n="qp_writing_desc">Task 1 &amp; 2 with Band 9 models, structure generators and vocabulary boosters.</p>
+          <span class="skill-link"><span data-i18n="practice">Practice now</span> →</span>
         </div>
         <div class="skill-card" onclick="showSection('speaking-sim')">
           <div class="skill-icon bg-[rgba(212,175,55,0.15)] text-[#ff6b6b]"><span data-imi-icon="speak" data-imi-size="w-7 h-7" data-imi-grad="1" data-imi-anim="1"></span></div>
-          <h3 class="font-bold text-[#f5f0e6] mb-1">Speaking</h3>
-          <p class="text-sm text-[#f5f0e6]/60 mb-4">Parts 1–3 with timers, recorder and fluency checklists for every band.</p>
-          <span class="skill-link">Practice now →</span>
+          <h3 class="font-bold text-[#f5f0e6] mb-1" data-i18n="qp_speaking">Speaking</h3>
+          <p class="text-sm text-[#f5f0e6]/60 mb-4" data-i18n="qp_speaking_desc">Parts 1–3 with timers, recorder and fluency checklists for every band.</p>
+          <span class="skill-link"><span data-i18n="practice">Practice now</span> →</span>
         </div>
       </div>
     </section>
 
     <section id="section-study-plan" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="study-plan-content"></div></div></section>
-    <section id="section-listening" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="listen" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Listening</h2><p class="text-sm text-[#f5f0e6]/60">A full mock test: 4 sections · 40 questions · ~30 minutes</p></div><div class="flex gap-2" id="listening-tabs"></div></div><div id="listening-controls" class="mb-4"><div class="flex flex-wrap items-center gap-3 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Strict exam</span><span id="listening-strict-time" class="font-mono text-sm font-bold text-[#d4af37]">30:00</span><button id="listening-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('listening')">🎯 Start (30 min)</button><button id="listening-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('listening')">✕ Cancel</button><span id="listening-strict-msg" class="text-xs text-[#d4af37]/80"></span></div></div><div id="listening-sections"></div><div id="listening-content"></div></section>
-    <section id="section-reading" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="read" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Reading</h2><p class="text-sm text-[#f5f0e6]/60">3 academic passages · 40 questions · 60-minute timer</p></div><div class="flex gap-2" id="reading-tabs"></div></div><div class="flex flex-wrap items-center gap-3 mb-4 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Timer</span><span id="reading-timer" class="font-mono text-sm font-bold text-[#d4af37]">00:00</span><button id="reading-timer-btn" class="btn-secondary !py-1.5 !px-3 text-xs" onclick="toggleReadingTimer()">Start timer</button><span class="text-xs text-[#f5f0e6]/30 mx-1">|</span><button id="reading-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('reading')">🎯 Strict exam (60 min)</button><span id="reading-strict-time" class="font-mono text-sm font-bold text-[#f5f0e6]"></span><button id="reading-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('reading')">✕ Cancel</button><span id="reading-strict-msg" class="text-xs text-[#d4af37]/80"></span></div><div id="reading-content"></div></section>
-    <section id="section-writing" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="write" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Writing</h2><p class="text-sm text-[#f5f0e6]/60">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p></div><div class="flex gap-2" id="writing-tabs"></div></div><div id="writing-content"></div></section>
-    <section id="section-speaking" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="speak" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Speaking</h2><p class="text-sm text-[#f5f0e6]/60">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p></div><div class="flex gap-2" id="speaking-tabs"></div></div><div id="speaking-content"></div></section>
-    <section id="section-levels" class="section-view hidden"><h2 class="text-2xl font-extrabold text-[#f5f0e6] mb-4"><span data-imi-icon="levels" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>CEFR Levels</h2><div id="levels-content"></div></section>
+    <section id="section-listening" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="listen" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_listening">Listening</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_listening_desc">A full mock test: 4 sections · 40 questions · ~30 minutes</p></div><div class="flex gap-2" id="listening-tabs"></div></div><div id="listening-controls" class="mb-4"><div class="flex flex-wrap items-center gap-3 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Strict exam</span><span id="listening-strict-time" class="font-mono text-sm font-bold text-[#d4af37]">30:00</span><button id="listening-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('listening')">🎯 Start (30 min)</button><button id="listening-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('listening')">✕ Cancel</button><span id="listening-strict-msg" class="text-xs text-[#d4af37]/80"></span></div></div><div id="listening-sections"></div><div id="listening-content"></div></section>
+    <section id="section-reading" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="read" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_reading">Reading</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_reading_desc">3 academic passages · 40 questions · 60-minute timer</p></div><div class="flex gap-2" id="reading-tabs"></div></div><div class="flex flex-wrap items-center gap-3 mb-4 bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-xl px-4 py-3"><span class="text-xs font-bold text-[#f5f0e6]/70">⏱ Timer</span><span id="reading-timer" class="font-mono text-sm font-bold text-[#d4af37]">00:00</span><button id="reading-timer-btn" class="btn-secondary !py-1.5 !px-3 text-xs" onclick="toggleReadingTimer()">Start timer</button><span class="text-xs text-[#f5f0e6]/30 mx-1">|</span><button id="reading-strict-start" class="btn-primary !py-1.5 !px-3 text-xs" onclick="startStrictExam('reading')">🎯 Strict exam (60 min)</button><span id="reading-strict-time" class="font-mono text-sm font-bold text-[#f5f0e6]"></span><button id="reading-strict-cancel" class="btn-secondary !py-1.5 !px-3 text-xs hidden" onclick="cancelStrictExam('reading')">✕ Cancel</button><span id="reading-strict-msg" class="text-xs text-[#d4af37]/80"></span></div><div id="reading-content"></div></section>
+    <section id="section-writing" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="write" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_writing">Writing</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_writing_desc">Task 1 &amp; Task 2 with live word counter and 60-minute timer</p></div><div class="flex gap-2" id="writing-tabs"></div></div><div id="writing-content"></div></section>
+    <section id="section-speaking" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="speak" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_speaking">Speaking</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_speaking_desc">Full test: Part 1 (Q&amp;A) · Part 2 (Long turn) · Part 3 (Discussion)</p></div><div class="flex gap-2" id="speaking-tabs"></div></div><div id="speaking-content"></div></section>
+    <section id="section-levels" class="section-view hidden"><h2 class="text-2xl font-extrabold text-[#f5f0e6] mb-4"><span data-imi-icon="levels" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_levels">CEFR Levels</span></h2><div id="levels-content"></div></section>
     <section id="section-learning-path" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="learning-path-content"></div></div></section>
     <section id="section-reading-hub" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="reading-hub-content"></div></div></section>
-    <section id="section-exam" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="clock" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Weekly Exam</h2><p class="text-sm text-[#f5f0e6]/60">15 questions · 15-minute timer · fresh each week</p></div></div><div id="exam-content"></div></section>
-    <section id="section-training" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="spark" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Training</h2><p class="text-sm text-[#f5f0e6]/60">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p></div></div><div id="training-content"></div></section>
-    <section id="section-readings" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="library" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Level Reading</h2><p class="text-sm text-[#f5f0e6]/60">Graded A1–C2 passages with comprehension quizzes</p></div></div><div id="readings-content"></div></section>
-    <section id="section-translator" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="swap" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Translator</h2><p class="text-sm text-[#f5f0e6]/60">Offline English ↔ Arabic glossary with instant word lookups</p></div></div><div id="translator-content"></div></section>
+    <section id="section-exam" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="clock" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_weekex">Weekly Exam</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_weekex_desc">15 questions · 15-minute timer · fresh each week</p></div></div><div id="exam-content"></div></section>
+    <section id="section-training" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="spark" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="training">Training</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_training_desc">Zero-to-hero skill paths: Vocabulary, Listening, Speaking</p></div></div><div id="training-content"></div></section>
+    <section id="section-readings" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="library" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_lvlread">Level Reading</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_lvlread_desc">Graded A1–C2 passages with comprehension quizzes</p></div></div><div id="readings-content"></div></section>
+    <section id="section-translator" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="swap" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_translator">Translator</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_translator_desc">Offline English ↔ Arabic glossary with instant word lookups</p></div></div><div id="translator-content"></div></section>
     <section id="section-catlango" class="section-view hidden"><div id="catlango-content"></div></section>
-    <section id="section-study" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="streak" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Study Tracker</h2><p class="text-sm text-[#f5f0e6]/60">Focus timer, daily goals and streak tracking</p></div></div><div id="study-content"></div></section>
-    <section id="section-words" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="bookmark" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>My Words</h2><p class="text-sm text-[#f5f0e6]/60">Personal vocabulary builder with flashcards</p></div></div><div id="words-content"></div></section>
-    <section id="section-chat" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="chat" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Chat</h2><p class="text-sm text-[#f5f0e6]/60">Community room, support, and direct messages</p></div></div><div id="chat-content"></div></section>
-    <section id="section-feed" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="users" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>Community Feed</h2><p class="text-sm text-[#f5f0e6]/60">Post updates and share your progress with other learners.</p></div></div><div id="feed-content"></div></section>
-    <section id="section-profile" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="shield" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span>My Profile</h2><p class="text-sm text-[#f5f0e6]/60">Your stats, badges, progress and activity — all in one place.</p></div></div><div id="profile-content"></div></section>
+    <section id="section-study" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="streak" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_study">Study Tracker</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_study_desc">Focus timer, daily goals and streak tracking</p></div></div><div id="study-content"></div></section>
+    <section id="section-words" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="bookmark" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_words">My Words</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_words_desc">Personal vocabulary builder with flashcards</p></div></div><div id="words-content"></div></section>
+    <section id="section-chat" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="chat" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_chat">Chat</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_chat_desc">Community room, support, and direct messages</p></div></div><div id="chat-content"></div></section>
+    <section id="section-feed" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="users" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_feed">Community Feed</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_feed_desc">Post updates and share your progress with other learners.</p></div></div><div id="feed-content"></div></section>
+    <section id="section-profile" class="section-view hidden"><div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-extrabold text-[#f5f0e6]"><span data-imi-icon="shield" data-imi-size="w-6 h-6" data-imi-grad="1" data-imi-anim="1" class="imi-icon-head"></span><span data-i18n="sec_profile">My Profile</span></h2><p class="text-sm text-[#f5f0e6]/60" data-i18n="sec_profile_desc">Your stats, badges, progress and activity — all in one place.</p></div></div><div id="profile-content"></div></section>
 
     <section id="section-quiz-hub" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="quiz-hub-content"></div></div></section>
     <section id="section-vocab-trainer" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vocab-trainer-content"></div></div></section>
@@ -438,7 +438,7 @@
       <div class="text-center">
         <div class="footer-olive-tl"><svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg"><path d="M80 105Q45 80 35 50 28 25 45 5" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".3"/><ellipse cx="42" cy="72" rx="10" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".2" transform="rotate(-35 42 72)"/><ellipse cx="35" cy="48" rx="8" ry="4.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".18" transform="rotate(-25 35 48)"/><ellipse cx="38" cy="28" rx="6" ry="3.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".15" transform="rotate(-15 38 28)"/></svg></div>
         <div class="footer-olive-br"><svg width="90" height="110" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg"><path d="M80 105Q45 80 35 50 28 25 45 5" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".3"/><ellipse cx="42" cy="72" rx="10" ry="5.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".2" transform="rotate(-35 42 72)"/><ellipse cx="35" cy="48" rx="8" ry="4.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".18" transform="rotate(-25 35 48)"/><ellipse cx="38" cy="28" rx="6" ry="3.5" fill="none" stroke="#d4af37" stroke-width=".8" opacity=".15" transform="rotate(-15 38 28)"/></svg></div>
-        <h3 class="text-xs font-extrabold uppercase tracking-widest text-[#f5f0e6]/50 mb-6">About the Developer · 🇵🇸</h3>
+        <h3 class="text-xs font-extrabold uppercase tracking-widest text-[#f5f0e6]/50 mb-6" data-i18n="footer_title">About the Developer · 🇵🇸</h3>
         <div class="inline-flex flex-col items-center gap-3">
           <div class="relative">
             <div class="w-24 h-24 rounded-full overflow-hidden bg-[#14120f] ring-4 ring-[rgba(212,175,55,0.3)] shadow-lg">
@@ -446,11 +446,11 @@
             </div>
           </div>
           <p class="font-bold text-[#f5f0e6]">Abdelrahman Osama</p>
-          <p class="text-sm text-[#f5f0e6]/60">Built with ❤️ and purpose · Teacher Rami (أستاذ رامي) — your master control</p>
-          <div class="flex items-center gap-1 text-sm text-[#f5f0e6]/50"><span>🇵🇸</span><span>Free Palestine</span></div>
+          <p class="text-sm text-[#f5f0e6]/60" data-i18n="footer_desc">Built with ❤️ and purpose · Teacher Rami (أستاذ رامي) — your master control</p>
+          <div class="flex items-center gap-1 text-sm text-[#f5f0e6]/50"><span>🇵🇸</span><span data-i18n="footer_free">Free Palestine</span></div>
         </div>
       </div>
-      <p class="text-center text-[11px] text-[#f5f0e6]/50 mt-8">IELTS PA is an unofficial practice tool. Not affiliated with the official IELTS test partners.</p>
+      <p class="text-center text-[11px] text-[#f5f0e6]/50 mt-8" data-i18n="footer_disclaimer">IELTS PA is an unofficial practice tool. Not affiliated with the official IELTS test partners.</p>
     </div>
   </footer>
 

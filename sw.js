@@ -5,12 +5,13 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v5';
+const CACHE = 'rami-star-v6';
 const CORE = [
   './',
   './index.html',
   './download.html',
   './manifest.webmanifest',
+  './icons/icon-96.png',
   './icons/icon-180.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -59,6 +60,7 @@ const CORE = [
   './js/academy-data-c2.js',
   './js/academy-data.js',
   './js/ramiacademy.js',
+  './js/resources.js',
   './js/i18n.js',
   './js/app.js',
   './js/appshell.js',
@@ -88,7 +90,9 @@ self.addEventListener('fetch', (event) => {
 
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req).catch(() => caches.match('./index.html'))
+      fetch(req)
+        .then((res) => (res && res.ok ? res : caches.match('./index.html')))
+        .catch(() => caches.match('./index.html'))
     );
     return;
   }
