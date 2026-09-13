@@ -3070,3 +3070,46 @@ header > div > div {
 }
 .mc-chalk { color: #f5f0e6; }
 .mc-chalk p { letter-spacing: 0.01em; }
+
+/* ============================================================
+   appshell — install banner, reminder, sync, streak, certificate
+   ============================================================ */
+#appshell-root{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:120;width:min(96vw,420px);display:flex;flex-direction:column;gap:10px;pointer-events:none}
+#appshell-root>*{pointer-events:auto}
+html[dir=rtl] #appshell-root{left:50%;right:auto;transform:translateX(-50%)}
+.shell-banner{position:relative;display:flex;flex-direction:column;gap:10px;width:100%;padding:14px 34px 14px 14px;border-radius:14px;background:rgba(18,18,22,0.96);border:1px solid rgba(212,175,55,0.35);box-shadow:0 18px 40px -12px rgba(0,0,0,0.7);backdrop-filter:blur(6px)}
+.shell-install{background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(20,18,15,0.97) 55%)}
+.shell-update{background:linear-gradient(135deg,rgba(180,50,50,0.16),rgba(20,18,15,0.97) 55%)}
+.shell-banner-x{position:absolute;top:6px;inset-inline-end:8px;color:rgba(245,240,230,0.55);font-size:20px;line-height:1;padding:4px 8px;cursor:pointer;background:none;border:0}
+.shell-banner-x:hover{color:#fff}
+.shell-banner-body{display:flex;gap:12px;align-items:center}
+.shell-install-icon{flex:none;border-radius:10px;box-shadow:0 4px 14px -4px rgba(212,175,55,0.5)}
+.shell-banner-title{font-weight:800;color:#f5f0e6;font-size:15px;line-height:1.2}
+.shell-banner-text{color:rgba(245,240,230,0.68);font-size:12.5px;line-height:1.45;margin-top:2px}
+.shell-banner-actions{display:flex;gap:8px;justify-content:flex-end}
+.shell-btn{display:inline-flex;align-items:center;gap:6px;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;color:#14120f;background:linear-gradient(135deg,#d4af37,#b8942e);cursor:pointer;border:0;text-decoration:none}
+.shell-btn.ghost{background:rgba(245,240,230,0.08);color:#f5f0e6;border:1px solid rgba(245,240,230,0.18)}
+.shell-btn:hover{filter:brightness(1.08)}
+#appshell-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:0 0 24px}
+.shell-card{background:rgba(15,18,25,0.72);border:1px solid rgba(212,175,55,0.18);border-radius:16px;padding:16px;backdrop-filter:blur(4px)}
+.shell-card-title{font-weight:800;color:#f5f0e6;font-size:14px;margin-bottom:10px}
+.shell-streak-line{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.shell-streak-big{font-size:40px;font-weight:800;color:#d4af37;line-height:1}
+.shell-streak-label{color:rgba(245,240,230,0.7);font-size:12px;font-weight:600}
+.shell-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.shell-day{height:20px;border-radius:4px;background:rgba(245,240,230,0.07)}
+.shell-day.on{background:rgba(212,175,55,0.55);box-shadow:inset 0 0 0 1px rgba(212,175,55,0.35)}
+.shell-day.today{box-shadow:inset 0 0 0 2px #f5f0e6}
+.shell-card-foot{color:rgba(245,240,230,0.55);font-size:11.5px}
+.shell-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.shell-input{background:rgba(245,240,230,0.08);border:1px solid rgba(245,240,230,0.2);border-radius:9px;color:#f5f0e6;padding:8px 10px;font-size:13px}
+.shell-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.shell-modal-card{position:relative;background:#10141d;border:1px solid rgba(212,175,55,0.35);border-radius:18px;padding:26px;width:min(92vw,380px);box-shadow:0 30px 80px -20px rgba(0,0,0,0.8)}
+.shell-field{display:flex;flex-direction:column;gap:6px;margin:12px 0;color:rgba(245,240,230,0.75);font-size:12.5px;font-weight:600}
+.shell-field input{background:rgba(245,240,230,0.07);border:1px solid rgba(245,240,230,0.2);border-radius:9px;color:#f5f0e6;padding:9px 11px;font-size:14px;font-weight:500}
+.shell-field input:focus{outline:2px solid rgba(212,175,55,0.5);border-color:transparent}
+.shell-modal .shell-btn{justify-content:center;width:100%;margin-top:8px}
+html[dir=rtl] .shell-modal .shell-field{text-align:right}
+html[dir=rtl] .nav-btn-mobile{text-align:right}
+html[dir=rtl] .skill-card .skill-icon{margin-inline-end:auto}
+html[dir=rtl] .shell-banner-x{inset-inline-end:8px;inset-inline-start:auto}

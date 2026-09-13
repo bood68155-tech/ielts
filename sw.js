@@ -5,7 +5,7 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v3';
+const CACHE = 'rami-star-v4';
 const CORE = [
   './',
   './index.html',
@@ -59,7 +59,9 @@ const CORE = [
   './js/academy-data-c2.js',
   './js/academy-data.js',
   './js/ramiacademy.js',
+  './js/i18n.js',
   './js/app.js',
+  './js/appshell.js',
   './rami-avatar.jpg'
 ];
 
