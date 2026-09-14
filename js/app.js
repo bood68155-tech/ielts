@@ -252,7 +252,8 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-2 shrink-0">
-          <button onclick="showSection('study-plan')" class="px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] text-sm font-bold">📋 ${user ? 'Open plan' : 'Start plan'}</button>
+          <button onclick="showSection('vpractice'); setTimeout(function(){document.getElementById('daily-content')&&document.getElementById('daily-content').scrollIntoView({behavior:'smooth',block:'start'})},200)" class="px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] text-sm font-bold">📅 ${user ? 'Start today' : 'Start today'}</button>
+          <button onclick="showSection('study-plan')" class="px-4 py-2 rounded-xl border border-[rgba(212,175,55,0.5)] hover:border-[#d4af37] hover:text-[#d4af37] transition text-[#f5f0e6] text-sm font-bold">📋 ${user ? 'Open plan' : 'Start plan'}</button>
           <button onclick="showSection('teacher-chat')" class="px-4 py-2 rounded-xl border border-[rgba(212,175,55,0.5)] hover:border-[#d4af37] hover:text-[#d4af37] transition text-[#f5f0e6] text-sm font-bold">💬 Ask Rami</button>
         </div>
       </div>`;
