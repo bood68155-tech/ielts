@@ -5,11 +5,10 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v6';
+const CACHE = 'rami-star-v7';
 const CORE = [
   './',
   './index.html',
-  './download.html',
   './manifest.webmanifest',
   './icons/icon-96.png',
   './icons/icon-180.png',
@@ -46,6 +45,10 @@ const CORE = [
   './js/writing-coach.js',
   './js/speaking-sim.js',
   './js/curriculum.js',
+  './js/video-curriculum.js',
+  './js/oxford-5000.js',
+  './js/oxford-trainer.js',
+  './js/daily-schedule.js',
   './js/band-score.js',
   './js/ai-key.js',
   './js/rami-icons.js',

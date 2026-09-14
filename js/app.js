@@ -65,8 +65,11 @@
 
   /* ---------------- Navigation ---------------- */
   window.showSection = function (name) {
-    // Auth gate: dashboard is the only section available before sign-in
-    if (name !== 'dashboard' && name !== 'resources' && window.IELTS_AUTH && !window.IELTS_AUTH.getCurrentUser()) {
+    // Auth gate: keep personal/gamified sections for members, but the
+    // video-curriculum lessons, resources and daily timetable are open
+    // to everyone so the site teaches even before sign-in.
+    const freeSections = ['dashboard', 'resources', 'vlistening', 'vreading', 'vwriting', 'vvocab', 'vpractice', 'teacher-chat'];
+    if (!freeSections.some((f) => name === f) && window.IELTS_AUTH && !window.IELTS_AUTH.getCurrentUser()) {
       window.IELTS_AUTH.showScreen();
       return;
     }

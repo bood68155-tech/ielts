@@ -1016,7 +1016,7 @@
   function showGuest() {
     currentUser = null;
     activeUserId = null;
-    showScreen();
+    hideScreen();
     refreshHeader();
     notifyUserChange();
   }
