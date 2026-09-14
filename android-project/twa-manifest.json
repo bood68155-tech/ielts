@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicedoc/twa-manifest-schema/master/twa-manifest.schema.json",
+  "packageId": "com.bood68155tech.ielts",
+  "host": "bood68155-tech.github.io",
+  "name": "IELTS PA — Teacher Rami Mastery System",
+  "shortName": "IELTS PA",
+  "startUrl": "/ielts/",
+  "launchUrl": "/ielts/",
+  "icon": "https://bood68155-tech.github.io/ielts/icons/icon-512.png",
+  "maskableIcon": "https://bood68155-tech.github.io/ielts/icons/icon-512.png",
+  "monochromeIcon": "https://bood68155-tech.github.io/ielts/icons/icon-512.png",
+  "backgroundColor": "#0f172a",
+  "themeColor": "#0f172a",
+  "appVersionName": "1.0.1",
+  "appVersionCode": 2,
+  "orientation": "portrait",
+  "display": "standalone",
+  "Signing": {
+    "keystore": "signing.keystore",
+    "keystorePassword": "<ask Rami>",
+    "keyAlias": "ielts-pa-key",
+    "keyPassword": "<ask Rami>"
+  },
+  "IconUrls": {
+    "mdpi": "https://bood68155-tech.github.io/ielts/icons/icon-96.png",
+    "hdpi": "https://bood68155-tech.github.io/ielts/icons/icon-192.png",
+    "xhdpi": "https://bood68155-tech.github.io/ielts/icons/icon-192.png",
+    "xxhdpi": "https://bood68155-tech.github.io/ielts/icons/icon-512.png",
+    "xxxhdpi": "https://bood68155-tech.github.io/ielts/icons/icon-512.png"
+  },
+  "enableScreenshots": true,
+  "isChromeOSOnly": false,
+  "isMeta": false,
+  "isPlayBuilt": false,
+  "appCategory": "education"
+}

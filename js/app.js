@@ -111,7 +111,7 @@
     if (name === 'listening-master' && window.IELTS_LISTMASTER) window.IELTS_LISTMASTER.render();
     if (name === 'writing-coach' && window.IELTS_WRITING_COACH) window.IELTS_WRITING_COACH.render();
     if (name === 'speaking-sim' && window.IELTS_SPEAKING_SIM) window.IELTS_SPEAKING_SIM.render();
-    if (name === 'curriculum' && window.IELTS_CURRICULUM) window.IELTS_CURRICULUM.render();
+    if (name === 'curriculum' && window.IELTS_VIDEO_CURRICULUM) window.IELTS_VIDEO_CURRICULUM.render();
     if (name === 'ramiacademy' && window.IELTS_ACADEMY) window.IELTS_ACADEMY.render();
     if (name === 'resources' && window.IELTS_RESOURCES) window.IELTS_RESOURCES.render();
     if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
