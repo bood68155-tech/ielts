@@ -597,8 +597,15 @@
   function showVerificationUI(code, email, username, serviceSent) {
     const verificationContainer = $('#verification-container');
     const authForms = $('.auth-forms-container');
+    const authScreen = $('#auth-screen');
 
     if (verificationContainer && authForms) {
+      /* The auth screen may have been hidden by sign-in — bring it back
+         so the verification panel is actually visible. */
+      if (authScreen) {
+        authScreen.classList.remove('hidden');
+        authScreen.classList.add('flex');
+      }
       verificationContainer.classList.remove('hidden');
       authForms.classList.add('hidden');
 
@@ -613,7 +620,7 @@
             <p style="font-size:0.8rem;color:rgba(245,240,230,0.6);margin-top:0.4rem;">A verification code has been sent to <strong style="color:#d4af37;">${escapeHtml(maskedEmail)}</strong></p>
             <p style="font-size:0.75rem;color:rgba(245,240,230,0.45);margin-top:0.25rem;">Enter the 6-character code below to confirm your account.</p>
           </div>
-          ${isDemo ? '<div style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.25);border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.25rem;text-align:center;"><p style="font-size:0.7rem;color:rgba(245,240,230,0.55);margin:0 0 0.4rem;">Demo build — no mail server configured</p><p style="font-size:1rem;color:#d4af37;font-weight:800;margin:0;letter-spacing:0.15em;font-family:monospace;">' + escapeHtml(code) + '</p><button id="verification-autofill" style="margin-top:0.5rem;padding:0.35rem 0.8rem;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Auto-fill code & verify</button></div>' : '<p style="font-size:0.7rem;color:rgba(245,240,230,0.5);margin-bottom:1rem;">Check your inbox for the code.</p>'}
+          ${isDemo ? '<div style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.25);border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.25rem;text-align:center;"><p style="font-size:0.7rem;color:rgba(245,240,230,0.55);margin:0 0 0.4rem;">Demo build — no mail server configured. This is your code (copied from the email):</p><div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;"><code id="verification-code-copy" style="font-size:1rem;color:#d4af37;font-weight:800;letter-spacing:0.15em;font-family:monospace;background:rgba(20,18,15,0.6);border:1px dashed rgba(212,175,55,0.35);border-radius:0.5rem;padding:0.4rem 0.8rem;">' + escapeHtml(code) + '</code><button id="verification-copy-btn" style="padding:0.4rem 0.7rem;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);color:#d4af37;font-size:0.75rem;font-weight:700;cursor:pointer;">Copy</button></div><button id="verification-autofill" style="margin-top:0.65rem;padding:0.35rem 0.8rem;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Paste code & verify</button></div>' : '<p style="font-size:0.7rem;color:rgba(245,240,230,0.5);margin-bottom:1rem;">Check your inbox for the code.</p>'}
           <div id="verification-digits" style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:1.25rem;">
             ${Array(6).fill(0).map((_, i) => '<input type="text" maxlength="1" class="verification-digit" data-index="' + i + '" autocomplete="off" style="width:2.4rem;height:2.8rem;text-align:center;font-size:1.1rem;font-weight:700;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.3);background:rgba(20,18,15,0.7);color:#f5f0e6;outline:none;" onfocus="this.style.borderColor=\'rgba(212,175,55,0.7)\'" onblur="this.style.borderColor=\'rgba(212,175,55,0.3)\'" />').join('')}
           </div>
@@ -637,6 +644,25 @@
             code.split('').forEach((ch, i) => { if (inputs[i]) inputs[i].value = ch; });
             if (inputs.length) inputs[inputs.length - 1].focus();
             setTimeout(() => verifyEmailCode(code, email, username), 250);
+          });
+        }
+        const copyBtn = $('#verification-copy-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', () => {
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code);
+              } else {
+                const ta = document.createElement('textarea');
+                ta.value = code;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+              }
+              copyBtn.textContent = 'Copied ✓';
+              setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1800);
+            } catch (e) { /* ignore */ }
           });
         }
       }
@@ -845,11 +871,12 @@
       await d.upsertUser(newUser);
     }
 
-    // Send verification email
-    const verificationCode = await sendVerificationEmail(email, username);
-
-    // Sign in the user
+    // Sign in the user first (persists the session across refresh)
     signInAs(username);
+
+    // Then show the verification code — demo mode shows it on screen
+    // as if it arrived by email, so the learner can type it in.
+    const verificationCode = await sendVerificationEmail(email, username);
 
     window.toast && window.toast('Account created! Please verify your email. 📧');
   }
@@ -1129,7 +1156,14 @@
     checkUrlVerification();
 
     // Restore session
-    restoreSession(currentSession());
+    restoreSession(currentSession()).then(function () {
+      // If a verification code is still pending and this account is not
+      // verified yet, bring the confirmation screen back after refresh.
+      const vt = getVerificationToken();
+      if (vt && vt.token && currentUser && currentUser.email === vt.email && !currentUser.emailVerified) {
+        showVerificationUI(vt.token, vt.email, currentUser.username || vt.email, false);
+      }
+    });
 
     // Setup cross-tab sync
     setupCrossTabSync();
