@@ -224,7 +224,16 @@
       vc_vi_12: 'The built-in trainer turns those wordlists into daily review reps.',
       vc_gi_11: 'A structured run of IELTS grammar masterclasses — watch, note, revise.',
       vc_gi_12: 'The in-app Master Classroom where Teacher Rami teaches full lessons.',
-      vc_pi_11: 'Free full Listening & Reading mocks with instant band scoring.'
+      vc_pi_11: 'Free full Listening & Reading mocks with instant band scoring.',
+      nav_listening: 'Listening',
+      nav_reading: 'Reading',
+      nav_writing: 'Writing & Speaking',
+      nav_vocab: 'Vocabulary & Grammar',
+      nav_practice: 'Practice & Tests',
+      nav_teacher: 'Teacher Rami',
+      vp_method: "Rami's method — step by step",
+      vp_plan: 'Open smart study plan',
+      vp_iot: 'Go to IELTS Online Tests'
     },
     ar: {
       dashboard: 'الرئيسية',
@@ -441,7 +450,16 @@
       vc_vi_12: 'المدرّب المدمج يحوّل تلك القوائم إلى مراجعات يومية.',
       vc_gi_11: 'سلسلة منظمة من دروس القواعد المركزة — شاهد، دوّن، راجع.',
       vc_gi_12: 'الفصل الدراسي داخل التطبيق حيث يقدّم الأستاذ رامي دروساً كاملة.',
-      vc_pi_11: 'اختبارات تجريبية كاملة مجانية للاستماع والقراءة مع تصحيح فوري للدرجة.'
+      vc_pi_11: 'اختبارات تجريبية كاملة مجانية للاستماع والقراءة مع تصحيح فوري للدرجة.',
+      nav_listening: 'الاستماع',
+      nav_reading: 'القراءة',
+      nav_writing: 'الكتابة والمحادثة',
+      nav_vocab: 'المفردات والقواعد',
+      nav_practice: 'التدريب والاختبارات',
+      nav_teacher: 'المستر رامي',
+      vp_method: 'منهج رامي — خطوة بخطوة',
+      vp_plan: 'افتح خطة المذاكرة الذكية',
+      vp_iot: 'انتقل إلى IELTS Online Tests'
     }
   };
 

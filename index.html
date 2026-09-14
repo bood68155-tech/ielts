@@ -231,21 +231,12 @@
         </button>
         <nav class="hidden md:flex items-center gap-1" id="main-nav">
           <button data-section="dashboard" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('dashboard')" data-i18n="dashboard">Home</button>
-          <button data-section="study-plan" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('study-plan')" data-i18n="study-plan">Study Plan</button>
-          <button data-section="placement" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('placement')" data-i18n="placement">Placement</button>
-          <button data-section="training" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('training')" data-i18n="training">Training</button>
-          <button data-section="vocab-trainer" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vocab-trainer')" data-i18n="vocab-trainer">Vocab</button>
-          <button data-section="quiz-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('quiz-hub')" data-i18n="quiz-hub">Quiz Hub</button>
-          <button data-section="reading-hub" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('reading-hub')" data-i18n="reading-hub">Reading</button>
-          <button data-section="band" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('band')" data-i18n="band">Mastery</button>
-          <button data-section="wss" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('wss')" data-i18n="wss">Studio</button>
-          <button data-section="band-calc" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('band-calc')" data-i18n="band-calc">Band Score</button>
-          <button data-section="diagnostics" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('diagnostics')" data-i18n="diagnostics">Diagnostics</button>
-          <button data-section="masterclass" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('masterclass')"><span class="imi-nav-mini" data-imi-icon="dome" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="masterclass">Master Classroom</span></button>
-          <button data-section="profile" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('profile')" data-i18n="profile">Profile</button>
-          <button data-section="curriculum" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('curriculum')" data-i18n="curriculum">Curriculum</button>
-          <button data-section="ramiacademy" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('ramiacademy')"><span class="imi-nav-mini" data-imi-icon="library" data-imi-size="w-4 h-4" data-imi-glow="1"></span><span data-i18n="ramiacademy">Rami Academy</span></button>
-          <button data-section="resources" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('resources')" data-i18n="resources">Resources</button>
+          <button data-section="vlistening" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vlistening')" data-i18n="nav_listening">Listening</button>
+          <button data-section="vreading" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vreading')" data-i18n="nav_reading">Reading</button>
+          <button data-section="vwriting" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vwriting')" data-i18n="nav_writing">Writing &amp; Speaking</button>
+          <button data-section="vvocab" class="nav-btn px-3 py-2 text-sm font-medium transition" onclick="showSection('vvocab')" data-i18n="nav_vocab">Vocabulary &amp; Grammar</button>
+          <button data-section="vpractice" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('vpractice')" data-i18n="nav_practice">Practice &amp; Tests</button>
+          <button data-section="teacher-chat" class="nav-btn nav-btn-featured px-3 py-2 text-sm font-medium transition" onclick="showSection('teacher-chat')"><span data-i18n="nav_teacher">Teacher Rami</span></button>
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
           <button id="lang-toggle" class="w-9 h-9 font-extrabold border border-[rgba(212,175,55,0.3)] text-[#d4af37] hover:bg-[rgba(212,175,55,0.1)] transition" title="Language / اللغة" aria-label="Toggle language">EN</button>
@@ -272,21 +263,12 @@
     </div>
     <nav id="mobile-nav" class="hidden md:hidden border-t border-[rgba(212,175,55,0.1)] bg-[rgba(20,18,15,0.95)] backdrop-blur-md px-4 py-3 space-y-1">
       <button data-section="dashboard" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('dashboard')" data-i18n="dashboard">Home</button>
-      <button data-section="study-plan" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('study-plan')" data-i18n="study-plan">Study Plan</button>
-      <button data-section="placement" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('placement')" data-i18n="placement">Placement</button>
-      <button data-section="training" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('training')" data-i18n="training">Training</button>
-      <button data-section="vocab-trainer" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vocab-trainer')" data-i18n="vocab-trainer">Vocab</button>
-      <button data-section="quiz-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('quiz-hub')" data-i18n="quiz-hub">Quiz Hub</button>
-      <button data-section="reading-hub" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('reading-hub')" data-i18n="reading-hub">Reading</button>
-      <button data-section="band" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('band')" data-i18n="band">Mastery</button>
-      <button data-section="wss" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('wss')" data-i18n="wss">Studio</button>
-      <button data-section="band-calc" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('band-calc')" data-i18n="band-calc">Band Score</button>
-      <button data-section="diagnostics" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('diagnostics')" data-i18n="diagnostics">Diagnostics</button>
-      <button data-section="masterclass" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('masterclass')" data-i18n="masterclass">Master Classroom</button>
-      <button data-section="profile" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('profile')" data-i18n="profile">Profile</button>
-      <button data-section="curriculum" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('curriculum')" data-i18n="curriculum">Curriculum</button>
-      <button data-section="ramiacademy" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('ramiacademy')" data-i18n="ramiacademy">Rami Academy</button>
-      <button data-section="resources" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('resources')" data-i18n="resources">Resources</button>
+      <button data-section="vlistening" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vlistening')" data-i18n="nav_listening">Listening</button>
+      <button data-section="vreading" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vreading')" data-i18n="nav_reading">Reading</button>
+      <button data-section="vwriting" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vwriting')" data-i18n="nav_writing">Writing &amp; Speaking</button>
+      <button data-section="vvocab" class="nav-btn-mobile block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vvocab')" data-i18n="nav_vocab">Vocabulary &amp; Grammar</button>
+      <button data-section="vpractice" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('vpractice')" data-i18n="nav_practice">Practice &amp; Tests</button>
+      <button data-section="teacher-chat" class="nav-btn-mobile nav-btn-mobile-featured block w-full text-left px-3 py-2 text-sm font-medium" onclick="showSection('teacher-chat')" data-i18n="nav_teacher">Teacher Rami</button>
       <button id="mobile-signout" onclick="IELTS_AUTH.logout()" class="hidden w-full text-left px-3 py-2 text-sm font-medium text-[#ff6b6b]"><span data-i18n="signout">Sign out</span></button>
     </nav>
   </header>
@@ -359,7 +341,7 @@
 
       <div id="dashboard-auth-banner"></div>
       <div id="dashboard-mission"></div>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="dashboard-stats"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10" id="dashboard-stats"></div>
       <div id="dashboard-roadmap"></div>
       <h2 class="text-xl font-bold text-[#f5f0e6] mb-4" data-i18n="quickpractice">Quick Practice</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -424,6 +406,11 @@
     <section id="section-writing-coach" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="writing-coach-content"></div></div></section>
     <section id="section-speaking-sim" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="speaking-sim-content"></div></div></section>
     <section id="section-curriculum" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="curriculum-content"></div></div></section>
+    <section id="section-vlistening" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vp-listening-content"></div></div></section>
+    <section id="section-vreading" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vp-reading-content"></div></div></section>
+    <section id="section-vwriting" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vp-writing-content"></div></div></section>
+    <section id="section-vvocab" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vp-vocab-content"></div></div></section>
+    <section id="section-vpractice" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="vp-practice-content"></div></div></section>
     <section id="section-ramiacademy" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="ramiacademy-content"></div></div></section>
     <section id="section-diagnostics" class="section-view hidden"><div class="max-w-5xl mx-auto px-4 py-8"><div id="diagnostics-content"></div></div></section>
   </main>

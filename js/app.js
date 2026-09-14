@@ -114,6 +114,11 @@
     if (name === 'curriculum' && window.IELTS_VIDEO_CURRICULUM) window.IELTS_VIDEO_CURRICULUM.render();
     if (name === 'ramiacademy' && window.IELTS_ACADEMY) window.IELTS_ACADEMY.render();
     if (name === 'resources' && window.IELTS_RESOURCES) window.IELTS_RESOURCES.render();
+    if (name === 'vlistening' && window.IELTS_VIDEO_PLATFORM) window.IELTS_VIDEO_PLATFORM.render('vp-listening-content', ['listening']);
+    if (name === 'vreading' && window.IELTS_VIDEO_PLATFORM) window.IELTS_VIDEO_PLATFORM.render('vp-reading-content', ['reading']);
+    if (name === 'vwriting' && window.IELTS_VIDEO_PLATFORM) window.IELTS_VIDEO_PLATFORM.render('vp-writing-content', ['writing', 'speaking']);
+    if (name === 'vvocab' && window.IELTS_VIDEO_PLATFORM) window.IELTS_VIDEO_PLATFORM.render('vp-vocab-content', ['vocabulary', 'grammar']);
+    if (name === 'vpractice' && window.IELTS_VIDEO_PLATFORM) window.IELTS_VIDEO_PLATFORM.render('vp-practice-content', ['practice']);
     if (name === 'diagnostics' && window.IELTS_DIAG) window.IELTS_DIAG.render();
     if (name === 'band-calc' && window.IELTS_BAND_SCORE) window.IELTS_BAND_SCORE.render();
 
@@ -224,23 +229,33 @@
           <button onclick="IELTS_AUTH.showScreen()" class="bg-white text-brand-700 font-semibold px-5 py-2.5 rounded-xl hover:bg-brand-50 transition">Sign in / Register</button>
         </div>`;
 
-    const stats = [
-      { icon: 'listen', label: 'Listening', value: countListeningScore() + '/40', sub: '40 questions' },
-      { icon: 'read', label: 'Reading', value: countReadingScore() + '/40', sub: '40 questions' },
-      { icon: 'write', label: 'Writing', value: '2 tasks', sub: '60 min timer' },
-      { icon: 'speak', label: 'Speaking', value: '3 parts', sub: 'Full test' }
+    const laneCards = [
+      { icon: 'listen', label: 'Listening', sub: 'Spotlight → Level Up → BBC Sounds', sec: 'vlistening' },
+      { icon: 'read', label: 'Reading', sub: 'Storynory → ESL Fast → BBC News', sec: 'vreading' },
+      { icon: 'write', label: 'Writing & Speaking', sub: 'Grammarly · AI coach · IELTS Advantage', sec: 'vwriting' },
+      { icon: 'speak', label: 'Vocabulary & Grammar', sub: 'Oxford 3000/5000 · masterclasses', sec: 'vvocab' },
+      { icon: 'dome', label: 'Practice & Tests', sub: 'IOT mocks + smart plan + Teacher Rami', sec: 'vpractice' }
     ];
-    $('#dashboard-stats').innerHTML = stats.map((s) => `
-      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] rounded-2xl p-4 shadow-sm">
+    $('#dashboard-stats').innerHTML = laneCards.map((s) => `
+      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.2)] hover:border-[rgba(212,175,55,0.5)] rounded-2xl p-4 cursor-pointer transition" onclick="showSection('${s.sec}')">
         <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#f5f0e6]/45 mb-1"><span data-imi-icon="${s.icon}" data-imi-size="w-3.5 h-3.5" data-imi-glow="1" class="imi-nav-mini"></span>${s.label}</div>
-        <div class="text-2xl font-extrabold text-[#d4af37]">${s.value}</div>
-        <div class="text-[11px] text-[#f5f0e6]/50 mt-0.5">${s.sub}</div>
+        <p class="text-[12px] text-[#f5f0e6]/55 mt-1.5 leading-relaxed">${s.sub}</p>
       </div>`).join('');
 
-    if (user) {
-      renderTodayMission();
-      renderNextStepsRoadmap(user);
-    }
+    $('#dashboard-roadmap').innerHTML = `
+      <div class="bg-[rgba(15,23,42,0.85)] backdrop-blur-md border border-[rgba(212,175,55,0.25)] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          ${window.IELTS_AI && window.IELTS_AI.MENTOR_AVATAR ? '<div class="w-12 h-12 rounded-full overflow-hidden bg-[#14120f] border border-[rgba(212,175,55,0.5)] shrink-0">' + window.IELTS_AI.MENTOR_AVATAR + '</div>' : '<div class="w-12 h-12 shrink-0 rounded-full bg-[#14120f] border border-[rgba(212,175,55,0.5)] text-[#d4af37] flex items-center justify-center text-xl font-extrabold">ر</div>'}
+          <div>
+            <p class="text-[10px] font-extrabold text-[#d4af37] uppercase tracking-widest">Smart study plan · supervised by Teacher Rami</p>
+            <p class="text-sm text-[#f5f0e6]/60 mt-0.5">خطة مذاكرة ذكية بإشراف الأستاذ رامي — مصمّمة حسب نتائجك.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 shrink-0">
+          <button onclick="showSection('study-plan')" class="px-4 py-2 rounded-xl bg-[#d4af37] hover:bg-[#b8962e] transition text-[#14120f] text-sm font-bold">📋 ${user ? 'Open plan' : 'Start plan'}</button>
+          <button onclick="showSection('teacher-chat')" class="px-4 py-2 rounded-xl border border-[rgba(212,175,55,0.5)] hover:border-[#d4af37] hover:text-[#d4af37] transition text-[#f5f0e6] text-sm font-bold">💬 Ask Rami</button>
+        </div>
+      </div>`;
   }
 
   /* ---------------- Today's study mission ---------------- */
