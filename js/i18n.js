@@ -233,7 +233,22 @@
       nav_teacher: 'Teacher Rami',
       vp_method: "Rami's method — step by step",
       vp_plan: 'Open smart study plan',
-      vp_iot: 'Go to IELTS Online Tests'
+      vp_iot: 'Go to IELTS Online Tests',
+      ox_title: 'Oxford 5000 — CEFR Trainer',
+      ox_sub: 'All the Oxford 5000 words, taught level by level. Mark what you know and ask Teacher Rami to explain the rest.',
+      ox_words: 'words',
+      ox_known: 'Known',
+      ox_again: 'Review later',
+      ox_ask: 'Rami, explain',
+      ox_mastered: 'Mastered',
+      ox_review: 'On review list',
+      ox_search: 'Search words in this level…',
+      ox_practice: 'Practice',
+      ox_list: 'All words',
+      ox_empty: 'No words in this level yet.',
+      ox_none: 'No words match your search.',
+      ox_more: 'more hidden',
+      ox_next_hint: 'Ask Rami to teach this word, or mark it known and move on.'
     },
     ar: {
       dashboard: 'الرئيسية',
@@ -459,7 +474,22 @@
       nav_teacher: 'المستر رامي',
       vp_method: 'منهج رامي — خطوة بخطوة',
       vp_plan: 'افتح خطة المذاكرة الذكية',
-      vp_iot: 'انتقل إلى IELTS Online Tests'
+      vp_iot: 'انتقل إلى IELTS Online Tests',
+      ox_title: 'أكسفورد 5000 — مدرّب المستويات',
+      ox_sub: 'كل كلمات أكسفورد 5000 تُدرَّس مستوى بمستوى. علّم ما تعرفه واسأل المستر رامي يشرح الباقي.',
+      ox_words: 'كلمة',
+      ox_known: 'أعرفها',
+      ox_again: 'راجعها لاحقاً',
+      ox_ask: 'رامي، اشرحها',
+      ox_mastered: 'مُتقنة',
+      ox_review: 'في قائمة المراجعة',
+      ox_search: 'ابحث عن كلمات في هذا المستوى…',
+      ox_practice: 'تدريب',
+      ox_list: 'كل الكلمات',
+      ox_empty: 'لا كلمات في هذا المستوى بعد.',
+      ox_none: 'لا توجد كلمات مطابقة لبحثك.',
+      ox_more: 'كلمة أخرى مخفية',
+      ox_next_hint: 'اطلب من رامي شرح الكلمة، أو علّمها وانتقل للبعدها.'
     }
   };
 
