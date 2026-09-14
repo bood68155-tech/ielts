@@ -256,6 +256,8 @@
           <button onclick="showSection('teacher-chat')" class="px-4 py-2 rounded-xl border border-[rgba(212,175,55,0.5)] hover:border-[#d4af37] hover:text-[#d4af37] transition text-[#f5f0e6] text-sm font-bold">💬 Ask Rami</button>
         </div>
       </div>`;
+
+    if (window.DAILY_SCHEDULE) { try { window.DAILY_SCHEDULE.render('dashboard-daily'); } catch (e) { /* ignore */ } }
   }
 
   /* ---------------- Today's study mission ---------------- */

@@ -334,9 +334,13 @@ window.IELTS_VIDEO_CURRICULUM = {
           '</div>' +
         '</div>' +
         lanes.map(function (L) { return lanePageHtml(L, {}); }).join('') +
-        (keys.indexOf('vocabulary') !== -1 && window.OXFORD_5000 ? '<div id="oxford-trainer-root"></div>' : '');
+        (keys.indexOf('vocabulary') !== -1 && window.OXFORD_5000 ? '<div id="oxford-trainer-root"></div>' : '') +
+        (keys.indexOf('practice') !== -1 ? '<div id="daily-content"></div>' : '');
       if (keys.indexOf('vocabulary') !== -1 && window.IELTS_OXFORD_TRAINER) {
         try { window.IELTS_OXFORD_TRAINER.render('oxford-trainer-root'); } catch (e) { /* ignore */ }
+      }
+      if (keys.indexOf('practice') !== -1 && window.DAILY_SCHEDULE) {
+        try { window.DAILY_SCHEDULE.render('daily-content'); } catch (e) { /* ignore */ }
       }
     }
 

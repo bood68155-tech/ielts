@@ -564,6 +564,7 @@
 
     // Try to send via email service if configured
     const emailServiceUrl = localStorage.getItem('ielts-email-service-url');
+    let serviceSent = false;
     if (emailServiceUrl) {
       try {
         await fetch(emailServiceUrl, {
@@ -576,23 +577,24 @@
                               <h1>Email Verification</h1>
                               <p>Hello ${username},</p>
                               <p>Please click the link below to verify your email address:</p>
-                              <p><a href="${verificationUrl}" style="background-color: #009736; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a></p>
+                              <p><a href="${verificationUrl}" style="background-color: #d4af37; color: #0f172a; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a></p>
                               <p>Or copy and paste this code: <strong>${verificationCode}</strong></p>
                               <p>This link expires in 24 hours.</p>
                             `
           })
         });
+        serviceSent = true;
       } catch (e) {
         console.warn('[auth] Failed to send verification email:', e);
       }
     }
 
     // Show verification UI
-    showVerificationUI(verificationCode, email, username);
+    showVerificationUI(verificationCode, email, username, serviceSent);
     return verificationCode;
   }
 
-  function showVerificationUI(code, email, username) {
+  function showVerificationUI(code, email, username, serviceSent) {
     const verificationContainer = $('#verification-container');
     const authForms = $('.auth-forms-container');
 
@@ -600,32 +602,44 @@
       verificationContainer.classList.remove('hidden');
       authForms.classList.add('hidden');
 
+      const isDemo = !serviceSent;
+      const maskedEmail = email.replace(/(.{2})(.*)(@.*)/, '$1***$3');
+
       verificationContainer.innerHTML = `
-        <div class="verification-content">
-          <div class="verification-icon">📧</div>
-          <h3 class="verification-title">Check Your Email</h3>
-          <p class="verification-subtitle">A verification code has been sent to <strong>${escapeHtml(email)}</strong></p>
-          <p class="verification-subtitle" style="margin-bottom: 1rem;">Enter the code below to verify your email address</p>
-          <div class="verification-digits">
-            ${Array(6).fill(0).map((_, i) => `
-              <input type="text" maxlength="1" class="verification-digit" data-index="${i}" autocomplete="off">
-            `).join('')}
+        <div style="background:rgba(15,23,42,0.92);border:1px solid rgba(212,175,55,0.25);border-radius:1rem;padding:2rem;max-width:400px;margin:0 auto;">
+          <div style="text-align:center;margin-bottom:1.5rem;">
+            <div style="width:48px;height:48px;margin:0 auto 0.75rem;border-radius:50%;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.35);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">📧</div>
+            <h3 style="font-size:1.15rem;font-weight:800;color:#f5f0e6;margin:0;">Check Your Email</h3>
+            <p style="font-size:0.8rem;color:rgba(245,240,230,0.6);margin-top:0.4rem;">A verification code has been sent to <strong style="color:#d4af37;">${escapeHtml(maskedEmail)}</strong></p>
+            <p style="font-size:0.75rem;color:rgba(245,240,230,0.45);margin-top:0.25rem;">Enter the 6-character code below to confirm your account.</p>
           </div>
-          <div class="verification-actions">
-            <button id="verify-email-btn" class="btn-primary">Verify Email</button>
+          ${isDemo ? '<div style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.25);border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.25rem;text-align:center;"><p style="font-size:0.7rem;color:rgba(245,240,230,0.55);margin:0 0 0.4rem;">Demo build — no mail server configured</p><p style="font-size:1rem;color:#d4af37;font-weight:800;margin:0;letter-spacing:0.15em;font-family:monospace;">' + escapeHtml(code) + '</p><button id="verification-autofill" style="margin-top:0.5rem;padding:0.35rem 0.8rem;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Auto-fill code & verify</button></div>' : '<p style="font-size:0.7rem;color:rgba(245,240,230,0.5);margin-bottom:1rem;">Check your inbox for the code.</p>'}
+          <div id="verification-digits" style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:1.25rem;">
+            ${Array(6).fill(0).map((_, i) => '<input type="text" maxlength="1" class="verification-digit" data-index="' + i + '" autocomplete="off" style="width:2.4rem;height:2.8rem;text-align:center;font-size:1.1rem;font-weight:700;border-radius:0.5rem;border:1px solid rgba(212,175,55,0.3);background:rgba(20,18,15,0.7);color:#f5f0e6;outline:none;" onfocus="this.style.borderColor=\'rgba(212,175,55,0.7)\'" onblur="this.style.borderColor=\'rgba(212,175,55,0.3)\'" />').join('')}
           </div>
-          <p class="verification-meta">
-            Didn't receive the code? 
-            <button type="button" id="resend-verification">Resend</button>
-          </p>
-          <button id="skip-verification" class="verification-skip">
-            Skip for now (continue as guest)
-          </button>
+          <button id="verify-email-btn" style="width:100%;padding:0.7rem;border-radius:0.75rem;border:none;background:#d4af37;color:#14120f;font-weight:800;font-size:0.85rem;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background=\'#b8962e\'" onmouseout="this.style.background=\'#d4af37\'">Verify Email</button>
+          <div style="display:flex;justify-content:space-between;margin-top:1rem;font-size:0.7rem;">
+            <button type="button" id="resend-verification" style="background:none;border:none;color:rgba(245,240,230,0.6);cursor:pointer;">Resend code</button>
+            <button type="button" id="skip-verification" style="background:none;border:none;color:rgba(245,240,230,0.35);cursor:pointer;">Skip for now</button>
+          </div>
         </div>
       `;
 
       // Setup verification inputs
       setupVerificationInputs(code, email, username);
+
+      // Auto-fill button (demo only)
+      if (isDemo) {
+        const afBtn = $('#verification-autofill');
+        if (afBtn) {
+          afBtn.addEventListener('click', () => {
+            const inputs = document.querySelectorAll('.verification-digit');
+            code.split('').forEach((ch, i) => { if (inputs[i]) inputs[i].value = ch; });
+            if (inputs.length) inputs[inputs.length - 1].focus();
+            setTimeout(() => verifyEmailCode(code, email, username), 250);
+          });
+        }
+      }
     }
   }
 
@@ -692,19 +706,19 @@
     const enteredCode = Array.from(inputs).map(i => i.value).join('');
 
     if (enteredCode.length !== 6) {
-      showError('Please enter the complete 6-digit code.');
+      window.toast && window.toast('Please enter the complete 6-character code.');
       return;
     }
 
     const verificationToken = getVerificationToken();
     if (!verificationToken || verificationToken.email !== email) {
-      showError('Verification session expired. Please try again.');
+      window.toast && window.toast('Verification session expired. Please try again.');
       return;
     }
 
     // Check if code matches
     if (enteredCode.toUpperCase() !== code.toUpperCase()) {
-      showError('Incorrect verification code. Please try again.');
+      window.toast && window.toast('Incorrect verification code. Please try again.');
       inputs.forEach(i => i.value = '');
       inputs[0].focus();
       return;
