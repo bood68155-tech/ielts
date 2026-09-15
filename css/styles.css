@@ -3193,3 +3193,391 @@ html[dir=rtl] .shell-modal .shell-field{text-align:right}
 html[dir=rtl] .nav-btn-mobile{text-align:right}
 html[dir=rtl] .skill-card .skill-icon{margin-inline-end:auto}
 html[dir=rtl] .shell-banner-x{inset-inline-end:8px;inset-inline-start:auto}
+
+/* ============================================================
+   RETRO PIXEL-ART (8-BIT) AESTHETIC LAYER
+   Palestinian heritage preserved: kuffiyeh diamonds, flag colours,
+   olive motifs all untouched.  This layer adds:
+   • Hard offset "ledge" shadows on buttons
+   • Stepped 4px chunky card borders
+   • image-rendering: pixelated on Rami avatar
+   • Press Start 2P pixel font accents (badges + hero)
+   • Kuffiyeh corner diamonds as pixel corner motif
+   • Subtle scanline overlay on hero panels
+   ============================================================ */
+
+/* --- Pixel avatar: render pixel art crisply at every size --- */
+.rami-avatar,
+.pixel-avatar-frame img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* --- Kuffiyeh pixel corner diamonds (4 corners) --- */
+.pixel-card::before,
+.pixel-card::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  background: #d4af37;
+  pointer-events: none;
+  opacity: 0.65;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.pixel-card::before { top: -5px; left: -5px; }
+.pixel-card::after  { top: -5px; right: -5px; }
+
+/* Lower pair via wrapper (index only has static card — bottom diamonds via
+   decorative span).  Apply .pixel-card-bottom div inside card for full set. */
+.pixel-card-bottom {
+  position: absolute; bottom: -5px; left: 0; right: 0; height: 0; z-index: 2; pointer-events: none;
+}
+.pixel-card-bottom::before,
+.pixel-card-bottom::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px;
+  background: #d4af37;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  opacity: 0.65;
+}
+.pixel-card-bottom::before { bottom: 5px; left: -5px; }
+.pixel-card-bottom::after  { bottom: 5px; right: -5px; }
+
+/* --- Stepped chunky border on auth card (dark glass) --- */
+.pixel-card {
+  box-shadow:
+    0 0 0 2px #0f172a,
+    0 0 0 4px rgba(212,175,55,0.55),
+    0 0 0 6px #0f172a,
+    0 8px 32px -8px rgba(0,0,0,0.7) !important;
+}
+
+/* --- Scanline overlay on auth header & hero panels --- */
+.pixel-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+.pixel-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  z-index: 1;
+}
+
+/* --- Pixel font accents (Press Start 2P, offline fallback) --- */
+.pixel-accent,
+.pixel-badge,
+.tab-pill.active,
+.nav-btn.active,
+.nav-btn-featured.active {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  letter-spacing: 0;
+}
+
+/* Hero subtitle in pixel font */
+.pixel-hero-subtitle {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  letter-spacing: 0;
+}
+
+/* --- Buttons: hard offset "ledge" shadows (8-bit feel) --- */
+/* Gold primary btn (dark theme, lives at ~L832+ in cascade) */
+.btn-primary {
+  position: relative;
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.7) !important;
+  box-shadow:
+    3px 3px 0 0 rgba(0,0,0,0.55),
+    0 0 0 1px rgba(212,175,55,0.3) !important;
+  transition: all 0.08s step-end !important;
+}
+.btn-primary:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow:
+    1px 1px 0 0 rgba(0,0,0,0.55),
+    0 0 0 1px rgba(212,175,55,0.4) !important;
+}
+.btn-primary:active {
+  transform: translate(3px,3px) !important;
+  box-shadow:
+    0 0 0 0 rgba(0,0,0,0.55),
+    0 0 0 1px rgba(212,175,55,0.5) !important;
+}
+
+/* Secondary btn */
+.btn-secondary {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.45) !important;
+  box-shadow:
+    3px 3px 0 0 rgba(0,0,0,0.5),
+    0 0 0 1px rgba(212,175,55,0.18) !important;
+  transition: all 0.08s step-end !important;
+}
+.btn-secondary:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow:
+    1px 1px 0 0 rgba(0,0,0,0.5) !important;
+}
+
+/* Red btn */
+.btn-red {
+  border-radius: 0 !important;
+  border: 2px solid rgba(255,100,100,0.5) !important;
+  box-shadow:
+    3px 3px 0 0 rgba(0,0,0,0.55),
+    0 0 0 1px rgba(180,50,50,0.25) !important;
+  transition: all 0.08s step-end !important;
+}
+.btn-red:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow:
+    1px 1px 0 0 rgba(0,0,0,0.55) !important;
+}
+
+/* App-shell buttons */
+.shell-btn {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.7) !important;
+  box-shadow: 3px 3px 0 0 rgba(0,0,0,0.55) !important;
+  transition: all 0.08s step-end !important;
+}
+.shell-btn:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow: 1px 1px 0 0 rgba(0,0,0,0.55) !important;
+}
+.shell-btn.ghost {
+  border-color: rgba(245,240,230,0.28) !important;
+}
+
+/* --- Nav buttons: stepped active border (pixel ledge) --- */
+.nav-btn.active,
+.nav-btn-featured.active {
+  border-radius: 0 !important;
+  border: 2px solid #fbbf24 !important;
+  box-shadow:
+    2px 2px 0 0 rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(251,191,36,0.3) !important;
+}
+.nav-btn-mobile.active,
+.nav-btn-mobile-featured.active {
+  border-radius: 0 !important;
+  border: 2px solid rgba(251,191,36,0.7) !important;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.55) !important;
+}
+
+/* --- Tab pills: pixel step border when active --- */
+.tab-pill.active {
+  border-radius: 0 !important;
+  border: 2px solid #d4af37 !important;
+  box-shadow:
+    2px 2px 0 0 rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(212,175,55,0.25) !important;
+}
+
+/* --- Language toggle: square pixel accent --- */
+#lang-toggle {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.55) !important;
+  font-family: 'Press Start 2P', 'Courier New', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0 !important;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.55) !important;
+  transition: all 0.08s step-end !important;
+}
+#lang-toggle:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow: 1px 1px 0 0 rgba(0,0,0,0.55) !important;
+}
+
+/* --- Pixel frame on avatar button (header + cards) --- */
+.pixel-avatar-frame {
+  border-radius: 0 !important;
+  box-shadow:
+    2px 2px 0 0 rgba(0,0,0,0.6),
+    0 0 0 2px #14120f,
+    0 0 0 4px rgba(212,175,55,0.5) !important;
+  overflow: hidden;
+}
+
+/* W-14 h-14 avatar in roadmap / tutor panels (from AI engine inline styles) */
+.w-14.h-14.rounded-full.pixel-avatar-frame {
+  border-radius: 0 !important;
+}
+
+/* --- Kuffiyeh repeating diamond divider (pixel) --- */
+.pixel-divider {
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d4af37 0px, #d4af37 3px,
+    transparent 3px, transparent 6px,
+    #f5f0e6 6px, #f5f0e6 9px,
+    transparent 9px, transparent 12px
+  );
+  opacity: 0.35;
+  margin: 12px 0;
+}
+
+/* --- Progress bar: pixel stepped fill --- */
+.pixel-progress {
+  background: #0f172a;
+  border: 2px solid rgba(212,175,55,0.45);
+  border-radius: 0 !important;
+  height: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.pixel-progress-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    #d4af37 0px, #d4af37 6px,
+    #b8942e 6px, #b8942e 8px
+  );
+  transition: width 0.3s step-end;
+}
+
+/* --- Level badges: pixel step shadow --- */
+.level-badge-emerald,
+.level-badge-sky,
+.level-badge-amber,
+.level-badge-orange,
+.level-badge-violet,
+.level-badge-rose {
+  border-radius: 0 !important;
+  border: 1px solid currentColor !important;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.45) !important;
+  font-family: 'Press Start 2P', 'Courier New', monospace !important;
+  font-size: 8px !important;
+  letter-spacing: 0 !important;
+}
+
+/* --- Shell install / update banners: pixel stepped border --- */
+.shell-banner {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.55) !important;
+  box-shadow:
+    4px 4px 0 0 rgba(0,0,0,0.6),
+    0 0 0 2px #0f172a !important;
+}
+
+/* --- MiBadge (imi-badge): pixel accent --- */
+.imi-badge {
+  border-radius: 0 !important;
+  font-family: 'Press Start 2P', 'Courier New', monospace !important;
+  font-size: 8px !important;
+  letter-spacing: 0 !important;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.45) !important;
+}
+
+/* --- Results banner: pixel step border --- */
+.result-banner {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.45) !important;
+  box-shadow:
+    3px 3px 0 0 rgba(0,0,0,0.55),
+    0 0 0 2px #0f172a !important;
+}
+
+/* --- Writing textarea: pixel border --- */
+.writing-area {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.35) !important;
+  box-shadow:
+    2px 2px 0 0 rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(212,175,55,0.12) !important;
+}
+
+/* --- Auth screen inputs: pixel step border on focus --- */
+#auth-screen input:focus {
+  border-color: #d4af37 !important;
+  box-shadow:
+    2px 2px 0 0 rgba(0,0,0,0.5),
+    inset 0 0 0 1px rgba(212,175,55,0.25) !important;
+}
+
+/* --- Kuffiyeh diamond accent bar at top of header (pixel motif) --- */
+header::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d4af37 0px, #d4af37 4px,
+    transparent 4px, transparent 8px,
+    #f5f0e6 8px, #f5f0e6 12px,
+    transparent 12px, transparent 16px
+  );
+  opacity: 0.45;
+}
+
+/* --- Hero banner corner diamonds (bottom pair, applied via extra span in HTML) --- */
+.pixel-corner-bl,
+.pixel-corner-br {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: #d4af37;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 5;
+}
+.pixel-corner-bl { bottom: 8px; left: 8px; }
+.pixel-corner-br { bottom: 8px; right: 8px; }
+
+/* --- Hero banner buttons: retro pixel step --- */
+.hero-banner button {
+  border-radius: 0 !important;
+  border: 2px solid currentColor !important;
+  box-shadow: 3px 3px 0 0 rgba(0,0,0,0.55) !important;
+  transition: all 0.08s step-end !important;
+}
+.hero-banner button:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow: 1px 1px 0 0 rgba(0,0,0,0.55) !important;
+}
+
+/* --- Skill cards: pixel step border --- */
+.skill-card {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.3) !important;
+  box-shadow:
+    3px 3px 0 0 rgba(0,0,0,0.5),
+    0 0 0 1px rgba(15,23,42,0.6) !important;
+  transition: all 0.08s step-end !important;
+}
+.skill-card:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow: 1px 1px 0 0 rgba(0,0,0,0.5) !important;
+}
+
+/* --- Task buttons (dashboard task rows): pixel retro step --- */
+.task-btn {
+  border-radius: 0 !important;
+  border: 1px solid rgba(212,175,55,0.3) !important;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.45) !important;
+  transition: all 0.08s step-end !important;
+}
+.task-btn:hover {
+  transform: translate(1px,1px) !important;
+  box-shadow: 1px 1px 0 0 rgba(0,0,0,0.45) !important;
+}
+
+/* --- Cue card: pixel border --- */
+.cue-card {
+  border-radius: 0 !important;
+  border: 2px solid rgba(212,175,55,0.4) !important;
+  box-shadow: 3px 3px 0 0 rgba(0,0,0,0.5) !important;
+}

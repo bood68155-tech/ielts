@@ -36,9 +36,9 @@
     }
   </style>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=12" />
   <script>
     tailwind.config = {
       theme: {
@@ -55,18 +55,21 @@
 <body class="text-slate-800 font-slate antialiased">
   <!-- ============ AUTH SCREEN ============ -->
   <div id="auth-screen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-slate-900/40">
-    <!-- Glassmorphism auth card -->
-    <div class="auth-card relative w-full max-w-md rounded-2xl bg-white/95 backdrop-blur-lg border-2 border-white/30 shadow-2xl overflow-hidden">
-      
-      <!-- Decorative background elements (clipped to card) -->
-      <div class="absolute -top-20 -right-20 w-40 h-40 bg-green-400/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-red-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- Glassmorphism auth card — pixel-art retro frame -->
+    <div class="auth-card pixel-card relative w-full max-w-md rounded-2xl bg-white/95 backdrop-blur-lg border-2 border-white/30 shadow-2xl overflow-hidden">
+      <!-- Pixel kuffiyeh corner diamonds (auth card) -->
+      <div class="pointer-events-none absolute inset-0 z-30" aria-hidden="true">
+        <span style="position:absolute;top:-5px;left:-5px;width:10px;height:10px;background:#d4af37;opacity:.6;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></span>
+        <span style="position:absolute;top:-5px;right:-5px;width:10px;height:10px;background:#d4af37;opacity:.6;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></span>
+        <span style="position:absolute;bottom:-5px;left:-5px;width:10px;height:10px;background:#d4af37;opacity:.6;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></span>
+        <span style="position:absolute;bottom:-5px;right:-5px;width:10px;height:10px;background:#d4af37;opacity:.6;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></span>
+      </div>
       
       <!-- Palestinian flag color accents -->
       <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-palestine-black via-white via-palestine-green via-palestine-red"></div>
       
       <!-- Header with Palestinian heritage -->
-      <div class="auth-header relative px-6 py-6 sm:px-8 sm:py-8 text-center bg-gradient-to-br from-palestine-green via-palestine-black to-palestine-red">
+      <div class="auth-header relative px-6 py-6 sm:px-8 sm:py-8 text-center bg-gradient-to-br from-palestine-green via-palestine-black to-palestine-red pixel-scanlines">
         <!-- Flag emoji -->
         <div class="flex justify-center mb-3">
           <span class="text-5xl sm:text-6xl">🇵🇸</span>
@@ -240,7 +243,7 @@
         </nav>
         <div class="hidden md:flex items-center gap-3 text-xs text-[#f5f0e6]/60">
           <button id="lang-toggle" class="w-9 h-9 font-extrabold border border-[rgba(212,175,55,0.3)] text-[#d4af37] hover:bg-[rgba(212,175,55,0.1)] transition" title="Language / اللغة" aria-label="Toggle language">EN</button>
-          <button onclick="showSection('masterclass')" class="w-9 h-9 rounded-full overflow-hidden border-2 border-[rgba(212,175,55,0.6)] shadow-[0_0_12px_rgba(212,175,55,0.3)] shrink-0 cursor-pointer p-0 hover:scale-110 transition" title="Master Classroom — learn live with Teacher Rami" aria-label="Master Classroom — learn live with Teacher Rami">
+          <button onclick="showSection('masterclass')" class="w-9 h-9 rounded-full overflow-hidden border-2 border-[rgba(212,175,55,0.6)] shadow-[0_0_12px_rgba(212,175,55,0.3)] shrink-0 cursor-pointer p-0 hover:scale-110 transition pixel-avatar-frame" title="Master Classroom — learn live with Teacher Rami" aria-label="Master Classroom — learn live with Teacher Rami">
             <img src="rami-avatar.jpg" alt="Teacher Rami" class="w-full h-full object-cover block" decoding="async" />
           </button>
           <div id="user-chip" class="hidden items-center gap-2 bg-[rgba(245,240,230,0.1)] border border-[rgba(212,175,55,0.3)] pl-1 pr-3 py-1 backdrop-blur">
@@ -278,6 +281,9 @@
     <section id="section-dashboard" class="section-view">
       <div class="hero-banner mb-8">
         <div class="px-6 sm:px-10 py-8 sm:py-10 text-white relative" style="background:rgba(15,23,42,0.85);border-radius:0px !important;">
+          <!-- Pixel kuffiyeh corner diamonds -->
+          <span class="pixel-corner-bl" aria-hidden="true"></span>
+          <span class="pixel-corner-br" aria-hidden="true"></span>
           <div class="hero-watermark">
             <!-- Golden olive branch (bottom-left) -->
             <svg class="hw-olive" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
@@ -304,7 +310,7 @@
             </svg>
           </div>
           <div class="relative z-10">
-            <div class="flex items-center gap-3 mb-3">
+            <div class="flex items-center gap-3 mb-3 pixel-hero-subtitle">
               <div class="olive-frame">
                 <svg class="olive-left" viewBox="0 0 70 95" xmlns="http://www.w3.org/2000/svg">
                   <path d="M55 90Q30 65 22 40 18 18 35 2" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
@@ -324,7 +330,7 @@
               </div>
               <div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight text-[#f5f0e6]">IELTS <span class="text-[#d4af37]">PA</span></h1>
-                <p class="text-sm text-[#d4af37]/55 font-medium" data-i18n="hero_tagline">Study with Purpose · Rise with Knowledge</p>
+                <p class="text-sm text-[#d4af37]/55 font-medium pixel-accent" data-i18n="hero_tagline">Study with Purpose · Rise with Knowledge</p>
               </div>
             </div>
             <p class="text-[#f5f0e6]/70 text-sm max-w-lg mb-5" data-i18n="hero_desc">Your personalised 4-week IELTS study plan. Click any task to launch the right tool and track your progress day by day.</p>
