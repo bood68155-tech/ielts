@@ -557,49 +557,19 @@
 
   // ============================================================================
   // EMAIL VERIFICATION
+  // Delivery is exclusively via the real EmailJS service: the OTP is sent to
+  // the learner's inbox and is never printed on screen.
   // ============================================================================
-  // Built-in Mock Email Service — auto-configured, zero keys required.
-  // Simulates sending by storing the email in a local virtual inbox
-  // and displaying the verification code on screen with a polished UI.
-  // If an EmailJS config is found (window.EMAILJS_CONFIG), real emails
-  // are sent via the EmailJS SDK instead.
-  // ============================================================================
-
-  const EMAIL_INBOX_KEY = 'ielts-email-inbox';
-
-  function storeEmailInInbox(to, subject, htmlBody) {
-    try {
-      const inbox = JSON.parse(localStorage.getItem(EMAIL_INBOX_KEY) || '[]');
-      inbox.unshift({ to, subject, body: htmlBody, date: Date.now(), read: false });
-      if (inbox.length > 50) inbox.length = 50;
-      localStorage.setItem(EMAIL_INBOX_KEY, JSON.stringify(inbox));
-    } catch (e) { /* ignore */ }
-  }
 
   async function sendVerificationEmail(email, username, presetCode) {
     /* The same code generated at registration is re-used here so the
-       OTP shown in the UI IS the code delivered by EmailJS. */
+       OTP verified in the UI IS the code delivered by EmailJS. */
     const verificationCode = presetCode || generateVerificationCode();
     const verificationUrl = window.location.origin + window.location.pathname + '?verify-email=' + verificationCode;
 
     setVerificationToken(verificationCode, email);
 
-    const emailSubject = 'Verify your IELTS PA account';
-    const emailBody =
-      '<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px;">' +
-        '<h2 style="color:#14120f;">IELTS PA — Email Verification</h2>' +
-        '<p>Hello ' + escapeHtml(username) + ',</p>' +
-        '<p>Your verification code is:</p>' +
-        '<div style="text-align:center;margin:24px 0;">' +
-          '<span style="display:inline-block;font-size:32px;font-weight:800;letter-spacing:8px;' +
-          'color:#d4af37;background:rgba(20,18,15,0.06);padding:12px 24px;border-radius:8px;' +
-          'font-family:monospace;">' + escapeHtml(verificationCode) + '</span>' +
-        '</div>' +
-        '<p style="color:#666;font-size:13px;">This code expires in 24 hours. ' +
-        'If you did not create this account, ignore this email.</p>' +
-      '</div>';
-
-    // --- Try real email via EmailJS SDK if configured ---
+    // --- Real email via EmailJS SDK ---
     const ejCfg = window.EMAILJS_CONFIG;
     let serviceSent = false;
     let serviceError = null;
@@ -630,12 +600,6 @@
       console.warn('[auth] ' + serviceError);
     }
 
-    // --- Local Mock: always store in virtual inbox ---
-    storeEmailInInbox(email, emailSubject, emailBody);
-
-    // --- Log to console for transparency ---
-    console.log('%c[Mock Email] Verification code for ' + email + ': ' + verificationCode, 'color:#d4af37;font-weight:bold;font-size:14px;');
-
     // Tell the learner what happened instead of failing silently.
     if (serviceError) {
       window.toast && window.toast(serviceError.short);
@@ -652,7 +616,7 @@
     const lower = text.toLowerCase();
     const verdict = {
       full: text,
-      short: '⚠️ EmailJS failed. Code shown below as fallback.',
+      short: '⚠️ Email delivery failed. Check the console for details.',
       hint: ''
     };
     if (lower.indexOf('unauthorized') !== -1 || lower.indexOf('403') !== -1 || lower.indexOf('invalid') !== -1) {
@@ -689,40 +653,21 @@
       authForms.classList.add('hidden');
 
       const maskedEmail = email.replace(/(.{2})(.*)(@.*)/, '$1***$3');
-      const emailSentLabel = serviceSent
-        ? 'A verification email has been sent to'
-        : 'A verification code was generated for';
+      const emailSentLabel = 'A verification email has been sent to';
 
       const failureBanner = (!serviceSent && serviceError)
         ? '<div style="margin-bottom:1rem;padding:0.6rem 0.8rem;border-radius:0.6rem;' +
           'background:rgba(185,28,28,0.12);border:1px solid rgba(185,28,28,0.45);text-align:left;">' +
-          '<p style="margin:0 0 0.25rem;font-size:0.7rem;font-weight:800;color:#f87171;">⚠️ Live email failed — using fallback</p>' +
+          '<p style="margin:0 0 0.25rem;font-size:0.7rem;font-weight:800;color:#f87171;">⚠️ Delivery failed</p>' +
           '<p style="margin:0;font-size:0.68rem;color:rgba(245,240,230,0.7);">' +
             escapeHtml(serviceError.hint || serviceError.full) +
           '</p></div>'
         : '';
 
-      const codePanel = serviceSent
-        ? /* Real email: code arrives in the learner's inbox */
-          '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0;padding:0.25rem 0;">' +
-          '📬 Check your inbox (and Spam/Promotions) for the code and enter it below.' +
-          '</p>'
-        : /* Mock email: code shown on screen (no mail server) */
-          '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0 0 0.5rem;">' +
-          '✉️ Verification email delivered. Here is your code:</p>' +
-          '<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;">' +
-            '<code id="verification-code-copy" style="font-size:1rem;color:#d4af37;font-weight:800;' +
-            'letter-spacing:0.15em;font-family:monospace;background:rgba(20,18,15,0.6);' +
-            'border:1px dashed rgba(212,175,55,0.35);border-radius:0.5rem;padding:0.4rem 0.8rem;">' +
-              escapeHtml(code) +
-            '</code>' +
-            '<button id="verification-copy-btn" style="padding:0.4rem 0.7rem;border-radius:0.5rem;' +
-            'border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
-            'color:#d4af37;font-size:0.75rem;font-weight:700;cursor:pointer;">Copy</button>' +
-          '</div>' +
-          '<button id="verification-autofill" style="margin-top:0.65rem;padding:0.35rem 0.8rem;' +
-          'border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
-          'color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Paste code & verify</button>';
+      const codePanel =
+        '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0;padding:0.25rem 0;">' +
+        '📬 Check your inbox (and Spam/Promotions) for the code and enter it below.' +
+        '</p>';
 
       verificationContainer.innerHTML =
         '<div style="background:rgba(15,23,42,0.92);border:1px solid rgba(212,175,55,0.25);border-radius:1rem;padding:2rem;max-width:400px;margin:0 auto;">' +
@@ -771,45 +716,25 @@
         '</div>';
 
       setupVerificationInputs(code, email, username);
+      setupVerificationCTA(code, email, username);
 
-      /* --- Wire up the "Paste code & verify" shortcut --- */
-      var afBtn = $('#verification-autofill');
-      if (afBtn) {
-        afBtn.addEventListener('click', function () {
-          var inputs = document.querySelectorAll('.verification-digit');
-          code.split('').forEach(function (ch, i) { if (inputs[i]) inputs[i].value = ch; });
-          if (inputs.length) inputs[inputs.length - 1].focus();
-          setTimeout(function () { verifyEmailCode(code, email, username); }, 250);
-        });
-      }
-      var copyBtn = $('#verification-copy-btn');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', function () {
-          try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(code);
-            } else {
-              var ta = document.createElement('textarea');
-              ta.value = code;
-              document.body.appendChild(ta);
-              ta.select();
-              document.execCommand('copy');
-              document.body.removeChild(ta);
-            }
-            copyBtn.textContent = 'Copied ✓';
-            setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1800);
-          } catch (e) { /* ignore */ }
-        });
-      }
-
-      /* --- Toast notification (real email vs mock delivery) --- */
+      /* --- Toast notification --- */
       setTimeout(function () {
         if (serviceSent) {
           window.toast && window.toast('📧 Verification email sent to ' + maskedEmail + ' — check your inbox.');
-        } else {
-          window.toast && window.toast('📧 Verification email delivered to ' + maskedEmail);
         }
       }, 400);
+    }
+  }
+
+  // Verify-email direct call now lives here to keep the DOM clean after
+  // the on-screen code box was removed.
+  function setupVerificationCTA(code, email, username) {
+    const verifyBtn = $('#verify-email-btn');
+    if (verifyBtn) {
+      verifyBtn.addEventListener('click', () => {
+        verifyEmailCode(code, email, username);
+      });
     }
   }
 
@@ -843,14 +768,6 @@
         currentIndex = index;
       });
     });
-
-    // Verify button
-    const verifyBtn = $('#verify-email-btn');
-    if (verifyBtn) {
-      verifyBtn.addEventListener('click', () => {
-        verifyEmailCode(code, email, username);
-      });
-    }
 
     // Resend button
     const resendBtn = $('#resend-verification');
@@ -1314,7 +1231,7 @@
       // verified yet, bring the confirmation screen back after refresh.
       const vt = getVerificationToken();
       if (vt && vt.token && currentUser && currentUser.email === vt.email && !currentUser.emailVerified) {
-        showVerificationUI(vt.token, vt.email, currentUser.username || vt.email, false);
+        showVerificationUI(vt.token, vt.email, currentUser.username || vt.email, true);
       }
     });
 

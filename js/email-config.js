@@ -9,8 +9,8 @@
    • Public Key  : Q2agmJZXRSIRFESQ7     ✅
 
    When all three are configured the auth flow sends a real OTP
-   email via EmailJS; the built-in Mock Email Service remains as
-   an automatic fallback if EmailJS is ever unreachable offline.
+   email via EmailJS to the learner's inbox. No verification code
+   is ever printed on screen — delivery is enforced via EmailJS.
    ============================================================ */
 (function () {
   'use strict';
