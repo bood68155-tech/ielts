@@ -602,18 +602,29 @@
     // --- Try real email via EmailJS SDK if configured ---
     const ejCfg = window.EMAILJS_CONFIG;
     let serviceSent = false;
+    let serviceError = null;
     if (ejCfg && ejCfg.serviceId && ejCfg.templateId && ejCfg.publicId && window.emailjs) {
       try {
-        await window.emailjs.send(ejCfg.serviceId, ejCfg.templateId, {
+        const res = await window.emailjs.send(ejCfg.serviceId, ejCfg.templateId, {
           to_email: email,
           to_name: username,
           verification_code: verificationCode,
-          verification_url: verificationUrl
+          verification_url: verificationUrl,
+          from_name: 'IELTS PA'
         }, { publicKey: ejCfg.publicId });
         serviceSent = true;
+        console.log('%c[EmailJS] ✅ Sent to ' + email + ' (status ' + (res && res.status) + ')',
+          'color:#2ecc71;font-weight:bold;');
       } catch (e) {
-        console.warn('[auth] EmailJS send failed, falling back to local mock:', e);
+        serviceError = emailjsFriendlyError(e);
+        console.warn('[auth] EmailJS send failed ->', e, serviceError);
       }
+    } else if (!(ejCfg && ejCfg.serviceId && ejCfg.templateId && ejCfg.publicId)) {
+      serviceError = 'EmailJS is not fully configured (missing serviceId/templateId/publicKey in js/email-config.js).';
+      console.warn('[auth] ' + serviceError);
+    } else {
+      serviceError = 'EmailJS SDK failed to load (offline or CDN blocked).';
+      console.warn('[auth] ' + serviceError);
     }
 
     // --- Local Mock: always store in virtual inbox ---
@@ -622,11 +633,46 @@
     // --- Log to console for transparency ---
     console.log('%c[Mock Email] Verification code for ' + email + ': ' + verificationCode, 'color:#d4af37;font-weight:bold;font-size:14px;');
 
-    showVerificationUI(verificationCode, email, username, serviceSent);
+    // Tell the learner what happened instead of failing silently.
+    if (serviceError) {
+      window.toast && window.toast(serviceError.short);
+    }
+
+    showVerificationUI(verificationCode, email, username, serviceSent, serviceError);
     return verificationCode;
   }
 
-  function showVerificationUI(code, email, username, serviceSent) {
+  // Turns any EmailJS / Gmail throw into a human-readable, actionable hint.
+  function emailjsFriendlyError(e) {
+    const raw = (e && (e.message || e.text || e.name)) || 'Unknown EmailJS error';
+    const text = String(raw);
+    const lower = text.toLowerCase();
+    const verdict = {
+      full: text,
+      short: '⚠️ EmailJS failed. Code shown below as fallback.',
+      hint: ''
+    };
+    if (lower.indexOf('unauthorized') !== -1 || lower.indexOf('403') !== -1 || lower.indexOf('invalid') !== -1) {
+      verdict.hint = 'The EmailJS Public Key or API KEY may be wrong (check js/email-config.js).';
+    } else if (lower.indexOf('required') !== -1 || lower.indexOf('template') !== -1) {
+      verdict.hint = 'Open EmailJS dashboard → Templates → the template id "' + (window.EMAILJS_CONFIG && window.EMAILJS_CONFIG.templateId) +
+        '" and confirm it has {{to_email}}, {{to_name}}, {{verification_code}}, {{verification_url}}.';
+    } else if (lower.indexOf('approve') !== -1 || lower.indexOf('approval') !== -1 || lower.indexOf('quota') !== -1) {
+      verdict.hint = 'EmailJS holds mail until the template/service is approved or the free quota resets. Approve in dashboard.';
+    } else if (lower.indexOf('535') !== -1 || lower.indexOf('auth') !== -1 || lower.indexOf('credentials') !== -1) {
+      verdict.hint = 'The connected mailbox failed authentication (Gmail app password / 2FA). Reconnect the service in EmailJS dashboard.';
+    } else if (lower.indexOf('rate') !== -1 || lower.indexOf('429') !== -1) {
+      verdict.hint = 'EmailJS rate limit. Try again in a few minutes — code shown below still works locally.';
+    } else if (lower.indexOf('network') !== -1 || lower.indexOf('fetch') !== -1 || lower.indexOf('offline') !== -1) {
+      verdict.hint = 'Network error — the CDN/sender was unreachable. Code shown below still works locally.';
+    } else {
+      verdict.full = text.length > 160 ? text.slice(0, 160) + '…' : text;
+    }
+    console.info('[auth] EmailJS diagnosis:', verdict.hint || verdict.full);
+    return verdict;
+  }
+
+  function showVerificationUI(code, email, username, serviceSent, serviceError) {
     const verificationContainer = $('#verification-container');
     const authForms = $('.auth-forms-container');
     const authScreen = $('#auth-screen');
@@ -644,10 +690,19 @@
         ? 'A verification email has been sent to'
         : 'A verification code was generated for';
 
+      const failureBanner = (!serviceSent && serviceError)
+        ? '<div style="margin-bottom:1rem;padding:0.6rem 0.8rem;border-radius:0.6rem;' +
+          'background:rgba(185,28,28,0.12);border:1px solid rgba(185,28,28,0.45);text-align:left;">' +
+          '<p style="margin:0 0 0.25rem;font-size:0.7rem;font-weight:800;color:#f87171;">⚠️ Live email failed — using fallback</p>' +
+          '<p style="margin:0;font-size:0.68rem;color:rgba(245,240,230,0.7);">' +
+            escapeHtml(serviceError.hint || serviceError.full) +
+          '</p></div>'
+        : '';
+
       const codePanel = serviceSent
         ? /* Real email: code arrives in the learner's inbox */
           '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0;padding:0.25rem 0;">' +
-          '📬 Check your inbox for the code and enter it below.' +
+          '📬 Check your inbox (and Spam/Promotions) for the code and enter it below.' +
           '</p>'
         : /* Mock email: code shown on screen (no mail server) */
           '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0 0 0.5rem;">' +
@@ -679,6 +734,8 @@
             '<p style="font-size:0.75rem;color:rgba(245,240,230,0.45);margin-top:0.25rem;">' +
               'Enter the 6-character code below to confirm your account.</p>' +
           '</div>' +
+          /* --- Failed-delivery warning (real attempt) --- */
+          failureBanner +
           /* --- Delivery panel (real email vs mock code) --- */
           '<div style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);' +
           'border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.25rem;text-align:center;">' +
@@ -796,7 +853,16 @@
     const resendBtn = $('#resend-verification');
     if (resendBtn) {
       resendBtn.addEventListener('click', () => {
-        sendVerificationEmail(email, username);
+        const fresh = generateVerificationCode();
+        const users = loadUsers();
+        const me = getUser(currentSession() || email);
+        const storedUser = me || users.find(function (u) { return u.email === email; });
+        if (storedUser) {
+          storedUser.emailVerificationCode = fresh;
+          storedUser.emailVerificationSentAt = Date.now();
+          saveUsers(users);
+        }
+        sendVerificationEmail(email, username, fresh);
       });
     }
 
