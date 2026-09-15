@@ -1,24 +1,24 @@
 /* ============================================================
-   IELTS PA — EmailJS configuration (REAL EMAIL DELIVERY)
+   IELTS PA — EmailJS configuration (LIVE REAL EMAIL)
    ------------------------------------------------------------
-   EmailJS enables sending real verification emails to the
-   learner's Gmail inbox (free tier: 200/day).
+   EmailJS sends real verification emails to the learner's Gmail
+   inbox. Free tier: 200 emails/day.
 
-   • Service ID  : service_l5hn0k3          ← CONFIGURED ✅
-   • Template ID : template_XXXXXXXXXX      ← PASTE HERE
-   • Public Key  : XXXX_XXXXXXXXXXXXXX      ← PASTE HERE
+   • Service ID  : service_l5hn0k3       ✅
+   • Template ID : template_wvon9iu      ✅
+   • Public Key  : Q2agmJZXRSIRFESQ7     ✅
 
-   Until the two missing values are pasted below the site keeps
-   using the built-in Mock Email Service (code shown on screen +
-   local virtual inbox) so the OTP flow always works end to end.
+   When all three are configured the auth flow sends a real OTP
+   email via EmailJS; the built-in Mock Email Service remains as
+   an automatic fallback if EmailJS is ever unreachable offline.
    ============================================================ */
 (function () {
   'use strict';
   var pc = /YOUR_|PASTE|TODO|xxx|XXXX/i;
   var serviceId = 'service_l5hn0k3';
   /* ↓↓↓ PASTE YOUR Template ID AND Public Key BELOW ↓↓↓ */
-  var templateId = 'PASTE_TEMPLATE_ID_HERE';
-  var publicId  = 'PASTE_PUBLIC_KEY_HERE';
+  var templateId = 'template_wvon9iu';
+  var publicId  = 'Q2agmJZXRSIRFESQ7';
   /* ↑↑↑ --------------------------------------------------- ↑↑↑ */
 
   var ok = serviceId && templateId && publicId &&

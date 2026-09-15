@@ -642,6 +642,28 @@
         ? 'A verification email has been sent to'
         : 'A verification code was generated for';
 
+      const codePanel = serviceSent
+        ? /* Real email: code arrives in the learner's inbox */
+          '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0;padding:0.25rem 0;">' +
+          '📬 Check your inbox for the code and enter it below.' +
+          '</p>'
+        : /* Mock email: code shown on screen (no mail server) */
+          '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0 0 0.5rem;">' +
+          '✉️ Verification email delivered. Here is your code:</p>' +
+          '<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;">' +
+            '<code id="verification-code-copy" style="font-size:1rem;color:#d4af37;font-weight:800;' +
+            'letter-spacing:0.15em;font-family:monospace;background:rgba(20,18,15,0.6);' +
+            'border:1px dashed rgba(212,175,55,0.35);border-radius:0.5rem;padding:0.4rem 0.8rem;">' +
+              escapeHtml(code) +
+            '</code>' +
+            '<button id="verification-copy-btn" style="padding:0.4rem 0.7rem;border-radius:0.5rem;' +
+            'border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
+            'color:#d4af37;font-size:0.75rem;font-weight:700;cursor:pointer;">Copy</button>' +
+          '</div>' +
+          '<button id="verification-autofill" style="margin-top:0.65rem;padding:0.35rem 0.8rem;' +
+          'border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
+          'color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Paste code & verify</button>';
+
       verificationContainer.innerHTML =
         '<div style="background:rgba(15,23,42,0.92);border:1px solid rgba(212,175,55,0.25);border-radius:1rem;padding:2rem;max-width:400px;margin:0 auto;">' +
           /* --- Header --- */
@@ -655,24 +677,10 @@
             '<p style="font-size:0.75rem;color:rgba(245,240,230,0.45);margin-top:0.25rem;">' +
               'Enter the 6-character code below to confirm your account.</p>' +
           '</div>' +
-          /* --- Simulated inbox notification --- */
+          /* --- Delivery panel (real email vs mock code) --- */
           '<div style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);' +
           'border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1.25rem;text-align:center;">' +
-            '<p style="font-size:0.72rem;color:rgba(245,240,230,0.55);margin:0 0 0.5rem;">' +
-              '✉️ Verification email delivered. Here is your code:</p>' +
-            '<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;">' +
-              '<code id="verification-code-copy" style="font-size:1rem;color:#d4af37;font-weight:800;' +
-              'letter-spacing:0.15em;font-family:monospace;background:rgba(20,18,15,0.6);' +
-              'border:1px dashed rgba(212,175,55,0.35);border-radius:0.5rem;padding:0.4rem 0.8rem;">' +
-                escapeHtml(code) +
-              '</code>' +
-              '<button id="verification-copy-btn" style="padding:0.4rem 0.7rem;border-radius:0.5rem;' +
-              'border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
-              'color:#d4af37;font-size:0.75rem;font-weight:700;cursor:pointer;">Copy</button>' +
-            '</div>' +
-            '<button id="verification-autofill" style="margin-top:0.65rem;padding:0.35rem 0.8rem;' +
-            'border-radius:0.5rem;border:1px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);' +
-            'color:#d4af37;font-size:0.7rem;font-weight:700;cursor:pointer;">Paste code & verify</button>' +
+            codePanel +
           '</div>' +
           /* --- OTP digit inputs --- */
           '<div id="verification-digits" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem;">' +
@@ -732,9 +740,13 @@
         });
       }
 
-      /* --- Toast notification to simulate email arrival --- */
+      /* --- Toast notification (real email vs mock delivery) --- */
       setTimeout(function () {
-        window.toast && window.toast('📧 Verification email delivered to ' + maskedEmail);
+        if (serviceSent) {
+          window.toast && window.toast('📧 Verification email sent to ' + maskedEmail + ' — check your inbox.');
+        } else {
+          window.toast && window.toast('📧 Verification email delivered to ' + maskedEmail);
+        }
       }, 400);
     }
   }
