@@ -67,6 +67,11 @@ body::after {
   padding: 1rem;
   background: rgba(15, 23, 42, 0.35);
   transition: opacity 0.3s ease;
+  /* Scroll safety: if the modal ever grows past the viewport, the
+     overlay itself scrolls (no clipped content on small screens). */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 #auth-screen.hidden {
@@ -87,7 +92,52 @@ body::after {
     0 25px 50px -12px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset,
     0 0 40px rgba(0, 151, 54, 0.1);
-  overflow: hidden;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  /* The modal becomes its own scroll container: the 6-digit OTP inputs
+     and the Verify button stay reachable on every screen height. */
+  max-height: 90vh;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.5) rgba(15, 23, 42, 0.25);
+}
+.auth-card::-webkit-scrollbar { width: 8px; }
+.auth-card::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.45); border-radius: 8px; }
+.auth-card::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.15); }
+
+/* --- Email verification panel: bottom breathing room so the code row
+       and Verify button are never pinned under the screen edge --- */
+#verification-container > div {
+  padding-bottom: 1.5rem !important;
+}
+
+/* --- Very short viewports: top-align and let the overlay scroll, so the
+       whole card (inputs → button → footer actions) stays fully reachable --- */
+@media (max-height: 640px) {
+  #auth-screen {
+    align-items: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  .auth-card {
+    max-height: none;
+  }
+}
+
+/* --- OTP digits: never clipped on narrow screens (wrap + shrink) --- */
+.verification-digit {
+  width: 2.4rem;
+  height: 2.8rem;
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+@media (max-width: 380px) {
+  .verification-digit {
+    width: 2rem;
+    height: 2.5rem;
+    font-size: 0.95rem;
+  }
+  #verification-digits { gap: 0.3rem; }
 }
 
 /* --- DECORATIVE BACKGROUND BLURS --- */
