@@ -5,7 +5,7 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v10';
+const CACHE = 'rami-star-v11';
 const CORE = [
   './',
   './index.html',
@@ -17,6 +17,7 @@ const CORE = [
   './icons/favicon.png',
   './css/styles.css',
   './js/data.js',
+  './js/email-config.js',
   './js/study-plan.js',
   './js/supabase-config.js',
   './js/supabaseClient.js',
