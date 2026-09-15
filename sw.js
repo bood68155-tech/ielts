@@ -5,7 +5,7 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v12';
+const CACHE = 'rami-star-v13';
 const CORE = [
   './',
   './index.html',

@@ -576,8 +576,10 @@
     } catch (e) { /* ignore */ }
   }
 
-  async function sendVerificationEmail(email, username) {
-    const verificationCode = generateVerificationCode();
+  async function sendVerificationEmail(email, username, presetCode) {
+    /* The same code generated at registration is re-used here so the
+       OTP shown in the UI IS the code delivered by EmailJS. */
+    const verificationCode = presetCode || generateVerificationCode();
     const verificationUrl = window.location.origin + window.location.pathname + '?verify-email=' + verificationCode;
 
     setVerificationToken(verificationCode, email);
@@ -956,9 +958,9 @@
     // Sign in the user first (persists the session across refresh)
     signInAs(username);
 
-    // Then show the verification code — demo mode shows it on screen
-    // as if it arrived by email, so the learner can type it in.
-    const verificationCode = await sendVerificationEmail(email, username);
+    // Then send the verification email with the SAME code generated above.
+    // Real EmailJS delivery is attempted (with local mock fallback).
+    await sendVerificationEmail(email, username, newUser.emailVerificationCode);
 
     window.toast && window.toast('Account created! Please verify your email. 📧');
   }
