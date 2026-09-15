@@ -5,7 +5,7 @@
    ============================================================ */
 'use strict';
 
-const CACHE = 'rami-star-v8';
+const CACHE = 'rami-star-v9';
 const CORE = [
   './',
   './index.html',
@@ -67,7 +67,7 @@ const CORE = [
   './js/i18n.js',
   './js/app.js',
   './js/appshell.js',
-  './rami-avatar.jpg'
+  './assets/teacher-rami.jpg'
 ];
 
 self.addEventListener('install', (event) => {

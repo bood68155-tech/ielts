@@ -130,7 +130,7 @@
       bodyAttr = ' stroke="url(#' + gid + ')"';
     }
     const extra = (opts.anim ? ' imi-anim' : '') + (opts.glow ? ' imi-glow' : '');
-    return '<svg class="' + (cls || 'w-5 h-5') + ' imi-icon' + extra + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    return '<svg class="' + (cls || 'w-5 h-5') + ' imi-icon' + extra + '" data-imi="' + name + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
       defs + HALO + '<g data-imi-body' + bodyAttr + '>' + body + '</g></svg>';
   };
 
