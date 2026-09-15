@@ -607,6 +607,9 @@
       try {
         const res = await window.emailjs.send(ejCfg.serviceId, ejCfg.templateId, {
           to_email: email,
+          email: email,
+          recipient: email,
+          to_email_address: email,
           to_name: username,
           verification_code: verificationCode,
           verification_url: verificationUrl,
