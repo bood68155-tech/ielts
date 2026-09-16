@@ -120,6 +120,16 @@
 
   /* ================= Gemini client ================= */
   const GEMINI_URL = (model) => 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
+  const GEMINI_TIMEOUT_MS = 15000;
+
+  // Race a fetch against a hard deadline so a hung proxy/AI call can never
+  // freeze a feature (no timeout = Rami appears to "never reply").
+  function withTimeout(promise) {
+    return Promise.race([
+      promise,
+      new Promise((resolve, reject) => setTimeout(() => reject(new Error('Gemini timed out after ' + GEMINI_TIMEOUT_MS + 'ms')), GEMINI_TIMEOUT_MS))
+    ]);
+  }
 
   // Use the Vercel serverless proxy (reads GEMINI_API_KEY server-side) first
   // whenever we are on a deployed domain — the key must never ship to the
@@ -144,24 +154,24 @@
       try {
         let out = '';
         if (proxied) {
-          const res = await fetch('/api/gemini', {
+          const res = await withTimeout(fetch('/api/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ model, system: systemPrompt, user: userPrompt, json: !!jsonOut })
-          });
+          }));
           if (!res.ok) return null;
           const data = await res.json().catch(() => null);
           if (!data || typeof data.text !== 'string' || !data.text.trim()) return null;
           out = data.text;
         } else if (c.key) {
-          const res = await fetch(GEMINI_URL(model) + '?key=' + encodeURIComponent(c.key), {
+          const res = await withTimeout(fetch(GEMINI_URL(model) + '?key=' + encodeURIComponent(c.key), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }],
               generationConfig: Object.assign({ temperature: 0.85, maxOutputTokens: 4096 }, jsonOut ? { responseMimeType: 'application/json' } : {})
             })
-          });
+          }));
           if (!res.ok) { lastErr = new Error('HTTP ' + res.status); if (res.status === 404) continue; throw lastErr; }
           const data = await res.json();
           const text = (((data.candidates || [])[0] || {}).content || {}).parts;
@@ -1442,17 +1452,21 @@
     return { reply: out.reply, corrections: cap, demo: true, suggestions: S(out.suggestions || []) };
   }
 
-  async function teacherChat(opts) {
+async function teacherChat(opts) {
     opts = opts || {};
     const user = String(opts.user || '').trim().slice(0, 600);
     const level = String(opts.level || 'B1 Intermediate');
     const history = Array.isArray(opts.history) ? opts.history.slice(-12) : [];
     const c = cfg();
-    if (!user) return { reply: 'Write something and I’ll respond — one honest sentence is all it takes.', corrections: [], demo: true };
+    if (!user) return { reply: 'Write something and I\'ll respond — one honest sentence is all it takes.', corrections: [], demo: true };
     if (!c.key && !useProxy()) return fallbackTeacherReply(user, level);
+    try {
     const sys = 'You are ' + MENTOR.name + ' (' + MENTOR.ar + '), the learner\'s personal IELTS English teacher — warm, sharp and encouraging, like a real private tutor texting a student. Match the learner\'s language but always reply in English (unless they write in Arabic, then answer warmly in Arabic first, then continue in English). Cover IELTS strategy, grammar, vocabulary, speaking and writing with concrete examples. Correct their English gently: for each mistake say what was wrong, why it is wrong, and the natural way a professional would say it. ALWAYS end your reply with ONE short follow-up question to keep the conversation alive. Keep the whole reply brief and human — never robotic, never a list of rules.';
     const usr = 'Learner level: ' + level + '.\nRecent conversation:\n' + history.map((m) => (String(m.role) === 'user' ? 'Learner: ' : MENTOR.name + ': ') + String(m.text || '')).join('\n') + '\n\nNow respond to the learner\'s LATEST message: "' + user + '"\nOutput ONLY strict JSON:\n{"reply":"your warm reply ending in one question","corrections":[{"original":"mistaken phrase","corrected":"natural fix","why":"one-line reason"}],"suggestions":["2 or 3 short tappable follow-up messages, varied"]}';
-    const raw = await gemini(sys, usr, true);
+    const raw = await Promise.race([
+      gemini(sys, usr, true),
+      new Promise((resolve) => setTimeout(() => resolve(null), 18000))
+    ]);
     const data = raw ? parseJson(raw) : null;
     if (!data || !String(data.reply || '').trim()) return fallbackTeacherReply(user, level);
     const suggestions = Array.isArray(data.suggestions)
@@ -1470,6 +1484,10 @@
       suggestions,
       demo: false
     };
+  } catch (e) {
+    console.warn('[IELTS_AI] teacherChat unexpected error → built-in coach reply:', e);
+    return fallbackTeacherReply(user, level);
+  }
   }
 
   /* ============================================================

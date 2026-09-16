@@ -37,12 +37,15 @@
     callId: null,
     callRec: null,
     callTick: null,
-    callSecs: 0
+    callSecs: 0,
+    lastLang: 'en-GB'
   };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
   }
+
+  function hasArabic(t) { return /[\u0600-\u06FF]/.test(String(t || '')); }
 
   const SPEAKER_ICON = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
 
@@ -55,11 +58,14 @@
     return new Promise((resolve) => {
       if (!text || !('speechSynthesis' in window)) { resolve(); return; }
       const clean = String(text).replace(/[*_`#]/g, '');
+      const ar = hasArabic(clean);
       const utter = new SpeechSynthesisUtterance(clean);
       const vs = speechSynthesis.getVoices();
-      const voice = vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
-      if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-US'; }
-      utter.rate = 0.95;
+      const voice = ar
+        ? (vs.find((v) => /^ar/i.test(v.lang)) || null)
+        : (vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null);
+      if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = ar ? 'ar-SA' : 'en-US'; }
+      utter.rate = ar ? 1.0 : 0.95;
       utter.pitch = 1.0;
       let done = false;
       const finish = () => { if (!done) { done = true; state.speaking = null; resolve(); } };
@@ -73,11 +79,14 @@
     if (state.speaking && state.speaking === text) { speechSynthesis.cancel(); state.speaking = null; return; }
     speechSynthesis.cancel();
     const clean = String(text).replace(/[*_`#]/g, '');
+    const ar = hasArabic(clean);
     const utter = new SpeechSynthesisUtterance(clean);
     const vs = speechSynthesis.getVoices();
-    const voice = vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null;
-    if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = 'en-US'; }
-    utter.rate = 0.95;
+    const voice = ar
+      ? (vs.find((v) => /^ar/i.test(v.lang)) || null)
+      : (vs.find((v) => /en[-_]GB/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null);
+    if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = ar ? 'ar-SA' : 'en-US'; }
+    utter.rate = ar ? 1.0 : 0.95;
     utter.pitch = 1.0;
     state.speaking = text;
     utter.onend = utter.onerror = function () { if (state.speaking === text) state.speaking = null; };
@@ -97,26 +106,38 @@
     if (!SR) { window.toast && window.toast('Voice input needs Chrome or Edge'); return; }
     if (!state.recognizer) {
       const rec = new SR();
-      rec.lang = 'en-GB';
+      rec.lang = state.lastLang || 'en-GB';
       rec.interimResults = false;
       rec.maxAlternatives = 1;
+      let langSwapped = false;
       rec.onresult = function (e) {
         let t = '';
         for (let i = 0; i < e.results.length; i++) if (e.results[i].isFinal) t += e.results[i][0].transcript + ' ';
         t = t.trim();
-        const inp = document.getElementById(id + '-input');
-        if (inp && t) {
-          const hadText = String(inp.value).trim().length > 0;
-          inp.value = hadText ? inp.value + ' ' + t : t;
-          if (!hadText && !state.busy) sendFrom(id);
+        if (t) {
+          langSwapped = false;
+          state.lastLang = hasArabic(t) ? 'ar-SA' : 'en-GB';
+          const inp = document.getElementById(id + '-input');
+          if (inp && t) {
+            const hadText = String(inp.value).trim().length > 0;
+            inp.value = hadText ? inp.value + ' ' + t : t;
+            if (!hadText && !state.busy) sendFrom(id);
+          }
         }
       };
-      rec.onerror = function () { setMic(false); };
+      rec.onerror = function (ev) {
+        if (state.micOn && !langSwapped && (ev && (ev.error === 'no-speech' || ev.error === 'audio-capture' || ev.error === 'network'))) {
+          langSwapped = true;
+          try { rec.lang = state.lastLang === 'ar-SA' ? 'en-GB' : 'ar-SA'; rec.start(); setMic(true); } catch (e2) { setMic(false); }
+          return;
+        }
+        setMic(false);
+      };
       rec.onend = function () { setMic(false); };
       state.recognizer = rec;
     }
     if (state.micOn) { try { state.recognizer.stop(); } catch (e) { /* noop */ } setMic(false); return; }
-    state.recognizer.lang = 'en-GB';
+    state.recognizer.lang = state.lastLang || 'en-GB';
     try { state.recognizer.start(); setMic(true); } catch (e) { setMic(false); }
   }
 
@@ -511,14 +532,17 @@
     if (!SR) return false;
     let rec;
     try { rec = new SR(); } catch (e) { return false; }
-    rec.lang = 'en-GB';
+    rec.lang = state.lastLang || 'en-GB';
     rec.interimResults = false;
     rec.maxAlternatives = 1;
+    let langSwapped = false;
     rec.onresult = function (e) {
       let t = '';
       for (let i = 0; i < e.results.length; i++) if (e.results[i].isFinal) t += e.results[i][0].transcript + ' ';
       t = t.trim();
       if (t && state.callOn && id === state.callId) {
+        langSwapped = false;
+        state.lastLang = hasArabic(t) ? 'ar-SA' : 'en-GB';
         try { rec.stop(); } catch (err) { /* noop */ }
         runCallTurn(t);
       }
@@ -528,7 +552,10 @@
       if (ev && ev.error === 'not-allowed') {
         endCall(id);
         window.toast && window.toast('Microphone blocked — allow it to call Rami');
-      } else if (ev && ev.error !== 'aborted' && ev.error !== 'no-speech') {
+      } else if (!langSwapped && ev && (ev.error === 'no-speech' || ev.error === 'audio-capture' || ev.error === 'network')) {
+        langSwapped = true;
+        try { rec.lang = state.lastLang === 'ar-SA' ? 'en-GB' : 'ar-SA'; rec.start(); } catch (e2) { endCall(id); }
+      } else if (ev && ev.error !== 'aborted') {
         endCall(id);
       }
     };
